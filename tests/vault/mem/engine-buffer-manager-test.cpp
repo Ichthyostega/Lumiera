@@ -24,11 +24,14 @@
 //#include "lib/depend-inject.hpp"
 //#include "lib/thread.hpp"
 //#include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "test/diagnostic-output.hpp"////////////TODO
 
+#include <algorithm>
 
 //using std::this_thread::yield;
 //using lib::Thread;
+using lib::Literal;
 
 namespace vault {
 namespace mem   {
@@ -66,7 +69,8 @@ namespace test  {
 //          seedRand();
           
           demonstrate_AllocatorInterface();
-          verify_DataTransfer();
+          verify_syncRequest();
+          verify_asyncRequest();
           verify_lulz();
         }
       
@@ -107,9 +111,34 @@ namespace test  {
       
       
       
-      /** @test  */
+      /** @test show that a direct request for allocation is honored */
       void
-      verify_DataTransfer()
+      verify_syncRequest()
+        {
+          EngineBufferManager manager;
+SHOW_EXPR(watch(manager).isEmpty())
+          
+          Alloc alloc = manager.requestAllocation (555);
+          CHECK (not alloc.empty());
+          CHECK (alloc.siz >= 555);
+          
+SHOW_EXPR(watch(manager).bytesAllocd())
+SHOW_EXPR(watch(manager).bytesLeased())
+          
+          // can use that memory
+          char* buf = reinterpret_cast<char*> (alloc.mem);
+          string ranS{lib::randStr(555-1)};
+          auto* p = std::copy (ranS.begin(), ranS.end(), buf);
+SHOW_EXPR(p - buf)
+          *p = '\0';
+          CHECK (ranS == buf);
+        }
+      
+      
+      
+      /** @test show that an working allocation request across thread boundaries */
+      void
+      verify_asyncRequest()
         {
         }
       

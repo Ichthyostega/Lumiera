@@ -116126,6 +116126,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#fe512a" DESTINATION="ID_1866513124" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_216610784" SOURCE="ID_389538548" STARTARROW="None" STARTINCLINATION="-1061;50;"/>
 <icon BUILTIN="bell"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_611835362" MODIFIED="1778544742963" TEXT="Schwierigkeit: Steuern des Aufwands f&#xfc;r Buffer-Allokation">
+<arrowlink COLOR="#fd374b" DESTINATION="ID_1302229619" ENDARROW="Default" ENDINCLINATION="-1530;-92;" ID="Arrow_ID_1216327685" STARTARROW="None" STARTINCLINATION="-1173;55;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_611835362" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1590540822" SOURCE="ID_166765181" STARTARROW="None" STARTINCLINATION="-1013;69;"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#c8b6c1" CREATED="1729963571896" HGAP="-82" ID="ID_780325179" MODIFIED="1729963839764" TEXT="Schablone" VSHIFT="23">
 <edge COLOR="#be05a9"/>
@@ -146174,7 +146179,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1777325501367" ID="ID_586279034" MODIFIED="1777325521405" TEXT="tats&#xe4;chlich wollen wir hier eine explizit gemanagete Server-Komponente"/>
+<node CREATED="1777325501367" ID="ID_586279034" MODIFIED="1778507800975" TEXT="tats&#xe4;chlich wollen wir hier eine explizit gemanagete Server-Komponente">
+<arrowlink COLOR="#fde6d2" DESTINATION="ID_1303340175" ENDARROW="Default" ENDINCLINATION="690;28;" ID="Arrow_ID_795971086" STARTARROW="None" STARTINCLINATION="862;34;"/>
+</node>
 <node CREATED="1777325699181" ID="ID_1392466705" MODIFIED="1777325832394" TEXT="Dependency-Factory kann auf abstrakte Basisklasse konfiguriert werden">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -146543,6 +146550,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778205040426" ID="ID_609664480" MODIFIED="1778205118401" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
 <linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="Default" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="None" STARTINCLINATION="707;0;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -146568,14 +146577,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-857;174;" ID="Arrow_ID_801625969" SOURCE="ID_1394284825" STARTARROW="None" STARTINCLINATION="171;-11;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
 <node CREATED="1778372162541" ID="ID_1423477043" MODIFIED="1778372391306">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist zwar nur ein Grenzfall
@@ -146584,50 +146592,38 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       &#160;&#8212; aber er stellt das gesamte Konzept in Frage
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Es handelt sich ganz klassisch um einen &#187;Race&#171; &#8212; das hei&#223;t, diese Situation ist in keinster Weise regul&#228;r vorgesehen, und d&#252;rfrte auch auch schwierig zu reproduzieren sein; sie sollte daher nicht der Ma&#223;stab sein, an dem das Konstrukt insgeseamt ausgerichtet wird. Leider aber f&#252;hrt diese Situation zur <i>memory corruption,</i>&#160;wenn wir das bisher ausgearbeitete Konzept umsetzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1778372393169" ID="ID_1109770264" MODIFIED="1778372505015" TEXT="Schwierigkeit: der LocalMemPool wei&#xdf; nicht, was er angefordert hat">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       denn andernfalls k&#246;nnte man versuchen, &#252;ber eine Spezialbehandlung im Destruktor die gesendete Speicher-Anforderung irgendwie stornieren (wiewohl auch dabei noch ein Race auftreten k&#246;nnte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1778372507757" ID="ID_228507573" MODIFIED="1778372578208" TEXT="eine M&#xf6;glichkeit w&#xe4;re, eine zus&#xe4;tzliche Sicherung im empfangenden Code vorzusehen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       So &#228;hnlich wie der ZombieCheck...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1778372538869" ID="ID_398624236" MODIFIED="1778373145721" TEXT="diese Sicherung m&#xfc;&#xdf;te allerdings wirksam werden vor dem ersten tats&#xe4;chlichen Speicherzugriff">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Erl&#228;uterung...
@@ -146653,10 +146649,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
-</node>
-</node>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -146689,12 +146682,31 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819169143" ID="ID_1367745941" MODIFIED="1777050391595" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
 <arrowlink COLOR="#fefab1" DESTINATION="ID_1503539674" ENDARROW="Default" ENDINCLINATION="-233;10;" ID="Arrow_ID_451160831" STARTARROW="None" STARTINCLINATION="92;5;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1778593688734" HGAP="35" ID="ID_730263664" MODIFIED="1778593713957" TEXT="Kern: die Verarbeitungs-Funktionalit&#xe4;t" VSHIFT="-9">
+<node CREATED="1778593747927" ID="ID_1315127845" MODIFIED="1778593770426" TEXT="sollte auf alle Allokator- und Aufr&#xe4;um-Arbeit kaskadieren"/>
+<node CREATED="1778593720983" ID="ID_1339362365" MODIFIED="1778594032492" TEXT="Trick: diesen Zugang explizit auch public aufrufbar machen">
+<linktarget COLOR="#fefbd6" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="-30;50;" ID="Arrow_ID_1537514504" SOURCE="ID_308671982" STARTARROW="None" STARTINCLINATION="57;3;"/>
+<linktarget COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" SOURCE="ID_1723782536" STARTARROW="None" STARTINCLINATION="226;-11;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819181261" ID="ID_1026628741" MODIFIED="1776819956356" TEXT="alternative synchrone Schnittstelle bereitstellen">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1777324291441" ID="ID_336948545" MODIFIED="1777324316333" TEXT="ist relevant f&#xfc;r &#xbb;sofort&#xab;-Allokation (Fallback)"/>
 <node CREATED="1776819226503" ID="ID_1059062619" MODIFIED="1777051865655" TEXT="sollte kongruent zum Messaging sein"/>
-<node CREATED="1776819244365" ID="ID_933815031" MODIFIED="1776819258406" TEXT="aber stets ein &#xbb;pull&#xab; vom lokalen Manager"/>
+<node CREATED="1778593890737" ID="ID_308671982" MODIFIED="1778594041691" TEXT="sollte idealerweise die asynchrone L&#xf6;sung inkludieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...so da&#223; es tats&#228;chlich nur eine L&#246;sung gibt, n&#228;mlich die Asynchrone, die dann hier aber sofort im aktuellen Thread komplett durchl&#228;uft. Wie sich zeigt, ist das nicht blo&#223; ein Kniff, um Duplikation im Code zu vermeiden, sondern l&#246;st <i>wie von selbst</i>&#160;eine schwierige architektonische Aufgabe
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fefbd6" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="-30;50;" ID="Arrow_ID_1537514504" STARTARROW="None" STARTINCLINATION="57;3;"/>
+</node>
+<node CREATED="1776819244365" ID="ID_933815031" MODIFIED="1778593872888" TEXT="erfolgt stets als &#xbb;pull&#xab; vom lokalen Manager"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1777324327301" ID="ID_1965528564" MODIFIED="1777324340058" TEXT="lege zun&#xe4;chst einen &#xbb;naiven&#xab; Memory-Manager an">
 <icon BUILTIN="flag-yellow"/>
@@ -146715,8 +146727,100 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777324494396" ID="ID_23718162" MODIFIED="1777324511253" TEXT="m&#xf6;glicherweise ist eine dynamische Steuerung notwendig + fall-Back auf den Heap-Allokator"/>
 </node>
 </node>
-<node CREATED="1777324560690" ID="ID_318881353" MODIFIED="1777324567396" TEXT="Rahmen per Test abstecken">
-<node COLOR="#338800" CREATED="1777339205760" ID="ID_1644044904" MODIFIED="1777339355233" TEXT="demonstrate_AllocatorInterface">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778507655159" ID="ID_662701381" MODIFIED="1778507661951" TEXT="Setup und Lebenszyklus">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778507710093" ID="ID_86258163" MODIFIED="1778507821841" TEXT="jemand mu&#xdf; die Instanz erzeugen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507726771" ID="ID_1303340175" MODIFIED="1778507800975" TEXT="Notwendig sofern irgend etwas konfitguriert und verdrahtet werden soll">
+<linktarget COLOR="#fde6d2" DESTINATION="ID_1303340175" ENDARROW="Default" ENDINCLINATION="690;28;" ID="Arrow_ID_795971086" SOURCE="ID_586279034" STARTARROW="None" STARTINCLINATION="862;34;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778507988939" ID="ID_48400467" MODIFIED="1778508004878" TEXT="Kl&#xe4;ren: wer bearbeitet angeforderte Allokationen?">
+<icon BUILTIN="help"/>
+<node CREATED="1778508010370" ID="ID_681344982" MODIFIED="1778508200989" TEXT="Fallback-L&#xf6;sung: der Anforderer selbst (synchron)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      M&#246;glicherweise ist diese L&#246;sung gar nicht so dramatisch schlecht...
+    </p>
+    <p>
+      Allerdings wird dadurch der Aufwand f&#252;r Allokationen und Speichermanagement zum Blocker und kann auch andere Threads behindern; wie sch&#228;dlich das aber tats&#228;chlich in der Praxis wird, h&#228;ngt davon ab wie gut der &#187;local Pool&#171;-Ansatz wirkt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778508213822" ID="ID_251628069" MODIFIED="1778508354641" TEXT="Irgendjemand mu&#xdf; es ja machen &#x2014; auf Kosten des Rendering">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da wir nur N Kerne haben, mu&#223; letztlich immer daf&#252;r Rechenkapazit&#228;t von einem Worker verdr&#228;ngt werden (es sei denn, man hat <i>so viele Kerne,</i>&#160;da&#223; man einfach mal einen Kern f&#252;r &#187;Sonstiges&#171; beiseite stellen kann)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e2dbb4" CREATED="1778592973322" ID="ID_1723782536" MODIFIED="1778593812308" TEXT="hybrid-L&#xf6;sung: der synchrone Fall schiebt den asynchronen Fall">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein Kniff (f&#252;r den ich einige Zeit gebraucht habe, um ihn zu sehen): wenn es gelingt, die synchrone L&#246;sung komplett durch die asynchrone L&#246;sung zu implementieren, dann impliziert der Aufruf dieser synchronen L&#246;sung da&#223; effektiv ein &#187;sub-Job&#171; mit der aktuell aufgesammelten Allokator-Arbeit im aktuellen Worker l&#228;uft. Das ist zwar ein ziemlich trickreicher Ansatz, hat aber die Sch&#246;nheit da&#223; man <i>eigentlich gar nichts daf&#252;r tun mu&#223; </i>&#8212; insofern w&#228;re damit jede andere L&#246;sung (Hintergrund-Thread, dedizierter Job) nur noch eine optionale Performance-Optimierung
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" STARTARROW="None" STARTINCLINATION="226;-11;"/>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1778508357967" ID="ID_1467114460" MODIFIED="1778508767506" TEXT="naheliegende L&#xf6;sung: Hintergrundthread">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser w&#252;rde dann periodisch schlafen und die Queue bedienen. Nach au&#223;en bleibt das komplett transparent und der Code ist einfach; allerdings kann das dazu f&#252;hren da&#223; andere Worker zwischen den Cores migrieren, au&#223;erdem wird das System insgesamt komplexer (es braucht einen separaten Service mit eigenem Lebenszyklus). Sofern allerdings der Aufwand f&#252;r die Allokations-Arbeit gegen&#252;ber dem Rendering vernachl&#228;ssigbar ist, und weniger als ein OS-Schedule-Slice ben&#246;tigt, d&#252;rfte sich der Einflu&#223; auf die Performance in Grenzen halten &#8212; unter diesen Voraussetzungen allerdings k&#246;nnte der jeweilge Worker diese Arbeit auch gleich selber machen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778508802711" ID="ID_202726246" MODIFIED="1778512058723" TEXT="Service-Job absetzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In dem Moment, wo so eine Anforderung auftritt, wird ein Service-Job abgesetzt, mit einer Priorit&#228;t, die noch zu diskutieren w&#228;re. M&#246;glicherweise m&#252;&#223;te die Steuerung sogar dynamisch sein, denn es handelt sich um eine &#187;opportunistische&#171; Parallelisierung, die nur sinnvoll ist, wenn der eigentliche Worker <i>inzwischen schon mal anfangen kann.</i>&#160;Denn sonst besteht die Gefahr von duplizierten Allokationen, wenn kurz darauf der Speicher definitiv im Worker gebraucht wird, und daher direkt, synchron angefordert. Das l&#228;&#223;t sich nicht verhindern, da wir nicht &#187;buch f&#252;hren&#171; &#252;ber die Anforderungen, und auch nicht aggregieren, da der Aufwand hierf&#252;r im Regelfall verschwendet w&#228;re. Eine weitere relevante Frage ist die nach dem insgesamt anfallenden Aufwand; da Anfragen, aber auch die die R&#252;ckgabe von Allokationen asynchron &#252;ber Queues erfolgt, steht zu erwarten da&#223; sich jeweils einge dieser &#187;kleinen Handgriffe&#171; ansammeln. Dem steht gegen&#252;ber, da&#223; das Scheduling eines Jobs einen erheblichen Aufwand verursacht, der im Verh&#228;ltnis um 1-2 Gr&#246;&#223;enordnungen &#252;ber dem Aufwand f&#252;r ein Mutex-Lock und eine globale Allokation liegt.
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="125" ID="ID_166765181" MODIFIED="1778592944008" STYLE="bubble" TEXT="Schwierigkeit: Aufwand und Priorisierung" VSHIFT="83">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_611835362" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1590540822" STARTARROW="None" STARTINCLINATION="-1013;69;"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1302229619" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1850718826" STARTARROW="None" STARTINCLINATION="-888;56;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" HGAP="24" ID="ID_295105344" MODIFIED="1778592923479" STYLE="fork" TEXT="wann ist es sinnvoll einen Service-Job einzusezen?" VSHIFT="13">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1778512183643" ID="ID_660207569" MODIFIED="1778512206019" STYLE="fork" TEXT="Dringlichkeit &#x27f7; Ansammeln von Arbeit">
+<edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node BACKGROUND_COLOR="#e3dcaf" COLOR="#990000" CREATED="1778547854514" HGAP="18" ID="ID_270935803" LINK="https://issues.lumiera.org/ticket/1429" MODIFIED="1778547925898" TEXT="#1429 control effort for global buffer allocator " VSHIFT="11">
+<edge COLOR="#ffa500"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507847611" ID="ID_1394284825" MODIFIED="1778507972282" TEXT="Race wegen terminierendem Thread">
+<arrowlink COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-857;174;" ID="Arrow_ID_801625969" STARTARROW="None" STARTINCLINATION="171;-11;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777324560690" ID="ID_318881353" MODIFIED="1778507667074" TEXT="Rahmen per Test abstecken">
+<icon BUILTIN="pencil"/>
+<node COLOR="#9b0b61" CREATED="1778591274938" ID="ID_540360328" MODIFIED="1778591296515" TEXT="EngineBufferManager_test">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1777339205760" ID="ID_1644044904" MODIFIED="1778591283255" TEXT="demonstrate_AllocatorInterface">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -146726,6 +146830,37 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <linktarget COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" SOURCE="ID_1470622255" STARTARROW="None" STARTINCLINATION="-20;33;"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778595475430" ID="ID_992537338" MODIFIED="1778597417344" STYLE="fork" TEXT="Diagnose-Zugang schaffen: watch(manager)">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778599970816" ID="ID_346337478" MODIFIED="1778599973845" TEXT="verify_syncRequest">
+<icon BUILTIN="pencil"/>
+<node CREATED="1778599985224" ID="ID_1402142899" MODIFIED="1778599992550" TEXT="eine Allokation machen"/>
+<node CREATED="1778599993498" ID="ID_1315033221" MODIFIED="1778600012854" TEXT="Diagnose der belegten Bytes checken"/>
+<node CREATED="1778600013692" ID="ID_245317435" MODIFIED="1778600031040" TEXT="was in den Speicher schreiben">
+<icon BUILTIN="help"/>
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1778600033770" ID="ID_340804822" MODIFIED="1778600056398" TEXT="das beweist nicht wirklich viel">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1778600042853" ID="ID_1647620526" MODIFIED="1778600051898" TEXT="dieses Problem ist semi-entscheidbar">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1778600072731" ID="ID_722954132" MODIFIED="1778600088111">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wenigstens <i>demonstriert es die Nutzbarkeit</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778599980968" TEXT="verify_asyncRequest">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1777330585249" ID="ID_1415692101" MODIFIED="1777330598348" TEXT="Ergebnis / Einsichten">
@@ -171420,6 +171555,36 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <arrowlink COLOR="#d1011b" DESTINATION="ID_950780614" ENDARROW="Default" ENDINCLINATION="928;320;" ID="Arrow_ID_1675889372" STARTARROW="None" STARTINCLINATION="515;28;"/>
 <linktarget COLOR="#943456" DESTINATION="ID_1232029805" ENDARROW="Default" ENDINCLINATION="-284;-16;" ID="Arrow_ID_173708448" SOURCE="ID_167266149" STARTARROW="None" STARTINCLINATION="155;234;"/>
 <icon BUILTIN="flag-yellow"/>
+</node>
+<node CREATED="1778511996967" ID="ID_708815431" MODIFIED="1778512001168" TEXT="Betriebssteuerung">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1302229619" MODIFIED="1778544742966" TEXT="Aufgabe: Buffer-Allokation steuern">
+<linktarget COLOR="#fd374b" DESTINATION="ID_1302229619" ENDARROW="Default" ENDINCLINATION="-1530;-92;" ID="Arrow_ID_1216327685" SOURCE="ID_611835362" STARTARROW="None" STARTINCLINATION="-1173;55;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1302229619" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1850718826" SOURCE="ID_166765181" STARTARROW="None" STARTINCLINATION="-888;56;"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778547854514" HGAP="36" ID="ID_1695116908" LINK="https://issues.lumiera.org/ticket/1429" MODIFIED="1778547956862" TEXT="#1429 control effort for global buffer allocator " VSHIFT="10">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778547971007" ID="ID_1189474796" MODIFIED="1778548102342">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist nicht einmal klar wie <i>wir vorl&#228;ufig damit umgehen</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn es <b>mu&#223; hier etwas getan werden</b>, sonst funktioniert das System &#252;berhaupt nicht &#8212; ist es sinnvoll, zun&#228;chst die Anforderungen stets synchron zu handhaben?
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node CREATED="1697933502816" ID="ID_1155890066" MODIFIED="1697933560271" TEXT="Laststeuerung">
 <linktarget COLOR="#7d55a6" DESTINATION="ID_1155890066" ENDARROW="Default" ENDINCLINATION="-78;310;" ID="Arrow_ID_1724375377" SOURCE="ID_338601496" STARTARROW="None" STARTINCLINATION="-372;-24;"/>

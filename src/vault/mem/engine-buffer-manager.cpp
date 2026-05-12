@@ -23,6 +23,7 @@
  ** blocks of memory. The contract is that the local memory user has to
  ** return those blocks reliably to the EngineBuffrerManager, which
  ** itself is also an \ref AllocReceiver.
+ ** @todo 5/2026 the plan is to use pooling allocators for the render buffers  //////////////////////////////TICKET #1430
  ** 
  ** @see EnginePufferManager_test
  ** @see LocalBufferStore_test
@@ -76,11 +77,68 @@ namespace mem {
     requestQueue_.consume_all ([this](AllocRequest request)
                                 {
                                   REQUIRE (request.receiver);
-                                  BufferAllocator allocator;
-                                  Alloc alloc = allocator.allocate (request.sizRequest);
-                                  ENSURE (alloc.mem);
+                                  Alloc alloc = doPerformAllocation (request.sizRequest);
+                                  ENSURE (not alloc.empty());
                                   request.receiver->supply (alloc);
                                 });
+  }
+  
+  
+  Alloc
+  EngineBufferManager::requestAllocation (size_t sizRequest)
+  {
+    processPendingRequests();
+    return doPerformAllocation (sizRequest);
+  }
+  
+  
+  /**
+   * @todo 5/2026 this is a preliminary placeholder implementation,
+   *       since any requests will just be passed-through to the heap allocator.
+   *       The plan is to use a system of buffer pools eventually...  ///////////////////////////////////////TICKET #1430
+   */
+  Alloc
+  EngineBufferManager::doPerformAllocation (size_t sizRequest)
+  {
+    BufferAllocator allocator;
+    Alloc alloc = allocator.allocate (sizRequest);
+    if (not alloc.empty())
+      {
+        allocated_ += alloc.siz;
+        leased_    += alloc.siz;
+        ++cnt_;
+      }
+    return alloc;
+  }
+  
+  
+  void
+  EngineBufferManager::doRedeemAllocation  (Alloc alloc)
+  {
+    REQUIRE (not alloc.empty());
+    ENSURE (allocated_ >= alloc.siz);
+    ENSURE (leased_    >= alloc.siz);
+    ENSURE (cnt_       >= 1        );
+    
+    BufferAllocator allocator;
+    allocated_ -= alloc.siz;
+    leased_    -= alloc.siz;
+    --cnt_;
+    allocator.deallocate (alloc);
+  }
+  
+  
+  /** @remark this API becomes relevant if we actually use a pool */
+  size_t
+  EngineBufferManager::size()  const
+  {
+    return cnt_;
+  }
+  
+  bool
+  EngineBufferManager::empty()  const
+  {
+    return 0 == cnt_;
   }
   
   

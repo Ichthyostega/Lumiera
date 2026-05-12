@@ -70,6 +70,8 @@ namespace mem {
     {
       Buff* mem;
       size_t siz;
+      
+      bool empty() const { return not bool(mem); }
     };
   
   
@@ -118,17 +120,124 @@ namespace mem {
       using RequestQueue = boost::lockfree::queue<AllocRequest>;
       RequestQueue requestQueue_;
       
+      /// diagnostic bookkeeping
+      size_t allocated_{0};
+      size_t leased_{0};
+      size_t cnt_{0};
+      
     public:
       EngineBufferManager()
         : AllocReceiver{}
         , requestQueue_{INQUEUE_SIZ}
         { }
-        
+      
+      
+      size_t size()  const;
+      bool   empty() const;
+      
+      
+      /****************************************************************//**
+       * Core function: satisfy a request for allocation
+       * @return an \ref Alloc struct representing the desired allocation,
+       *         can be empty to signal that the request can not be satisfied.
+       * @warning whoever accepts a non-empty result from this call
+       *         is **responsible** to [return](\ref AllocReceiver::supply)
+       *         this allocation eventually, to prevent memory leakage.
+       */
+      Alloc requestAllocation (size_t sizRequest);
+      
+      /**
+       * Standard access point: request an allocation
+       * that will be dispatched asynchronously to the given receiver.
+       * @remark without any temporal guarantees, this request will be
+       *         processed eventually, placing an \ref Alloc into the
+       *         [receiver's inqueue](\ref AllocReceiver::supply)
+       * @warning when the returned Alloc is [non-empty](\ref Alloc::empty),
+       *         the receiver is responsible for returning it after use.
+       */
+      void async_requestAllocation (AllocRequest const&);
+      
+      /**
+       * Handle all enqueued asynchronous requests
+       * and perform pending management and allocation work.
+       * @remark this function can be invoked as a batch job;
+       *         it acquires a lock and then handles the backlog. 
+       */
+      void processPendingRequests();
+      
     private:
       /** process all pending requests in the queue */
       void handleAllocRequests();
+      
+      /** performs the actual allocation work */
+      Alloc doPerformAllocation (size_t sizRequest);
+      void  doRedeemAllocation  (Alloc);
+  
+      /** a »backdoor« for unit testing */
+      friend class BufferManagerDiagnostic;
     };
   
+  
+  inline void
+  EngineBufferManager::async_requestAllocation (AllocRequest const& req)
+  {
+    
+  }
+  
+  inline void
+  EngineBufferManager::processPendingRequests()
+  {
+    inQueue_.consume_all ([this](Alloc alloc){ doRedeemAllocation (alloc); });
+    handleAllocRequests();
+  }
+  
+  
+  
+  /** wrapper to inspect internals from a unit test */
+  class BufferManagerDiagnostic
+    : util::MoveOnly
+    {
+      EngineBufferManager const& globalPool_;
+      
+    public:
+      BufferManagerDiagnostic (EngineBufferManager const& manager)
+        : globalPool_{manager}
+        { }
+      
+      bool
+      isEmpty()
+        {
+          return globalPool_.empty();
+        }
+      
+      size_t
+      size()
+        {
+          return globalPool_.size();
+        }
+      
+      size_t
+      bytesAllocd()
+        {
+          UNIMPLEMENTED ("alloc state diagnostic");
+        }
+      
+      size_t
+      bytesLeased()
+        {
+          UNIMPLEMENTED ("alloc state diagnostic");
+        }
+      
+        /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1430 : add pool diagnostics here if we actually switch to pooled allocations
+    };
+  
+  
+  /** entrance point to inspection for test */
+  inline BufferManagerDiagnostic
+  watch (EngineBufferManager const& manager)
+  {
+    return BufferManagerDiagnostic{manager};
+  }
   
 }} // namespace vault::mem
 #endif /*VAULT_MEM_ENGINE_BUFFR_MANAGA_H*/
