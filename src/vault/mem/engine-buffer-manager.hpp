@@ -45,6 +45,7 @@
 //#include "vault/mem/type-handler.hpp"
 //#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/sync.hpp"
 //#include "lib/util.hpp"
 
 #include <boost/lockfree/queue.hpp>
@@ -65,6 +66,9 @@ namespace mem {
     const size_t INQUEUE_SIZ = 30;   ///< initial size of the lock-free provision queue
     
   }
+  
+  using lib::Sync;
+  using lib::RecursiveLock_NoWait;
   
   struct Alloc
     {
@@ -110,6 +114,7 @@ namespace mem {
    */
   class EngineBufferManager
     : public AllocReceiver
+    , public Sync<RecursiveLock_NoWait>
     {
       struct AllocRequest
         {
@@ -133,7 +138,7 @@ namespace mem {
       
       
       size_t size()  const;
-      bool   empty() const;
+      bool  empty()  const;
       
       
       /****************************************************************//**
@@ -166,9 +171,6 @@ namespace mem {
       void processPendingRequests();
       
     private:
-      /** process all pending requests in the queue */
-      void handleAllocRequests();
-      
       /** performs the actual allocation work */
       Alloc doPerformAllocation (size_t sizRequest);
       void  doRedeemAllocation  (Alloc);
@@ -182,13 +184,6 @@ namespace mem {
   EngineBufferManager::async_requestAllocation (AllocRequest const& req)
   {
     
-  }
-  
-  inline void
-  EngineBufferManager::processPendingRequests()
-  {
-    inQueue_.consume_all ([this](Alloc alloc){ doRedeemAllocation (alloc); });
-    handleAllocRequests();
   }
   
   
@@ -219,13 +214,19 @@ namespace mem {
       size_t
       bytesAllocd()
         {
-          UNIMPLEMENTED ("alloc state diagnostic");
+          return globalPool_.allocated_;
         }
       
       size_t
       bytesLeased()
         {
-          UNIMPLEMENTED ("alloc state diagnostic");
+          return globalPool_.leased_;
+        }
+      
+      size_t
+      numAllocs()
+        {
+          return globalPool_.cnt_;
         }
       
         /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1430 : add pool diagnostics here if we actually switch to pooled allocations

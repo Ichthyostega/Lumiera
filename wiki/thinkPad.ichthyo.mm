@@ -146736,7 +146736,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778507988939" ID="ID_48400467" MODIFIED="1778508004878" TEXT="Kl&#xe4;ren: wer bearbeitet angeforderte Allokationen?">
+<node COLOR="#435e98" CREATED="1778507988939" ID="ID_48400467" MODIFIED="1778635053866" TEXT="Kl&#xe4;ren: wer bearbeitet angeforderte Allokationen?">
 <icon BUILTIN="help"/>
 <node CREATED="1778508010370" ID="ID_681344982" MODIFIED="1778508200989" TEXT="Fallback-L&#xf6;sung: der Anforderer selbst (synchron)">
 <richcontent TYPE="NOTE"><html>
@@ -146761,7 +146761,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#e2dbb4" CREATED="1778592973322" ID="ID_1723782536" MODIFIED="1778593812308" TEXT="hybrid-L&#xf6;sung: der synchrone Fall schiebt den asynchronen Fall">
+<node BACKGROUND_COLOR="#e2dbb4" CREATED="1778592973322" ID="ID_1723782536" MODIFIED="1778635048385" TEXT="hybrid-L&#xf6;sung: der synchrone Fall schiebt den asynchronen Fall">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -146771,6 +146771,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" STARTARROW="None" STARTINCLINATION="226;-11;"/>
+<linktarget COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" SOURCE="ID_226540112" STARTARROW="None" STARTINCLINATION="1004;42;"/>
 <icon BUILTIN="forward"/>
 </node>
 <node CREATED="1778508357967" ID="ID_1467114460" MODIFIED="1778508767506" TEXT="naheliegende L&#xf6;sung: Hintergrundthread">
@@ -146814,6 +146815,58 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-857;174;" ID="Arrow_ID_801625969" STARTARROW="None" STARTINCLINATION="171;-11;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
+<node CREATED="1778630840458" ID="ID_108123775" MODIFIED="1778630844917" TEXT="Locking">
+<node CREATED="1778630852336" ID="ID_1688369877" MODIFIED="1778630859835" TEXT="zwei m&#xf6;gliche Ans&#xe4;tze">
+<node CREATED="1778630861078" ID="ID_692489731" MODIFIED="1778630977002" TEXT="m&#xf6;glichst kurz/lokal">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      im Grunde m&#252;&#223;te man nur den Zugang zum Memory-Manager selber locken, denn die ganzen Queue-Operationen sind ja schon lock-free und threadsafe; auch k&#246;nnten diese Locks dann non-recursive sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1778630869382" ID="ID_1688710426" MODIFIED="1778631446175" TEXT="m&#xf6;glichst wenig Locks">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...andererseits ist jeder (Mutex)-Lock ein Kernel-Aufruf, und wir erwarten durchaus ganze B&#252;ndel an Requests. Au&#223;erdem wird mit wenigen Locks auf API-Level viel klarer, da&#223; das Locking vollst&#228;ndig, und der Zustand konsistent ist.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1778631447430" ID="ID_1196517656" MODIFIED="1778631809891" TEXT="entscheide mich (nach Bauchgef&#xfc;hl) f&#xfc;r &#xbb;wenig Locks&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und zwar sagt mir mein Bauchgef&#252;hl, da&#223; wir hier keine Situation mit starker Contention haben; das hat sich auch bereits im Zusammenhang mit dem Scheduler gezeigt. Im Regelfall erwarte ich, da&#223; die Anfragen durch die Queue gehen, und damit ohne Interferenz aneinander vorbeikommen. Wenn dann tats&#228;chlich mal ein Thread den synchronen Pfad einschl&#228;gt, erscheint es mir sinnvoller, alle Arbeit in einem Schwung zu erledigen, selbst wenn dadruch (ohenhin nur ausnahmsweise!) ein anderer Thread mal geblockt wird. Letztlich gilt hier immer: die Jobs sind <i>vergleichsweise gro&#223;. </i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Den Ausschlag gegeben hat aber eine andere Hinsicht: Klarheit und Wartbarkeit sind wichtiger, spezielle Performance-Tweaks sollte man empirisch beweisen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1778631791231" ID="ID_118677112" MODIFIED="1778631843980" TEXT="in #1429 notiert"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777324560690" ID="ID_318881353" MODIFIED="1778507667074" TEXT="Rahmen per Test abstecken">
 <icon BUILTIN="pencil"/>
@@ -146831,11 +146884,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <linktarget COLOR="#47c9c9" DESTINATION="ID_1644044904" ENDARROW="Default" ENDINCLINATION="6;-56;" ID="Arrow_ID_1619156849" SOURCE="ID_1470622255" STARTARROW="None" STARTINCLINATION="-20;33;"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778595475430" ID="ID_992537338" MODIFIED="1778597417344" STYLE="fork" TEXT="Diagnose-Zugang schaffen: watch(manager)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1778595475430" ID="ID_992537338" MODIFIED="1778635094590" TEXT="Diagnose-Zugang schaffen: watch(manager)">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778599970816" ID="ID_346337478" MODIFIED="1778599973845" TEXT="verify_syncRequest">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1778599970816" ID="ID_346337478" MODIFIED="1778635102267" TEXT="verify_syncRequest">
 <node CREATED="1778599985224" ID="ID_1402142899" MODIFIED="1778599992550" TEXT="eine Allokation machen"/>
 <node CREATED="1778599993498" ID="ID_1315033221" MODIFIED="1778600012854" TEXT="Diagnose der belegten Bytes checken"/>
 <node CREATED="1778600013692" ID="ID_245317435" MODIFIED="1778600031040" TEXT="was in den Speicher schreiben">
@@ -146858,6 +146910,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
+<node CREATED="1778635069297" ID="ID_1942014687" MODIFIED="1778635075164" TEXT="mehrere Allokationen machen"/>
+<node CREATED="1778635075937" ID="ID_1005055901" MODIFIED="1778635080660" TEXT="alles wieder freigeben"/>
+<node CREATED="1778635083791" ID="ID_227876159" MODIFIED="1778635088455" TEXT="Diagnostik pr&#xfc;fen"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778599980968" TEXT="verify_asyncRequest">
 <icon BUILTIN="hourglass"/>
@@ -171564,7 +171619,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778547854514" HGAP="36" ID="ID_1695116908" LINK="https://issues.lumiera.org/ticket/1429" MODIFIED="1778547956862" TEXT="#1429 control effort for global buffer allocator " VSHIFT="10">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778547971007" ID="ID_1189474796" MODIFIED="1778548102342">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778547971007" ID="ID_1189474796" MODIFIED="1778634786640">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -171583,6 +171638,22 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </html></richcontent>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="messagebox_warning"/>
+<node COLOR="#435e98" CREATED="1778634707713" HGAP="30" ID="ID_226540112" MODIFIED="1778635048385" TEXT="habe aber inzwischen eine elegante L&#xf6;sung f&#xfc;r dieses Dilemma gefunden" VSHIFT="19">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...n&#228;mlich indem der Job letztlich auf den synchronen Fall zur&#252;ckgreift, dieser aber durch die gleiche Mechanik implementiert ist, wie der asynchrone Fall, und dabei gleich alle aufgesammelten Requests in den Queues mit verarbeitet. Dadruch wird effektiv ein Batch an Allokator-Aufwand in denjenigen Worker geschoben, der rein zuf&#228;llig als erster auf eine nicht bediente Allokation st&#246;&#223;t. Das Sch&#246;ne an dieser Code-Struktur ist, da&#223; die M&#246;glichkeit offen bleibt, sp&#228;ter zur Performance-Optimierung (oder nur in bestimmten Situationen) dennoch etwas speziell einzurichten / schedulen / auszuf&#252;hren, ohne da&#223; dazu der Code im EngineBufferManager ge&#228;ndert werden mu&#223;
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" STARTARROW="None" STARTINCLINATION="1004;42;"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 </node>

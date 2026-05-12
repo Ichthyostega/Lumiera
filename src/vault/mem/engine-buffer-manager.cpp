@@ -71,9 +71,17 @@ namespace mem {
   
   /* === EngineBufferManager implementation === */
   
+  /**
+   * @note 5/2026 I prefer a small number of locks at API level,
+   *       based on the assumption that this processing environment
+   *       does not exhibit much contention. This should be [validated] however.
+   * [validated]: https://issues.lumiera.org/ticket/1429#comment:1
+   */
   void
-  EngineBufferManager::handleAllocRequests()
+  EngineBufferManager::processPendingRequests()
   {
+    Lock sync{this};
+    inQueue_     .consume_all ([this](Alloc alloc){ doRedeemAllocation (alloc); });
     requestQueue_.consume_all ([this](AllocRequest request)
                                 {
                                   REQUIRE (request.receiver);
@@ -87,6 +95,7 @@ namespace mem {
   Alloc
   EngineBufferManager::requestAllocation (size_t sizRequest)
   {
+    Lock sync{this};
     processPendingRequests();
     return doPerformAllocation (sizRequest);
   }

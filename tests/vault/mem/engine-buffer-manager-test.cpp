@@ -111,27 +111,55 @@ namespace test  {
       
       
       
-      /** @test show that a direct request for allocation is honored */
+      /** @test show that a direct request for allocation is honored
+       *      - request some memory
+       *      - read and write to that memory
+       *      - return all leased allocations
+       *      - verify the diagnostic meshes up with the allocation
+       * @remark in principle it is not possible to prove that some
+       *      memory allocation actually works, other than checking
+       *      that access to the given memory is possible, because
+       *      the fact that no memory corruption took place is
+       *      only semi-decidable (you can show a corruption event,
+       *      but not the absence of any such an event).
+       */
       void
       verify_syncRequest()
         {
           EngineBufferManager manager;
-SHOW_EXPR(watch(manager).isEmpty())
+          CHECK (watch(manager).isEmpty());
           
           Alloc alloc = manager.requestAllocation (555);
           CHECK (not alloc.empty());
           CHECK (alloc.siz >= 555);
           
-SHOW_EXPR(watch(manager).bytesAllocd())
-SHOW_EXPR(watch(manager).bytesLeased())
+          CHECK (alloc.siz == watch(manager).bytesAllocd());
+          CHECK (alloc.siz == watch(manager).bytesLeased());
+          CHECK (alloc.siz % HeapBufferAllocator::TILE_SIZ == 0);
           
           // can use that memory
           char* buf = reinterpret_cast<char*> (alloc.mem);
           string ranS{lib::randStr(555-1)};
           auto* p = std::copy (ranS.begin(), ranS.end(), buf);
-SHOW_EXPR(p - buf)
+          CHECK (ranS.length() == size_t(p - buf));
           *p = '\0';
           CHECK (ranS == buf);
+          
+          CHECK (1 == watch(manager).numAllocs());
+          Alloc a2 = manager.requestAllocation (1'000'000);
+          CHECK (not a2.empty());
+          CHECK (a2.siz >= 1e6);
+          CHECK (2 == watch(manager).numAllocs());
+          CHECK (1e6+555 < watch(manager).bytesLeased());
+          
+          manager.supply (a2);
+          manager.processPendingRequests();
+          CHECK (1 == watch(manager).numAllocs());
+          CHECK (1e6 > watch(manager).bytesLeased());
+          manager.supply (alloc);
+          manager.processPendingRequests();
+          CHECK (0 == watch(manager).numAllocs());
+          CHECK (0 == watch(manager).bytesLeased());
         }
       
       
