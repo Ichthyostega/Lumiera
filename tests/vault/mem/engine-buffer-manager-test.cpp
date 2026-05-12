@@ -21,17 +21,26 @@
 //#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
 #include "vault/mem/engine-buffer-allocator.hpp"
+#include "lib/scoped-collection.hpp"
+#include "lib/iter-explorer.hpp"
 //#include "lib/depend-inject.hpp"
-//#include "lib/thread.hpp"
+#include "lib/thread.hpp"
 //#include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "test/diagnostic-output.hpp"////////////TODO
 
 #include <algorithm>
+//#include <thread>
+#include <array>
 
-//using std::this_thread::yield;
-//using lib::Thread;
+using lib::Thread;
 using lib::Literal;
+using lib::explore;
+//using lib::ScopedCollection;
+using std::this_thread::yield;
+using std::this_thread::sleep_for;
+using std::chrono::microseconds;
+using std::chrono_literals::operator ""ms;
 
 namespace vault {
 namespace mem   {
@@ -43,6 +52,8 @@ namespace test  {
   
   namespace { // Test helper
     
+    const size_t ALLOC_REQ = 1024*1024;
+    const size_t NUM_THREADS = 100;
 //    template<typename X>
 //    Buff*
 //    mark_as_Buffer(X& something)
@@ -66,7 +77,7 @@ namespace test  {
       virtual void
       run (Arg)
         {
-//          seedRand();
+          seedRand();
           
           demonstrate_AllocatorInterface();
           verify_syncRequest();
@@ -164,10 +175,87 @@ namespace test  {
       
       
       
-      /** @test show that an working allocation request across thread boundaries */
+      /** @test show that an working allocation request passes thread boundaries */
       void
       verify_asyncRequest()
         {
+            struct LocalTestPool
+              : AllocReceiver
+              {
+                Alloc
+                retrieveAlloc()
+                  {
+                    Alloc received{nullptr, 0};
+                    inQueue_.pop (received);     // Note: no-op if queue is empty
+                    return received;
+                  }
+                
+                bool
+                empty()  const
+                  {
+                    return inQueue_.empty();
+                  }
+              };
+            
+          EngineBufferManager manager;
+          
+          using WorkBuff = std::array<uint64_t, ALLOC_REQ / sizeof(uint64_t)>;
+          
+std::atomic_int cnt{0};
+          auto workSeq = [&, gen = makeRandGen()]// local random generator per thread
+                         ()  mutable
+                            {// sequence of actions within a worker thread
+int i=++cnt;
+                              LocalTestPool myPool;
+                              CHECK (myPool.empty());
+                              
+                              manager.async_requestAllocation (myPool, ALLOC_REQ);
+                              
+                              // meanwhile the worker does some other "work"
+                              uint delay = 100 + gen.i(800);
+                              sleep_for (microseconds(delay));
+SHOW_EXPR(delay)
+                              
+                              Alloc alloc = myPool.retrieveAlloc();
+                              if (alloc.empty())
+                                // they let us down ...
+                                // insist harder to be serviced thusly
+                                alloc = manager.requestAllocation (ALLOC_REQ);
+                              
+                              CHECK (not alloc.empty());
+                              CHECK (ALLOC_REQ <= alloc.siz);
+                              // can use that allocation for some "serious work"...
+                              auto content = new(alloc.mem) WorkBuff;
+                              std::ranges::generate (*content, [&]{ return gen.u64(); });
+                              sleep_for (10ms);
+                              
+                              // pass allocation back to the central hub
+                              manager.supply (alloc);
+SHOW_EXPR(i)
+                            };
+          
+          using Threads = lib::ScopedCollection<Thread>;
+          auto startThread = [&](auto& storage){ storage.template create<Thread> (workSeq); };
+          
+          // Start a collection of workers....
+          Threads threads{NUM_THREADS, startThread};
+          
+          // wait for all threads to finish...
+          while (explore(threads).has_any())
+            yield();
+          
+          // all the allocations sent back by the workers
+          // should sit in the EngineBufferManager's input queue
+SHOW_EXPR(watch(manager).numAllocs());
+//          CHECK (NUM_THREADS           == watch(manager).numAllocs());
+SHOW_EXPR(watch(manager).bytesLeased());
+//          CHECK (NUM_THREADS*ALLOC_REQ <= watch(manager).bytesLeased());
+          
+          // process in-queue and retrieve all allocations..
+          manager.processPendingRequests();
+SHOW_EXPR(watch(manager).numAllocs());
+SHOW_EXPR(watch(manager).bytesLeased());
+//          CHECK (0 == watch(manager).bytesLeased());
         }
       
       

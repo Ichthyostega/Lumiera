@@ -160,7 +160,7 @@ namespace mem {
        * @warning when the returned Alloc is [non-empty](\ref Alloc::empty),
        *         the receiver is responsible for returning it after use.
        */
-      void async_requestAllocation (AllocRequest const&);
+      void async_requestAllocation (AllocReceiver&, size_t sizRequest);
       
       /**
        * Handle all enqueued asynchronous requests
@@ -181,9 +181,10 @@ namespace mem {
   
   
   inline void
-  EngineBufferManager::async_requestAllocation (AllocRequest const& req)
+  EngineBufferManager::async_requestAllocation  (AllocReceiver& receiver, size_t sizRequest)
   {
-    
+    REQUIRE (sizRequest);
+    requestQueue_.push ({&receiver, sizRequest});
   }
   
   

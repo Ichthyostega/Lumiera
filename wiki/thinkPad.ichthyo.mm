@@ -146914,8 +146914,60 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778635075937" ID="ID_1005055901" MODIFIED="1778635080660" TEXT="alles wieder freigeben"/>
 <node CREATED="1778635083791" ID="ID_227876159" MODIFIED="1778635088455" TEXT="Diagnostik pr&#xfc;fen"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778599980968" TEXT="verify_asyncRequest">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778641424697" TEXT="verify_asyncRequest">
+<icon BUILTIN="pencil"/>
+<node CREATED="1778641426736" ID="ID_460139955" MODIFIED="1778641441187" TEXT="sollte hier gleich etwas &#xbb;massives&#xab; machen"/>
+<node CREATED="1778641442270" ID="ID_1826595532" MODIFIED="1778641456169" TEXT="f&#xfc;hre eine typische usage-sequence in jedem Thread aus">
+<node CREATED="1778641462236" ID="ID_51963277" MODIFIED="1778641469666" TEXT="fordere eine Allokation"/>
+<node CREATED="1778641470523" ID="ID_1338437091" MODIFIED="1778641482349" TEXT="&#x2014; delay &#x2014;"/>
+<node CREATED="1778641485269" ID="ID_1979457912" MODIFIED="1778641494779" TEXT="hole die Allokation">
+<node CREATED="1778641496587" ID="ID_818471680" MODIFIED="1778641501576" TEXT="entweder aus der Queue"/>
+<node CREATED="1778641502490" ID="ID_909654376" MODIFIED="1778641512097" TEXT="ansonsten fordere sie synchron an"/>
+</node>
+<node CREATED="1778641515186" ID="ID_1850061858" MODIFIED="1778641527135" TEXT="schreibe Zufallszahlen in die Allokation"/>
+<node CREATED="1778641528055" ID="ID_572369413" MODIFIED="1778641532894" TEXT="&#x2014; delay &#x2014;"/>
+<node CREATED="1778641533746" ID="ID_1255059129" MODIFIED="1778641540762" TEXT="schicke die Allokation zur&#xfc;ck"/>
+</node>
+<node CREATED="1778641582324" ID="ID_723485846" MODIFIED="1778641604860" TEXT="danach sollten....">
+<node CREATED="1778641588959" ID="ID_857089658" MODIFIED="1778641600492" TEXT="NUM_THREADS Allokationen erfolgt sein"/>
+<node CREATED="1778641607696" ID="ID_514432880" MODIFIED="1778641618195" TEXT="alle diese Allokationen wieder in der Queue sitzen"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1778642703060" ID="ID_378615107" MODIFIED="1778642712701" TEXT="funktioniert nicht...">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1778642715157" ID="ID_723545359" MODIFIED="1778642718343" TEXT="Beobachtungen">
+<node CREATED="1778642721100" ID="ID_454509509" MODIFIED="1778642737405" TEXT="einige Threads sind anscheinend schon fertig bevor andere &#xfc;berhaupt erst anfangen"/>
+<node CREATED="1778642739266" ID="ID_1618120303" MODIFIED="1778642753195" TEXT="damit werden nat&#xfc;rlich einige Allokationen bereits wegger&#xe4;umt"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778642777488" ID="ID_735364209" MODIFIED="1778642799183" TEXT="unklar: warum sind nach processPending() noch Allocs offen?">
+<icon BUILTIN="help"/>
+</node>
+</node>
+<node CREATED="1778642807208" ID="ID_1933157461" MODIFIED="1778642812460" TEXT="genauere Analyse">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778642813695" ID="ID_241071013" MODIFIED="1778643259773" TEXT="Problem-1: brauche wirklich unabh&#xe4;ngige Random-Generatoren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hatte diese Technik vom incidence-count-test kopiert; der Code dort ist aber <i>nicht ganz korrekt &#8212;</i>&#160;was dort aber nicht auff&#228;llt, da das thread-Microbenchmark seine test-Funktion (das &#187;subjekt&#171;) nochmal kopiert, n&#228;mlich in die closure des jeweiligen Thread. Diese Kopie bewirkt dann einfach, da&#223; der Generator nochmal kopiert wird ... bin mir aber trotzdem nicht sicher, so wirklich verschiedene Zufallszahlen gezogen werden.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Jedenfalls in dem Setup, das ich jetzt hier f&#252;r diesen neuen Test gebaut habe, verwenden alle Threads dasselbe Lamba f&#252;r die Thread-Funktion <i>gemeinsam</i>. Das bedeutet, das makeRandomGen() wird tats&#228;chlich nur einmal aufgerufen, und daher haben wir nur einen einzigen Seed (selbst wenn die Lambdas dann im Thread-Wrapper nochmal kopiert werden)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778643262156" ID="ID_46315611" MODIFIED="1778643274742" TEXT="sehe in allen Threads exakt den gleichen Delay"/>
+<node CREATED="1778643275676" ID="ID_284051539" MODIFIED="1778643284600" TEXT="daher wachen die auch alle gemeinsam auf"/>
+<node CREATED="1778643339650" ID="ID_1840909466" MODIFIED="1778643355371" TEXT="und dann sind die ersten schon fertig bevor die sp&#xe4;teren &#xfc;berhaupt zum Zug kommen"/>
+<node CREATED="1778643357162" ID="ID_512680760" MODIFIED="1778643379727" TEXT="kann aber auch daran liegen, da&#xdf; wir einfach nicht so viele Threads gleichzeitig laufen lassen k&#xf6;nnen"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1777330585249" ID="ID_1415692101" MODIFIED="1777330598348" TEXT="Ergebnis / Einsichten">
