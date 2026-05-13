@@ -283,7 +283,7 @@ namespace test{
           CHECK (horror.isParseFail());
           
           // CsvParser is a »Lumiera Forward Iterator«
-          CHECK (meta::can_IterForEach<CsvParser>::value);
+          CHECK (meta::lum_iter<CsvParser>);
         }
       
       

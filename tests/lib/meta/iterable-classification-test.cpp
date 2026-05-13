@@ -131,20 +131,20 @@ namespace test {
           CHECK (false == can_STL_ForEach<LumieraCoreIter>::value );
           
           // detect Lumiera Forward Iterator
-          CHECK (false == can_IterForEach<TimeVector>::value );
-          CHECK (false == can_IterForEach<LongSet>   ::value );
-          CHECK (false == can_IterForEach<CharMap>   ::value );
-          CHECK (false == can_IterForEach<BoolList>  ::value );
-          CHECK (false == can_IterForEach<ShortDeque>::value );
-          CHECK (false == can_IterForEach<CustomCont>::value );
+          CHECK (false == can_LumieraIter<TimeVector>::value );
+          CHECK (false == can_LumieraIter<LongSet>   ::value );
+          CHECK (false == can_LumieraIter<CharMap>   ::value );
+          CHECK (false == can_LumieraIter<BoolList>  ::value );
+          CHECK (false == can_LumieraIter<ShortDeque>::value );
+          CHECK (false == can_LumieraIter<CustomCont>::value );
           
-          CHECK ( true == can_IterForEach<LumieraRangeIter>      ::value );
-          CHECK ( true == can_IterForEach<LumieraFilteredIter>   ::value );
-          CHECK ( true == can_IterForEach<LumieraTransformedIter>::value );
-          CHECK ( true == can_IterForEach<CustomLumieraIter>     ::value );
+          CHECK ( true == can_LumieraIter<LumieraRangeIter>      ::value );
+          CHECK ( true == can_LumieraIter<LumieraFilteredIter>   ::value );
+          CHECK ( true == can_LumieraIter<LumieraTransformedIter>::value );
+          CHECK ( true == can_LumieraIter<CustomLumieraIter>     ::value );
           
-          CHECK (false == can_IterForEach<CustomStateCore>::value );
-          CHECK ( true == can_IterForEach<LumieraCoreIter>::value );     // Note: Lumiera iterator capability added as wrapper
+          CHECK (false == can_LumieraIter<CustomStateCore>::value );
+          CHECK ( true == can_LumieraIter<LumieraCoreIter>::value );     // Note: Lumiera iterator capability added as wrapper
           
           // detect State Core
           CHECK (false == is_StateCore<TimeVector>::value );

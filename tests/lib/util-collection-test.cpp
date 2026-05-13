@@ -33,7 +33,7 @@ using util::first;
 using util::last;
 
 using lib::meta::can_STL_ForEach;
-using lib::meta::can_IterForEach;
+using lib::meta::can_LumieraIter;
 using lib::meta::can_STL_backIteration;
 
 using boost::lexical_cast;
@@ -131,8 +131,8 @@ namespace test {
           CHECK (!can_STL_ForEach<RangeI>::value);
           CHECK (!can_STL_backIteration<RangeI>::value);
           
-          CHECK (!can_IterForEach<VecI>::value);
-          CHECK ( can_IterForEach<RangeI>::value);
+          CHECK (!can_LumieraIter<VecI>::value);
+          CHECK ( can_LumieraIter<RangeI>::value);
         }
     };
   

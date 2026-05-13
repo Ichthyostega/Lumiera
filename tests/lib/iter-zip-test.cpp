@@ -20,6 +20,7 @@
 #include "test/run.hpp"
 #include "lib/iter-zip.hpp"
 #include "lib/iter-explorer.hpp"
+#include "lib/meta/tuple-helper.hpp"
 #include "test/test-helper.hpp"
 #include "lib/format-util.hpp"
 #include "lib/util.hpp"

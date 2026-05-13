@@ -431,11 +431,14 @@ namespace iter_stl {
       /** create empty snapshot */
       IterSnapshot() { }
       
+      // standard copy operations acceptable
+      
+      
       /** take snapshot by discharging the given Lumiera Forward iterator
        *  @warning depending on the implementation backing the source iterator,
        *           this might or might not yield side-effects.
        */
-      template<class IT>
+      template<class IT,       typename =meta::disable_if_self<IterSnapshot, IT>>
       IterSnapshot (IT&& src)
         {
           for ( ; src; ++src)
@@ -446,7 +449,7 @@ namespace iter_stl {
        *  @warning depending on the implementation backing the source iterator,
        *           this might or might not yield side-effects.
        */
-      template<class IT>
+      template<class IT,       typename =meta::disable_if_self<IterSnapshot, IT>>
       IterSnapshot (IT const& src)
         {
           for (IT copy{src}; copy; ++copy)
@@ -468,11 +471,6 @@ namespace iter_stl {
           for (IT pos{begin}; pos!=end; ++pos)
             buffer_.emplace_back (*pos);
         }
-      
-      IterSnapshot(IterSnapshot &&)                 = default;
-      IterSnapshot(IterSnapshot const&)             = default;
-      IterSnapshot& operator= (IterSnapshot const&) = default;
-      IterSnapshot& operator= (IterSnapshot &&)     = default;
       
       explicit
       operator bool() const

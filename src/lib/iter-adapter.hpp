@@ -193,7 +193,7 @@ namespace lib {
   
   namespace iter {
     using meta::is_StateCore;
-    using meta::can_IterForEach;
+    using meta::can_LumieraIter;
     using meta::can_STL_ForEach;
     using meta::ValueTypeBinding;
     using meta::RefTraits;
@@ -223,7 +223,7 @@ namespace lib {
     template<class IT>
     struct Trait
       {
-        static constexpr bool is_LumieraIter = can_IterForEach<IT>::value;
+        static constexpr bool is_LumieraIter = meta::is_LumieraIter_v<IT>;
         static constexpr bool is_STLIter = std::input_iterator<IT>;
         static constexpr bool is_Legacy  = legacy_traits_marked<IT>;
         
@@ -579,7 +579,7 @@ namespace lib {
   class IterStateCore
     : public IT
     {
-      static_assert (iter::can_IterForEach<IT>::value
+      static_assert (iter::can_LumieraIter<IT>::value
                     ,"Lumiera Iterator required as source");
     protected:
       IT&

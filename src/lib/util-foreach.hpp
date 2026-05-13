@@ -56,7 +56,7 @@ namespace util {
   using lib::meta::disable_if;
   
   using lib::meta::can_STL_ForEach;
-  using lib::meta::can_IterForEach;
+  using lib::meta::can_LumieraIter;
   
   
   
@@ -108,7 +108,7 @@ namespace util {
   template <typename Container
            ,typename FUN
            >
-  inline                                   disable_if< can_IterForEach<Container>,
+  inline                                   disable_if< can_LumieraIter<Container>,
   FUN                                      >
   for_each (Container const& coll, FUN doIt)
   {
@@ -124,7 +124,7 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   enable_if< can_IterForEach<IT>,
+  inline   enable_if< can_LumieraIter<IT>,
   FUN      >
   for_each (IT const& ii, FUN doIt)
   {
@@ -152,7 +152,7 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   enable_if< can_IterForEach<IT>,
+  inline   enable_if< can_LumieraIter<IT>,
   bool     >
   and_all (IT const& ii, FUN predicate)
   {
@@ -179,7 +179,7 @@ namespace util {
   template <typename IT
            ,typename FUN
            >
-  inline   enable_if< can_IterForEach<IT>,
+  inline   enable_if< can_LumieraIter<IT>,
   bool     >
   has_any (IT const& ii, FUN predicate)
   {

@@ -405,7 +405,7 @@ namespace lib {
     class ValueAdapter
       : public SRC
       {
-        static_assert (can_IterForEach<SRC>::value, "Lumiera Iterator required as source.");
+        static_assert (can_LumieraIter<SRC>::value, "Lumiera Iterator required as source.");
         
       public:
         SRC::value_type

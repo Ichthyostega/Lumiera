@@ -506,7 +506,7 @@ namespace meta {
    * @see IterableClassification_test
    */
   template<typename T>
-  class can_IterForEach
+  class can_LumieraIter
     {
       using  Type = Strip<T>::TypeReferred;
        
@@ -524,6 +524,12 @@ namespace meta {
           };
     };
   
+  template<class IT>
+  constexpr bool is_LumieraIter_v = meta::can_LumieraIter<IT>::value;
+  
+  template<class IT>
+  concept lum_iter = is_LumieraIter_v<IT>;
+  
   
   
   /** Trait template to detect a type exposing a »state core« API.
@@ -531,10 +537,10 @@ namespace meta {
    *  with the help of lib::IterStateWrapper or lib::IterableDecorator.
    *  This check is heuristic, based on the presence of function names.
    */
-  template<typename T>
+  template<typename COR>
   class is_StateCore
     {
-      using  Type = Strip<T>::TypeReferred;
+      using  Type = Strip<COR>::TypeReferred;
      
       META_DETECT_FUNCTION_ARGLESS(checkPoint);
       META_DETECT_FUNCTION_ARGLESS(iterNext);
@@ -547,10 +553,19 @@ namespace meta {
           };
     };
   
+  template<class COR>
+  constexpr bool is_StateCore_v = is_StateCore<COR>::value;
+  
+  template<class COR>
+  concept state_core = is_StateCore_v<COR>;
+  
   
   
   /** Trait template to detect a type usable with the STL for-each loop.
    *  Basically we're looking for the functions to get the begin/end iterator
+   * @remark many Lumiera Iterators define those additional functions any
+   *         can thus be used in a for-each loop, since a default-constructed
+   *         Lumiera Iterator can act as an "end" sentinel.
    */
   template<typename T>
   class can_STL_ForEach

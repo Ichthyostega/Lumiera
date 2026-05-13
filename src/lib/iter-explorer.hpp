@@ -250,7 +250,7 @@ namespace lib {
     using std::is_lvalue_reference;
     using std::remove_reference_t;
     using meta::is_StateCore;
-    using meta::can_IterForEach;
+    using meta::can_LumieraIter;
     using meta::can_STL_ForEach;
     using meta::ValueTypeBinding;
     using meta::has_TypeResult;
@@ -259,20 +259,20 @@ namespace lib {
     template<class SRC>
     struct shall_wrap_STL_Iter
       : __and_<can_STL_ForEach<SRC>
-              ,__not_<can_IterForEach<SRC>>
+              ,__not_<can_LumieraIter<SRC>>
               >
       { };
     
     template<class SRC>
     struct shall_use_Lumiera_Iter
-      : __and_<can_IterForEach<SRC>
+      : __and_<can_LumieraIter<SRC>
               ,__not_<is_StateCore<SRC>>
               >
       { };
     
     template<class SRC>
     struct shall_use_StateCore
-      : __and_<__not_<can_IterForEach<SRC>>
+      : __and_<__not_<can_LumieraIter<SRC>>
               ,is_StateCore<SRC>
               >
       { };
@@ -361,12 +361,12 @@ namespace lib {
       };
     
     template<class SRC, typename RES>
-    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  can_IterForEach<RES> >>>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  can_LumieraIter<RES> >>>
       {
         using SrcAdapter = meta::RefTraits<SRC>::value_type;
       };
     template<class SRC, typename RES>
-    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, can_IterForEach<RES> >>>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, can_LumieraIter<RES> >>>
       {
         using NestedIter = meta::RefTraits<RES>::value_type;
         using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
@@ -612,7 +612,7 @@ namespace lib {
     class RedressAdapter
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source.");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source.");
         
         using SrcRes = iter::Yield<SRC>;
         static_assert(meta::isLRef_v<SrcRes>, "Source iterator must yield its result by-ref.");
@@ -678,7 +678,7 @@ namespace lib {
     class Expander
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using _Trait = _ExpanderTraits<SRC,RES>;
         using ResIter = _Trait::ResIter;
@@ -897,10 +897,10 @@ namespace lib {
     class Flattener
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
 
         using NestedIT = iter::Yield<SRC>;
-        static_assert(can_IterForEach<NestedIT>::value, "flatten() operation expects nested iterator");
+        static_assert(can_LumieraIter<NestedIT>::value, "flatten() operation expects nested iterator");
 
       public:
         using value_type = meta::ValueTypeBinding<NestedIT>::value_type;
@@ -986,7 +986,7 @@ namespace lib {
     class Transformer
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using TransformFunctor = function<RES(SRC&)>;
         using TransformedItem = wrapper::ItemWrapper<RES>;
@@ -1216,7 +1216,7 @@ namespace lib {
     class Grouping
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using Group = std::array<RES, grp>;
@@ -1350,7 +1350,7 @@ namespace lib {
     class GroupAggregator
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using SrcValue   = meta::ValueTypeBinding<SRC>::value_type;
@@ -1439,7 +1439,7 @@ namespace lib {
     class Filter
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using FilterPredicate = function<bool(SRC&)>;
@@ -1540,7 +1540,7 @@ namespace lib {
       : public Filter<SRC>
       {
         using _Filter = Filter<SRC>;
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       public:
         MutableFilter() =default;
@@ -1705,7 +1705,7 @@ namespace lib {
     class StopTrigger
       : public IterStateCore<SRC>
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using Core = IterStateCore<SRC>;
         using Cond = function<bool(SRC&)>;
@@ -1905,7 +1905,7 @@ namespace lib {
   class IterExplorer
     : public SRC
     {
-      static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+      static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
       
       
     public:
