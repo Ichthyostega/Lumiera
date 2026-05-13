@@ -146679,23 +146679,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819169143" ID="ID_1367745941" MODIFIED="1777050391595" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
+<node COLOR="#338800" CREATED="1776819169143" ID="ID_1367745941" MODIFIED="1778694413443" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
 <arrowlink COLOR="#fefab1" DESTINATION="ID_1503539674" ENDARROW="Default" ENDINCLINATION="-233;10;" ID="Arrow_ID_451160831" STARTARROW="None" STARTINCLINATION="92;5;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778593688734" HGAP="35" ID="ID_730263664" MODIFIED="1778593713957" TEXT="Kern: die Verarbeitungs-Funktionalit&#xe4;t" VSHIFT="-9">
 <node CREATED="1778593747927" ID="ID_1315127845" MODIFIED="1778593770426" TEXT="sollte auf alle Allokator- und Aufr&#xe4;um-Arbeit kaskadieren"/>
 <node CREATED="1778593720983" ID="ID_1339362365" MODIFIED="1778594032492" TEXT="Trick: diesen Zugang explizit auch public aufrufbar machen">
 <linktarget COLOR="#fefbd6" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="-30;50;" ID="Arrow_ID_1537514504" SOURCE="ID_308671982" STARTARROW="None" STARTINCLINATION="57;3;"/>
 <linktarget COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" SOURCE="ID_1723782536" STARTARROW="None" STARTINCLINATION="226;-11;"/>
 <icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778684644901" HGAP="82" ID="ID_494756239" LINK="#ID_1946083526" MODIFIED="1778684756894" TEXT="dieser Kniff geht nicht auf" VSHIFT="2">
+<arrowlink COLOR="#dd0609" DESTINATION="ID_314091864" ENDARROW="Default" ENDINCLINATION="21;-45;" ID="Arrow_ID_425697321" STARTARROW="None" STARTINCLINATION="-13;40;"/>
+<icon BUILTIN="stop-sign"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776819181261" ID="ID_1026628741" MODIFIED="1776819956356" TEXT="alternative synchrone Schnittstelle bereitstellen">
-<icon BUILTIN="flag-yellow"/>
+</node>
+<node COLOR="#338800" CREATED="1776819181261" ID="ID_1026628741" MODIFIED="1778694419297" TEXT="alternative synchrone Verbindung bereitstellen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777324291441" ID="ID_336948545" MODIFIED="1777324316333" TEXT="ist relevant f&#xfc;r &#xbb;sofort&#xab;-Allokation (Fallback)"/>
+<node COLOR="#5b280f" CREATED="1778692651060" ID="ID_526425164" MODIFIED="1778692684555" TEXT="erst mal eine synchrone API-Funktion bauen">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1778692661635" ID="ID_971709459" MODIFIED="1778692666072" TEXT="nett f&#xfc;r Tests"/>
+<node CREATED="1778692671532" ID="ID_1297893109" MODIFIED="1778692716537" TEXT="l&#xf6;st aber irgendwie nicht das Problem">
+<arrowlink COLOR="#fe590e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="0;-19;" ID="Arrow_ID_928400072" STARTARROW="None" STARTINCLINATION="64;21;"/>
+</node>
+</node>
 <node CREATED="1776819226503" ID="ID_1059062619" MODIFIED="1777051865655" TEXT="sollte kongruent zum Messaging sein"/>
-<node CREATED="1778593890737" ID="ID_308671982" MODIFIED="1778594041691" TEXT="sollte idealerweise die asynchrone L&#xf6;sung inkludieren">
+<node CREATED="1778593890737" ID="ID_308671982" MODIFIED="1778692684564" TEXT="sollte idealerweise die asynchrone L&#xf6;sung inkludieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -146705,11 +146716,113 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#fefbd6" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="-30;50;" ID="Arrow_ID_1537514504" STARTARROW="None" STARTINCLINATION="57;3;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778683283418" HGAP="55" ID="ID_985414238" MODIFIED="1778692707890" TEXT="das ist aber problematisch..." VSHIFT="13">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bez&#252;glich Code-Struktur, da Teile des asynchronen Verarbeitungs-Pfades im LocalMemPool liegen
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#b9104e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="653;64;" ID="Arrow_ID_649016741" SOURCE="ID_398699629" STARTARROW="Default" STARTINCLINATION="646;0;"/>
+<linktarget COLOR="#fe590e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="0;-19;" ID="Arrow_ID_928400072" SOURCE="ID_1297893109" STARTARROW="None" STARTINCLINATION="64;21;"/>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778684714648" HGAP="44" ID="ID_314091864" MODIFIED="1778692175930" TEXT="genaue Anforderungs-Analyse" VSHIFT="2">
+<linktarget COLOR="#dd0609" DESTINATION="ID_314091864" ENDARROW="Default" ENDINCLINATION="21;-45;" ID="Arrow_ID_425697321" SOURCE="ID_494756239" STARTARROW="None" STARTINCLINATION="-13;40;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1778684814094" ID="ID_495303541" MODIFIED="1778684863789" TEXT="synchrone Anforderung &#x27f9; bediene mich jetzt sofort und verbindlich"/>
+<node CREATED="1778684880184" ID="ID_1007933032" MODIFIED="1778684907582" TEXT="Duplikat vermeiden &#x27f9; atomar feststellen ob bedient wurde"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778684917792" ID="ID_705215696" MODIFIED="1778684931903" TEXT="der Pr&#xfc;f-Punkt f&#xfc;r Beides liegt im LocalMemPool">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f1f1a5" COLOR="#351d75" CREATED="1778692148968" ID="ID_335112254" MODIFIED="1778692984253" TEXT="Einsicht: Unterscheidung zwischen &#xbb;Schnittstelle&#xab; und &#xbb;Code-Pfad&#xab;">
+<arrowlink COLOR="#fff5b4" DESTINATION="ID_404163400" ENDARROW="Default" ENDINCLINATION="62;-198;" ID="Arrow_ID_750368441" STARTARROW="None" STARTINCLINATION="-477;19;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1778692209288" ID="ID_1212177224" MODIFIED="1778692337700" TEXT="gebraucht wird der &#xbb;synchrone Code-Pfad&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und zwar als zweiter Code-Pfad, nachdem zun&#228;chst eine asynchrone Anfrage abgesetzt wurde, und dennoch an der Stelle des Bedarfs die Allokation noch nicht bereitgestellt wurde. Deshalb dient diser &#187;synchrone Code-Pfad&#171; dazu, JETZT eine DEFINITIVE Antwort zu bekommen (ggfs. einen Fehler)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778692223446" ID="ID_286335522" MODIFIED="1778692386533" TEXT="das impliziert nicht, da&#xdf; ich eine synchrone Methode aufrufe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das w&#228;re zwar der naheliegende Ansatz, w&#252;rde hier aber die Sache sehr komplex machen, da ich nicht nur die definitive Antwort m&#246;chte, sondern <i>zus&#228;tzlich auch noch Duplikate vermeiden.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778692404305" ID="ID_430379303" MODIFIED="1778692564453">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich hatte bereits die <i>zutreffende Antwort</i>&#160;gefunden, diese aber nicht &#187;realisiert&#171;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nochmal: die L&#246;sung besteht darin, da&#223; der asynchrone Code-Pfad in die synchrone Feststellung eingeschlossen wird. Aber eben nicht so, da&#223; ich (am asynchronen Codepfad vorbei) einen synchronen API-Aufruf mache.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1776819244365" ID="ID_933815031" MODIFIED="1778593872888" TEXT="erfolgt stets als &#xbb;pull&#xab; vom lokalen Manager"/>
+<node CREATED="1778692733047" ID="ID_404163400" MODIFIED="1778692984253" TEXT="Spezifikation: synchrone Verbindung">
+<linktarget COLOR="#fff5b4" DESTINATION="ID_404163400" ENDARROW="Default" ENDINCLINATION="62;-198;" ID="Arrow_ID_750368441" SOURCE="ID_335112254" STARTARROW="None" STARTINCLINATION="-477;19;"/>
+<icon BUILTIN="list"/>
+<node CREATED="1778692764885" ID="ID_202708583" MODIFIED="1778692781959" TEXT="(lokal) feststellen ob Allokation bedient werden kann"/>
+<node CREATED="1778692783354" ID="ID_255495997" MODIFIED="1778692800030" TEXT="(synchron) alles anstehende globale Processing ausf&#xfc;hren"/>
+<node CREATED="1778692808951" ID="ID_471309892" MODIFIED="1778692818145" TEXT="(lokal) feststellen ob Allokation nun doch bedient werden kann"/>
+<node CREATED="1778692821014" ID="ID_819345575" MODIFIED="1778692825913" TEXT="sonst: Fehler">
+<node COLOR="#5b280f" CREATED="1778692856948" ID="ID_1878910282" MODIFIED="1778692888621" TEXT="man k&#xf6;nnte an der Stelle auch das synchrone API aufrufen">
+<icon BUILTIN="button_cancel"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1777324327301" ID="ID_1965528564" MODIFIED="1777324340058" TEXT="lege zun&#xe4;chst einen &#xbb;naiven&#xab; Memory-Manager an">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778692867807" ID="ID_1843603861" MODIFIED="1778692893324" TEXT="Aber: diese Situation kann nur auftreten, wenn etwas defekt ist">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778692897100" ID="ID_1787182653" MODIFIED="1778692907839" TEXT="unter der Annahme da&#xdf; vorher ein async-Request gestellt wurde"/>
+<node CREATED="1778692908762" ID="ID_707657939" MODIFIED="1778692926163" TEXT="dann mu&#xdf; das globale Processing diesen behandelt und zugestellt haben"/>
+<node CREATED="1778692929071" ID="ID_467967428" MODIFIED="1778692935363" TEXT="und sei es, als leere Alloc"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#540f69" CREATED="1778693019244" ID="ID_1545731490" MODIFIED="1778693042226" TEXT="beachte: gar kein direkter Request">
+<icon BUILTIN="forward"/>
+<node CREATED="1778693079023" ID="ID_1817887106" MODIFIED="1778693099150" TEXT="beruht auf der Idee der atomaren Ordnung"/>
+<node CREATED="1778693100696" ID="ID_72040121" MODIFIED="1778693128459">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der async-Request <b>happens-before</b>&#160;dem synchronen globalen Processing
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#a9d8a7" COLOR="#338800" CREATED="1778694426989" ID="ID_1722546045" MODIFIED="1778694529807" TEXT="funktioniert im Test">
+<arrowlink COLOR="#12d25a" DESTINATION="ID_389422946" ENDARROW="Default" ENDINCLINATION="-296;-885;" ID="Arrow_ID_533922798" STARTARROW="None" STARTINCLINATION="158;20;"/>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1777324327301" ID="ID_1965528564" MODIFIED="1778694422162" TEXT="lege zun&#xe4;chst einen &#xbb;naiven&#xab; Memory-Manager an">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777324341484" ID="ID_269815037" MODIFIED="1777324543018" TEXT="einzig sinnvoll: direkt vom/zum Heap">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -146819,9 +146932,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778630852336" ID="ID_1688369877" MODIFIED="1778630859835" TEXT="zwei m&#xf6;gliche Ans&#xe4;tze">
 <node CREATED="1778630861078" ID="ID_692489731" MODIFIED="1778630977002" TEXT="m&#xf6;glichst kurz/lokal">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       im Grunde m&#252;&#223;te man nur den Zugang zum Memory-Manager selber locken, denn die ganzen Queue-Operationen sind ja schon lock-free und threadsafe; auch k&#246;nnten diese Locks dann non-recursive sein
@@ -146832,9 +146943,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1778630869382" ID="ID_1688710426" MODIFIED="1778631446175" TEXT="m&#xf6;glichst wenig Locks">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...andererseits ist jeder (Mutex)-Lock ein Kernel-Aufruf, und wir erwarten durchaus ganze B&#252;ndel an Requests. Au&#223;erdem wird mit wenigen Locks auf API-Level viel klarer, da&#223; das Locking vollst&#228;ndig, und der Zustand konsistent ist.
@@ -146846,9 +146955,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1778631447430" ID="ID_1196517656" MODIFIED="1778631809891" TEXT="entscheide mich (nach Bauchgef&#xfc;hl) f&#xfc;r &#xbb;wenig Locks&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und zwar sagt mir mein Bauchgef&#252;hl, da&#223; wir hier keine Situation mit starker Contention haben; das hat sich auch bereits im Zusammenhang mit dem Scheduler gezeigt. Im Regelfall erwarte ich, da&#223; die Anfragen durch die Queue gehen, und damit ohne Interferenz aneinander vorbeikommen. Wenn dann tats&#228;chlich mal ein Thread den synchronen Pfad einschl&#228;gt, erscheint es mir sinnvoller, alle Arbeit in einem Schwung zu erledigen, selbst wenn dadruch (ohenhin nur ausnahmsweise!) ein anderer Thread mal geblockt wird. Letztlich gilt hier immer: die Jobs sind <i>vergleichsweise gro&#223;. </i>
@@ -146931,9 +147038,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778641582324" ID="ID_723485846" MODIFIED="1778641604860" TEXT="danach sollten....">
 <node CREATED="1778641588959" ID="ID_857089658" MODIFIED="1778641600492" TEXT="NUM_THREADS Allokationen erfolgt sein"/>
 <node CREATED="1778641607696" ID="ID_514432880" MODIFIED="1778641618195" TEXT="alle diese Allokationen wieder in der Queue sitzen"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1778642703060" ID="ID_378615107" MODIFIED="1778642712701" TEXT="funktioniert nicht...">
+<node COLOR="#435e98" CREATED="1778642703060" ID="ID_378615107" MODIFIED="1778694539272" TEXT="funktioniert nicht...">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1778642715157" ID="ID_723545359" MODIFIED="1778642718343" TEXT="Beobachtungen">
+<node CREATED="1778642715157" ID="ID_723545359" MODIFIED="1778694786375" TEXT="Beobachtungen">
+<icon BUILTIN="info"/>
 <node CREATED="1778642721100" ID="ID_454509509" MODIFIED="1778642737405" TEXT="einige Threads sind anscheinend schon fertig bevor andere &#xfc;berhaupt erst anfangen"/>
 <node CREATED="1778642739266" ID="ID_1618120303" MODIFIED="1778642753195" TEXT="damit werden nat&#xfc;rlich einige Allokationen bereits wegger&#xe4;umt"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778642777488" ID="ID_735364209" MODIFIED="1778642799183" TEXT="unklar: warum sind nach processPending() noch Allocs offen?">
@@ -146943,9 +147051,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778642807208" ID="ID_1933157461" MODIFIED="1778642812460" TEXT="genauere Analyse">
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778642813695" ID="ID_241071013" MODIFIED="1778643259773" TEXT="Problem-1: brauche wirklich unabh&#xe4;ngige Random-Generatoren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       hatte diese Technik vom incidence-count-test kopiert; der Code dort ist aber <i>nicht ganz korrekt &#8212;</i>&#160;was dort aber nicht auff&#228;llt, da das thread-Microbenchmark seine test-Funktion (das &#187;subjekt&#171;) nochmal kopiert, n&#228;mlich in die closure des jeweiligen Thread. Diese Kopie bewirkt dann einfach, da&#223; der Generator nochmal kopiert wird ... bin mir aber trotzdem nicht sicher, so wirklich verschiedene Zufallszahlen gezogen werden.
@@ -146963,10 +147069,222 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778643262156" ID="ID_46315611" MODIFIED="1778643274742" TEXT="sehe in allen Threads exakt den gleichen Delay"/>
 <node CREATED="1778643275676" ID="ID_284051539" MODIFIED="1778643284600" TEXT="daher wachen die auch alle gemeinsam auf"/>
 <node CREATED="1778643339650" ID="ID_1840909466" MODIFIED="1778643355371" TEXT="und dann sind die ersten schon fertig bevor die sp&#xe4;teren &#xfc;berhaupt zum Zug kommen"/>
-<node CREATED="1778643357162" ID="ID_512680760" MODIFIED="1778643379727" TEXT="kann aber auch daran liegen, da&#xdf; wir einfach nicht so viele Threads gleichzeitig laufen lassen k&#xf6;nnen"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778679838089" ID="ID_437100940" MODIFIED="1778679860382" TEXT="Problem-2: erste Theads terminieren bevor letzte starten">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#970133" CREATED="1778679865901" ID="ID_621751054" MODIFIED="1778680065876" TEXT="das ist das eigentliche Problem"/>
+<node CREATED="1778679898083" ID="ID_1944064033" MODIFIED="1778679919434" TEXT="wobei &#x2014; wei&#xdf; nicht ... kann ja auch ein tats&#xe4;chlicher Bug sein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778679922322" ID="ID_857836397" MODIFIED="1778680049795" TEXT="zumindest ist wegen diesem Problem das Test-Setup korrupt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Genauer: das Szenario ist nicht so, wie von mir geplant. Es ist zwar tats&#228;chlich massiv concurrent, und das m&#252;&#223;te das Subject auch verkraften; aber das Verhalten ist dadurch nicht mehr verifzierbar
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778681131699" ID="ID_725298648" MODIFIED="1778681149966" TEXT="nebenbei bemerkt: das API f&#xfc;r ScopedCollection ist unvollst&#xe4;ndig">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1778681154739" ID="ID_1527328731" MODIFIED="1778681164103" TEXT="das Erzeugen der Instanz ist zu umst&#xe4;ndlich"/>
+<node CREATED="1778681181873" ID="ID_262040421" MODIFIED="1778709901385" TEXT="es fehlt das Hinterlegen fester Argumente">
+<node CREATED="1778709995012" ID="ID_1485556701" MODIFIED="1778710018906" TEXT="w&#xe4;re m&#xf6;glich durch Erweiterung von FillWith">
+<node CREATED="1778710037003" ID="ID_730979662" MODIFIED="1778710085583" TEXT="m&#xfc;&#xdf;te dazu ein Argument-Tupel materialisieren"/>
+<node CREATED="1778710769213" ID="ID_410726998" MODIFIED="1778710789818" TEXT="bisher wird &lt;tuple&gt; nicht includiert"/>
+</node>
+<node CREATED="1778711002374" ID="ID_839332664" MODIFIED="1778711024630" TEXT="k&#xf6;nnte man auch als &#x3bb;-builder neu formulieren">
+<node CREATED="1778711483235" ID="ID_1590205155" LINK="https://stackoverflow.com/a/49902823/444796" MODIFIED="1778711541326" TEXT="in C++20 gibt es perfect &#x3bb;-capture"/>
+<node CREATED="1778711904212" ID="ID_1775952563" LINK="https://en.cppreference.com/cpp/language/lambda#Lambda_capture" MODIFIED="1778711918406" TEXT="ist m&#xf6;glich sowohl f&#xfc;r Referenz, alsauch Copy-Capture"/>
+</node>
+<node COLOR="#435e98" CREATED="1778727867774" ID="ID_833107791" MODIFIED="1778727892750" TEXT="kann damit die nested-Funcors durch Builder-Funktionen ersetzen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1778681164947" ID="ID_281208279" MODIFIED="1778681175454" TEXT="es fehlt das Aufrufen eines Lambda"/>
+<node CREATED="1778727780762" ID="ID_1017169041" MODIFIED="1778727790117" TEXT="Iterator-pull ist limitiert">
+<node CREATED="1778727795148" ID="ID_699461971" MODIFIED="1778727812229" TEXT="k&#xf6;nnte sowohl copy-Konstruktion, alsauch Value-Konstruktion machen"/>
+<node CREATED="1778727813246" ID="ID_791306906" MODIFIED="1778727831783" TEXT="sollte mit dem Populieren aufh&#xf6;ren, wenn der Iterator ersch&#xf6;pft ist"/>
+<node COLOR="#435e98" CREATED="1778727839622" ID="ID_576015934" MODIFIED="1778727896555" TEXT="Mit einem Concept k&#xf6;nnte das direkt eine Konstruktor-Variante sein">
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
+</node>
+<node COLOR="#435e98" CREATED="1778680084927" ID="ID_831309457" MODIFIED="1778694776376" TEXT="Anpassungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1778680089194" ID="ID_197674581" MODIFIED="1778680092854" TEXT="Random-Generierung">
+<node CREATED="1778680096265" ID="ID_1358593920" MODIFIED="1778680104920" TEXT="Erinnerung...">
+<node CREATED="1778680106055" ID="ID_750869602" MODIFIED="1778680120858" TEXT="Nucleus &#x2259; Quelle f&#xfc;r den Seed"/>
+<node CREATED="1778680128125" ID="ID_472547204" MODIFIED="1778680162028" TEXT="Random::Seed &#x2259; ein Nucleus der den Seed aus einem anderen Generator zieht"/>
+<node CREATED="1778680175271" ID="ID_733278339" MODIFIED="1778680199983" TEXT="der Seed passiert in dem Moment, wo der Generator konstruiert wird"/>
+</node>
+<node CREATED="1778680209583" ID="ID_1798555768" MODIFIED="1778680229555" TEXT="Problem hier: verwende eine gemeinsame &#x3bb;-Instanz f&#xfc;r alle Threads">
+<node CREATED="1778680231725" ID="ID_231244196" MODIFIED="1778680237418" TEXT="kann man machen"/>
+<node CREATED="1778680238246" ID="ID_257727363" MODIFIED="1778680251465" TEXT="wird verwirrend, sofern die Closure mutable ist"/>
+</node>
+<node CREATED="1778680371181" ID="ID_189533548" MODIFIED="1778680499023">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Randomisierung ist hier <b>grunds&#228;tzlich nicht reproduzierbar</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das liegt daran, da&#223; das relative Verhalten der Threads zueinander eine Rolle spielt. Solche zeitlichen Verschiebungen enthalten ein Element echter Entropie, wenngleich auch die Qualit&#228;t der Entropie unterschiedlich sein kann. Man kann zwar versuchen, diese Entropie zu reduzieren, und ein solches Unterfangen ist gef&#228;hrlich, weil es einen Grad der Kontrolle suggeriert, der letztlich nicht gegeben ist.
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1778680507732" ID="ID_1577851272" MODIFIED="1778680636069" TEXT="dann besser gleich auf Reproduzierbarkeit verzichten">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1778680521745" ID="ID_1202354696" MODIFIED="1778680538048" TEXT="ja dann &#x27f9; ist auch ein korrupter Generator-State egal">
+<node CREATED="1778680541142" ID="ID_1203688363" MODIFIED="1778680549382" TEXT="siehe random-concurrent-test.cpp"/>
+<node CREATED="1778680551508" ID="ID_214413089" MODIFIED="1778680561399" TEXT="Generatoren sind nicht threadsafe"/>
+<node CREATED="1778680562252" ID="ID_1130838275" MODIFIED="1778680576390" TEXT="m&#xf6;gliche Effekte">
+<node CREATED="1778680576916" ID="ID_1824606428" MODIFIED="1778680584349" TEXT="Bias in der Verteilung"/>
+<node CREATED="1778680585424" ID="ID_1894957394" MODIFIED="1778680598203" TEXT="Werte au&#xdf;erhalb des Wertbereichs"/>
+</node>
+<node CREATED="1778680599902" ID="ID_926765859" MODIFIED="1778680628723">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      beides ist hier <b>komplett egal</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      solange wir <i>irgendwie verschiedene Werte</i>&#160;in den Threads bekommen, is gut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1778680640757" ID="ID_1394659905" MODIFIED="1778680760973" TEXT="also einfach einen Generator im Thread erzeugen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da der Seed irgend ein 64bit-uint ist, ist das Schlimmste, was passieren kann, da&#223; zwei Threads einen lokalen Generator mit dem gleichen Seed und damit der gleichen Sequenz haben. Dieser Fall <b>ist aber nicht die Regel</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1778681240809" ID="ID_1531241320" MODIFIED="1778681252059" TEXT="kontrolliertes Szenario herstellen">
+<node CREATED="1778681253391" ID="ID_1862800880" MODIFIED="1778681315111" TEXT="selbst 100ms reichen nicht aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was auch eigentlich nicht verwunderlich ist, denn wir haben zwar einen Sleep, aber auch eine signifikante CPU-Load (1 Million Speicherzugriffe)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778681346331" ID="ID_1939471461" MODIFIED="1778681362397" TEXT="sollte dann eine N-fach-Barriere verwenden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778681773306" ID="ID_609909829" MODIFIED="1778694543005" TEXT="Problem auch mit dem korrekten Szenario">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1778681862806" ID="ID_443478205" MODIFIED="1778681870089" TEXT="es passieren zu viele Allokationen"/>
+<node CREATED="1778681887129" ID="ID_1998517831" MODIFIED="1778681907304" TEXT="exakt die &#xfc;bersch&#xfc;ssigen Allokationen &gt; 100 (numThreds) bleiben &#xfc;brig"/>
+<node CREATED="1778682005163" ID="ID_796657228" MODIFIED="1778682023905" TEXT="Vermutung: Race in der synchronen Zuteilung">
+<node CREATED="1778682357350" ID="ID_797392472" MODIFIED="1778682405357" TEXT="best&#xe4;tigt: queues im Thread nicht leer">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn ich am Ende in jedem Thread die Queue leere, dann stimmt die Bilanz am Ende
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778682408073" ID="ID_1038446915" MODIFIED="1778682446918" TEXT="es ist maximal eine zus&#xe4;tzliche Allokation in der Queue">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Typische Werte schwanken zwischen 40 und 80 zus&#228;tzlichen Allokationen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778682682880" ID="ID_499008534" MODIFIED="1778682807751" TEXT="im Testcode ist ein offensichtlicher Race">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zwischen dem Pr&#252;fen auf die leere Queue und dem synchronen Aufruf f&#252;r eine Zuteilung
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1778682880797" ID="ID_127419517" MODIFIED="1778682888786" TEXT="tritt aber &#xfc;berraschend h&#xe4;ufig auf"/>
+<node CREATED="1778682889494" ID="ID_1958360361" MODIFIED="1778683124733" TEXT="Vermututng: Race wird durch Contention verl&#xe4;ngert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da man das Lock erlangen mu&#223;, um die synchrone Anfrage zu t&#228;tigen, verst&#228;rkt sich eine einzige zuf&#228;llige Kollision: der benachteiligte Thread wartet, erlangt das Lock und bringt dadruch andere Threads zum Warten. <b>Immer wenn ein Thread auf das Lock wartet</b>, ist danach auch sicher seine asynchrone Anfrage bereits bedient
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f2d3b5" COLOR="#990033" CREATED="1778683132230" ID="ID_1946083526" MODIFIED="1778683164074" TEXT="dahinter verbirgt sich ein Problem der Code-Struktur">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1778683193686" ID="ID_398699629" MODIFIED="1778683443874" TEXT="problematisch ist exakt der Kniff, der Doppel-Zuteilungen verhindern soll">
+<arrowlink COLOR="#b9104e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="653;64;" ID="Arrow_ID_649016741" STARTARROW="Default" STARTINCLINATION="646;0;"/>
+</node>
+<node CREATED="1778684203562" ID="ID_1914041075" MODIFIED="1778684232754" TEXT="denn die Eingangs-Queue des LocalPool ist nicht vom Lock abgedeckt"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778684453026" ID="ID_926570788" MODIFIED="1778684571749" TEXT="der synchrone Request baut nicht wirklich auf dem asynchronen Request auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich dachte, ich kann mich dem Problem entwinden, indem ich beide auf den gleichen Basis-Funktionen aufbaue; der Test zeigt aber, da&#223; das nicht aufgeht
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778694549001" ID="ID_160394565" MODIFIED="1778694768049" TEXT="habe nun verstanden was ich falsch verstanden habe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zusammengefa&#223;t: ich brauche einen synchronen Abgleich zur Herstellung der Konsistenz, sofern der zun&#228;cht ausgel&#246;ste asynchrone Abgleich nicht erfolgreich war. Aber das impliziert <b>nicht</b>&#160;einen Aufruf des synchronen API (das ich nun tats&#228;chlich nur f&#252;r den Test gebaut habe). Vielmehr besteht die <i>elegante L&#246;sung</i>&#160;darin, ein &#187;happens-before&#171; herzustellen (in dem wir &#187;jetzt und hier&#171; das globale Processing machen); danach <i>mu&#223;</i>&#160;der zun&#228;chst gesendete asynchrone Request auch tats&#228;chlich behandelt und zugestellt sein, <i>ohne daf&#252;r noch extra etwas zu unternehmen.</i>&#160;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1778694437303" ID="ID_389422946" MODIFIED="1778694529808" TEXT="nach dem Umbau funktionierts">
+<linktarget COLOR="#12d25a" DESTINATION="ID_389422946" ENDARROW="Default" ENDINCLINATION="-296;-885;" ID="Arrow_ID_533922798" SOURCE="ID_1722546045" STARTARROW="None" STARTINCLINATION="158;20;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1778695283214" ID="ID_978534045" MODIFIED="1778695295656" TEXT="Vorsicht: Testsuite ist auf 8MiB limitiert">
+<node CREATED="1778695297087" ID="ID_1119237552" MODIFIED="1778695308343" TEXT="dieser test alloziert &#xbb;mal eben&#xab; 100 MiB"/>
+<node CREATED="1778695331666" ID="ID_1196538153" MODIFIED="1778695331666" TEXT=""/>
 </node>
 </node>
 </node>
@@ -171692,9 +172010,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#435e98" CREATED="1778634707713" HGAP="30" ID="ID_226540112" MODIFIED="1778635048385" TEXT="habe aber inzwischen eine elegante L&#xf6;sung f&#xfc;r dieses Dilemma gefunden" VSHIFT="19">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...n&#228;mlich indem der Job letztlich auf den synchronen Fall zur&#252;ckgreift, dieser aber durch die gleiche Mechanik implementiert ist, wie der asynchrone Fall, und dabei gleich alle aufgesammelten Requests in den Queues mit verarbeitet. Dadruch wird effektiv ein Batch an Allokator-Aufwand in denjenigen Worker geschoben, der rein zuf&#228;llig als erster auf eine nicht bediente Allokation st&#246;&#223;t. Das Sch&#246;ne an dieser Code-Struktur ist, da&#223; die M&#246;glichkeit offen bleibt, sp&#228;ter zur Performance-Optimierung (oder nur in bestimmten Situationen) dennoch etwas speziell einzurichten / schedulen / auszuf&#252;hren, ohne da&#223; dazu der Code im EngineBufferManager ge&#228;ndert werden mu&#223;

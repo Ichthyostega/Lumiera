@@ -18,25 +18,22 @@
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-//#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
 #include "vault/mem/engine-buffer-allocator.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/iter-explorer.hpp"
-//#include "lib/depend-inject.hpp"
+#include "lib/sync-barrier.hpp"
 #include "lib/thread.hpp"
-//#include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "test/diagnostic-output.hpp"////////////TODO
 
 #include <algorithm>
-//#include <thread>
+#include <string>
 #include <array>
 
-using lib::Thread;
-using lib::Literal;
 using lib::explore;
-//using lib::ScopedCollection;
+using lib::Literal;
+using lib::Thread;
+using lib::SyncBarrier;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
 using std::chrono::microseconds;
@@ -46,24 +43,10 @@ namespace vault {
 namespace mem   {
 namespace test  {
   
-//  using LERR_(LOGIC);
-//  using LERR_(LIFECYCLE);
-  
-  
-  namespace { // Test helper
-    
-    const size_t ALLOC_REQ = 1024*1024;
-    const size_t NUM_THREADS = 100;
-//    template<typename X>
-//    Buff*
-//    mark_as_Buffer(X& something)
-//      {
-//        return reinterpret_cast<Buff*> (std::addressof(something));
-//      }
-//    
+  namespace { // Test parameters......
+    const size_t ALLOC_REQ = 1024*1024;   ///< use test-allocation request of 1 MiB size
+    const size_t NUM_THREADS = 100;       ///< press concurrently
   }
-  
-  
   
   
   
@@ -77,12 +60,9 @@ namespace test  {
       virtual void
       run (Arg)
         {
-          seedRand();
-          
           demonstrate_AllocatorInterface();
           verify_syncRequest();
           verify_asyncRequest();
-          verify_lulz();
         }
       
       
@@ -150,7 +130,7 @@ namespace test  {
           
           // can use that memory
           char* buf = reinterpret_cast<char*> (alloc.mem);
-          string ranS{lib::randStr(555-1)};
+          std::string ranS{lib::randStr(555-1)};
           auto* p = std::copy (ranS.begin(), ranS.end(), buf);
           CHECK (ranS.length() == size_t(p - buf));
           *p = '\0';
@@ -175,7 +155,16 @@ namespace test  {
       
       
       
-      /** @test show that an working allocation request passes thread boundaries */
+      /** @test show a working allocation request passed over thread boundaries...
+       *      - use a simplified »local pool« that actually just provides an in-queue
+       *      - start a lot of threads that perform the typical allocation sequence
+       *        + first send an asynchronous allocation request
+       *        + some delay while doing other stuff (here: sleep)
+       *        + check if allocation has been serviced
+       *        + if not, then perform global allocation servicing in this worker
+       *        + allocation must be available now, can use it
+       *        + when done, send allocation back to the global pool
+       */
       void
       verify_asyncRequest()
         {
@@ -196,42 +185,44 @@ namespace test  {
                     return inQueue_.empty();
                   }
               };
-            
+          
           EngineBufferManager manager;
           
           using WorkBuff = std::array<uint64_t, ALLOC_REQ / sizeof(uint64_t)>;
           
-std::atomic_int cnt{0};
-          auto workSeq = [&, gen = makeRandGen()]// local random generator per thread
-                         ()  mutable
-                            {// sequence of actions within a worker thread
-int i=++cnt;
+          SyncBarrier afterThread{NUM_THREADS+1};
+          auto workSeq = [&]{ // sequence-of-actions-within-worker-thread-------------------
                               LocalTestPool myPool;
                               CHECK (myPool.empty());
-                              
+
                               manager.async_requestAllocation (myPool, ALLOC_REQ);
-                              
-                              // meanwhile the worker does some other "work"
-                              uint delay = 100 + gen.i(800);
+
+                              // meanwhile the worker does some other "work"...
+                              auto gen = makeRandGen(); // local random generator per thread
+                              uint delay = 100 + gen.i(900);
                               sleep_for (microseconds(delay));
-SHOW_EXPR(delay)
                               
                               Alloc alloc = myPool.retrieveAlloc();
                               if (alloc.empty())
-                                // they let us down ...
-                                // insist harder to be serviced thusly
-                                alloc = manager.requestAllocation (ALLOC_REQ);
+                                { // they let us down ...
+                                  // insist harder to be serviced thusly
+                                  manager.processPendingRequests();
+                                  alloc = myPool.retrieveAlloc();
+                                  // Explanation: since the async_requestAllocation() »happens-before« the processPendingRequests()
+                                } //              our request *must* have been processed and dispatched now, unless there was a failure
                               
                               CHECK (not alloc.empty());
                               CHECK (ALLOC_REQ <= alloc.siz);
                               // can use that allocation for some "serious work"...
                               auto content = new(alloc.mem) WorkBuff;
                               std::ranges::generate (*content, [&]{ return gen.u64(); });
-                              sleep_for (10ms);
+                              
+                              // coordinate end of all threads
+                              afterThread.sync();
                               
                               // pass allocation back to the central hub
                               manager.supply (alloc);
-SHOW_EXPR(i)
+                              CHECK (myPool.empty()); // no further pending / duplicate Alloc in-queue
                             };
           
           using Threads = lib::ScopedCollection<Thread>;
@@ -240,31 +231,21 @@ SHOW_EXPR(i)
           // Start a collection of workers....
           Threads threads{NUM_THREADS, startThread};
           
+          // after that barrier, all threads send back their allocation
+          afterThread.sync();
+          
           // wait for all threads to finish...
           while (explore(threads).has_any())
             yield();
           
           // all the allocations sent back by the workers
-          // should sit in the EngineBufferManager's input queue
-SHOW_EXPR(watch(manager).numAllocs());
-//          CHECK (NUM_THREADS           == watch(manager).numAllocs());
-SHOW_EXPR(watch(manager).bytesLeased());
-//          CHECK (NUM_THREADS*ALLOC_REQ <= watch(manager).bytesLeased());
+          // should sit now in the EngineBufferManager's input queue
+          CHECK (NUM_THREADS           == watch(manager).numAllocs());
+          CHECK (NUM_THREADS*ALLOC_REQ <= watch(manager).bytesLeased());
           
           // process in-queue and retrieve all allocations..
           manager.processPendingRequests();
-SHOW_EXPR(watch(manager).numAllocs());
-SHOW_EXPR(watch(manager).bytesLeased());
-//          CHECK (0 == watch(manager).bytesLeased());
-        }
-      
-      
-      
-      /** @test 
-       */
-      void
-      verify_lulz()
-        {
+          CHECK (0 == watch(manager).bytesLeased());
         }
     };
   

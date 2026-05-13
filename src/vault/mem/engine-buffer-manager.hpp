@@ -75,7 +75,18 @@ namespace mem {
       Buff* mem;
       size_t siz;
       
-      bool empty() const { return not bool(mem); }
+      bool
+      empty()  const
+        {
+          return not bool(mem);
+        }
+      
+      void
+      discard()
+        {
+          mem = nullptr;
+          siz = 0;
+        }
     };
   
   
@@ -100,9 +111,10 @@ namespace mem {
        *         implementation code from a subclass will have to
        *         receive and dispatch those entries */
       void
-      supply (Alloc const& alloc)
+      supply (Alloc& alloc)
         {
           inQueue_.push (alloc);
+          alloc.discard();
         }
     };
   

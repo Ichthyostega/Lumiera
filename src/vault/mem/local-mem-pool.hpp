@@ -227,7 +227,8 @@ namespace mem   {
       void
       supply (Buff* mem, size_t siz)
         {
-          AllocReceiver::supply ({mem,siz});
+          Alloc alloc{mem,siz};
+          AllocReceiver::supply (alloc);
         }
       
       /**
