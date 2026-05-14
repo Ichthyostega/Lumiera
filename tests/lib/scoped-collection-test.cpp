@@ -379,9 +379,9 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           
-          CollD coll (25, CollD::FillAll() );
+          CollD coll (25, CollD::fill() );
           
-          CHECK (!isnil (coll));
+          CHECK (not isnil (coll));
           CHECK (25 == coll.size());
           CHECK (0 != Dummy::checksum());
           
@@ -393,14 +393,16 @@ namespace test{
         }
       
       
+      /** @test use a "populator" that creates a subclass and binds arguments */
       void
       verify_subclassPopulator()
         {
           CHECK (0 == Dummy::checksum());
           
-          CollD coll (25, CollD::FillWith<SubDummy>() );
+          const uint arg{42};
+          CollD coll (25, CollD::fillWith<SubDummy> (arg, 55) );
           
-          CHECK (!isnil (coll));
+          CHECK (not isnil (coll));
           CHECK (25 == coll.size());
           CHECK (0 != Dummy::checksum());
           
@@ -409,29 +411,32 @@ namespace test{
         }
       
       
+      /** @test verify dynamic pulling of elements
+       *      - the first step uses a "populator" that invokes a λ
+       *      - the second step then uses the source container's iterator,
+       *        which happens to be a _Lumiera Forward Iterator_ to pull
+       *        copies into a second container.
+       *      - even while the second container is dimensioned to be larger,
+       *        only the number of elements yielded by the iterator are created.
+       */
       void
       verify_iteratorPopulator()
         {
           typedef ScopedCollection<uint> CollI;
           
-          CollI source (25);
-          for (uint i=0; i < source.capacity(); ++i)
-            source.emplace<uint>(i);           // holding the numbers 0..24
-          
-          CollI coll (20, CollI::pull(source.begin()));
-                                              // this immediately pulls in the first 20 elements
-          CHECK (!isnil (coll));
+          CollI source (20, CollI::invoke([i=0] mutable { return i++; }));
+                                             // filled with numbers 0..19
+          CollI coll (30, source.begin());  //  this immediately pulls in the first 20 elements
+          CHECK (not isnil (coll));
           CHECK (20 == coll.size());
-          CHECK (25 == source.size());
+          CHECK (20 == source.size());
+          CHECK (30 == coll.capacity());
           
           for (uint i=0; i < coll.size(); ++i)
             {
               CHECK (coll[i] == i        );
               CHECK (coll[i] == source[i]);
             }
-          
-          // note: the iterator is assumed to deliver a sufficient amount of elements
-          VERIFY_ERROR (ITER_EXHAUST, CollI (50, CollI::pull (source.begin())));
         }
       
       

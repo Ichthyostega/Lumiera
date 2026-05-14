@@ -145915,7 +145915,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777024713120" ID="ID_24309556" MODIFIED="1777024728172" TEXT="eigentlich keine Anpassung notwendig">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1777024729820" ID="ID_1492141284" MODIFIED="1777024764811" TEXT="man k&#xf6;nnte....">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1777024729820" ID="ID_1492141284" MODIFIED="1778788703833" TEXT="man k&#xf6;nnte....">
+<icon BUILTIN="hourglass"/>
 <node CREATED="1777024765911" ID="ID_596148209" MODIFIED="1777024771000" TEXT="Eintr&#xe4;ge stehen lassen"/>
 <node CREATED="1777024772191" ID="ID_645148091" MODIFIED="1777024802721" TEXT="erneute Allokation mit gleicher Adresse aus FREE-State zulassen"/>
 </node>
@@ -145924,8 +145925,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
 <icon BUILTIN="yes"/>
-<node CREATED="1777050520227" ID="ID_796153621" MODIFIED="1777325912544" TEXT="Use-Cases">
-<linktarget COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-452;0;" ID="Arrow_ID_1304449539" SOURCE="ID_1675354420" STARTARROW="Default" STARTINCLINATION="-32;-602;"/>
+<node CREATED="1777050520227" ID="ID_796153621" MODIFIED="1778788680440" TEXT="Use-Cases">
+<linktarget COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-246;327;" ID="Arrow_ID_1304449539" SOURCE="ID_1675354420" STARTARROW="Default" STARTINCLINATION="-44;-241;"/>
 <node CREATED="1777068198295" ID="ID_1010651012" MODIFIED="1777068390012" TEXT="Allokationsbedarf ank&#xfc;ndigen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -145954,7 +145955,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1777317280989" TEXT="Implementieren">
+<node COLOR="#338800" CREATED="1777050453251" FOLDED="true" ID="ID_1529547535" MODIFIED="1778788655476" TEXT="Implementieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777084853433" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
 <icon BUILTIN="button_ok"/>
@@ -146162,8 +146163,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1777339324992" TEXT="EngineBufferManager">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1777339332224" TEXT="Grundkonzeption schaffen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1778788622379" TEXT="Grundkonzeption schaffen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1777325396485" ID="ID_947969066" MODIFIED="1777325400377" TEXT="Interface">
 <node CREATED="1777325407524" ID="ID_1333052454" MODIFIED="1777325421966" TEXT="Zugang via lib::Depend&lt;EngineBufferManager&gt;">
 <node CREATED="1777325446047" ID="ID_1500798718" MODIFIED="1777325451218" TEXT="geht das &#xfc;berhaupt?"/>
@@ -146200,8 +146201,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1777325872302" ID="ID_1675354420" MODIFIED="1777325912544" TEXT="Use-Cases">
-<arrowlink COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-452;0;" ID="Arrow_ID_1304449539" STARTARROW="Default" STARTINCLINATION="-32;-602;"/>
+<node CREATED="1777325872302" ID="ID_1675354420" MODIFIED="1778788680440" TEXT="Use-Cases">
+<arrowlink COLOR="#36506f" DESTINATION="ID_796153621" ENDARROW="Default" ENDINCLINATION="-246;327;" ID="Arrow_ID_1304449539" STARTARROW="Default" STARTINCLINATION="-44;-241;"/>
 <node CREATED="1777326001051" ID="ID_825262980" MODIFIED="1777326053002" TEXT="Allokation(en) asynchron beauftragen"/>
 <node CREATED="1777326037424" ID="ID_613961876" MODIFIED="1777326058745" TEXT="Allokation(en) synchron beauftragen"/>
 <node CREATED="1777326109630" ID="ID_1521192845" MODIFIED="1777326120671" TEXT="Allokation asynchron zur&#xfc;ckgeben"/>
@@ -146212,7 +146213,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1777326654102" ID="ID_499885447" MODIFIED="1777326656831" TEXT="Struktur">
+<node COLOR="#435e98" CREATED="1777326654102" ID="ID_499885447" MODIFIED="1778788640455" TEXT="Struktur">
+<icon BUILTIN="forward"/>
 <node CREATED="1777326657789" ID="ID_831464061" MODIFIED="1777326715033" TEXT="L&#xe4;ngerfristig: Policy-based-Design">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -146223,7 +146225,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1777326753646" ID="ID_448684473" MODIFIED="1777326779620" TEXT="doch zun&#xe4;chst einmal: alles direkt coden">
+<node COLOR="#435e98" CREATED="1777326753646" ID="ID_448684473" MODIFIED="1778788617177" TEXT="doch zun&#xe4;chst einmal: alles direkt coden">
 <icon BUILTIN="yes"/>
 <node CREATED="1777339002955" ID="ID_758544304" MODIFIED="1777339007206" TEXT="typedef BufferAllocator"/>
 <node CREATED="1777339008730" ID="ID_1534654283" MODIFIED="1777339172707" TEXT="verwende fix eine Tile-Size von 64 Bytes">
@@ -146367,7 +146369,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1778118771505" ID="ID_1314536256" MODIFIED="1778118805988" TEXT="also &#x27f9; sinnvollerweise die Eingangs- und Ausgangs-Seite dediziert und separat bauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778118771505" ID="ID_1314536256" MODIFIED="1778788608420" TEXT="also &#x27f9; sinnvollerweise die Eingangs- und Ausgangs-Seite dediziert und separat bauen">
 <icon BUILTIN="yes"/>
 <node CREATED="1778118817300" ID="ID_1259663169" MODIFIED="1778118842536" TEXT="Ausgang &#x2259; Allokations-Requests">
 <node CREATED="1778118984391" ID="ID_231045425" MODIFIED="1778118994533" TEXT="angefordert wird nur eine size"/>
@@ -146409,8 +146411,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1778119450587" ID="ID_1806367243" MODIFIED="1778119470264" TEXT="Anordnung im Code">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1778119450587" FOLDED="true" ID="ID_1806367243" MODIFIED="1778788593642" TEXT="Anordnung im Code">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778119474043" ID="ID_898200002" MODIFIED="1778119501037">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -146431,7 +146433,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778119639862" ID="ID_1359278383" MODIFIED="1778119728301" TEXT="Konsequenz: der EngineBufferManager mu&#xdf; den LocalBufferStore sehen"/>
 </node>
 </node>
-<node CREATED="1778199712170" ID="ID_334307615" MODIFIED="1778199836250" TEXT="aufl&#xf6;sen durch getrennte Translation-Units">
+<node COLOR="#435e98" CREATED="1778199712170" ID="ID_334307615" MODIFIED="1778788535095" TEXT="aufl&#xf6;sen durch getrennte Translation-Units">
+<icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1778199840557" ID="ID_444542765" MODIFIED="1778200791662" TEXT="hier nochmal die Diskussion: Abstraktion einf&#xfc;hren?">
 <linktarget COLOR="#694543" DESTINATION="ID_444542765" ENDARROW="Default" ENDINCLINATION="-442;-19;" ID="Arrow_ID_1733074661" SOURCE="ID_845392021" STARTARROW="None" STARTINCLINATION="183;9;"/>
 <icon BUILTIN="help"/>
@@ -146451,7 +146454,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778200776431" ID="ID_633380599" MODIFIED="1778200789719" TEXT="damit dann die Frage: wer steht &#xbb;vorne&#xab;?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3f0f69" CREATED="1778200776431" ID="ID_633380599" MODIFIED="1778788526626" TEXT="damit dann die Frage: wer steht &#xbb;vorne&#xab;?">
 <icon BUILTIN="help"/>
 <node CREATED="1778200986313" ID="ID_833445396" MODIFIED="1778201001726" TEXT="render-environment.cpp : orchestriert alle Komponenten"/>
 <node CREATED="1778201611985" ID="ID_915606652" MODIFIED="1778201663551" TEXT="local-buffer-store.hpp : mu&#xdf; Interface + Impl sichtbar includieren">
@@ -146473,7 +146476,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778201747177" ID="ID_1235232289" MODIFIED="1778201802499" TEXT="&#x27f9; engine-buffer-manager.hpp : sichtbares Backend-Service-Interface"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778203953066" ID="ID_570673188" MODIFIED="1778203985427" TEXT="brauche dann aber doch eine Konvention / Abstraktion f&#xfc;r den Callback">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778203953066" ID="ID_570673188" MODIFIED="1778788509519" TEXT="brauche dann aber doch eine Konvention / Abstraktion f&#xfc;r den Callback">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778203987341" ID="ID_384285004" MODIFIED="1778204998986" TEXT="und zwar gibt es eine zus&#xe4;tzliche Komplikation durch das Thread-Local-Slice">
 <richcontent TYPE="NOTE"><html>
@@ -146725,8 +146728,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#b9104e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="653;64;" ID="Arrow_ID_649016741" SOURCE="ID_398699629" STARTARROW="Default" STARTINCLINATION="646;0;"/>
 <linktarget COLOR="#fe590e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="0;-19;" ID="Arrow_ID_928400072" SOURCE="ID_1297893109" STARTARROW="None" STARTINCLINATION="64;21;"/>
+<linktarget COLOR="#b9104e" DESTINATION="ID_985414238" ENDARROW="Default" ENDINCLINATION="653;64;" ID="Arrow_ID_649016741" SOURCE="ID_398699629" STARTARROW="Default" STARTINCLINATION="646;0;"/>
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778684714648" HGAP="44" ID="ID_314091864" MODIFIED="1778692175930" TEXT="genaue Anforderungs-Analyse" VSHIFT="2">
 <linktarget COLOR="#dd0609" DESTINATION="ID_314091864" ENDARROW="Default" ENDINCLINATION="21;-45;" ID="Arrow_ID_425697321" SOURCE="ID_494756239" STARTARROW="None" STARTINCLINATION="-13;40;"/>
@@ -146938,8 +146941,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       im Grunde m&#252;&#223;te man nur den Zugang zum Memory-Manager selber locken, denn die ganzen Queue-Operationen sind ja schon lock-free und threadsafe; auch k&#246;nnten diese Locks dann non-recursive sein
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1778630869382" ID="ID_1688710426" MODIFIED="1778631446175" TEXT="m&#xf6;glichst wenig Locks">
 <richcontent TYPE="NOTE"><html>
@@ -146949,8 +146951,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...andererseits ist jeder (Mutex)-Lock ein Kernel-Aufruf, und wir erwarten durchaus ganze B&#252;ndel an Requests. Au&#223;erdem wird mit wenigen Locks auf API-Level viel klarer, da&#223; das Locking vollst&#228;ndig, und der Zustand konsistent ist.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1778631447430" ID="ID_1196517656" MODIFIED="1778631809891" TEXT="entscheide mich (nach Bauchgef&#xfc;hl) f&#xfc;r &#xbb;wenig Locks&#xab;">
@@ -146967,16 +146968,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Den Ausschlag gegeben hat aber eine andere Hinsicht: Klarheit und Wartbarkeit sind wichtiger, spezielle Performance-Tweaks sollte man empirisch beweisen.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1778631791231" ID="ID_118677112" MODIFIED="1778631843980" TEXT="in #1429 notiert"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1777324560690" ID="ID_318881353" MODIFIED="1778507667074" TEXT="Rahmen per Test abstecken">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1777324560690" ID="ID_318881353" MODIFIED="1778788472215" TEXT="Rahmen per Test abstecken">
+<icon BUILTIN="yes"/>
 <node COLOR="#9b0b61" CREATED="1778591274938" ID="ID_540360328" MODIFIED="1778591296515" TEXT="EngineBufferManager_test">
 <icon BUILTIN="info"/>
 </node>
@@ -147021,8 +147021,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778635075937" ID="ID_1005055901" MODIFIED="1778635080660" TEXT="alles wieder freigeben"/>
 <node CREATED="1778635083791" ID="ID_227876159" MODIFIED="1778635088455" TEXT="Diagnostik pr&#xfc;fen"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778641424697" TEXT="verify_asyncRequest">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778788462054" TEXT="verify_asyncRequest">
 <node CREATED="1778641426736" ID="ID_460139955" MODIFIED="1778641441187" TEXT="sollte hier gleich etwas &#xbb;massives&#xab; machen"/>
 <node CREATED="1778641442270" ID="ID_1826595532" MODIFIED="1778641456169" TEXT="f&#xfc;hre eine typische usage-sequence in jedem Thread aus">
 <node CREATED="1778641462236" ID="ID_51963277" MODIFIED="1778641469666" TEXT="fordere eine Allokation"/>
@@ -147035,16 +147034,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778641528055" ID="ID_572369413" MODIFIED="1778641532894" TEXT="&#x2014; delay &#x2014;"/>
 <node CREATED="1778641533746" ID="ID_1255059129" MODIFIED="1778641540762" TEXT="schicke die Allokation zur&#xfc;ck"/>
 </node>
-<node CREATED="1778641582324" ID="ID_723485846" MODIFIED="1778641604860" TEXT="danach sollten....">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778641582324" ID="ID_723485846" MODIFIED="1778788451349" TEXT="danach sollten....">
 <node CREATED="1778641588959" ID="ID_857089658" MODIFIED="1778641600492" TEXT="NUM_THREADS Allokationen erfolgt sein"/>
 <node CREATED="1778641607696" ID="ID_514432880" MODIFIED="1778641618195" TEXT="alle diese Allokationen wieder in der Queue sitzen"/>
-<node COLOR="#435e98" CREATED="1778642703060" ID="ID_378615107" MODIFIED="1778694539272" TEXT="funktioniert nicht...">
+<node COLOR="#435e98" CREATED="1778642703060" FOLDED="true" ID="ID_378615107" MODIFIED="1778788384414" TEXT="funktioniert nicht...">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1778642715157" ID="ID_723545359" MODIFIED="1778694786375" TEXT="Beobachtungen">
 <icon BUILTIN="info"/>
 <node CREATED="1778642721100" ID="ID_454509509" MODIFIED="1778642737405" TEXT="einige Threads sind anscheinend schon fertig bevor andere &#xfc;berhaupt erst anfangen"/>
 <node CREATED="1778642739266" ID="ID_1618120303" MODIFIED="1778642753195" TEXT="damit werden nat&#xfc;rlich einige Allokationen bereits wegger&#xe4;umt"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778642777488" ID="ID_735364209" MODIFIED="1778642799183" TEXT="unklar: warum sind nach processPending() noch Allocs offen?">
+<node BACKGROUND_COLOR="#d3a387" COLOR="#990033" CREATED="1778642777488" ID="ID_735364209" MODIFIED="1778788369851" TEXT="unklar: warum sind nach processPending() noch Allocs offen?">
 <icon BUILTIN="help"/>
 </node>
 </node>
@@ -147063,8 +147062,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Jedenfalls in dem Setup, das ich jetzt hier f&#252;r diesen neuen Test gebaut habe, verwenden alle Threads dasselbe Lamba f&#252;r die Thread-Funktion <i>gemeinsam</i>. Das bedeutet, das makeRandomGen() wird tats&#228;chlich nur einmal aufgerufen, und daher haben wir nur einen einzigen Seed (selbst wenn die Lambdas dann im Thread-Wrapper nochmal kopiert werden)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778643262156" ID="ID_46315611" MODIFIED="1778643274742" TEXT="sehe in allen Threads exakt den gleichen Delay"/>
 <node CREATED="1778643275676" ID="ID_284051539" MODIFIED="1778643284600" TEXT="daher wachen die auch alle gemeinsam auf"/>
@@ -147090,13 +147088,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778681131699" ID="ID_725298648" MODIFIED="1778681149966" TEXT="nebenbei bemerkt: das API f&#xfc;r ScopedCollection ist unvollst&#xe4;ndig">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1778681154739" ID="ID_1527328731" MODIFIED="1778681164103" TEXT="das Erzeugen der Instanz ist zu umst&#xe4;ndlich"/>
-<node CREATED="1778681181873" ID="ID_262040421" MODIFIED="1778709901385" TEXT="es fehlt das Hinterlegen fester Argumente">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778681154739" ID="ID_1527328731" MODIFIED="1778783685746" TEXT="das Erzeugen der Instanz ist zu umst&#xe4;ndlich">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#338800" CREATED="1778681181873" ID="ID_262040421" MODIFIED="1778783692002" TEXT="es fehlt das Hinterlegen fester Argumente">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778709995012" ID="ID_1485556701" MODIFIED="1778710018906" TEXT="w&#xe4;re m&#xf6;glich durch Erweiterung von FillWith">
 <node CREATED="1778710037003" ID="ID_730979662" MODIFIED="1778710085583" TEXT="m&#xfc;&#xdf;te dazu ein Argument-Tupel materialisieren"/>
 <node CREATED="1778710769213" ID="ID_410726998" MODIFIED="1778710789818" TEXT="bisher wird &lt;tuple&gt; nicht includiert"/>
 </node>
-<node CREATED="1778711002374" ID="ID_839332664" MODIFIED="1778711024630" TEXT="k&#xf6;nnte man auch als &#x3bb;-builder neu formulieren">
+<node COLOR="#435e98" CREATED="1778711002374" ID="ID_839332664" MODIFIED="1778783672948" TEXT="k&#xf6;nnte man auch als &#x3bb;-builder neu formulieren">
 <node CREATED="1778711483235" ID="ID_1590205155" LINK="https://stackoverflow.com/a/49902823/444796" MODIFIED="1778711541326" TEXT="in C++20 gibt es perfect &#x3bb;-capture"/>
 <node CREATED="1778711904212" ID="ID_1775952563" LINK="https://en.cppreference.com/cpp/language/lambda#Lambda_capture" MODIFIED="1778711918406" TEXT="ist m&#xf6;glich sowohl f&#xfc;r Referenz, alsauch Copy-Capture"/>
 </node>
@@ -147104,12 +147105,49 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1778681164947" ID="ID_281208279" MODIFIED="1778681175454" TEXT="es fehlt das Aufrufen eines Lambda"/>
-<node CREATED="1778727780762" ID="ID_1017169041" MODIFIED="1778727790117" TEXT="Iterator-pull ist limitiert">
+<node COLOR="#338800" CREATED="1778681164947" ID="ID_281208279" MODIFIED="1778783693544" TEXT="es fehlt das Aufrufen eines Lambda">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1778727780762" ID="ID_1017169041" MODIFIED="1778783695258" TEXT="Iterator-pull ist limitiert">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778727795148" ID="ID_699461971" MODIFIED="1778727812229" TEXT="k&#xf6;nnte sowohl copy-Konstruktion, alsauch Value-Konstruktion machen"/>
 <node CREATED="1778727813246" ID="ID_791306906" MODIFIED="1778727831783" TEXT="sollte mit dem Populieren aufh&#xf6;ren, wenn der Iterator ersch&#xf6;pft ist"/>
 <node COLOR="#435e98" CREATED="1778727839622" ID="ID_576015934" MODIFIED="1778727896555" TEXT="Mit einem Concept k&#xf6;nnte das direkt eine Konstruktor-Variante sein">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1778783706927" ID="ID_909107103" MODIFIED="1778788348871" TEXT="Formulierung diverser Tests nun stark vereinfacht">
+<icon BUILTIN="idea"/>
+<node CREATED="1778783718253" ID="ID_271640023" MODIFIED="1778783732071" TEXT="speziell die F&#xe4;lle wo wir einen Satz an Threads starten"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778788061645" ID="ID_92554859" MODIFIED="1778788084275" TEXT="aber Vorsicht &#x2014; nicht immer m&#xf6;glich">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778788087357" ID="ID_502254218" MODIFIED="1778788224843" TEXT="manchmal m&#xfc;ssen Referenzen an den Konstruktor &#xfc;bergeben werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und das geht nicht mit dem fill()-Populator, denn dieser materialisiert alle Argumente als Kopien. Man k&#246;nnte das &#228;ndern, m&#252;&#223;te dann aber explizit ein perfect-forwarding-Tupel bauen. Das war mir jetzt alles zu m&#252;hsam
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b6020c" CREATED="1778788232367" ID="ID_134775139" MODIFIED="1778788330594" TEXT="manchmal ist es essentiell, f&#xfc;r jeden Thread ein separates Lambda zu konstruieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist im Besonderen relevant, wenn die captures nicht-triviale Operationen in der Initialisierung verwenden. Da der fill()-Popoulator kopiert, w&#252;rden sich alle Threads das gleiche Lambda teilen, und daher auf den gleichen Werten arbeiten. Das ist <b>eine subtile Falle</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 </node>
 </node>
@@ -147282,9 +147320,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1778695283214" ID="ID_978534045" MODIFIED="1778695295656" TEXT="Vorsicht: Testsuite ist auf 8MiB limitiert">
-<node CREATED="1778695297087" ID="ID_1119237552" MODIFIED="1778695308343" TEXT="dieser test alloziert &#xbb;mal eben&#xab; 100 MiB"/>
-<node CREATED="1778695331666" ID="ID_1196538153" MODIFIED="1778695331666" TEXT=""/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778695283214" ID="ID_978534045" MODIFIED="1778788447228" TEXT="Vorsicht: dieser test alloziert &#xbb;mal eben&#xab; 100 MiB">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1778695297087" ID="ID_1119237552" MODIFIED="1778788425737" TEXT="kein Problem ... die Testsuite ist auf 8 GiB limitiert"/>
+<node CREATED="1778695331666" ID="ID_1196538153" MODIFIED="1778788441455" TEXT="ein moderner PC steckt sowas locker weg"/>
 </node>
 </node>
 </node>
@@ -172016,8 +172055,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
       ...n&#228;mlich indem der Job letztlich auf den synchronen Fall zur&#252;ckgreift, dieser aber durch die gleiche Mechanik implementiert ist, wie der asynchrone Fall, und dabei gleich alle aufgesammelten Requests in den Queues mit verarbeitet. Dadruch wird effektiv ein Batch an Allokator-Aufwand in denjenigen Worker geschoben, der rein zuf&#228;llig als erster auf eine nicht bediente Allokation st&#246;&#223;t. Das Sch&#246;ne an dieser Code-Struktur ist, da&#223; die M&#246;glichkeit offen bleibt, sp&#228;ter zur Performance-Optimierung (oder nur in bestimmten Situationen) dennoch etwas speziell einzurichten / schedulen / auszuf&#252;hren, ohne da&#223; dazu der Code im EngineBufferManager ge&#228;ndert werden mu&#223;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" STARTARROW="None" STARTINCLINATION="1004;42;"/>
 <font NAME="SansSerif" SIZE="11"/>
 <icon BUILTIN="idea"/>

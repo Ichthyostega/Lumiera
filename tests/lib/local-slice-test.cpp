@@ -129,19 +129,19 @@ namespace test {
           
           // launch a significant number of threads,
           // each verifying the same invocation sequence
-          lib::ScopedCollection<Thread> threads{NUM_THREADS};
-          for (uint i=1; i<=NUM_THREADS; ++i)
-            threads.emplace ([&]{
-                                  CHECK (i1 == myDummy.invoke());
-                                  
-                                  sleep_for (100us);
-                                  
-                                  CHECK (i2 == myDummy.invoke());
-                                  
-                                  sleep_for (100us);
-                                  
-                                  CHECK (i3 == myDummy.invoke());
-                                });
+          using Threads = lib::ScopedCollection<Thread>;
+          Threads threads{NUM_THREADS
+                         ,Threads::fill ([&]{
+                                              CHECK (i1 == myDummy.invoke());
+                                              
+                                              sleep_for (100us);
+                                              
+                                              CHECK (i2 == myDummy.invoke());
+                                              
+                                              sleep_for (100us);
+                                              
+                                              CHECK (i3 == myDummy.invoke());
+                                            })};
           
           while (explore(threads).has_any())
             yield();          // wait for all threads to finish

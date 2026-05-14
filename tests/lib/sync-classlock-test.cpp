@@ -19,10 +19,12 @@
 #include "test/run.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-collection.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/thread.hpp"
 
 using test::Test;
-//using vault::ThreadJoinable;  //////////////////WIP
+using lib::explore;
+using std::this_thread::yield;
 
 namespace lib {
 namespace test {
@@ -58,29 +60,25 @@ namespace test {
           auto gen = buildCappedSubSequence(defaultGen);
           int contended = 0;
           
-          using Threads = lib::ScopedCollection<ThreadJoinable<>>;
+          using Threads = lib::ScopedCollection<Thread>;
           
-               // Start a bunch of threads with random access pattern
           Threads threads{NUM_THREADS,
-                          [&](Threads::ElementHolder& storage)
-                             {
-                               storage.create<ThreadJoinable<>> ("Sync-ClassLock stress test"
-                                                                ,[&]{
-                                                                      for (uint i=0; i<NUM_LOOP; ++i)
-                                                                        {
-                                                                          uint delay = gen.i(10);
-                                                                          usleep (delay);
-                                                                          {
-                                                                            ClassLock<void> guard;
-                                                                            ++contended;
-                                                                          }
-                                                                        }
-                                                                    });
-                             }
-                         };
+                          // Start a bunch of threads with random access pattern...
+                          Threads::fill ("Sync-ClassLock stress test"
+                                        ,[&]{
+                                              for (uint i=0; i<NUM_LOOP; ++i)
+                                                {
+                                                  uint delay = gen.i(10);
+                                                  usleep (delay);
+                                                  {
+                                                    ClassLock<void> guard;
+                                                    ++contended;
+                                                  }
+                                                }
+                                            })};
           
-          for (auto& thread : threads)
-            thread.join(); // block until thread terminates   // @suppress("Return value not evaluated")
+          while (explore(threads).has_any())
+            yield();  // wait for all threads to terminate
           
           CHECK (contended == NUM_THREADS * NUM_LOOP,
                  "ALARM: Lock failed, concurrent modification "

@@ -451,6 +451,8 @@ namespace lib {
          * and possibly configure further details, depending on the actual Policy used.
          * @remark the primary ThreadLifecycle-ctor accepts such a Launch-instance
          *         and invokes a chain of λ-functions collected in the member #launch
+         * @note a Launch instance can be built by direct conversion from an arg-less
+         *         thread function (because the ctor is _not_ explicit)
          */
         struct Launch
           : util::MoveOnly
@@ -571,6 +573,10 @@ namespace lib {
          * Primary constructor: Launch the new thread with flexible configuration.
          * @param launcher a #Launch builder with a λ-chain to configure and
          *        finally trigger start of the thread
+         * @note The Launch instance can be built by implicit conversion from any
+         *        arg-less invocable; this implies that ThreadLifecycle (and its
+         *        relevant subclasses) can be built without much ado directly
+         *        from a Lambda that defines the thread-function.
          */
         ThreadLifecycle (Launch launcher)
           : Policy{launcher.id}
@@ -644,6 +650,12 @@ namespace lib {
    * thread has already copied the arguments and indeed actively started to run.
    * @warning The destructor waits for a short grace period of 20ms, but calls
    *          `std::terminate` afterwards, should the thread still be active then.
+   * @remark creating a Thread instance immediately starts the thread;
+   *         it can be built from
+   *         - any argument-less invocable or lambda (that is invoked in the thread)
+   *         - a string argument for the thread-id, an invocable, further arguments...
+   *         - a member pointer and further arguments; useful for derived classes
+   *         - a ThreadLifecycle::Launch, which allows fine grained configuration
    */
   class Thread
     : public thread::ThreadLifecycle<thread::PolicyLaunchOnly>

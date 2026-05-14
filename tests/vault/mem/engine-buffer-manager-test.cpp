@@ -225,11 +225,9 @@ namespace test  {
                               CHECK (myPool.empty()); // no further pending / duplicate Alloc in-queue
                             };
           
-          using Threads = lib::ScopedCollection<Thread>;
-          auto startThread = [&](auto& storage){ storage.template create<Thread> (workSeq); };
-          
           // Start a collection of workers....
-          Threads threads{NUM_THREADS, startThread};
+          using Threads = lib::ScopedCollection<Thread>;
+          Threads threads{NUM_THREADS, Threads::fill(workSeq)};
           
           // after that barrier, all threads send back their allocation
           afterThread.sync();
