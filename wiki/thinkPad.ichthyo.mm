@@ -143862,6 +143862,26 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#ede2a7" COLOR="#242380" CREATED="1778802024913" ID="ID_575451700" MODIFIED="1778802301707">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      tats&#228;chlich verfolge ich jetzt aber eine <i>elegante</i>&#160;andere L&#246;sung....
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wodurch die Worker-Threads diese Aufgabe probabilistisch mit erledigen: wannimmer ein Worker eine Allokation angefordert hat, diese aber noch nicht zugestellt wurde, macht er mit globalem Lock eine Runde der Allokations-Arbeit
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#c9e1fe" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="-2385;0;" ID="Arrow_ID_1515784613" STARTARROW="None" STARTINCLINATION="1597;63;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1771436306089" ID="ID_862253994" MODIFIED="1771436308932" TEXT="f&#xfc;r den Cache">
 <node CREATED="1771436577677" ID="ID_636699078" MODIFIED="1771436613780" TEXT="grunds&#xe4;tzlich w&#xe4;re das eine Hintergrund-Aktivit&#xe4;t"/>
@@ -143984,7 +144004,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 <node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1776718387608" TEXT="vorgreifende Vereinfachungen">
 <arrowlink COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1046;-49;" ID="Arrow_ID_1903219737" STARTARROW="None" STARTINCLINATION="178;997;"/>
-<node CREATED="1771434938648" ID="ID_598910343" MODIFIED="1776718297756" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
+<node COLOR="#5b280f" CREATED="1771434938648" ID="ID_598910343" MODIFIED="1778792994090" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143994,9 +144014,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <icon BUILTIN="full-1"/>
-<icon BUILTIN="forward"/>
+<icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1771434732657" ID="ID_1779414160" MODIFIED="1776718304320" TEXT="Verwaltung nur lokal im Thread">
+<node COLOR="#5b280f" CREATED="1771434732657" ID="ID_1779414160" MODIFIED="1778793002887" TEXT="Verwaltung nur lokal im Thread">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144006,7 +144026,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <icon BUILTIN="full-2"/>
-<icon BUILTIN="hourglass"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1771434757430" ID="ID_460264122" MODIFIED="1771434936057" TEXT="es gibt dort bereits ein gewisses Pooling">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -144019,7 +144039,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1771434769658" ID="ID_830753719" MODIFIED="1771434796468" TEXT="aber neu-Allokationen und Freigaben passieren direkt per Heap-Memory"/>
 </node>
-<node CREATED="1771435088490" ID="ID_1084049036" MODIFIED="1776718310328" TEXT="Zentraler Pool arbeitet identisch wie die thread-lokale Verwaltung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771435088490" ID="ID_1084049036" MODIFIED="1778793214912" TEXT="Zentraler Pool arbeitet identisch wie die thread-lokale Verwaltung">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144028,8 +144048,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#3b5dc9" DESTINATION="ID_1955682141" ENDARROW="Default" ENDINCLINATION="551;23;" ID="Arrow_ID_1141757705" STARTARROW="None" STARTINCLINATION="515;21;"/>
 <icon BUILTIN="full-3"/>
-<icon BUILTIN="hourglass"/>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af054b" CREATED="1778793138391" ID="ID_1072005423" MODIFIED="1778793228369" TEXT="mu&#xdf;te doch bis auf diesen Level implementieren...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...habe mich ganz sch&#246;n sauber in den internen Problemen und Widerspr&#252;chen des Design-Plans verstrickt, so da&#223; ich letztlich die Struktur bereits weitgehend ausarbeiten mu&#223;te, um den Knoten aufzul&#246;sen...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1776195351345" TEXT="Problem der Code-Struktur">
@@ -144813,6 +144845,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1046;-49;" ID="Arrow_ID_1903219737" SOURCE="ID_87043838" STARTARROW="None" STARTINCLINATION="178;997;"/>
 <node CREATED="1776720614578" ID="ID_1271966009" MODIFIED="1776720628696" TEXT="im ersten Schritt ohne Pooling, direkt auf den Heap"/>
 <node CREATED="1776720640172" ID="ID_953357896" MODIFIED="1776720658883" TEXT="dann eine einfache Pool-Steuerung dazubauen"/>
+<node CREATED="1778793110179" ID="ID_1045866724" MODIFIED="1778793122185" TEXT="mu&#xdf; dann aber doch &#xfc;berlegen wie das async-messaging funktioniert"/>
 </node>
 <node CREATED="1776720939330" ID="ID_1122029657" MODIFIED="1776720953799" TEXT="eine Test-Instrumentierung mu&#xdf; mit entwickelt werden">
 <node CREATED="1776720954934" ID="ID_533496174" MODIFIED="1776721127952" TEXT="Vorbild ist der BlockFlow">
@@ -144910,13 +144943,253 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#a9837f" DESTINATION="ID_1559459005" ENDARROW="Default" ENDINCLINATION="-5;115;" ID="Arrow_ID_93328070" STARTARROW="Default" STARTINCLINATION="-339;11;"/>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1778792142467" ID="ID_471365898" MODIFIED="1778792259242" TEXT="nach detaillierter Abw&#xe4;gung entscheide ich, diese Redundanz zu ignorieren">
+<arrowlink COLOR="#651733" DESTINATION="ID_1964767554" ENDARROW="Default" ENDINCLINATION="-12;-2292;" ID="Arrow_ID_1601176637" STARTARROW="None" STARTINCLINATION="-1569;56;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1778800010518" ID="ID_653507071" MODIFIED="1778800029578" TEXT="damit ergibt sich das Nutz-Muster">
+<node CREATED="1778800031791" ID="ID_367166647" MODIFIED="1778800110299" TEXT="die Allocation-Pools arbeiten mit kleinen Alloc-Records">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die nur die minimalen Informationen enthalten, also die Speicheradresse und -Gr&#246;&#223;e. Solche Allokationen <i>geh&#246;ren</i>&#160; stets dem EngineBufferManager, k&#246;nnen aber verschickt und damit &#187;verliehen&#171; werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778800112467" ID="ID_101690828" MODIFIED="1778800147358" TEXT="der LocalMemPool hat eine rein-interne Datenhaltung f&#xfc;r die Bewertung und Auswahl"/>
+<node CREATED="1778800372961" ID="ID_1456498130" MODIFIED="1778800389062" TEXT="Allokationen dagegen sind rein ein Belang des Allocators"/>
 </node>
 </node>
 </node>
-<node CREATED="1776722100558" ID="ID_1140947088" MODIFIED="1776722105058" TEXT="LocalMemPool_test"/>
+<node BACKGROUND_COLOR="#a9d8a7" COLOR="#338800" CREATED="1776722100558" ID="ID_1140947088" MODIFIED="1778800333726" STYLE="fork" TEXT="im Rahmen des Prototyping implementiert und getestet">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<arrowlink COLOR="#357fd6" DESTINATION="ID_1385383632" ENDARROW="Default" ENDINCLINATION="-1147;-1723;" ID="Arrow_ID_997338547" STARTARROW="None" STARTINCLINATION="-513;25;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node CREATED="1776204787207" ID="ID_1425789996" MODIFIED="1776204792254" TEXT="vorerst nur anlegen">
+<node CREATED="1778800412568" ID="ID_15988377" MODIFIED="1778800420157" TEXT="kann nun Implementierung einf&#xfc;gen">
+<node COLOR="#338800" CREATED="1778800421847" ID="ID_1548904968" MODIFIED="1778800556897" TEXT="das Kommunikations-Schema wurde bereits abstrakt entwickelt und getestet">
+<arrowlink COLOR="#11c58f" DESTINATION="ID_1722546045" ENDARROW="Default" ENDINCLINATION="-2280;-262;" ID="Arrow_ID_75214759" STARTARROW="None" STARTINCLINATION="-645;23;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1778801228103" ID="ID_215195213" MODIFIED="1778979214616" TEXT="minimale Funktionalit&#xe4;t anstreben &#x2014; weitgehend alles delegieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1778802374835" ID="ID_1565150362" MODIFIED="1778802383352" TEXT="der Store mu&#xdf; selber keinerlei Tracking mehr machen"/>
+<node CREATED="1778802388611" ID="ID_770567636" MODIFIED="1778802403241" TEXT="Allokationen werden vom LocalMemPool angefordert"/>
+<node CREATED="1778802404433" ID="ID_1753143521" MODIFIED="1778802411586" TEXT="und lediglich an diesen zur&#xfc;ckgegeben"/>
+<node CREATED="1778802416765" ID="ID_911669908" MODIFIED="1778802488853" TEXT="Speicheradresse als Identit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch der LocalMemPool arbeitet auf dieser Basis: er hat eine lineare Liste (die als klein angenommen wird, so da&#223; lineare Suche gen&#252;gt), in der eine Allokation wiedergefunden wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778979188506" ID="ID_1435066016" MODIFIED="1778979206192" TEXT="Zugriff auf Thread-Local Mem-Pool und EngineBufferManager">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778802491003" ID="ID_1880673250" MODIFIED="1778979225756" TEXT="brauche noch einen Trigger-Mechanismus f&#xfc;r das heuristische Clean-up">
+<icon BUILTIN="yes"/>
+<node CREATED="1778805833301" ID="ID_493965127" MODIFIED="1778806330596" TEXT="man k&#xf6;nnte nach jeder de-Allokation einen partiellen clean-up machen">
+<node CREATED="1778805853860" ID="ID_1555068699" MODIFIED="1778806001396" TEXT="w&#xe4;re wirksam, da nur unterhalb der Schwelle aufger&#xe4;umt wird">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es w&#252;rden dann oft gar keine Bl&#246;cke zur&#252;ckgesandt, sofern die meisten freien Bl&#246;cke einen guten Score haben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778805933680" ID="ID_1480655883" MODIFIED="1778806266138" TEXT="auch verwendete und reservierte Bl&#xf6;cke w&#xe4;ren au&#xdf;en vor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ein reservierter (oder verwendeter) Block ist <i>festgehalten,</i>&#160;selbst wenn er keinen guten Score hat; erst nachdem er einmal tats&#228;chlich gebraucht wurde, kommt er wieder in Zirkulation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778805944800" ID="ID_1470728828" MODIFIED="1778806323720" TEXT="allerdings ist das (linear) aufwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es m&#252;&#223;t nach jeder de-Allokation die ganze Blockliste gescannt werden, wobei erwartungsgem&#228;&#223; nach den meisten Scans nichts zur Freigabe gefunden wird
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1778806342604" ID="ID_447948169" MODIFIED="1778806371642" TEXT="man k&#xf6;nnte stattdessen das Pr&#xfc;f-Intervall vergr&#xf6;&#xdf;ern">
+<node CREATED="1778806422659" ID="ID_209215056" MODIFIED="1778806429636" TEXT="das w&#xe4;re ein einfacher Z&#xe4;hler"/>
+<node CREATED="1778806430506" ID="ID_1204281805" MODIFIED="1778806482405" TEXT="aber Festlegen der richtigen Frequenz ist schwierig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und w&#252;rde letztlich doch wieder darauf hinauslaufen, da&#223; man irgendwie einen wachsenden Leerlauf erkennt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1778806374342" ID="ID_1184281449" MODIFIED="1778806407316" TEXT="oder man k&#xf6;nnte eine Kennzahl bilden, die den Overhead repr&#xe4;sentiert">
+<node CREATED="1778806682396" ID="ID_1994737812" MODIFIED="1778806693783" TEXT="ist aber nicht unmittelbar klar, wie das gehen soll"/>
+<node CREATED="1778806951977" ID="ID_578362748" MODIFIED="1778806975305" TEXT="f&#xfc;r eine inhaltlich bezogene Kennzahl sind Integrale notwendig"/>
+<node CREATED="1778806977102" ID="ID_248750955" MODIFIED="1778807108123" TEXT="und diese sind ebenfalls aufwendig zu berechnen &#x2014; oder fehleranf&#xe4;llig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jede Integral-Berechnung bedingt mindestens einen vollen Scan &#8212; und dann h&#228;tte man auch einen Cleanup-Lauf machen k&#246;nnen. Alternativ k&#246;nnte man versuchen, Integrale (wie z.B. einen Durchschintts-Score) durch Fortschreiben mitzuf&#252;hren. Das macht den Code aber komplex, schwer lesbar und fehleranf&#228;llig (weil man zuverl&#228;ssig jeden Zugriff und jede &#196;nderung erfassen mu&#223;)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778807256655" ID="ID_780111085" MODIFIED="1778807348968" TEXT="zudem ist eine zeitweilig nur geringe Auslatung nicht notwendig problematisch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Grade wenn die Berechnung kurzzeitige Speicherbedarfs-Spitzen aufweist, w&#228;re es sogar sch&#228;dlich, eine ungenutzte Reserve aggressiv wieder aufzur&#228;umen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778807528300" ID="ID_1103283661" MODIFIED="1778807637131" TEXT="obendrein kann der BufferStore nicht wissen, an welcher Stelle im Job-Zyklus der Worker ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Idealerweise w&#252;rde ein heuristischer Clean-up stets am Ende eines Job erfolgen, aber nicht irgendwo mittendrin
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1778807703620" ID="ID_259340071" MODIFIED="1778807710432" TEXT="theoretische Feststellungen">
+<node CREATED="1778807713013" ID="ID_1591472662" MODIFIED="1778807729459" TEXT="bei guter Anpassung w&#xe4;chst der Score aller Bl&#xf6;cke gleicherma&#xdf;en"/>
+<node CREATED="1778807756996" ID="ID_1925785341" MODIFIED="1778807811257" TEXT="bei Kapazit&#xe4;ts&#xfc;berschu&#xdf; haben viele Bl&#xf6;cke einen deutlich geringeren Score"/>
+<node CREATED="1778946963640" ID="ID_993736225" MODIFIED="1778946997115" TEXT="bei Leerlauf w&#xe4;chst der Score weniger Bl&#xf6;cke (und damit der Max-Score) &#xfc;berproportional"/>
+<node CREATED="1778807937581" ID="ID_1900765984" MODIFIED="1778807970854" TEXT="bei lokaler Knappheit werden viele Allokations-Anforderungen gesandt"/>
+</node>
+<node CREATED="1778945962154" ID="ID_535774391" MODIFIED="1778945972518" TEXT="daraus einen Mechanismus entwickeln">
+<icon BUILTIN="idea"/>
+<node CREATED="1778946005609" ID="ID_1483973980" MODIFIED="1778946757293" TEXT="Ansatz: die bereits implementierte Aufr&#xe4;um-Heuristik ist zielf&#xfc;hrend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      denn sie findet ja die selten verwendeten Buffer &#8212; und bei hinreichend gleichm&#228;&#223;iger Verwendung findet sie gar nichts
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778946759356" ID="ID_58112277" MODIFIED="1778947643959" TEXT="ben&#xf6;tigt wird nur noch eine flexible D&#xe4;mpfung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      um zu verhindern, da&#223; wir andauernd scannen und auch voreilig Buffer wegr&#228;umen, die Kapazit&#228;tsspitzen abfangen k&#246;nnten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778947001639" ID="ID_78533321" MODIFIED="1778947098163" TEXT="Idee: &#xbb;turnover&#xab; &#x2014; jedem Block eine Chance geben">
+<icon BUILTIN="forward"/>
+<node CREATED="1778947114570" ID="ID_914679223" MODIFIED="1778947126240" TEXT="ankommende Bl&#xf6;cke erh&#xf6;hen den Turnover"/>
+<node CREATED="1778947127539" ID="ID_253931638" MODIFIED="1778947136630" TEXT="jede de-Allokation veringert den Turnover"/>
+<node CREATED="1778948418531" ID="ID_1565059399" MODIFIED="1778948435266" TEXT="nach dem Aufr&#xe4;umen wird der Turnoer auf die aktuelle Poolsize gesetzt"/>
+<node CREATED="1778947233953" ID="ID_1828464374" MODIFIED="1778947258422">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>einfacher Trigger</u>: pr&#252;fen wenn der Turnover auf Null f&#228;llt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778947673427" ID="ID_293933324" MODIFIED="1778947693056">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>heuristischer Trigger</u>: Max-Score einbeziehen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1778947842948" ID="ID_24266582" MODIFIED="1778948022346" TEXT="bei gleichm&#xe4;&#xdf;iger Nutzung w&#xe4;chst der Max-Score nur einen Schritt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bei perfektem Match bekommt jeder Block einmal im Turnover-Zyklus die volle Punktzahl gutgeschrieben. Wenn dagegen ein Block dominiert, dann bekommt dieser T&#183;Punktzahl
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1778948068575" ID="ID_855345858" MODIFIED="1778948159062" TEXT="verwende also MaxScore / MATCH_SCORE als Triggerschwelle gegen den Turnout"/>
+<node CREATED="1778948224807" ID="ID_1282800052" MODIFIED="1778948275175" TEXT="zus&#xe4;tzlicher Gewichtsfaktor um die Sch&#xe4;rfe der &#xdc;berpr&#xfc;fung zu regulieren"/>
+</node>
+</node>
+<node CREATED="1778948347649" ID="ID_288471074" MODIFIED="1778948354192" TEXT="erwartetes Verhalten">
+<node CREATED="1778948371158" ID="ID_1349452477" MODIFIED="1778948397466" TEXT="m&#xf6;glicherweise gepr&#xfc;ft wird nach einer de-Allokation"/>
+<node CREATED="1778948398746" ID="ID_763933408" MODIFIED="1778948411228" TEXT="zu-Allokationen schieben den Pr&#xfc;fzeitpunkt hinaus"/>
+<node CREATED="1778948485011" ID="ID_834812028" MODIFIED="1778948501849" TEXT="wenn nur ein einziger Block aktiv ist, wird nach dem halben Turnover gepr&#xfc;ft"/>
+<node CREATED="1778948503130" ID="ID_114608227" MODIFIED="1778948529822" TEXT="nachdem durch einen hohen MaxScore vorzeitig ausgel&#xf6;st wurde, ist das Pr&#xfc;fintervall k&#xfc;rzer"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778800559849" ID="ID_1776275235" MODIFIED="1778800646883" TEXT="LocalBufferStore_test">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1778800660632" ID="ID_864970874" MODIFIED="1778979160301" TEXT="Zweck">
+<icon BUILTIN="yes"/>
+<node CREATED="1778800664656" ID="ID_690903258" MODIFIED="1778800678906" TEXT="Aufbau der Implemenrierung treiben"/>
+<node CREATED="1778800684264" ID="ID_1722512715" MODIFIED="1778800718145" TEXT="korrektes Verhalten auf API-Level zeigen"/>
+<node CREATED="1778948633708" ID="ID_1152843800" MODIFIED="1778948643382" TEXT="Steuer-Heuristik beobachten"/>
+<node CREATED="1778948730082" ID="ID_868291823" MODIFIED="1778948736909" TEXT="Grenzf&#xe4;lle / Lebenszyklus"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778948838374" ID="ID_1190893477" MODIFIED="1778979151352" TEXT="verify_API">
+<icon BUILTIN="pencil"/>
+<node CREATED="1778948874440" ID="ID_619417705" MODIFIED="1778948892430" TEXT="Allokation ank&#xfc;ndigen"/>
+<node CREATED="1778948897541" ID="ID_625050889" MODIFIED="1778948901900" TEXT="Allokation beziehen"/>
+<node CREATED="1778948902738" ID="ID_324329976" MODIFIED="1778948908603" TEXT="weitere Allokation beziehen"/>
+<node CREATED="1778948910157" ID="ID_131928895" MODIFIED="1778948916538" TEXT="beide zur&#xfc;ckgeben"/>
+<node CREATED="1778948920382" ID="ID_77474536" MODIFIED="1778948938383" TEXT="noch eine Allokation"/>
+<node CREATED="1778948939771" ID="ID_1407930950" MODIFIED="1778948943134" TEXT="Thread beenden"/>
+<node CREATED="1778979132916" ID="ID_393345688" MODIFIED="1778979147235" TEXT="Anzahl tats&#xe4;chlicher Allokationen pr&#xfc;fen"/>
+</node>
+<node CREATED="1778948944946" ID="ID_399276838" MODIFIED="1778948954589" TEXT="verify_announce">
+<node CREATED="1778948971327" ID="ID_655345868" MODIFIED="1778948993943" TEXT="mu&#xdf; hier die Pr&#xfc;fung bei laufendem Worker-Thread machen (barrier)"/>
+<node CREATED="1778948997109" ID="ID_1331981737" MODIFIED="1778949018089" TEXT="Announcment mu&#xdf; im Engine-Pool sichtbar sein"/>
+</node>
+<node CREATED="1778949021417" ID="ID_1256480563" MODIFIED="1778968909103" TEXT="verify_allocate">
+<node CREATED="1778969027419" ID="ID_1633706484" MODIFIED="1778969039237" TEXT="gemeint ist: eine direkte Allokation, ohne Ank&#xfc;ndigung"/>
+</node>
+<node CREATED="1778968918381" ID="ID_752345967" MODIFIED="1778968922655" TEXT="verify_release">
+<node CREATED="1778969042432" ID="ID_1262962638" MODIFIED="1778969052166" TEXT="hier sollte auch ein clean-up provoziert werden"/>
+</node>
+<node CREATED="1778969102656" ID="ID_249806133" MODIFIED="1778969116594" TEXT="verify_heuristic">
+<node CREATED="1778979230293" ID="ID_683051783" MODIFIED="1778979241071" TEXT="meine Idee der Heuristik umsetzen"/>
+<node CREATED="1778979241959" ID="ID_959604784" MODIFIED="1778979251687" TEXT="mit einzelnen Grenz-Szenarien durchspielen"/>
+<node CREATED="1778979252922" ID="ID_1913037138" MODIFIED="1778979264429" TEXT="Verhalten sollte deterministisch vorhersagbar sein"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1778800594638" ID="ID_267050112" LINK="#ID_318881353" MODIFIED="1778800638798" TEXT="siehe EngineBufferManager_test"/>
+</node>
+<node CREATED="1776204787207" ID="ID_1425789996" MODIFIED="1778792001986" TEXT="entwickeln soweit notwendig">
 <node COLOR="#338800" CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776718452275" TEXT="EngineBufferMetadata">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776605957061" ID="ID_405169256" MODIFIED="1776606058887" TEXT="eigenst&#xe4;ndiger Service">
@@ -145008,8 +145281,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1776718587143" TEXT="EngineBufferManager">
+<node COLOR="#338800" CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1778800580244" TEXT="EngineBufferManager">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1778792315684" ID="ID_1791813360" MODIFIED="1778792397575" TEXT="nun doch bereits grunds&#xe4;tzlich fertig implementiert">
+<arrowlink COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" STARTARROW="None" STARTINCLINATION="-438;24;"/>
+</node>
+<node CREATED="1778792406944" ID="ID_647851114" MODIFIED="1778792432142" TEXT="beinhaltet auch die Ausarbeitung der asynchronen Kommunikation mit den lokalen Pools"/>
+<node CREATED="1778792433573" ID="ID_1955682141" MODIFIED="1778793091179" TEXT="jedoch den Memory-Manager lasse ich aus (verwende Heap-Allocations)">
+<linktarget COLOR="#3b5dc9" DESTINATION="ID_1955682141" ENDARROW="Default" ENDINCLINATION="551;23;" ID="Arrow_ID_1141757705" SOURCE="ID_1084049036" STARTARROW="None" STARTINCLINATION="515;21;"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778792452930" ID="ID_1493734301" LINK="https://issues.lumiera.org/ticket/1430" MODIFIED="1778792804901" TEXT="geplant ist ein Pool-Allokator (#1430)">
 <icon BUILTIN="hourglass"/>
+</node>
 </node>
 </node>
 <node CREATED="1776442826894" ID="ID_509761355" MODIFIED="1776442834087" TEXT="OutputSlot mit integrieren">
@@ -145045,7 +145328,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776783102911" ID="ID_1474311402" MODIFIED="1776783117962" TEXT="Analyse Gesamtablauf">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#311d85" CREATED="1776783102911" ID="ID_1474311402" MODIFIED="1778792288798" TEXT="Analyse Gesamtablauf">
 <icon BUILTIN="yes"/>
 <node CREATED="1776783177514" ID="ID_426565530" MODIFIED="1776783444987" TEXT="Anla&#xdf;: Limitierungen der bisherigen Betrachtungsweise">
 <richcontent TYPE="NOTE"><html>
@@ -145264,7 +145547,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776808117872" ID="ID_1054840028" MODIFIED="1776808168037" TEXT="die State-Engine geh&#xf6;rt dem Buffer-Manager">
+<node CREATED="1776808117872" ID="ID_1054840028" MODIFIED="1778792632097" TEXT="die State-Engine geh&#xf6;rt dem Buffer-Manager">
+<icon BUILTIN="forward"/>
 <node CREATED="1776808169588" ID="ID_325963604" MODIFIED="1776808183067" TEXT="die State-Flag ist Teil des Allokations-Deskriptors"/>
 <node CREATED="1776808189543" ID="ID_730809908" MODIFIED="1776808207957" TEXT="der Allokations-Deskriptor kann optional einen typ-Hash speichern">
 <node CREATED="1776808235361" ID="ID_1954060088" MODIFIED="1776808346046" TEXT="Vorsicht: sicherstellen da&#xdf; valider Hash niemals Null wird">
@@ -145317,7 +145601,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776809679448" ID="ID_1620167252" MODIFIED="1776809696176" TEXT="wie werden Buffer-Allokationen zugeteilt / zur&#xfc;ckgegeben?"/>
 </node>
 </node>
-<node CREATED="1776810818641" ID="ID_1990109101" MODIFIED="1776810830162" TEXT="Erweiterung der bestehenden Struktur">
+<node COLOR="#5b280f" CREATED="1776810818641" ID="ID_1990109101" MODIFIED="1778792564355" TEXT="Erweiterung der bestehenden Struktur">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1776810842916" ID="ID_1308910879" MODIFIED="1776810900632" TEXT="Ansatz: der Store bekommt eine Direkt-Verbindung zu BufferMetadata">
 <node CREATED="1776810904516" ID="ID_467003761" MODIFIED="1776811035606" TEXT="l&#xe4;&#xdf;t sich realisieren unter Ausn&#xfc;tzung des LocalSlice">
 <richcontent TYPE="NOTE"><html>
@@ -145510,7 +145795,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" ID="ID_1964767554" MODIFIED="1777317537379" TEXT="Diskussion und Abw&#xe4;gung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" ID="ID_1964767554" MODIFIED="1778792259242" TEXT="Diskussion und Abw&#xe4;gung">
+<linktarget COLOR="#651733" DESTINATION="ID_1964767554" ENDARROW="Default" ENDINCLINATION="-12;-2292;" ID="Arrow_ID_1601176637" SOURCE="ID_471365898" STARTARROW="None" STARTINCLINATION="-1569;56;"/>
 <node CREATED="1776817881283" ID="ID_1958629364" MODIFIED="1776817923320" TEXT="tats&#xe4;chlich liegen die Modelle gar nicht so weit auseinander....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -145921,7 +146207,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777024772191" ID="ID_645148091" MODIFIED="1777024802721" TEXT="erneute Allokation mit gleicher Adresse aus FREE-State zulassen"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1777050407430" ID="ID_1385383632" MODIFIED="1777317323338" TEXT="LocalMemPool">
+<node COLOR="#435e98" CREATED="1777050407430" ID="ID_1385383632" MODIFIED="1778800333726" TEXT="LocalMemPool">
+<linktarget COLOR="#357fd6" DESTINATION="ID_1385383632" ENDARROW="Default" ENDINCLINATION="-1147;-1723;" ID="Arrow_ID_997338547" SOURCE="ID_1140947088" STARTARROW="None" STARTINCLINATION="-513;25;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
 <icon BUILTIN="yes"/>
@@ -145932,7 +146219,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      zwar wird das niemals einer konkreten Allokation vorgreifen, sollte aber <i>den internen Seiten-Effekt haben da&#223; Pool-Eingr&#228;ge &#187;beiseitegelegt&#171; werden.</i>&#160; Denn sonst w&#252;rden die gleichen Eintr&#228;ge u.U. f&#252;r nachfolgende Vorank&#252;ndigungen nochmal verbucht werden, wodurch dann insgesamt zu wenig zus&#228;tzlicher Speicher angefordert wird. Das bedeutet, wir brauchen nicht nur eine Flag, sondern verschiedene Grade der Reservierung
+      zwar wird das niemals einer konkreten Allokation vorgreifen, sollte aber <i>den internen Seiten-Effekt haben da&#223; Pool-Eintr&#228;ge &#187;beiseitegelegt&#171; werden.</i>&#160; Denn sonst w&#252;rden die gleichen Eintr&#228;ge u.U. f&#252;r nachfolgende Vorank&#252;ndigungen nochmal verbucht werden, wodurch dann insgesamt zu wenig zus&#228;tzlicher Speicher angefordert wird. Das bedeutet, wir brauchen nicht nur eine Flag, sondern verschiedene Grade der Reservierung
     </p>
   </body>
 </html></richcontent>
@@ -146161,7 +146448,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1777339324992" TEXT="EngineBufferManager">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1778792397575" TEXT="EngineBufferManager">
+<linktarget COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" SOURCE="ID_1791813360" STARTARROW="None" STARTINCLINATION="-438;24;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1778788622379" TEXT="Grundkonzeption schaffen">
 <icon BUILTIN="button_ok"/>
@@ -146819,8 +147107,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#a9d8a7" COLOR="#338800" CREATED="1778694426989" ID="ID_1722546045" MODIFIED="1778694529807" TEXT="funktioniert im Test">
+<node BACKGROUND_COLOR="#a9d8a7" COLOR="#338800" CREATED="1778694426989" ID="ID_1722546045" MODIFIED="1778800556897" TEXT="funktioniert im Test">
 <arrowlink COLOR="#12d25a" DESTINATION="ID_389422946" ENDARROW="Default" ENDINCLINATION="-296;-885;" ID="Arrow_ID_533922798" STARTARROW="None" STARTINCLINATION="158;20;"/>
+<linktarget COLOR="#11c58f" DESTINATION="ID_1722546045" ENDARROW="Default" ENDINCLINATION="-2280;-262;" ID="Arrow_ID_75214759" SOURCE="ID_1548904968" STARTARROW="None" STARTINCLINATION="-645;23;"/>
 <icon BUILTIN="forward"/>
 </node>
 </node>
@@ -146877,7 +147166,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#e2dbb4" CREATED="1778592973322" ID="ID_1723782536" MODIFIED="1778635048385" TEXT="hybrid-L&#xf6;sung: der synchrone Fall schiebt den asynchronen Fall">
+<node BACKGROUND_COLOR="#e2dbb4" CREATED="1778592973322" ID="ID_1723782536" MODIFIED="1778802160285" TEXT="hybrid-L&#xf6;sung: der synchrone Fall schiebt den asynchronen Fall">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -146888,6 +147177,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" STARTARROW="None" STARTINCLINATION="226;-11;"/>
 <linktarget COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" SOURCE="ID_226540112" STARTARROW="None" STARTINCLINATION="1004;42;"/>
+<linktarget COLOR="#c9e1fe" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="-2385;0;" ID="Arrow_ID_1515784613" SOURCE="ID_575451700" STARTARROW="None" STARTINCLINATION="1597;63;"/>
 <icon BUILTIN="forward"/>
 </node>
 <node CREATED="1778508357967" ID="ID_1467114460" MODIFIED="1778508767506" TEXT="naheliegende L&#xf6;sung: Hintergrundthread">
@@ -147123,9 +147413,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778788087357" ID="ID_502254218" MODIFIED="1778788224843" TEXT="manchmal m&#xfc;ssen Referenzen an den Konstruktor &#xfc;bergeben werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und das geht nicht mit dem fill()-Populator, denn dieser materialisiert alle Argumente als Kopien. Man k&#246;nnte das &#228;ndern, m&#252;&#223;te dann aber explizit ein perfect-forwarding-Tupel bauen. Das war mir jetzt alles zu m&#252;hsam
@@ -147136,9 +147424,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#b6020c" CREATED="1778788232367" ID="ID_134775139" MODIFIED="1778788330594" TEXT="manchmal ist es essentiell, f&#xfc;r jeden Thread ein separates Lambda zu konstruieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist im Besonderen relevant, wenn die captures nicht-triviale Operationen in der Initialisierung verwenden. Da der fill()-Popoulator kopiert, w&#252;rden sich alle Threads das gleiche Lambda teilen, und daher auf den gleichen Werten arbeiten. Das ist <b>eine subtile Falle</b>

@@ -46,6 +46,39 @@ namespace mem   {
     public:
       LocalBufferStore()
         { }
+      
+      
+      /* ==== Implementation of the BufferStore interface ==== */
+      
+      uint
+      prepareBuffers (HashVal, uint numBuffers, size_t)  override
+      {
+        UNIMPLEMENTED ("announce");
+      }
+    
+      
+      /** API: create a new buffer allocation */
+      BuffAlloc
+      provideBuffer (HashVal, size_t buffSiz, LocalTag specifics, int64_t)  override
+      {
+        UNIMPLEMENTED ("retrieve alloc");
+      }
+      
+      
+      /** API: mark a buffer as _emitted_ */
+      void
+      mark_emitted (HashVal, BuffAlloc storageSlot)  override
+      {
+        UNIMPLEMENTED ("emit");
+      }
+      
+      
+      /** API: mark a buffer as officially discarded */
+      void
+      detachBuffer (HashVal, BuffAlloc storageSlot)  override
+      {
+        UNIMPLEMENTED ("reclaim alloc");
+      }
     };
   
   

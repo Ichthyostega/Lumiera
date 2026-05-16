@@ -196,7 +196,7 @@ namespace mem   {
   
   
   
-  /* ==== Implementation of the BufferProvider interface ==== */
+  /* ==== Implementation of the BufferStore interface ==== */
   
   /** @note pre-anouncement is ignored */
   uint
