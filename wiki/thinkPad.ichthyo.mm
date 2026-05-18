@@ -144995,8 +144995,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778979188506" ID="ID_1435066016" MODIFIED="1778979206192" TEXT="Zugriff auf Thread-Local Mem-Pool und EngineBufferManager">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1778979188506" ID="ID_1435066016" MODIFIED="1779148168359" TEXT="Zugriff auf Thread-Local Mem-Pool und EngineBufferManager">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779128982798" ID="ID_1913652442" MODIFIED="1779128995471" TEXT="Problem Clean-up">
 <icon BUILTIN="messagebox_warning"/>
@@ -145231,6 +145231,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778948838374" ID="ID_1190893477" MODIFIED="1778979151352" TEXT="verify_API">
 <icon BUILTIN="pencil"/>
+<node CREATED="1779148191788" ID="ID_39449611" MODIFIED="1779148194561" TEXT="Schritte">
 <node CREATED="1778948874440" ID="ID_619417705" MODIFIED="1778948892430" TEXT="Allokation ank&#xfc;ndigen"/>
 <node CREATED="1778948897541" ID="ID_625050889" MODIFIED="1778948901900" TEXT="Allokation beziehen"/>
 <node CREATED="1778948902738" ID="ID_324329976" MODIFIED="1778948908603" TEXT="weitere Allokation beziehen"/>
@@ -145238,6 +145239,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778948920382" ID="ID_77474536" MODIFIED="1778948938383" TEXT="noch eine Allokation"/>
 <node CREATED="1778948939771" ID="ID_1407930950" MODIFIED="1778948943134" TEXT="Thread beenden"/>
 <node CREATED="1778979132916" ID="ID_393345688" MODIFIED="1778979147235" TEXT="Anzahl tats&#xe4;chlicher Allokationen pr&#xfc;fen"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779149341620" ID="ID_1844089253" MODIFIED="1779149360400" TEXT="preparBuffers beachtet Reservierungen nicht">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1779149362001" ID="ID_674281546" MODIFIED="1779149386315" TEXT="eigentlich sollten von den 5 angeforderten Buffern 4 noch &#xbb;reserved&#xab; sein"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779148203212" ID="ID_784985187" MODIFIED="1779148210922" STYLE="fork" TEXT="SEGFAULT">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1779148212791" ID="ID_912557487" MODIFIED="1779148225972" TEXT="undurchsichtige Situation">
+<node CREATED="1779148226905" ID="ID_135139479" MODIFIED="1779148244026" TEXT="hier wird offensichtlich der dtor des thread-local-Objekts aufgerufen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779148244982" ID="ID_1958707025" MODIFIED="1779149274605" TEXT="aber: der Thread gilt offiziell bereits als terminiert (d.h. main l&#xe4;uft ebenfalls weiter)">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1779149276142" ID="ID_1730131768" MODIFIED="1779149284875" TEXT="das ist ein Problem f&#xfc;r das Test-Setup"/>
+<node CREATED="1779149288603" ID="ID_990204079" MODIFIED="1779149314066" TEXT="weil wir damit zu u.U zu fr&#xfc;h pr&#xfc;fen (befor die Allocs zur&#xfc;ckgesandt wurden)"/>
+</node>
+<node CREATED="1779148268344" ID="ID_1630618662" MODIFIED="1779148295972" TEXT="der clean-up-Hook bekommt eine Instanz mit einer leeren Block-Liste"/>
+<node CREATED="1779148296997" ID="ID_418820207" MODIFIED="1779148309028" TEXT="aber er iteriert diese, aus unklarem Grund"/>
+</node>
+</node>
 </node>
 <node CREATED="1778948944946" ID="ID_399276838" MODIFIED="1778948954589" TEXT="verify_announce">
 <node CREATED="1778948971327" ID="ID_655345868" MODIFIED="1778948993943" TEXT="mu&#xdf; hier die Pr&#xfc;fung bei laufendem Worker-Thread machen (barrier)"/>
@@ -147171,6 +147191,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778692897100" ID="ID_1787182653" MODIFIED="1778692907839" TEXT="unter der Annahme da&#xdf; vorher ein async-Request gestellt wurde"/>
 <node CREATED="1778692908762" ID="ID_707657939" MODIFIED="1778692926163" TEXT="dann mu&#xdf; das globale Processing diesen behandelt und zugestellt haben"/>
 <node CREATED="1778692929071" ID="ID_467967428" MODIFIED="1778692935363" TEXT="und sei es, als leere Alloc"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779144663108" ID="ID_16263096" MODIFIED="1779144677490" TEXT="in der Praxis ist es komplexer">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1779144679873" ID="ID_1548159331" MODIFIED="1779144739766" TEXT="...weil wir nicht wissen, ob ein Announcement stattgefunden hat">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      genauer, wir &#187;wissen&#171; da&#223; die Standard-Implementierung der Render-Invocation ein Announcement macht (Haha ... aktuell macht sie keines), aber wir k&#246;nnen uns niemals darauf verlassen.....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1779144741521" ID="ID_1735692450" MODIFIED="1779144758025" TEXT="daher mu&#xdf; hier tats&#xe4;chlich auch das synchrone API aufgerufen werden"/>
+<node CREATED="1779144758915" ID="ID_702343722" MODIFIED="1779144791995" TEXT="und erst danach werfen wir error::State (Allokaitonsfehler)"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#540f69" CREATED="1778693019244" ID="ID_1545731490" MODIFIED="1778693042226" TEXT="beachte: gar kein direkter Request">

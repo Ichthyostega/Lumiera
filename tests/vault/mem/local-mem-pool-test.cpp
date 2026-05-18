@@ -117,7 +117,7 @@ namespace test  {
           CHECK (watch(pool).cnt(SIZ10) == 0);                 // new allotment not ingested yet,....
           CHECK (not watch(pool).isEmpty());                   // however, there is an entry in the in-queue
           
-          CHECK (pool.canServe(SIZ10));                        // query causes a scan and retrieval from the in-queu
+          CHECK (pool.canServe(SIZ10));                        // query causes a scan and retrieval from the in-queue
           CHECK (watch(pool).cnt(SIZ10) == 1);
           CHECK (not watch(pool).isEmpty());
           

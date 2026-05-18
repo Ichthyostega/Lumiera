@@ -143,10 +143,6 @@ namespace mem   {
    *       the client should be prepared for exceptions. The #announce operation allows
    *       to establish a reliably available baseline.
    * @todo 2/2025 might need to accept a cache key as additional parameter //////////////////////////////////TICKET #1392 : get cache key from computation to the cache backend
-   * @todo 2/2026 my intention is to use metadata::Entry within a threadsafe allocator
-   *       to pass buffers around. For this to be possible, buffer-metadata.hpp needs
-   *       some refactoring, and then the BufferStore::provideBuffer would have to
-   *       return a metadata::Entry
    */
   BuffHandle
   BufferProvider::lockBuffer (BuffDescr const& type, int64_t arg)

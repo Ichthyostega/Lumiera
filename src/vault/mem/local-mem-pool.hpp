@@ -370,7 +370,7 @@ namespace mem   {
        * @warning there must not be any allocations in use when invoking this function 
        */
       template<invocable<Buff*,size_t> FUN>
-      uint
+      void
       purge (FUN&& consumer)
         {
           ingest();
@@ -390,7 +390,9 @@ namespace mem   {
         {
           inQueue_.consume_all ([this](Alloc alloc)
                                       {
-                                        blocks_.emplace_front (move(alloc));
+                                        if (alloc.mem)
+                                          blocks_.emplace_front (move(alloc));
+                                        // otherwise: allocation not possible, do not add anything
                                       });
         }
       

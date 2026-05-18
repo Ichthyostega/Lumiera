@@ -26,6 +26,7 @@
 #include "lib/thread.hpp"
 //#include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "test/diagnostic-output.hpp"
 
 #include <algorithm>
 
@@ -98,7 +99,7 @@ namespace test  {
           
           const size_t   ALLOC = HeapBufferAllocator::numTiles(BUFFSIZ) * HeapBufferAllocator::TILE_SIZ;
           
-          Thread testWorker{[&] /* === Play through one typical usage cycle === */ //  ◁─────────────────┨ bla
+          Thread testWorker{[&] /* === Play through one typical usage cycle === */
                               {
                                 uint avail = storeAPI.prepareBuffers(TYPEID, CNT, BUFFSIZ);
                                 CHECK (0 == avail);
@@ -131,7 +132,7 @@ namespace test  {
                                 CHECK (sto1);
                                 CHECK (sto2);
                                 CHECK (isSameAdr (storage, sto1));
-                                CHECK (not isSameAdr (storage, sto1));
+                                CHECK (not isSameAdr (storage, sto2));
                                 CHECK (BUFFSIZ <= siz1);
                                 CHECK (BUFFSIZ <= siz2);
                                 
@@ -145,6 +146,7 @@ namespace test  {
           
           // before shutdown, LocalMemPool has sent back  all allocations;
           // these should sit now in the EngineBufferManager's input queue
+SHOW_EXPR(watch(*globalPool).numAllocs());
           CHECK ( CNT+1        == watch(*globalPool).numAllocs());
           CHECK ((CNT+1)*ALLOC == watch(*globalPool).bytesLeased());
           
