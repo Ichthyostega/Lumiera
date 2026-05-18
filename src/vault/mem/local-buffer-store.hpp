@@ -42,6 +42,31 @@ namespace mem   {
   class LocalBufferStore
     : public BufferProviderSetup::Store
     {
+      struct SetupPool;
+      using LocalPool = lib::LocalSlice<LocalMemPool, SetupPool>;
+      using GlobalPool = lib::Depend<EngineBufferManager>;
+      
+      struct SetupPool
+        {
+          using Service = LocalMemPool;
+          
+          static LocalMemPool
+          init()
+            {
+              return LocalMemPool{[](LocalMemPool& pool2close)
+                                    {
+                                      pool2close.purge([](Buff* mem, size_t siz)
+                                                        {
+                                                          Alloc alloc{mem,siz};
+                                                          GlobalPool globalPool;
+                                                          globalPool().supply(alloc);
+                                                        });
+                                    }};
+            }
+        };
+      
+      LocalPool localReg_;
+      GlobalPool globalReg_;
       
     public:
       LocalBufferStore()

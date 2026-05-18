@@ -77,6 +77,7 @@
 #include "vault/mem/engine-buffer-manager.hpp"
 #include "lib/util.hpp"
 
+#include <functional>
 #include <algorithm>
 #include <utility>
 #include <string>
@@ -98,6 +99,7 @@ namespace mem   {
   
   using std::move;
   using std::forward;
+  using std::invocable;
   using util::unConst;
   using util::isLimited;
   
@@ -123,7 +125,8 @@ namespace mem   {
    */
   class LocalMemPool
     : public AllocReceiver
-    {
+    {     // NonCopyable
+      
       struct Block
         {
           Alloc   alloc{nullptr,0};
@@ -143,11 +146,29 @@ namespace mem   {
       
       int32_t maxScore_{1};
       
+      std::function<void(LocalMemPool&)> shutdownHook_{};
+      
     public:
       LocalMemPool()
         : AllocReceiver{}
         , blocks_{}
         { }
+       // NonCopyable
+      
+      template<invocable<LocalMemPool&> FUN>
+      explicit
+      LocalMemPool (FUN&& onShutdown)
+        : AllocReceiver{}
+        , blocks_{}
+        , shutdownHook_{forward<FUN> (onShutdown)}
+        { }
+      
+     ~LocalMemPool()
+        {
+          if (shutdownHook_)
+            shutdownHook_(*this);
+        }
+      
       
       
       /* ===== Pool Access API ===== */
@@ -283,7 +304,7 @@ namespace mem   {
        * @param siz precise size of the memory block(s) to yield
        * @return actual number of allocations removed from the pool.
        */
-      template<class FUN> ////////TODO requires std::invocable<FUN,Buff*,size_t>
+      template<invocable<Buff*,size_t> FUN>
       uint
       yield (uint cnt, size_t siz, FUN&& consumer)
         {
@@ -317,7 +338,7 @@ namespace mem   {
        *               \a degree ≡ 0.5 retains all matches that were frequently successful.
        * @return actual number of allocations removed from the pool.
        */
-      template<class FUN> ////////TODO requires std::invocable<FUN,Buff*,size_t>
+      template<invocable<Buff*,size_t> FUN>
       uint
       cleanup (double degree, FUN&& consumer)
         {
@@ -345,6 +366,23 @@ namespace mem   {
           return removed;
         }
       
+      /** unconditionally dispose of the pool's entire contents.
+       * @warning there must not be any allocations in use when invoking this function 
+       */
+      template<invocable<Buff*,size_t> FUN>
+      uint
+      purge (FUN&& consumer)
+        {
+          ingest();
+          ///////////////////////////////////////OOO need a way to »lock down« the inqueue at that point
+          for (Block& block : blocks_)
+            {
+              REQUIRE (not block.used);
+              consumer (block.alloc.mem, block.alloc.siz);
+              blocks_.clear();
+            }
+          ENSURE (this->empty());
+        }
       
     private:
       void

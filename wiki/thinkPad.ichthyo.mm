@@ -144403,7 +144403,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776292987880" ID="ID_808037956" MODIFIED="1776477504910" TEXT="Zugriff &#xfc;ber Pointer-artige Syntax">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" FOLDED="true" ID="ID_808171568" MODIFIED="1776717333143" TEXT="Problem: thread_local ist implizit statisch">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" FOLDED="true" ID="ID_808171568" MODIFIED="1779131275381" TEXT="Problem: thread_local ist implizit statisch">
 <linktarget COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" SOURCE="ID_290625266" STARTARROW="None" STARTINCLINATION="257;14;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776293040334" ID="ID_555811092" MODIFIED="1776293060463" TEXT="das hei&#xdf;t es ist eine &#xbb;versteckte globale Variable&#xab;"/>
@@ -144412,6 +144412,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776295943826" ID="ID_896591615" MODIFIED="1776295967932" TEXT="nein &#x2014; der BufferProvider in der Engine ist sowiso ein Singleton"/>
 <node CREATED="1776436869043" ID="ID_1444097357" MODIFIED="1776439761005" TEXT="aber &#x2014; Buffer-Metadata baucht eine RootID">
 <arrowlink COLOR="#5b39d7" DESTINATION="ID_1105234662" ENDARROW="Default" ENDINCLINATION="113;-353;" ID="Arrow_ID_8614584" STARTARROW="None" STARTINCLINATION="-450;30;"/>
+</node>
+<node CREATED="1779131181376" ID="ID_1507803308" MODIFIED="1779131272555" TEXT="aber &#x2014; ein &#xbb;Local Pool&#xab; mu&#xdf; am Thread-Ende aufger&#xe4;umt werden">
+<arrowlink COLOR="#8233d1" DESTINATION="ID_1569602452" ENDARROW="Default" ENDINCLINATION="-746;-38;" ID="Arrow_ID_1519809069" STARTARROW="None" STARTINCLINATION="-695;30;"/>
 </node>
 </node>
 <node CREATED="1776437522354" ID="ID_1884586370" MODIFIED="1776437530564" TEXT="Bedeutung f&#xfc;r den Lebenszyklus">
@@ -144995,6 +144998,72 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778979188506" ID="ID_1435066016" MODIFIED="1778979206192" TEXT="Zugriff auf Thread-Local Mem-Pool und EngineBufferManager">
 <icon BUILTIN="flag-yellow"/>
 </node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779128982798" ID="ID_1913652442" MODIFIED="1779128995471" TEXT="Problem Clean-up">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1779128999922" ID="ID_1435970090" MODIFIED="1779129012818" TEXT="dieser wird vom thread-local Subobjekt getriggert"/>
+<node CREATED="1779129014668" ID="ID_978040113" MODIFIED="1779129075918" TEXT="der LocalBufferStore bekommt das nicht einmal mit">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      ...weil es ja durch das Ende eines Thread verursacht wird, wodurch ein thread-local Subobjekt out of scope geht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1779129078429" ID="ID_1921726698" MODIFIED="1779129106317" TEXT="aber die Service-Verbindungen sind nur im LocalBuffer gegeben"/>
+<node CREATED="1779130807327" ID="ID_1569602452" MODIFIED="1779131264472" TEXT="&#x27f9; also wird ein shutdown-Hook notwendig">
+<linktarget COLOR="#8233d1" DESTINATION="ID_1569602452" ENDARROW="Default" ENDINCLINATION="-746;-38;" ID="Arrow_ID_1519809069" SOURCE="ID_1507803308" STARTARROW="None" STARTINCLINATION="-695;30;"/>
+<node CREATED="1779130847250" ID="ID_222831030" MODIFIED="1779135184435" TEXT="das ganze Thema kommt mir bekannt vor...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      ...ich hatte bereits &#252;ber die Konfiguration nachgedacht, und dann f&#252;r LocalSlice ein policy-based-design verwendet, allerdings in einer Form so da&#223; es weiterhin default-constructible bleibt. Leider kann ich hier den Shutdown / clean-Up <i>nicht einfach anbauen,</i>&#160;da LocalSlice davon garnichts merkt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779130986850" ID="ID_1806655906" MODIFIED="1779131349575" TEXT="erneut stellt sich das Problem der effektiv-statischen Instanz">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1779131365999" ID="ID_660464086" MODIFIED="1779131414390">
+<richcontent TYPE="NODE"><html>
+  <head>
+  <body>
+    <p>
+      eine Verdrahtung auf das <i>managing Object</i>&#160;ist nur indirekt (trickreich) m&#246;glich
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1779133795132" ID="ID_1232765189" MODIFIED="1779133813258" TEXT="aber gl&#xfc;cklicherweise brauchen wir tats&#xe4;chlich nur den Zugriff auf EngineBufferManager"/>
+<node CREATED="1779133821370" ID="ID_627116251" MODIFIED="1779134164150" TEXT="das w&#xe4;re zwar etwas indirekt, aber akzeptabel, da es in einem lokalen Setup stattfindet">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1779135986170" ID="ID_1418977742" MODIFIED="1779136269411" TEXT="und es wird h&#xe4;sslich, wenngleich auch nicht Performance-relevant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+  <body>
+    <p>
+      ...denn ich mu&#223; irgendwie einen clean-up-Hook in jede Instanz installieren, sofern ich LocalMemPool weiterhin von der sonstigen Implementierung entkoppelt haben m&#246;chte. Das bedingt dann entweder, einen Template-Parameter einzuf&#252;hren, oder std::function mit einer Konstruktor-Variante. Letzteres erscheint attraktiv, da es diesen Sachverhalt etwas &#187;unter den Teppich kehrt&#171; und eigentlich erst auff&#228;llt, wenn man das PROD-Setup f&#252;r die Engine sieht...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1779140476970" ID="ID_1853141177" MODIFIED="1779140488380" TEXT="f&#xfc;hre also eine shutdown-function ein"/>
+<node CREATED="1779140489560" ID="ID_1942203871" MODIFIED="1779140502858" TEXT="verwende die Config von LocalSlice um die zu injizieren"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779140507822" ID="ID_1541520016" MODIFIED="1779140836908" TEXT="weitere Komplikation: Race im Shutdown">
+<arrowlink COLOR="#e5024c" DESTINATION="ID_241014081" ENDARROW="Default" ENDINCLINATION="-1049;0;" ID="Arrow_ID_1884336660" STARTARROW="None" STARTINCLINATION="-946;65;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1779140860563" ID="ID_187364117" MODIFIED="1779140879122" TEXT="das zeigt: ein explizitesr Schutzmechanismus ist notwendig"/>
+<node CREATED="1779140879780" ID="ID_418804808" MODIFIED="1779140902765" TEXT="dieser mu&#xdf; bereits in der Basisklasse AllocReceiver sitzen"/>
+<node CREATED="1779140904161" ID="ID_292316056" MODIFIED="1779140919843" TEXT="der darf auf keinerlei dynamischen Speicher zugreifen"/>
+<node CREATED="1779140953120" ID="ID_475594715" MODIFIED="1779140969596" TEXT="die Objekt-Identit&#xe4;t mu&#xdf; aus der Speicheradresse gewonnen werden"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778802491003" ID="ID_1880673250" MODIFIED="1778979225756" TEXT="brauche noch einen Trigger-Mechanismus f&#xfc;r das heuristische Clean-up">
 <icon BUILTIN="yes"/>
 <node CREATED="1778805833301" ID="ID_493965127" MODIFIED="1778806330596" TEXT="man k&#xf6;nnte nach jeder de-Allokation einen partiellen clean-up machen">
@@ -145026,8 +145095,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Es m&#252;&#223;t nach jeder de-Allokation die ganze Blockliste gescannt werden, wobei erwartungsgem&#228;&#223; nach den meisten Scans nichts zur Freigabe gefunden wird
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1778806342604" ID="ID_447948169" MODIFIED="1778806371642" TEXT="man k&#xf6;nnte stattdessen das Pr&#xfc;f-Intervall vergr&#xf6;&#xdf;ern">
@@ -145769,8 +145837,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1776814507533" ID="ID_189865287" MODIFIED="1776814576271" TEXT="Ownership / Transaktionelle Sicherheit">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1778205114333" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
-<arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="Default" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="None" STARTINCLINATION="707;0;"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1779140437311" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
+<arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="Default" STARTINCLINATION="707;0;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776816880663" ID="ID_233138855" MODIFIED="1776816975061" TEXT="das ist nicht-trivial &#x2014; ohne weitere Ma&#xdf;namen &#xbb;verlieren&#xab; wir Buffer">
@@ -146843,8 +146911,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778205040426" ID="ID_609664480" MODIFIED="1778205118401" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
-<linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="Default" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="None" STARTINCLINATION="707;0;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778205040426" ID="ID_609664480" MODIFIED="1779140437311" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
+<linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="Default" STARTINCLINATION="707;0;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778205127309" ID="ID_174843767" MODIFIED="1778205132800" TEXT="Beispiel-Szenario">
 <node CREATED="1778205135600" ID="ID_1730604347" MODIFIED="1778205230908" TEXT="neuer Job &#x27f9; Anforderung an EngineBufferManager">
@@ -146902,7 +146970,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1778372507757" ID="ID_228507573" MODIFIED="1778372578208" TEXT="eine M&#xf6;glichkeit w&#xe4;re, eine zus&#xe4;tzliche Sicherung im empfangenden Code vorzusehen">
+<node CREATED="1778372507757" ID="ID_228507573" MODIFIED="1779140798964" TEXT="eine M&#xf6;glichkeit w&#xe4;re, eine zus&#xe4;tzliche Sicherung im empfangenden Code vorzusehen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -146911,6 +146979,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#2b53d4" DESTINATION="ID_255577978" ENDARROW="Default" ENDINCLINATION="443;20;" ID="Arrow_ID_57636127" STARTARROW="None" STARTINCLINATION="320;11;"/>
 </node>
 <node CREATED="1778372538869" ID="ID_398624236" MODIFIED="1778373145721" TEXT="diese Sicherung m&#xfc;&#xdf;te allerdings wirksam werden vor dem ersten tats&#xe4;chlichen Speicherzugriff">
 <richcontent TYPE="NOTE"><html>
@@ -146942,6 +147011,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779140529611" ID="ID_241014081" MODIFIED="1779140636770" TEXT="ein weiterer &#xe4;hnlicher Race besteht im Destruktor + shotdown-Hook">
+<linktarget COLOR="#e5024c" DESTINATION="ID_241014081" ENDARROW="Default" ENDINCLINATION="-1049;0;" ID="Arrow_ID_1884336660" SOURCE="ID_1541520016" STARTARROW="None" STARTINCLINATION="-946;65;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1779140649391" ID="ID_1221279387" MODIFIED="1779140665105" TEXT="ein anderer Thread k&#xf6;nnte grade mit der Zustellung anfangen"/>
+<node CREATED="1779140665976" ID="ID_694831112" MODIFIED="1779140680958" TEXT="...w&#xe4;hrend der LocalMemPool seinen Destruktor bearbeitet"/>
+<node CREATED="1779140681992" ID="ID_1268043667" MODIFIED="1779140711019" TEXT="also leider noch nicht tot ist  &#xd83d;&#xdc80;">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1779140722186" ID="ID_255577978" MODIFIED="1779140798964" TEXT="&#x27f9; das Sicherheits-Feature mu&#xdf; also sogar explizit triggerbar sein">
+<linktarget COLOR="#2b53d4" DESTINATION="ID_255577978" ENDARROW="Default" ENDINCLINATION="443;20;" ID="Arrow_ID_57636127" SOURCE="ID_228507573" STARTARROW="None" STARTINCLINATION="320;11;"/>
 </node>
 </node>
 </node>
@@ -147176,8 +147257,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#e7f3c5" DESTINATION="ID_1339362365" ENDARROW="Default" ENDINCLINATION="273;14;" ID="Arrow_ID_74341588" STARTARROW="None" STARTINCLINATION="226;-11;"/>
-<linktarget COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" SOURCE="ID_226540112" STARTARROW="None" STARTINCLINATION="1004;42;"/>
 <linktarget COLOR="#c9e1fe" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="-2385;0;" ID="Arrow_ID_1515784613" SOURCE="ID_575451700" STARTARROW="None" STARTINCLINATION="1597;63;"/>
+<linktarget COLOR="#cffd68" DESTINATION="ID_1723782536" ENDARROW="Default" ENDINCLINATION="2031;68;" ID="Arrow_ID_1674470149" SOURCE="ID_226540112" STARTARROW="None" STARTINCLINATION="1004;42;"/>
 <icon BUILTIN="forward"/>
 </node>
 <node CREATED="1778508357967" ID="ID_1467114460" MODIFIED="1778508767506" TEXT="naheliegende L&#xf6;sung: Hintergrundthread">
@@ -147419,8 +147500,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...und das geht nicht mit dem fill()-Populator, denn dieser materialisiert alle Argumente als Kopien. Man k&#246;nnte das &#228;ndern, m&#252;&#223;te dann aber explizit ein perfect-forwarding-Tupel bauen. Das war mir jetzt alles zu m&#252;hsam
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#b6020c" CREATED="1778788232367" ID="ID_134775139" MODIFIED="1778788330594" TEXT="manchmal ist es essentiell, f&#xfc;r jeden Thread ein separates Lambda zu konstruieren">
 <richcontent TYPE="NOTE"><html>
@@ -147430,8 +147510,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       das ist im Besonderen relevant, wenn die captures nicht-triviale Operationen in der Initialisierung verwenden. Da der fill()-Popoulator kopiert, w&#252;rden sich alle Threads das gleiche Lambda teilen, und daher auf den gleichen Werten arbeiten. Das ist <b>eine subtile Falle</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
