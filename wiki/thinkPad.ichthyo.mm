@@ -145055,10 +145055,253 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779140507822" ID="ID_1541520016" MODIFIED="1779140836908" TEXT="weitere Komplikation: Race im Shutdown">
 <arrowlink COLOR="#e5024c" DESTINATION="ID_241014081" ENDARROW="Default" ENDINCLINATION="-1049;0;" ID="Arrow_ID_1884336660" STARTARROW="None" STARTINCLINATION="-946;65;"/>
 <icon BUILTIN="broken-line"/>
-<node CREATED="1779140860563" ID="ID_187364117" MODIFIED="1779140879122" TEXT="das zeigt: ein explizitesr Schutzmechanismus ist notwendig"/>
+<node CREATED="1779140860563" ID="ID_187364117" MODIFIED="1779216224446" TEXT="das zeigt: ein explizitesr Schutzmechanismus ist notwendig">
+<arrowlink COLOR="#ad0057" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="114;-220;" ID="Arrow_ID_1737519596" STARTARROW="None" STARTINCLINATION="-1063;52;"/>
+</node>
 <node CREATED="1779140879780" ID="ID_418804808" MODIFIED="1779140902765" TEXT="dieser mu&#xdf; bereits in der Basisklasse AllocReceiver sitzen"/>
 <node CREATED="1779140904161" ID="ID_292316056" MODIFIED="1779140919843" TEXT="der darf auf keinerlei dynamischen Speicher zugreifen"/>
 <node CREATED="1779140953120" ID="ID_475594715" MODIFIED="1779140969596" TEXT="die Objekt-Identit&#xe4;t mu&#xdf; aus der Speicheradresse gewonnen werden"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779216016773" ID="ID_1356813075" MODIFIED="1779328952013" TEXT="Schutzmechanismus f&#xfc;r die Async-Kommunikation">
+<linktarget COLOR="#ad0057" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="114;-220;" ID="Arrow_ID_1737519596" SOURCE="ID_187364117" STARTARROW="None" STARTINCLINATION="-1063;52;"/>
+<linktarget COLOR="#5000ad" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="-430;843;" ID="Arrow_ID_1277922642" SOURCE="ID_1697479221" STARTARROW="None" STARTINCLINATION="-1130;69;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1779224920108" ID="ID_909246085" MODIFIED="1779328938586" TEXT="Anforderungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1779224928540" ID="ID_117163407" MODIFIED="1779224938270" TEXT="hat einen aktiv / geblockt-State"/>
+<node CREATED="1779224951104" ID="ID_1266800565" MODIFIED="1779224964148" TEXT="State mu&#xdf; threadsafe-lesbar sein"/>
+<node CREATED="1779224973409" ID="ID_767873382" MODIFIED="1779225032550" TEXT="State ist an den Instanz-Lebenszyklus gekoppelt"/>
+<node CREATED="1779225034381" ID="ID_710084049" MODIFIED="1779225044408" TEXT="aber State darf nicht in der Instanz gespeichert sein"/>
+</node>
+<node COLOR="#435e98" CREATED="1779225160990" ID="ID_1932610329" MODIFIED="1779328935367" TEXT="Ansatz">
+<icon BUILTIN="info"/>
+<node CREATED="1779225165484" ID="ID_1205009248" MODIFIED="1779225172950" TEXT="verwende einen Monostate-artigen Zugang"/>
+<node CREATED="1779225174394" ID="ID_964352880" MODIFIED="1779225199891" TEXT="dieser erzeugt aber einen Key, der an die Instanz gebunden ist"/>
+<node CREATED="1779225204246" ID="ID_773629611" MODIFIED="1779227167103" TEXT="dar&#xfc;ber wird in einen speziellen Marker zugegriffen"/>
+<node CREATED="1779225216669" ID="ID_1883744470" MODIFIED="1779225232126" TEXT="Lebenszyklus-Kopplung &#xfc;ber Ctor/Dtor realisiert"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779227171937" ID="ID_857696487" MODIFIED="1779328111248" TEXT="Problem der Synchronisation">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1779227189574" ID="ID_697877195" MODIFIED="1779227476829">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      eine statische Map als L&#246;sung ist deshalb <b>problematisch</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1779227525202" ID="ID_285171260" MODIFIED="1779227536124" TEXT="denn concurrent-updates bedingen ein tats&#xe4;chliches Lock"/>
+<node CREATED="1779227544752" ID="ID_1800677649" MODIFIED="1779227597579" TEXT="und hierbei ist mit echter Lock-Contention zu rechnen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da die Worker-Threads normalerweise gleichzeitig starten / stoppen, also sehr wahrscheinlich mit dem Zugriff der anderen Worker kollidieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779234317235" ID="ID_1854090554" MODIFIED="1779234355283" TEXT="weiteres Problem: die Lesezugriffe sehen u.U. ein Update nicht / nur partiell">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node CREATED="1779227244643" ID="ID_832890047" MODIFIED="1779227262336" TEXT="zun&#xe4;chst einmal: jedes Auslesen mu&#xdf; &#xfc;ber einen atomic-Read gehen">
+<node CREATED="1779227266487" ID="ID_542363079" MODIFIED="1779227279926" TEXT="so da&#xdf; der Lesende gezwungen ist, seinen Cach zu refreshen"/>
+<node CREATED="1779227283799" ID="ID_921394030" MODIFIED="1779227327440" TEXT="nat&#xfc;rlich bedingt dann jede Status-&#xc4;nderung des &#xfc;berwachten Objekts einen atomic-Write"/>
+<node CREATED="1779227333371" ID="ID_268505194" MODIFIED="1779227435627" TEXT="bez&#xfc;glich Performance w&#xe4;re das irrelevant">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn der n&#228;chste Schritt nach erfolgreichem Passieren des Schutzmechanismus w&#228;re ohnehin eine Einf&#252;gung in eine lock-free-Queue, also sogar atomic-Read/Write or CAS. Und <i>das</i>&#160;machen wir nur wenn Allokationen global angefordert / zugestellt werden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d3b4a8" COLOR="#990033" CREATED="1779234491711" ID="ID_1387632637" MODIFIED="1779235165552" TEXT="das l&#xf6;st aber leider noch nicht das Sichtbarkeits-Problem f&#xfc;r eine Map">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn die Sichtbarkeits-Garantie wird nur &#252;ber eine happens-before-Ordnung hergestellt: <i>wenn</i>&#160;ich die &#196;nderung im Atomic sehe, dann sehe ich <i>garantiert auch alle happens-before-&#196;nderungen.</i>&#160; Wenn ich die &#196;nderung allerdings nicht sehe, ist nichts weiter &#252;ber die sonstige Sichtbarkeit bekannt. In diesem Fall m&#252;&#223;te ich weitere Rnden lokal drehen, und d&#252;rfte nicht auf anderweitig synchronisierten globalen Speicher zugreifen, <i>bis ich die &#196;nderung auf dem Atomic</i>&#160;sehe. Leider pa&#223;t dieses Muster <b>&#252;berhaupt nicht zur Anforderung</b>, da&#223; ich &#187;<b>jetzt und hier</b>&#171; f&#252;r den n&#228;chsten Zugriff die korrekten Werte sehe (und sonst passiert eine schr&#246;ckliche Katastrofe)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1779227720661" ID="ID_1207863358" MODIFIED="1779227735129" TEXT="alternativer Ansatz: ein Speicher-Trick">
+<node CREATED="1779227737273" ID="ID_1151704840" MODIFIED="1779227745577" TEXT="der Marker liegt im Objekt selber"/>
+<node CREATED="1779227746583" ID="ID_827606725" MODIFIED="1779227764050" TEXT="er enth&#xe4;lt einen eindeutig verifizierbaren Hash"/>
+<node CREATED="1779227764967" ID="ID_1341800059" MODIFIED="1779227783624" TEXT="und die Flag steht im gleichen Datenwort, im LSB"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779228859352" ID="ID_1992869770" MODIFIED="1779228994364" TEXT="Problem dabei: f&#xe4;lschliche Freigabe per Koinzidenz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn dummerweise an genau der gleichen Speicheradresse wieder ein solches Objekt mit diesem Mechanismus landet. Selbst wenn es sich um einen anderen Objekttyp handelt, oder eben um die Instanz f&#252;r einen anderen, inzwischen neu gestarteten Thread. Das ist auf den ersten Blick <i>extrem unwahrscheinlich,</i>&#160;aber ich k&#246;nnte mir durchaus Situationen denken, die sowas gradezu provozieren (z.B. custom pooling Allocator)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779236363484" ID="ID_1623305116" MODIFIED="1779238992369" TEXT="Nach einigem Nachdenken: wei&#xdf; nicht ob das Sichtbarkeitsproblem ohne Lock l&#xf6;sbar ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im gegebenen Kontext ist das problematisch, <i>weil der Zweck der ganzen Veranstaltung ist, da&#223; sich Worker m&#246;glichst wenig gegenseitig st&#246;ren.</i>&#160; Als Solches mak dieses Ziel debattierbar sein, aber wenn man es akzeptiert, dann w&#228;re ein volle Lese/Schreib-Barriere oder gar eine Mutex-Sektion bereits genug, um die lock-free-Queue und das komplizierte asynchrone Austausch-System komplett ad absurdum zu f&#252;hren. Denn dann k&#246;nnten sich die Worker bei Bedarf auch gleich selber neuen Speicher vom Heap holen....
+    </p>
+    <p>
+      Leider sind aber die offensichtlichen, alternativen L&#246;sungen mit Atomics immer darauf angewiesen, da&#223; irgendwo ein zeitlicher Spielraum ist, also z.B. ein Consumer, der im Zweifelsfall &quot;mal eben eine weitere Runde drehen&quot; kann. Denn die Atomics geben nur eine Positiv-Garantie: <i>wenn</i>&#160; ich die &#196;nderung auf dem Atomic sehe, <i>dann sehe ich konsistent</i>&#160; auch alle anderen happens-before-&#196;nderungen. Wir brauchen aber ziemlich genau das Gegenteil hier: wenn wir zugreifen, m&#252;ssen wir sicher sein, da&#223; der Empf&#228;nger noch lebt, sonst staubt's.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1779239004500" ID="ID_1301042348" MODIFIED="1779239024082" TEXT="jetzt bin ich ziemlich ratlos">
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1779239032895" ID="ID_1565211003" MODIFIED="1779239059936" TEXT="der Speichertrick h&#xe4;tte diese Probleme nicht, aber er hat ein unbekanntes &#xbb;Restrisiko&#xab;"/>
+<node CREATED="1779239066139" ID="ID_1333334571" MODIFIED="1779239416970" TEXT="mit einer Nonce im Hash l&#xe4;&#xdf;t sich das nicht beheben, und ein Type-Seed hilft nur bedingt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn eine Nonce m&#252;&#223;te ja wieder irgendwo stehen, also entweder im statischen Speicher (back to square one), oder im Objekt, und im letzteren Fall w&#252;rde sie f&#252;r ein neues Objekt ge&#228;ndert, zusammen mit dem Hash, so da&#223; alles wieder konsistent w&#228;re, und damit das Problem nicht bemerkt w&#252;rde. Sicher w&#228;re das nur, wenn man die Nonce auf der anderen Seite des Zugriffs hinterlegen w&#252;rde, also beim zugreifenden Client. Das w&#228;re dann aber h&#228;sslich, komplex und verwirrend. Alternativ k&#246;nnte man einen Typ-Hash verwenden. Der w&#252;rde verhindern, da&#223; man auf ein neues Objekt eines ganz anderen Typs zugreift (ein Fall, der konkret gar nicht auftreten kann). Aber er w&#252;rde nicht verhindern, da&#223; man versehentlich auf einen Pool eines neu gestarteten, anderen Threads zugreift, der zuf&#228;llig an der gleichen Speicheradresse liegt. Zwar w&#252;rde das keinen Schaden anrichten, aber diese Art &#187;harmlose Glitches&#171; sind etwas, auf das man sich besser nicht verlassen sollte.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#5b280f" CREATED="1779239419156" ID="ID_1089705414" MODIFIED="1779240425918" TEXT="was gehen w&#xfc;rde, ist eine lineare Liste, mit statischem atomarem Einstiegspunkt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Jeder Zugriff m&#252;&#223;te dann mit einer Read-Barriere &#252;ber den Atomic gehen (was grade noch akzeptabel ist, da man kurz darauf genau das Gleiche auch mit der lock-free-Queue macht). Man w&#252;rde dann neue Objekte vorne anf&#252;gen, und w&#252;rde die Liste linear durchsuchen nach einem Eintrag f&#252;r das aktuelle Objekt. Denn wenn bei &#196;nderungen eine Write-Barriere genutzt wird, ist die &#196;nderung garantiert im Speicher; wenn au&#223;erdem jeder Zugriff eine Lese-Barriere verwendet, dann sieht er garantiert den Wert aus dem Hauptspeicher, und garantiert auch alle vorher gemachten &#196;nderungen. <i>Allerdings sch&#252;tzt das <b>wieder nicht</b>&#160;gegen ein concurrent Update der Map.</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1779240431389" ID="ID_1958970349" MODIFIED="1779241337090" TEXT="einen Schritt weiter gedacht: ein atomic Lock w&#xfc;rde funktionien und w&#xe4;re akzeptabel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also ein Konstrukt wie ich es f&#252;r das &#187;Grooming-Token&#171; im Scheduler verwendet habe:
+    </p>
+    <ul>
+      <li>
+        vor <i>jedwedem Zugriff</i>&#160;(Scheiben <i>und</i>&#160;Lesen) mu&#223; man ein atomic-Token setzen (auf die Thread-ID)
+      </li>
+      <li>
+        wenn es bereits gesetzt ist, mu&#223; man &#187;spinnen&#171;
+      </li>
+      <li>
+        die dahinter liegende Datenstruktur dagegen bedarf keines weiteren Schutzes, denn durch das Schreiben/Lesen des atomic-Lock hat man bereits die Garantie, da&#223; man den aktuellen Stand sieht.
+      </li>
+      <li>
+        effektiv ist das ein MUTEX, aber ohne Kernel-Switch und ohne die Gefahr, schlafen gelegt zu werden.
+      </li>
+    </ul>
+    <p>
+      Leider bedingt das eine Schreib-Barriere auch f&#252;r jeden Lesezugriff, da man das Lock auch zum Lesen erlangen mu&#223;. Das kostet 20&#181;s und m&#246;glicherweise einen Pipeline-Stall, was aber hier vielleicht grade noch akzeptabel w&#228;re, da es nur bei Austausch von Allokationen notwendig ist. Allerdings: diese passieren durchaus regelm&#228;&#223;ig, und wenn die EngineBufferManager dann mal eben 30 Requests zuzustellen hat, ist das auch nicht mehr lustig. <b>Also fragw&#252;rdig</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1779241271672" ID="ID_826264580" MODIFIED="1779328158312" TEXT="demgegen&#xfc;ber erscheint nun ein Speichertrick mit client-seitigem Pr&#xfc;fwert doch attraktiv">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man m&#252;&#223;te dazu also den AllocReceiver umformulieren und zudem auch noch die Requests im EngineBufferManager. Vermutlich l&#228;uft das auf einen speziellen smart-Handle-Typ hinaus. Dieser w&#252;rde eine Pr&#252;fsumme beinhalten, die dann auf der Empf&#228;ngerseite genauso im Speicher vorzufinden sein mu&#223;. Die Pr&#252;fsumme w&#252;rde auf einer Nonce+der Ziel-Addresse beruhen, und k&#246;nnte damit so nur ein einziges Mal pro Programmlauf auftreten (modulo 63-bit Hash-Kollision). Die Sperr-Flag best&#252;nde dann einfach darin, die empf&#228;ngerseitige Pr&#252;fsumme auf Null zu setzen (kein Match, kein Zugriff). Diese empf&#228;ngerseitige Pr&#252;fsumme m&#252;&#223;te ein Atomic sein, und beim Zugriff w&#252;rde eine Lese-Barriere angewendet, beim &#196;ndern eine Schreibbarriere. Das w&#228;re v&#246;llig akzeptabel. Dar&#252;berhinaus g&#228;be es keine Contention (au&#223;er beim Neuerzeugen eines Objekts, weil dann die Nonce inkrementiert werden mu&#223;).
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#effec1" DESTINATION="ID_86232371" ENDARROW="Default" ENDINCLINATION="590;70;" ID="Arrow_ID_1616330137" STARTARROW="None" STARTINCLINATION="89;231;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1779225244553" ID="ID_33299173" MODIFIED="1779328092186" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1779302502523" ID="ID_332907520" MODIFIED="1779328099815">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Hilfsklasse: <b>LiveMark</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1779302523581" ID="ID_272378166" MODIFIED="1779302536450" TEXT="wird inkorporiert"/>
+<node CREATED="1779302591078" ID="ID_1400105754" MODIFIED="1779302599488" TEXT="initialisiert sich automatisch mit einer Nonce"/>
+<node CREATED="1779302600351" ID="ID_119289264" MODIFIED="1779302630803" TEXT="kann explizit disengaged werden (unumkehrbar)"/>
+<node CREATED="1779302636830" ID="ID_424340598" MODIFIED="1779302657688" TEXT="und disengaged im Destruktor"/>
+<node CREATED="1779302661463" ID="ID_685500830" MODIFIED="1779302678340" TEXT="man kann daraus ein SafeHandle&lt;TAR&gt; erzeugen"/>
+</node>
+<node CREATED="1779302768803" ID="ID_1441984984" MODIFIED="1779316440364" TEXT="Details">
+<icon BUILTIN="idea"/>
+<node CREATED="1779302772812" ID="ID_267911667" MODIFIED="1779302787022" TEXT="der Client mu&#xdf; auf die LiveMark zugreifen k&#xf6;nnen"/>
+<node COLOR="#5b280f" CREATED="1779302826315" ID="ID_918422403" MODIFIED="1779302959278" TEXT="dazu brauchen wir ein Lambda oder einen Funktor">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779302960427" ID="ID_783330097" MODIFIED="1779316428169" TEXT="oder der Tr&#xe4;ger mu&#xdf; ein Concept erf&#xfc;llen">
+<icon BUILTIN="forward"/>
+<node CREATED="1779303004975" ID="ID_946970515" MODIFIED="1779303018640" TEXT="alive_marked"/>
+<node CREATED="1779303022339" ID="ID_1505569542" MODIFIED="1779303038533" TEXT="TAR::getLiveMark()"/>
+</node>
+<node COLOR="#435e98" CREATED="1779303082464" ID="ID_1818678384" MODIFIED="1779316434225" TEXT="Redundanz ist akzeptabel &#x27f9; speichere den LiveMark-Hash auf beiden Seiten">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1779305086437" ID="ID_1154074030" MODIFIED="1779316393076" TEXT="das Handle ist ein typischer smart-ptr mit bool-check und exception">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1779303131609" ID="ID_1623611953" MODIFIED="1779316395955" TEXT="Nonce inkrementieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1779328129353" ID="ID_86232371" MODIFIED="1779328147143" TEXT="die L&#xf6;sung gef&#xe4;llt mir">
+<linktarget COLOR="#effec1" DESTINATION="ID_86232371" ENDARROW="Default" ENDINCLINATION="590;70;" ID="Arrow_ID_1616330137" SOURCE="ID_826264580" STARTARROW="None" STARTINCLINATION="89;231;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1779225249759" ID="ID_744341688" MODIFIED="1779328088646" TEXT="Test">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1779303148844" ID="ID_1026277820" MODIFIED="1779324021489" TEXT="lib::LiveMark_test">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#338800" CREATED="1779316458172" ID="ID_466259903" MODIFIED="1779316471356" TEXT="einfache Verwendung eines Handle">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1779316472296" ID="ID_1937415890" MODIFIED="1779316492345" TEXT="demonstrieren da&#xdf; ein dangling pointer erkannt wird">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1779324030592" ID="ID_1681185093" MODIFIED="1779328057631" TEXT="Kommunikation &#xfc;ber Thread-Grenzen zeigen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1779324880269" ID="ID_1402037409" MODIFIED="1779324907661" TEXT="schwierig &#x2014; wenig zu greifen"/>
+<node COLOR="#435e98" CREATED="1779324908499" ID="ID_1843707764" MODIFIED="1779328060422" TEXT="Idee: empfange &#xfc;ber eine lock-free queue">
+<icon BUILTIN="idea"/>
+<node CREATED="1779324952821" ID="ID_1297928668" MODIFIED="1779324974400" TEXT="Sender pr&#xfc;ft ob Empf&#xe4;nger noch zugreifbar ist"/>
+<node CREATED="1779324980129" ID="ID_374081410" MODIFIED="1779325011161" TEXT="Empf&#xe4;nger deaktiviert die LiveMark und leert die Queue"/>
+<node CREATED="1779325012566" ID="ID_210063040" MODIFIED="1779325018696" TEXT="danach darf nichts mehr ankommen"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779325042993" ID="ID_344181114" MODIFIED="1779327324878" TEXT="das zeigt: hier besteht immer noch ein Race">
+<arrowlink COLOR="#b00581" DESTINATION="ID_1664117186" ENDARROW="Default" ENDINCLINATION="-937;0;" ID="Arrow_ID_1984536453" STARTARROW="None" STARTINCLINATION="-349;22;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779325064012" ID="ID_266392583" MODIFIED="1779328078960" TEXT="zwischen dem Check und dem Zugriff auf die Queue">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1779325191221" ID="ID_1731541361" MODIFIED="1779325216960" TEXT="kaum zu verhindern ohne ein Lock oder einen atomaren Best&#xe4;tigungs-Mechanismus"/>
 </node>
 </node>
 </node>
@@ -145240,22 +145483,90 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778948939771" ID="ID_1407930950" MODIFIED="1778948943134" TEXT="Thread beenden"/>
 <node CREATED="1778979132916" ID="ID_393345688" MODIFIED="1778979147235" TEXT="Anzahl tats&#xe4;chlicher Allokationen pr&#xfc;fen"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779149341620" ID="ID_1844089253" MODIFIED="1779149360400" TEXT="preparBuffers beachtet Reservierungen nicht">
+<node COLOR="#435e98" CREATED="1779149341620" FOLDED="true" ID="ID_1844089253" MODIFIED="1779215841493" TEXT="prepareBuffers beachtet Reservierungen nicht">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1779149362001" ID="ID_674281546" MODIFIED="1779149386315" TEXT="eigentlich sollten von den 5 angeforderten Buffern 4 noch &#xbb;reserved&#xab; sein"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779212779895" ID="ID_1728903949" MODIFIED="1779212904879" TEXT="das war ein Denkfehler im Test-Setup...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      als &quot;reserviert&quot; markieren wir nur Bl&#246;cke, die bereits unmittelbar im lokalen Pool verf&#252;gbar sind; vom EngineBufferManager angeforderte Bl&#246;cke dagegen sind nicht &quot;reserviert&quot;, wenn sie ankommen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779148203212" ID="ID_784985187" MODIFIED="1779148210922" STYLE="fork" TEXT="SEGFAULT">
+<node COLOR="#338800" CREATED="1779212862037" ID="ID_1851382271" MODIFIED="1779212892822" TEXT="Test kann aber leicht angepa&#xdf;t werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und dann verh&#228;lt sich alles wie erwartet
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1779148203212" FOLDED="true" ID="ID_784985187" MODIFIED="1779215806068" TEXT="SEGFAULT">
 <font NAME="SansSerif" SIZE="12"/>
-<icon BUILTIN="broken-line"/>
-<node CREATED="1779148212791" ID="ID_912557487" MODIFIED="1779148225972" TEXT="undurchsichtige Situation">
-<node CREATED="1779148226905" ID="ID_135139479" MODIFIED="1779148244026" TEXT="hier wird offensichtlich der dtor des thread-local-Objekts aufgerufen"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779148244982" ID="ID_1958707025" MODIFIED="1779149274605" TEXT="aber: der Thread gilt offiziell bereits als terminiert (d.h. main l&#xe4;uft ebenfalls weiter)">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1779148212791" ID="ID_912557487" MODIFIED="1779215781829" TEXT="undurchsichtige Situation">
+<node CREATED="1779148226905" ID="ID_135139479" MODIFIED="1779215781829" TEXT="hier wird offensichtlich der dtor des thread-local-Objekts aufgerufen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779148244982" ID="ID_1958707025" MODIFIED="1779215781829" TEXT="aber: der Thread gilt offiziell bereits als terminiert (d.h. main l&#xe4;uft ebenfalls weiter)">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1779149276142" ID="ID_1730131768" MODIFIED="1779149284875" TEXT="das ist ein Problem f&#xfc;r das Test-Setup"/>
-<node CREATED="1779149288603" ID="ID_990204079" MODIFIED="1779149314066" TEXT="weil wir damit zu u.U zu fr&#xfc;h pr&#xfc;fen (befor die Allocs zur&#xfc;ckgesandt wurden)"/>
+<node CREATED="1779149276142" ID="ID_1730131768" MODIFIED="1779215781830" TEXT="das ist ein Problem f&#xfc;r das Test-Setup"/>
+<node CREATED="1779149288603" ID="ID_990204079" MODIFIED="1779215781830" TEXT="weil wir damit zu u.U zu fr&#xfc;h pr&#xfc;fen (befor die Allocs zur&#xfc;ckgesandt wurden)"/>
+<node CREATED="1779212920394" ID="ID_820337477" MODIFIED="1779215781830" TEXT="habe jetzt 10ms zus&#xe4;tzliche Pause eingebaut"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779212981320" ID="ID_7683582" MODIFIED="1779215781830" TEXT="(bringt aber nix)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      selbst 1s warten bringt nix, der SEGFAULT kommt schneller
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node CREATED="1779148268344" ID="ID_1630618662" MODIFIED="1779148295972" TEXT="der clean-up-Hook bekommt eine Instanz mit einer leeren Block-Liste"/>
-<node CREATED="1779148296997" ID="ID_418820207" MODIFIED="1779148309028" TEXT="aber er iteriert diese, aus unklarem Grund"/>
+</node>
+<node CREATED="1779148268344" ID="ID_1630618662" MODIFIED="1779215781830" TEXT="der clean-up-Hook bekommt eine Instanz mit einer leeren Block-Liste"/>
+<node CREATED="1779148296997" ID="ID_418820207" MODIFIED="1779215781830" TEXT="aber er iteriert diese, aus unklarem Grund"/>
+</node>
+<node CREATED="1779213480136" ID="ID_1959546736" MODIFIED="1779215781831" TEXT="genauere Untersuchung">
+<node CREATED="1779213486900" ID="ID_1675164848" MODIFIED="1779215781831" TEXT="Print-Statements">
+<node CREATED="1779213496701" ID="ID_211301594" MODIFIED="1779215781831" TEXT="der Main-Thread schl&#xe4;ft noch..."/>
+<node CREATED="1779213508414" ID="ID_180428325" MODIFIED="1779215781831" TEXT="Destruktor ruft den Clean-up Hook"/>
+<node CREATED="1779213519754" ID="ID_724111756" MODIFIED="1779215781831" TEXT="dort hat die Block-Liste 5 Eintr&#xe4;ge (korrekt)"/>
+<node CREATED="1779213534847" ID="ID_392144473" MODIFIED="1779215781831" TEXT="noch Meldung von der 1. Iteration mit einer Mem-Adresse"/>
+<node CREATED="1779213555317" ID="ID_97951475" MODIFIED="1779215781831" TEXT="Segfault">
+<node CREATED="1779214868024" ID="ID_1561723869" MODIFIED="1779215781831" TEXT="List ist leer"/>
+<node CREATED="1779214875444" ID="ID_443229940" MODIFIED="1779215781831" TEXT="aber main-Thread ist dann bereits in eine failed assertion gelaufen"/>
+<node CREATED="1779214894031" ID="ID_1325180229" MODIFIED="1779215781831" TEXT="nicht klar ob das mit der Debugging-Situation zusammenh&#xe4;ngt"/>
+</node>
+</node>
+<node CREATED="1779215384594" ID="ID_1448842553" MODIFIED="1779215781831" TEXT="Situation anders pr&#xe4;parieren">
+<node CREATED="1779215401622" ID="ID_1163169402" MODIFIED="1779215781831" TEXT="so da&#xdf; keine zus&#xe4;tzliche Allokation angefordert wird"/>
+<node CREATED="1779215411016" ID="ID_1634872510" MODIFIED="1779215781831" TEXT="alle Assertions aus Main herausnehmen"/>
+<node CREATED="1779215424588" ID="ID_1565063764" MODIFIED="1779215781831" TEXT="dort 2x 1sec schlafen"/>
+<node CREATED="1779215441122" ID="ID_418906350" MODIFIED="1779215781831" TEXT="Eindeutig: Problem in der 2.Iteration vom Clean-up">
+<node CREATED="1779215460832" ID="ID_1116789626" MODIFIED="1779215781831" TEXT="der Main-Thread ist noch im sleep()"/>
+<node CREATED="1779215474598" ID="ID_1113629525" MODIFIED="1779215781831" TEXT="die erste Iteration printet"/>
+<node CREATED="1779215481157" ID="ID_1309368036" MODIFIED="1779215781831" TEXT="in der zweiten ist der aktuelle Block nicht mehr valide"/>
+<node CREATED="1779215508363" ID="ID_1562083980" MODIFIED="1779215781831" TEXT="und die Liste ist leer"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779215600010" ID="ID_743469822" MODIFIED="1779215781831" TEXT="AUA: ganz d&#xe4;mlicher Bug &#x2014; Schleife falsch geklammert">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node CREATED="1779215763458" ID="ID_1073142525" MODIFIED="1779215781831" TEXT="Fazit. &#xbb;eigene Dummheit&#xab;"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779215808575" ID="ID_536197148" MODIFIED="1779215834783" TEXT="Assertion-Failure: Lease bleibt offen">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1779215845829" ID="ID_1150970737" MODIFIED="1779215866852" TEXT="Grund ist eine &#xbb;Zombie-Zustellung&#xab;"/>
+<node CREATED="1779215868024" ID="ID_182421878" MODIFIED="1779215990774" TEXT="Problem hatte ich bereits theoretisch vorhergesehen">
+<arrowlink COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" STARTARROW="None" STARTINCLINATION="659;35;"/>
 </node>
 </node>
 </node>
@@ -146941,7 +147252,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778205155009" ID="ID_536238884" MODIFIED="1778205234412" TEXT="Problem im Job &#x27f9; Unwind, Worker terminiert">
 <icon BUILTIN="full-2"/>
 </node>
-<node BACKGROUND_COLOR="#f9e4d6" COLOR="#c00244" CREATED="1778205192805" ID="ID_931645192" MODIFIED="1778205307186">
+<node BACKGROUND_COLOR="#f9e4d6" COLOR="#c00244" CREATED="1778205192805" ID="ID_931645192" MODIFIED="1779328009963">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -146956,7 +147267,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-857;174;" ID="Arrow_ID_801625969" SOURCE="ID_1394284825" STARTARROW="None" STARTINCLINATION="171;-11;"/>
+<linktarget COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-937;191;" ID="Arrow_ID_801625969" SOURCE="ID_1394284825" STARTARROW="None" STARTINCLINATION="171;-11;"/>
+<linktarget COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" SOURCE="ID_182421878" STARTARROW="None" STARTINCLINATION="659;35;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -147044,6 +147356,43 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779140722186" ID="ID_255577978" MODIFIED="1779140798964" TEXT="&#x27f9; das Sicherheits-Feature mu&#xdf; also sogar explizit triggerbar sein">
 <linktarget COLOR="#2b53d4" DESTINATION="ID_255577978" ENDARROW="Default" ENDINCLINATION="443;20;" ID="Arrow_ID_57636127" SOURCE="ID_228507573" STARTARROW="None" STARTINCLINATION="320;11;"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779327275881" ID="ID_1664117186" MODIFIED="1779327343009" TEXT="und noch ein weiterer Race l&#xe4;&#xdf;t sich nicht ohne Weiteres schlie&#xdf;en">
+<linktarget COLOR="#b00581" DESTINATION="ID_1664117186" ENDARROW="Default" ENDINCLINATION="-937;0;" ID="Arrow_ID_1984536453" SOURCE="ID_344181114" STARTARROW="None" STARTINCLINATION="-349;22;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1779327356588" ID="ID_1046958487" MODIFIED="1779327373060" TEXT="selbst mit einem solchen Schutzmechanismus..."/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779327373930" ID="ID_1071387222" MODIFIED="1779327429911" TEXT="denn eine Atomic-flag ist kein Lock &#x2014; gesendet wird nach dem Check">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#f0c5e6" COLOR="#990033" CREATED="1779327385156" ID="ID_434544755" MODIFIED="1779327557928" TEXT="und ohne einen expliziten Mechanismus kann ich hier nichts machen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hat nichts mit der unmittelbar hier diskutierten Technologie zu tun. Sondern es zeigt eine Diskrepanz in der Architektur: &#187;asynchron&#171; bedeutet immer &#187;eventuell irgendwann&#171; &#8212; aber wenn ein Thread terminiert, dann terminiert er <font color="#b40101">SOFORT</font>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1779327593320" ID="ID_1480276868" MODIFIED="1779327990693" TEXT="das mu&#xdf; &#xbb;pragmatisch&#xab; in der Implementierung abgefangen werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn letztlich dichte ich hier ein Restrisiko ab; es w&#252;rde gen&#252;gen, wenn der Thread nach dem Sperren des Empfangs noch einen Moment wartet, und dann erst die Eingangsqueue ausr&#228;umt. Wir k&#246;nnen aber letztlich nicht verhindern, da&#223; der Empf&#228;nger-Thread m&#246;glicherweise stirbt w&#228;hrend der Sender-Thread grade mitten in der Zustellung ist, und durch &#228;u&#223;ere Umst&#228;nde dabei ausgebremst wird. Um das zu verhindern, br&#228;uchten wir einen Handshake &#8212; und dann w&#228;re die L&#246;sung <i>nicht mehr asynchron!</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#b92d55" DESTINATION="ID_1344328276" ENDARROW="Default" ENDINCLINATION="341;-476;" ID="Arrow_ID_1052781255" STARTARROW="Default" STARTINCLINATION="-205;854;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779140860563" ID="ID_1697479221" MODIFIED="1779327578704" TEXT="dedizierten Schutzmechanismus schaffen!">
+<arrowlink COLOR="#5000ad" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="-430;843;" ID="Arrow_ID_1277922642" STARTARROW="None" STARTINCLINATION="-1130;69;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 <node CREATED="1778118843392" ID="ID_45310528" MODIFIED="1778118856450" TEXT="Eingang &#x2259; zur&#xfc;ckgegebene Allokationen">
@@ -147333,9 +147682,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507847611" ID="ID_1394284825" MODIFIED="1778507972282" TEXT="Race wegen terminierendem Thread">
-<arrowlink COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-857;174;" ID="Arrow_ID_801625969" STARTARROW="None" STARTINCLINATION="171;-11;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507847611" ID="ID_1394284825" MODIFIED="1779328009963" TEXT="Race wegen terminierendem Thread">
+<arrowlink COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-937;191;" ID="Arrow_ID_801625969" STARTARROW="None" STARTINCLINATION="171;-11;"/>
 <icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779327845116" HGAP="31" ID="ID_1344328276" MODIFIED="1779327990693" TEXT="konnte den Race nur mit Restrisiko abdichten..." VSHIFT="23">
+<linktarget COLOR="#b92d55" DESTINATION="ID_1344328276" ENDARROW="Default" ENDINCLINATION="341;-476;" ID="Arrow_ID_1052781255" SOURCE="ID_1480276868" STARTARROW="Default" STARTINCLINATION="-205;854;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1778630840458" ID="ID_108123775" MODIFIED="1778630844917" TEXT="Locking">
 <node CREATED="1778630852336" ID="ID_1688369877" MODIFIED="1778630859835" TEXT="zwei m&#xf6;gliche Ans&#xe4;tze">

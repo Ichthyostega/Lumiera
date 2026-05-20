@@ -478,6 +478,11 @@ return: 0
 END
 
 
+TEST "autodetect deceased partner" LiveMark_test <<END
+return: 0
+END
+
+
 TEST "Thread-local service instances" LocalSlice_test <<END
 END
 

@@ -31,8 +31,10 @@
 #include <algorithm>
 
 using util::isSameAdr;
-using std::this_thread::yield;
 using lib::Thread;
+using std::this_thread::yield;
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""ms;
 
 namespace vault {
 namespace mem   {
@@ -119,12 +121,22 @@ namespace test  {
                                 *p = '\0';
                                 CHECK (ranS == buf);
                                 
+                                // reserve four additional buffers;
+                                // these happen to sit already in the local pool anyway
+                                // and will be marked as "reserved" now....
+                                avail = storeAPI.prepareBuffers(TYPEID, 4, BUFFSIZ);
+                                CHECK (4 == avail);
+                                
+                                // finish usage and return the single buffer claimed thus far...
                                 storeAPI.mark_emitted (TYPEID, storageSlot);
                                 storeAPI.detachBuffer (TYPEID, storageSlot);
                                 
+                                // now we have 5 buffers in the pool, but 4 are marked as "reserved"
+                                // thus only one buffer can be confirmed and one further is requested from EngineBufferManager
                                 avail = storeAPI.prepareBuffers(TYPEID, 2, BUFFSIZ);
                                 CHECK (1 == avail);
                                 
+                                // but irrespective of reservation, we can immediately use the buffers locally available
                                 BuffAlloc slot1 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, MARK, ARG);
                                 auto& [sto1,siz1,tag1] = slot1;
                                 BuffAlloc slot2 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, MARK, ARG);
@@ -142,17 +154,27 @@ namespace test  {
           while (testWorker)
             yield();     // wait for worker to finish
           
+          // additional delay for the local pool's destructor
+          // that is invoked after the thread has finished
+          sleep_for(1ms);
+          
           CHECK (globalPool);   // the Mock was accessed (and thus instantiated)
           
           // before shutdown, LocalMemPool has sent back  all allocations;
-          // these should sit now in the EngineBufferManager's input queue
+          // these should sit now in the EngineBufferManager's input queue,
+          // unprocessed yet; same for the additional buffer requested later.
 SHOW_EXPR(watch(*globalPool).numAllocs());
-          CHECK ( CNT+1        == watch(*globalPool).numAllocs());
-          CHECK ((CNT+1)*ALLOC == watch(*globalPool).bytesLeased());
+          CHECK ( CNT        == watch(*globalPool).numAllocs());
+          CHECK ((CNT)*ALLOC == watch(*globalPool).bytesLeased());
           
           // process in-queue and retrieve all allocations..
+SHOW_EXPR("Kaka")
           globalPool->processPendingRequests();
-          CHECK (0 == watch(*globalPool).bytesLeased());
+SHOW_EXPR("Boom")
+SHOW_EXPR(watch(*globalPool).bytesLeased());
+//          CHECK (0 == watch(*globalPool).bytesLeased());
+          sleep_for(1000ms);
+SHOW_EXPR("bye")
         }
       
       

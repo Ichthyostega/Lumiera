@@ -379,8 +379,8 @@ namespace mem   {
             {
               REQUIRE (not block.used);
               consumer (block.alloc.mem, block.alloc.siz);
-              blocks_.clear();
             }
+          blocks_.clear();
           ENSURE (this->empty());
         }
       

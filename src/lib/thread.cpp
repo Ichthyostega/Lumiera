@@ -56,7 +56,7 @@ namespace thread{
   ThreadWrapper::decorate_with_global_count (string const& rawID)
   {
     static atomic_uint globalCnt{1};
-    return _Fmt{"%s.%03i"} % rawID % globalCnt.fetch_add (+1, std::memory_order_acq_rel);
+    return _Fmt{"%s.%03i"} % rawID % globalCnt.fetch_add (+1, std::memory_order_relaxed);
   }
   
   
