@@ -144998,7 +144998,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1778979188506" ID="ID_1435066016" MODIFIED="1779148168359" TEXT="Zugriff auf Thread-Local Mem-Pool und EngineBufferManager">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779128982798" ID="ID_1913652442" MODIFIED="1779128995471" TEXT="Problem Clean-up">
+<node COLOR="#435e98" CREATED="1779128982798" ID="ID_1913652442" MODIFIED="1779578940844" TEXT="Problem Clean-up">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1779128999922" ID="ID_1435970090" MODIFIED="1779129012818" TEXT="dieser wird vom thread-local Subobjekt getriggert"/>
 <node CREATED="1779129014668" ID="ID_978040113" MODIFIED="1779129075918" TEXT="der LocalBufferStore bekommt das nicht einmal mit">
@@ -145012,7 +145012,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 <node CREATED="1779129078429" ID="ID_1921726698" MODIFIED="1779129106317" TEXT="aber die Service-Verbindungen sind nur im LocalBuffer gegeben"/>
-<node CREATED="1779130807327" ID="ID_1569602452" MODIFIED="1779131264472" TEXT="&#x27f9; also wird ein shutdown-Hook notwendig">
+<node COLOR="#435e98" CREATED="1779130807327" FOLDED="true" ID="ID_1569602452" MODIFIED="1779578931772" TEXT="&#x27f9; also wird ein shutdown-Hook notwendig">
 <linktarget COLOR="#8233d1" DESTINATION="ID_1569602452" ENDARROW="Default" ENDINCLINATION="-746;-38;" ID="Arrow_ID_1519809069" SOURCE="ID_1507803308" STARTARROW="None" STARTINCLINATION="-695;30;"/>
 <node CREATED="1779130847250" ID="ID_222831030" MODIFIED="1779135184435" TEXT="das ganze Thema kommt mir bekannt vor...">
 <richcontent TYPE="NOTE"><html>
@@ -145024,7 +145024,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779130986850" ID="ID_1806655906" MODIFIED="1779131349575" TEXT="erneut stellt sich das Problem der effektiv-statischen Instanz">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779130986850" ID="ID_1806655906" MODIFIED="1779578919404" TEXT="erneut stellt sich das Problem der effektiv-statischen Instanz">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1779131365999" ID="ID_660464086" MODIFIED="1779131414390">
 <richcontent TYPE="NODE"><html>
@@ -145052,7 +145052,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1779140476970" ID="ID_1853141177" MODIFIED="1779140488380" TEXT="f&#xfc;hre also eine shutdown-function ein"/>
 <node CREATED="1779140489560" ID="ID_1942203871" MODIFIED="1779140502858" TEXT="verwende die Config von LocalSlice um die zu injizieren"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779140507822" ID="ID_1541520016" MODIFIED="1779140836908" TEXT="weitere Komplikation: Race im Shutdown">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779140507822" ID="ID_1541520016" MODIFIED="1779578885634" TEXT="weitere Komplikation: Race im Shutdown">
 <arrowlink COLOR="#e5024c" DESTINATION="ID_241014081" ENDARROW="Default" ENDINCLINATION="-1049;0;" ID="Arrow_ID_1884336660" STARTARROW="None" STARTINCLINATION="-946;65;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1779140860563" ID="ID_187364117" MODIFIED="1779216224446" TEXT="das zeigt: ein explizitesr Schutzmechanismus ist notwendig">
@@ -145064,11 +145064,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1779578897524" ID="ID_142601062" MODIFIED="1779578915636" TEXT="konnte das durch geeignetes Setup im LocalBufferStore l&#xf6;sen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779216016773" ID="ID_1356813075" MODIFIED="1779328952013" TEXT="Schutzmechanismus f&#xfc;r die Async-Kommunikation">
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779216016773" FOLDED="true" ID="ID_1356813075" MODIFIED="1779578936751" TEXT="Schutzmechanismus f&#xfc;r die Async-Kommunikation">
 <linktarget COLOR="#ad0057" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="114;-220;" ID="Arrow_ID_1737519596" SOURCE="ID_187364117" STARTARROW="None" STARTINCLINATION="-1063;52;"/>
 <linktarget COLOR="#5000ad" DESTINATION="ID_1356813075" ENDARROW="Default" ENDINCLINATION="-430;843;" ID="Arrow_ID_1277922642" SOURCE="ID_1697479221" STARTARROW="None" STARTINCLINATION="-1130;69;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1779224920108" ID="ID_909246085" MODIFIED="1779328938586" TEXT="Anforderungen">
 <icon BUILTIN="yes"/>
 <node CREATED="1779224928540" ID="ID_117163407" MODIFIED="1779224938270" TEXT="hat einen aktiv / geblockt-State"/>
@@ -145082,7 +145085,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779225174394" ID="ID_964352880" MODIFIED="1779225199891" TEXT="dieser erzeugt aber einen Key, der an die Instanz gebunden ist"/>
 <node CREATED="1779225204246" ID="ID_773629611" MODIFIED="1779227167103" TEXT="dar&#xfc;ber wird in einen speziellen Marker zugegriffen"/>
 <node CREATED="1779225216669" ID="ID_1883744470" MODIFIED="1779225232126" TEXT="Lebenszyklus-Kopplung &#xfc;ber Ctor/Dtor realisiert"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779227171937" ID="ID_857696487" MODIFIED="1779328111248" TEXT="Problem der Synchronisation">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779227171937" FOLDED="true" ID="ID_857696487" MODIFIED="1779578870402" TEXT="Problem der Synchronisation">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1779227189574" ID="ID_697877195" MODIFIED="1779227476829">
 <richcontent TYPE="NODE"><html>
@@ -145149,7 +145152,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779236363484" ID="ID_1623305116" MODIFIED="1779238992369" TEXT="Nach einigem Nachdenken: wei&#xdf; nicht ob das Sichtbarkeitsproblem ohne Lock l&#xf6;sbar ist">
+<node BACKGROUND_COLOR="#e3cda4" COLOR="#a50125" CREATED="1779236363484" ID="ID_1623305116" MODIFIED="1779573180765" TEXT="Nach einigem Nachdenken: wei&#xdf; nicht ob das Sichtbarkeitsproblem ohne Lock l&#xf6;sbar ist">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -145215,12 +145218,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="help"/>
 </node>
-<node CREATED="1779241271672" ID="ID_826264580" MODIFIED="1779328158312" TEXT="demgegen&#xfc;ber erscheint nun ein Speichertrick mit client-seitigem Pr&#xfc;fwert doch attraktiv">
+<node CREATED="1779241271672" ID="ID_826264580" MODIFIED="1779573256726" TEXT="demgegen&#xfc;ber erscheint nun ein Speichertrick mit client-seitigem Pr&#xfc;fwert doch attraktiv">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Man m&#252;&#223;te dazu also den AllocReceiver umformulieren und zudem auch noch die Requests im EngineBufferManager. Vermutlich l&#228;uft das auf einen speziellen smart-Handle-Typ hinaus. Dieser w&#252;rde eine Pr&#252;fsumme beinhalten, die dann auf der Empf&#228;ngerseite genauso im Speicher vorzufinden sein mu&#223;. Die Pr&#252;fsumme w&#252;rde auf einer Nonce+der Ziel-Addresse beruhen, und k&#246;nnte damit so nur ein einziges Mal pro Programmlauf auftreten (modulo 63-bit Hash-Kollision). Die Sperr-Flag best&#252;nde dann einfach darin, die empf&#228;ngerseitige Pr&#252;fsumme auf Null zu setzen (kein Match, kein Zugriff). Diese empf&#228;ngerseitige Pr&#252;fsumme m&#252;&#223;te ein Atomic sein, und beim Zugriff w&#252;rde eine Lese-Barriere angewendet, beim &#196;ndern eine Schreibbarriere. Das w&#228;re v&#246;llig akzeptabel. Dar&#252;berhinaus g&#228;be es keine Contention (au&#223;er beim Neuerzeugen eines Objekts, weil dann die Nonce inkrementiert werden mu&#223;).
+      Man m&#252;&#223;te dazu also den AllocReceiver umformulieren und zudem auch noch die Requests im EngineBufferManager. Vermutlich l&#228;uft das auf einen speziellen smart-Handle-Typ hinaus. Dieser w&#252;rde eine Pr&#252;fsumme beinhalten, die dann auf der Empf&#228;ngerseite genauso im Speicher vorzufinden sein mu&#223;. Die Pr&#252;fsumme w&#252;rde auf einer Nonce plus der Ziel-Addresse beruhen, und k&#246;nnte damit so nur ein einziges Mal pro Programmlauf auftreten (modulo 64-bit Hash-Kollision). Die Sperr-Flag best&#252;nde dann einfach darin, die empf&#228;ngerseitige Pr&#252;fsumme auf Null zu setzen (kein Match, kein Zugriff). Diese empf&#228;ngerseitige Pr&#252;fsumme m&#252;&#223;te ein Atomic sein, und beim Zugriff w&#252;rde eine Lese-Barriere angewendet, beim &#196;ndern eine Schreibbarriere. Das w&#228;re v&#246;llig akzeptabel. Dar&#252;berhinaus g&#228;be es keine Contention (au&#223;er beim Neuerzeugen eines Objekts, weil dann die Nonce inkrementiert werden mu&#223;).
     </p>
   </body>
 </html>
@@ -145233,7 +145236,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1779225244553" ID="ID_33299173" MODIFIED="1779328092186" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1779302502523" ID="ID_332907520" MODIFIED="1779328099815">
+<node COLOR="#435e98" CREATED="1779302502523" ID="ID_332907520" MODIFIED="1779578150521">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -145242,6 +145245,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_668417083" SOURCE="ID_1820292066" STARTARROW="None" STARTINCLINATION="-634;41;"/>
+<linktarget COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_1142922633" SOURCE="ID_142165791" STARTARROW="None" STARTINCLINATION="-634;41;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1779302523581" ID="ID_272378166" MODIFIED="1779302536450" TEXT="wird inkorporiert"/>
 <node CREATED="1779302591078" ID="ID_1400105754" MODIFIED="1779302599488" TEXT="initialisiert sich automatisch mit einer Nonce"/>
@@ -145295,13 +145300,27 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779324980129" ID="ID_374081410" MODIFIED="1779325011161" TEXT="Empf&#xe4;nger deaktiviert die LiveMark und leert die Queue"/>
 <node CREATED="1779325012566" ID="ID_210063040" MODIFIED="1779325018696" TEXT="danach darf nichts mehr ankommen"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779325042993" ID="ID_344181114" MODIFIED="1779327324878" TEXT="das zeigt: hier besteht immer noch ein Race">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779325042993" ID="ID_344181114" MODIFIED="1779578840255" TEXT="das zeigt: hier besteht immer noch ein Race">
 <arrowlink COLOR="#b00581" DESTINATION="ID_1664117186" ENDARROW="Default" ENDINCLINATION="-937;0;" ID="Arrow_ID_1984536453" STARTARROW="None" STARTINCLINATION="-349;22;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779325064012" ID="ID_266392583" MODIFIED="1779328078960" TEXT="zwischen dem Check und dem Zugriff auf die Queue">
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1779325191221" ID="ID_1731541361" MODIFIED="1779325216960" TEXT="kaum zu verhindern ohne ein Lock oder einen atomaren Best&#xe4;tigungs-Mechanismus"/>
+<node COLOR="#435e98" CREATED="1779578618396" ID="ID_1461104900" MODIFIED="1779578640765" TEXT="extra daf&#xfc;r einen 100&#xb5;s-Sleep eingebaut">
+<icon BUILTIN="idea"/>
+<node COLOR="#5f0a4d" CREATED="1779578645372" HGAP="29" ID="ID_41372706" MODIFIED="1779578834204" TEXT="&#xbb;pragmatische L&#xf6;sung&#xab; f&#xfc;r ein &#xbb;Restrisiko&#xab;" VSHIFT="8">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da es sich um einen Grenzfall handelt, den ich durch theoretische &#220;berlegung identifiziert habe, und der im regul&#228;ren Betrieb niemals auftreten sollte. Wenn es dazu kommt, wird sehr wahrscheinlich die Applikation insgesamt terminieren, d.h. in dem Fall verhindern wir nur diese l&#228;stige Art von nicht-reproduzierbaren SEGFAULT on shutdown. Falls es aber doch mal ein anderes Szenario gibt, w&#252;rde das zu Speicherlecks f&#252;hren. Daher denke ich, es gen&#252;gt, das Restrisiko zu dr&#252;cken (denn eine tats&#228;chliche L&#246;sung w&#228;re ziemlich schwierig und w&#252;rde das ganze Konzept der asynchronen Kommunikation konterkarrieren)
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -145472,8 +145491,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778948633708" ID="ID_1152843800" MODIFIED="1778948643382" TEXT="Steuer-Heuristik beobachten"/>
 <node CREATED="1778948730082" ID="ID_868291823" MODIFIED="1778948736909" TEXT="Grenzf&#xe4;lle / Lebenszyklus"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778948838374" ID="ID_1190893477" MODIFIED="1778979151352" TEXT="verify_API">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1778948838374" ID="ID_1190893477" MODIFIED="1779578606270" TEXT="verify_API">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1779148191788" ID="ID_39449611" MODIFIED="1779148194561" TEXT="Schritte">
 <node CREATED="1778948874440" ID="ID_619417705" MODIFIED="1778948892430" TEXT="Allokation ank&#xfc;ndigen"/>
 <node CREATED="1778948897541" ID="ID_625050889" MODIFIED="1778948901900" TEXT="Allokation beziehen"/>
@@ -145562,11 +145581,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1779215763458" ID="ID_1073142525" MODIFIED="1779215781831" TEXT="Fazit. &#xbb;eigene Dummheit&#xab;"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779215808575" ID="ID_536197148" MODIFIED="1779215834783" TEXT="Assertion-Failure: Lease bleibt offen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779215808575" ID="ID_536197148" MODIFIED="1779578580360" TEXT="Assertion-Failure: Lease bleibt offen">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1779215845829" ID="ID_1150970737" MODIFIED="1779215866852" TEXT="Grund ist eine &#xbb;Zombie-Zustellung&#xab;"/>
-<node CREATED="1779215868024" ID="ID_182421878" MODIFIED="1779215990774" TEXT="Problem hatte ich bereits theoretisch vorhergesehen">
-<arrowlink COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" STARTARROW="None" STARTINCLINATION="659;35;"/>
+<node CREATED="1779215868024" ID="ID_182421878" MODIFIED="1779578600503" TEXT="Problem hatte ich bereits theoretisch vorhergesehen">
+<arrowlink COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" STARTARROW="None" STARTINCLINATION="802;43;"/>
+</node>
+<node COLOR="#0b4759" CREATED="1779578559693" ID="ID_1483979505" MODIFIED="1779578593019" TEXT="nach Einbau des LiveMark + shutdown-Hook nun behoben">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -145739,7 +145761,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1776783536196" ID="ID_33829677" MODIFIED="1776783554130" TEXT="Betrachtung aus Sicht der Speicherverwaltung">
+<node CREATED="1776783536196" FOLDED="true" ID="ID_33829677" MODIFIED="1779579301343" TEXT="Betrachtung aus Sicht der Speicherverwaltung">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="edit"/>
 <node CREATED="1776783636098" ID="ID_369280976" MODIFIED="1776783638425" TEXT="Builder">
 <node CREATED="1776783732204" ID="ID_255731901" MODIFIED="1776783741763" TEXT="sieht einen Buffer-Typ vor">
@@ -145891,7 +145914,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1776807130845" ID="ID_1245794656" MODIFIED="1776807136352" TEXT="Diskussion">
-<node CREATED="1776807151258" ID="ID_1373944107" MODIFIED="1776807903140" TEXT="betrachte eine Neu-Implementierung (&#xbb;from scratch&#xab;)">
+<node CREATED="1776807151258" FOLDED="true" ID="ID_1373944107" MODIFIED="1779579282817" TEXT="betrachte eine Neu-Implementierung (&#xbb;from scratch&#xab;)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -145970,7 +145993,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776809193817" ID="ID_1697805600" MODIFIED="1776809208314" TEXT="MRU und Scores werden hier verwaltet"/>
 </node>
 </node>
-<node CREATED="1776809288741" ID="ID_421543225" MODIFIED="1776809295743" TEXT="Vergleich mit dem aktuellen Planungs-Stand">
+<node CREATED="1776809288741" FOLDED="true" ID="ID_421543225" MODIFIED="1779579284558" TEXT="Vergleich mit dem aktuellen Planungs-Stand">
 <node CREATED="1776809298955" ID="ID_1145369165" MODIFIED="1776809312397" TEXT="BufferMetadata enth&#xe4;lt bereits eine State-Engine"/>
 <node CREATED="1776809313293" ID="ID_16177595" MODIFIED="1776809331186" TEXT="damit ist eine sehr einfache Implementierung des Buffer-Store m&#xf6;glich">
 <node CREATED="1776809332407" ID="ID_634300630" MODIFIED="1776809342193" TEXT="f&#xfc;r den &#xbb;naiven&#xab; Fall"/>
@@ -146000,7 +146023,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776809679448" ID="ID_1620167252" MODIFIED="1776809696176" TEXT="wie werden Buffer-Allokationen zugeteilt / zur&#xfc;ckgegeben?"/>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1776810818641" ID="ID_1990109101" MODIFIED="1778792564355" TEXT="Erweiterung der bestehenden Struktur">
+<node COLOR="#5b280f" CREATED="1776810818641" FOLDED="true" ID="ID_1990109101" MODIFIED="1779579275062" TEXT="Erweiterung der bestehenden Struktur">
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1776810842916" ID="ID_1308910879" MODIFIED="1776810900632" TEXT="Ansatz: der Store bekommt eine Direkt-Verbindung zu BufferMetadata">
 <node CREATED="1776810904516" ID="ID_467003761" MODIFIED="1776811035606" TEXT="l&#xe4;&#xdf;t sich realisieren unter Ausn&#xfc;tzung des LocalSlice">
@@ -146168,16 +146191,24 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1776814507533" ID="ID_189865287" MODIFIED="1776814576271" TEXT="Ownership / Transaktionelle Sicherheit">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1779140437311" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
-<arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="Default" STARTINCLINATION="707;0;"/>
+<node BACKGROUND_COLOR="#d9b592" COLOR="#5a0f69" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1779578509948" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
+<arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="Default" STARTINCLINATION="1057;40;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779578462799" ID="ID_141245900" MODIFIED="1779578541143" TEXT="nun theoretisch gel&#xf6;st &#x2014; aber schwer zu testen">
+<arrowlink DESTINATION="ID_256080084" ENDARROW="Default" ENDINCLINATION="203;0;" ID="Arrow_ID_1543361263" STARTARROW="None" STARTINCLINATION="217;12;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776816880663" ID="ID_233138855" MODIFIED="1776816975061" TEXT="das ist nicht-trivial &#x2014; ohne weitere Ma&#xdf;namen &#xbb;verlieren&#xab; wir Buffer">
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776816880663" ID="ID_233138855" MODIFIED="1779578302154" TEXT="das ist nicht-trivial &#x2014; ohne weitere Ma&#xdf;namen &#xbb;verlieren&#xab; wir Buffer">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776816921522" ID="ID_1322737136" MODIFIED="1776816945259" TEXT="wenn auch die Ownership mitwandert, verlieren wir sie wirklich"/>
 <node CREATED="1776816946503" ID="ID_1522146043" MODIFIED="1776816964208" TEXT="andernfalls bleiben sie im globalen Manager gesperrt"/>
+<node COLOR="#338800" CREATED="1779578018664" ID="ID_142165791" MODIFIED="1779578293554" TEXT="expliziter neuer Schutzmechanismus: LiveMark">
+<arrowlink COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_1142922633" STARTARROW="None" STARTINCLINATION="-634;41;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776817562925" ID="ID_1219928484" MODIFIED="1776817591586" TEXT="&#x27f9; das wird eine explizite Verantwortlichkeit des BufferStore">
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817562925" ID="ID_1219928484" MODIFIED="1779578444334" TEXT="&#x27f9; das wird eine explizite Verantwortlichkeit des BufferStore">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1776817599497" ID="ID_1874411040" MODIFIED="1776817620997" TEXT="er mu&#xdf; einen nicht-trivialen Destruktor bereitstellen"/>
@@ -146191,6 +146222,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1779578335436" ID="ID_452117945" MODIFIED="1779578438818" TEXT="eingebaut...">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1779578349322" ID="ID_1132145779" MODIFIED="1779578365095" TEXT="LocalBufferStore konfiguriert LocalMemPool"/>
+<node CREATED="1779578367804" ID="ID_1461756059" MODIFIED="1779578385657" TEXT="LocalMemPool hat einen shutdown-Hook"/>
+<node CREATED="1779578387055" ID="ID_256080084" MODIFIED="1779578541143" TEXT="dieser sendet den Inhalt des Pool zur&#xfc;ck">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_256080084" ENDARROW="Default" ENDINCLINATION="203;0;" ID="Arrow_ID_1543361263" SOURCE="ID_141245900" STARTARROW="None" STARTINCLINATION="217;12;"/>
+</node>
+<node CREATED="1779578405235" ID="ID_333707432" MODIFIED="1779578421861" TEXT="Zustellung noch schwebender Alloc-Requests wird unterbunden"/>
+<node CREATED="1779578422716" ID="ID_698985096" MODIFIED="1779578434019" TEXT="daf&#xfc;r LiveMark in den LocalMemPool platziert"/>
 </node>
 </node>
 </node>
@@ -146847,7 +146888,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1778792397575" TEXT="EngineBufferManager">
+<node BACKGROUND_COLOR="#a4c8cf" COLOR="#22695a" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1779579198844" TEXT="EngineBufferManager">
 <linktarget COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" SOURCE="ID_1791813360" STARTARROW="None" STARTINCLINATION="-438;24;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1778788622379" TEXT="Grundkonzeption schaffen">
@@ -146900,7 +146941,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1777326654102" ID="ID_499885447" MODIFIED="1778788640455" TEXT="Struktur">
+<node COLOR="#435e98" CREATED="1777326654102" FOLDED="true" ID="ID_499885447" MODIFIED="1779579221965" TEXT="Struktur">
 <icon BUILTIN="forward"/>
 <node CREATED="1777326657789" ID="ID_831464061" MODIFIED="1777326715033" TEXT="L&#xe4;ngerfristig: Policy-based-Design">
 <richcontent TYPE="NOTE"><html>
@@ -147058,9 +147099,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778118771505" ID="ID_1314536256" MODIFIED="1778788608420" TEXT="also &#x27f9; sinnvollerweise die Eingangs- und Ausgangs-Seite dediziert und separat bauen">
 <icon BUILTIN="yes"/>
-<node CREATED="1778118817300" ID="ID_1259663169" MODIFIED="1778118842536" TEXT="Ausgang &#x2259; Allokations-Requests">
+<node COLOR="#435e98" CREATED="1778118817300" ID="ID_1259663169" MODIFIED="1779579147974" TEXT="Ausgang &#x2259; Allokations-Requests">
 <node CREATED="1778118984391" ID="ID_231045425" MODIFIED="1778118994533" TEXT="angefordert wird nur eine size"/>
-<node CREATED="1778118995115" ID="ID_1837404142" MODIFIED="1778119005838" TEXT="Aber: der Callback ist eine Member-Funktion">
+<node CREATED="1778118995115" FOLDED="true" ID="ID_1837404142" MODIFIED="1779579127416" TEXT="Aber: der Callback ist eine Member-Funktion">
 <node CREATED="1778119010570" ID="ID_1042885761" MODIFIED="1778119024572" TEXT="m&#xf6;gliche Darstellung">
 <node COLOR="#5b280f" CREATED="1778119025799" ID="ID_582301331" MODIFIED="1778119039754" TEXT="als std::function">
 <richcontent TYPE="NOTE"><html>
@@ -147083,8 +147124,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1778119348551" ID="ID_1733239947" MODIFIED="1778119367938" TEXT="als statische callback-Funktion mit &#xbb;Instance&#xab;-Parameter">
-<icon BUILTIN="forward"/>
+<node CREATED="1778119348551" ID="ID_1733239947" MODIFIED="1779579068069" TEXT="als statische callback-Funktion mit &#xbb;Instance&#xab;-Parameter">
+<icon BUILTIN="help"/>
 <node CREATED="1778119381603" ID="ID_954784730" MODIFIED="1778119390390" TEXT="Vorsicht! kein Over-Engineering"/>
 <node CREATED="1778119391222" ID="ID_1689068968" MODIFIED="1778119443403" TEXT="klar ist hier: es gibt nur eine einzige Implementierung des Empf&#xe4;ngers">
 <richcontent TYPE="NOTE"><html>
@@ -147097,10 +147138,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1779579069316" ID="ID_306667350" MODIFIED="1779579106439" TEXT="als Memberfunktion auf einer Basisklasse">
+<arrowlink COLOR="#3a77be" DESTINATION="ID_1837745925" ENDARROW="Default" ENDINCLINATION="-340;-16;" ID="Arrow_ID_899315499" STARTARROW="None" STARTINCLINATION="146;9;"/>
+<icon BUILTIN="forward"/>
 </node>
-<node COLOR="#338800" CREATED="1778119450587" FOLDED="true" ID="ID_1806367243" MODIFIED="1778788593642" TEXT="Anordnung im Code">
+</node>
+<node COLOR="#338800" CREATED="1778119450587" ID="ID_1806367243" MODIFIED="1779579049327" TEXT="Anordnung im Code">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1778119474043" ID="ID_898200002" MODIFIED="1778119501037">
+<node CREATED="1778119474043" FOLDED="true" ID="ID_898200002" MODIFIED="1779579112826">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -147120,7 +147165,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778119639862" ID="ID_1359278383" MODIFIED="1778119728301" TEXT="Konsequenz: der EngineBufferManager mu&#xdf; den LocalBufferStore sehen"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1778199712170" ID="ID_334307615" MODIFIED="1778788535095" TEXT="aufl&#xf6;sen durch getrennte Translation-Units">
+<node COLOR="#435e98" CREATED="1778199712170" FOLDED="true" ID="ID_334307615" MODIFIED="1779579116409" TEXT="aufl&#xf6;sen durch getrennte Translation-Units">
 <icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1778199840557" ID="ID_444542765" MODIFIED="1778200791662" TEXT="hier nochmal die Diskussion: Abstraktion einf&#xfc;hren?">
 <linktarget COLOR="#694543" DESTINATION="ID_444542765" ENDARROW="Default" ENDINCLINATION="-442;-19;" ID="Arrow_ID_1733074661" SOURCE="ID_845392021" STARTARROW="None" STARTINCLINATION="183;9;"/>
@@ -147163,7 +147208,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778201747177" ID="ID_1235232289" MODIFIED="1778201802499" TEXT="&#x27f9; engine-buffer-manager.hpp : sichtbares Backend-Service-Interface"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778203953066" ID="ID_570673188" MODIFIED="1778788509519" TEXT="brauche dann aber doch eine Konvention / Abstraktion f&#xfc;r den Callback">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778203953066" FOLDED="true" ID="ID_570673188" MODIFIED="1778788509519" TEXT="brauche dann aber doch eine Konvention / Abstraktion f&#xfc;r den Callback">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778203987341" ID="ID_384285004" MODIFIED="1778204998986" TEXT="und zwar gibt es eine zus&#xe4;tzliche Komplikation durch das Thread-Local-Slice">
 <richcontent TYPE="NOTE"><html>
@@ -147213,7 +147258,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 <node CREATED="1778338086407" ID="ID_540821014" MODIFIED="1778338102529" TEXT="damit bleibt ein Interface als einzige L&#xf6;sung &#xfc;brig"/>
-<node CREATED="1778338455958" ID="ID_1837745925" MODIFIED="1778338481318" TEXT="Idee: einen AllocReceiver schaffen">
+<node CREATED="1778338455958" ID="ID_1837745925" MODIFIED="1779579103387" TEXT="Idee: einen AllocReceiver schaffen">
+<linktarget COLOR="#3a77be" DESTINATION="ID_1837745925" ENDARROW="Default" ENDINCLINATION="-340;-16;" ID="Arrow_ID_899315499" SOURCE="ID_306667350" STARTARROW="None" STARTINCLINATION="146;9;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1778338483900" ID="ID_886291553" MODIFIED="1778338496471" TEXT="der enth&#xe4;lt bereits die Lock-free Queue"/>
 <node CREATED="1778338497805" ID="ID_642065562" MODIFIED="1778338510741" TEXT="EngineBufferManager w&#xfc;rde den ebenfalls includieren"/>
@@ -147242,8 +147288,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778205040426" ID="ID_609664480" MODIFIED="1779140437311" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
-<linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="Default" STARTINCLINATION="707;0;"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778205040426" FOLDED="true" ID="ID_609664480" MODIFIED="1779579131027" TEXT="weiteres Problem: Race mit Ende des Worker-Thread">
+<linktarget COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" SOURCE="ID_1402352728" STARTARROW="Default" STARTINCLINATION="1057;40;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1778205127309" ID="ID_174843767" MODIFIED="1778205132800" TEXT="Beispiel-Szenario">
 <node CREATED="1778205135600" ID="ID_1730604347" MODIFIED="1778205230908" TEXT="neuer Job &#x27f9; Anforderung an EngineBufferManager">
@@ -147252,7 +147298,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778205155009" ID="ID_536238884" MODIFIED="1778205234412" TEXT="Problem im Job &#x27f9; Unwind, Worker terminiert">
 <icon BUILTIN="full-2"/>
 </node>
-<node BACKGROUND_COLOR="#f9e4d6" COLOR="#c00244" CREATED="1778205192805" ID="ID_931645192" MODIFIED="1779328009963">
+<node BACKGROUND_COLOR="#f9e4d6" COLOR="#c00244" CREATED="1778205192805" ID="ID_931645192" MODIFIED="1779578600503">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -147267,8 +147313,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" SOURCE="ID_182421878" STARTARROW="None" STARTINCLINATION="802;43;"/>
 <linktarget COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-937;191;" ID="Arrow_ID_801625969" SOURCE="ID_1394284825" STARTARROW="None" STARTINCLINATION="171;-11;"/>
-<linktarget COLOR="#fe902e" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-2428;97;" ID="Arrow_ID_1201055029" SOURCE="ID_182421878" STARTARROW="None" STARTINCLINATION="659;35;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -147344,8 +147390,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1779578018664" ID="ID_1820292066" MODIFIED="1779578150521" TEXT="gel&#xf6;st durch Integrieren eines lib::LiveMark">
+<arrowlink COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_668417083" STARTARROW="None" STARTINCLINATION="-634;41;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1779578164714" ID="ID_786439623" MODIFIED="1779578174454" TEXT="neuer Schutzmechanismus genau f&#xfc;r diesen Zweck"/>
+<node CREATED="1779578176344" ID="ID_436406258" MODIFIED="1779578187464" TEXT="verwendet eine Hash-ID auf beiden Seiten"/>
+<node COLOR="#435e98" CREATED="1779578189454" ID="ID_1212814572" MODIFIED="1779578222184" TEXT="kann so erkennen wenn der Nachrichtenemf&#xe4;nger nicht mehr existiert">
+<icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779140529611" ID="ID_241014081" MODIFIED="1779140636770" TEXT="ein weiterer &#xe4;hnlicher Race besteht im Destruktor + shotdown-Hook">
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779140529611" FOLDED="true" ID="ID_241014081" MODIFIED="1779579132518" TEXT="ein weiterer &#xe4;hnlicher Race besteht im Destruktor + shotdown-Hook">
 <linktarget COLOR="#e5024c" DESTINATION="ID_241014081" ENDARROW="Default" ENDINCLINATION="-1049;0;" ID="Arrow_ID_1884336660" SOURCE="ID_1541520016" STARTARROW="None" STARTINCLINATION="-946;65;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1779140649391" ID="ID_1221279387" MODIFIED="1779140665105" TEXT="ein anderer Thread k&#xf6;nnte grade mit der Zustellung anfangen"/>
@@ -147357,7 +147412,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#2b53d4" DESTINATION="ID_255577978" ENDARROW="Default" ENDINCLINATION="443;20;" ID="Arrow_ID_57636127" SOURCE="ID_228507573" STARTARROW="None" STARTINCLINATION="320;11;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1779327275881" ID="ID_1664117186" MODIFIED="1779327343009" TEXT="und noch ein weiterer Race l&#xe4;&#xdf;t sich nicht ohne Weiteres schlie&#xdf;en">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779327275881" FOLDED="true" ID="ID_1664117186" MODIFIED="1779579134158" TEXT="und noch ein weiterer Race l&#xe4;&#xdf;t sich nicht ohne Weiteres schlie&#xdf;en">
 <linktarget COLOR="#b00581" DESTINATION="ID_1664117186" ENDARROW="Default" ENDINCLINATION="-937;0;" ID="Arrow_ID_1984536453" SOURCE="ID_344181114" STARTARROW="None" STARTINCLINATION="-349;22;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1779327356588" ID="ID_1046958487" MODIFIED="1779327373060" TEXT="selbst mit einem solchen Schutzmechanismus..."/>
@@ -147383,8 +147438,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       ...denn letztlich dichte ich hier ein Restrisiko ab; es w&#252;rde gen&#252;gen, wenn der Thread nach dem Sperren des Empfangs noch einen Moment wartet, und dann erst die Eingangsqueue ausr&#228;umt. Wir k&#246;nnen aber letztlich nicht verhindern, da&#223; der Empf&#228;nger-Thread m&#246;glicherweise stirbt w&#228;hrend der Sender-Thread grade mitten in der Zustellung ist, und durch &#228;u&#223;ere Umst&#228;nde dabei ausgebremst wird. Um das zu verhindern, br&#228;uchten wir einen Handshake &#8212; und dann w&#228;re die L&#246;sung <i>nicht mehr asynchron!</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#b92d55" DESTINATION="ID_1344328276" ENDARROW="Default" ENDINCLINATION="341;-476;" ID="Arrow_ID_1052781255" STARTARROW="Default" STARTINCLINATION="-205;854;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -147395,7 +147449,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1778118843392" ID="ID_45310528" MODIFIED="1778118856450" TEXT="Eingang &#x2259; zur&#xfc;ckgegebene Allokationen">
+<node COLOR="#435e98" CREATED="1778118843392" ID="ID_45310528" MODIFIED="1779579144744" TEXT="Eingang &#x2259; zur&#xfc;ckgegebene Allokationen">
 <node CREATED="1778118860685" ID="ID_744369649" MODIFIED="1778118884334" TEXT="hier kommt eine Alloc, d.h. (Buffer-Adr, Size)"/>
 <node CREATED="1778118904520" ID="ID_1909917635" MODIFIED="1778118915854" TEXT="diese werden alle intern konsumiert"/>
 <node CREATED="1778118916726" ID="ID_1993073258" MODIFIED="1778118979086">
@@ -147436,7 +147490,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776819181261" ID="ID_1026628741" MODIFIED="1778694419297" TEXT="alternative synchrone Verbindung bereitstellen">
+<node COLOR="#338800" CREATED="1776819181261" FOLDED="true" ID="ID_1026628741" MODIFIED="1778694419297" TEXT="alternative synchrone Verbindung bereitstellen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1777324291441" ID="ID_336948545" MODIFIED="1777324316333" TEXT="ist relevant f&#xfc;r &#xbb;sofort&#xab;-Allokation (Fallback)"/>
 <node COLOR="#5b280f" CREATED="1778692651060" ID="ID_526425164" MODIFIED="1778692684555" TEXT="erst mal eine synchrone API-Funktion bauen">

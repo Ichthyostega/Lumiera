@@ -33,13 +33,10 @@
 #include "lib/error.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/allocator-handle.hpp"
-//#include "lib/hash-value.h"
 #include "vault/mem/buffhandle.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
 #include "vault/mem/engine-buffer-allocator.hpp"
-//#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/util.hpp"
 
 #include <memory>
 #include <array>
@@ -47,21 +44,9 @@
 
 namespace vault{
 namespace mem {
-  
-//  using lib::HashVal;
-//  using util::unConst;
-  
   namespace err = lumiera::error;
   
   using std::byte;
-  
-  
-  namespace { // config and internal helpers...
-    
-  }
-  
-  
-  
   
   
   using BufferAllocator = HeapBufferAllocator;
@@ -84,10 +69,11 @@ namespace mem {
     inQueue_     .consume_all ([this](Alloc alloc){ doRedeemAllocation (alloc); });
     requestQueue_.consume_all ([this](AllocRequest request)
                                 {
-                                  REQUIRE (request.receiver);
+                                  if (not request.receiver) return;
                                   Alloc alloc = doPerformAllocation (request.sizRequest);
                                   ENSURE (not alloc.empty());
-                                  request.receiver->supply (alloc);
+                                  if (request.receiver)
+                                    request.receiver->supply (alloc);
                                 });
   }
   

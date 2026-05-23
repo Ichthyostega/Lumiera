@@ -102,6 +102,8 @@ namespace mem   {
   using std::invocable;
   using util::unConst;
   using util::isLimited;
+  using std::this_thread::sleep_for;
+  using std::chrono_literals::operator ""us;
   
   class PoolDiagnostic;
   
@@ -367,14 +369,21 @@ namespace mem   {
         }
       
       /** unconditionally dispose of the pool's entire contents.
-       * @warning there must not be any allocations in use when invoking this function 
+       * @warning there must not be any allocations in use when invoking this function
+       * @remark This function is intended to be used when shutting down this pool;
+       *         in theory, a dangerous race could happen when a worker thread unwinds
+       *         due to an unexpected error in the middle of a computation.
+       *         EngineBufferManager might process pending allocation requests sent
+       *         shortly before the failure, thereby accessing an already destroyed pool.
+       *         The lib::LiveMark is used to protect against that situation
        */
       template<invocable<Buff*,size_t> FUN>
       void
       purge (FUN&& consumer)
         {
+          mark_.disengage();  // »lock down« the in-queue at that point (do not accept further allocations)
+          sleep_for (100us); //  pragmatic solution for race with a dispatch of further allocations;
           ingest();
-          ///////////////////////////////////////OOO need a way to »lock down« the inqueue at that point
           for (Block& block : blocks_)
             {
               REQUIRE (not block.used);

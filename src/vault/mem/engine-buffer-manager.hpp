@@ -40,23 +40,16 @@
 #define VAULT_MEM_ENGINE_BUFFR_MANAGA_H
 
 
-//#include "lib/hash-value.h"
 #include "vault/mem/buffhandle.hpp"
-//#include "vault/mem/type-handler.hpp"
-//#include "vault/mem/buffer-local-tag.hpp"
+#include "lib/live-mark.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/sync.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/lockfree/queue.hpp>
 
 
 namespace vault{
 namespace mem {
-  
-//  using lib::HashVal;
-//  using util::unConst;
-  
   namespace err = lumiera::error;
   
   
@@ -98,6 +91,8 @@ namespace mem {
     : util::NonCopyable
     {
     protected:
+      lib::LiveMark mark_{*this};
+      
       using InQueue = boost::lockfree::queue<Alloc>;
       InQueue inQueue_;
       
@@ -116,6 +111,21 @@ namespace mem {
           inQueue_.push (alloc);
           alloc.discard();
         }
+      
+      /** allow safe access through a smart-handle,
+       *  to prevent interaction with an deceased partner */
+      auto
+      getSafeHandle()
+        {
+          return mark_.makeHandle (*this);
+        }
+      
+      /** accessor to allow verification of liveness state */
+      lib::LiveMark const&
+      getLiveMark() const
+        {
+          return mark_;
+        }
     };
   
   
@@ -130,7 +140,8 @@ namespace mem {
     {
       struct AllocRequest
         {
-          AllocReceiver* receiver;
+          using Handle = lib::LiveMark::SafeHandle<AllocReceiver>;
+          Handle receiver;
           size_t sizRequest;
         };
       
@@ -196,7 +207,7 @@ namespace mem {
   EngineBufferManager::async_requestAllocation  (AllocReceiver& receiver, size_t sizRequest)
   {
     REQUIRE (sizRequest);
-    requestQueue_.push ({&receiver, sizRequest});
+    requestQueue_.push ({receiver.getSafeHandle(), sizRequest});
   }
   
   

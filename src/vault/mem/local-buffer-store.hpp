@@ -13,7 +13,23 @@
 
 /** @file local-buffer-store.hpp
  ** Production-grade implementation of engine::BufferProvider memory handling.
- **
+ ** All functionality is delegated to further components. Notably, each thread
+ ** maintains a LocalMemPool so that allocations can preferably be satisfied
+ ** by reusing memory blocks currently associated to this thread. Excess capacity
+ ** or further allocation demand is coordinated with the EngineBufferManager via
+ ** asynchronous messaging.
+ ** 
+ ** However, in accordance with the architecture of the Render Engine, there is
+ ** no dedicated _memory manager thread_ — rather, the worker threads perform
+ ** the accrued memory management effort on-demand. Allocation requests are
+ ** placed into the queue, yet whenever some worker runs into some actual
+ ** memory demand not yet satisfied, it acquires a global lock and performs
+ ** all the requests queued thus far, in one batch. This scheme allows to
+ ** allocate all available cores to the workers, while preventing global
+ ** management efforts to push aside some worker. The same pattern is
+ ** also used for the scheduler: each worker performs a chunk of the
+ ** necessary scheduler work, until the next runnable job is found.
+ ** 
  ** @see LocalBufferStore_test
  ** @see buffer-provider.hpp
  ** @see buffer-provider-protocol-test.cpp
@@ -39,7 +55,22 @@ namespace mem   {
   
   
   /**
-   * @todo type comment
+   * Production-grade implementation of buffer allocation
+   * based on a thread-local pool that is connected asynchronously
+   * to the central EngineBufferManager (global pooling allocator).
+   * - announcement will send an allocation request to the global pool
+   * - allocations will either be served from the local pool or force
+   *   a blocking round-trip into the EngineBufferManagert to perform
+   *   all currently pending allocation requests for all worker threads.
+   * - the `emit()` call has no effect here; this differs from the
+   *   OutputSlot and the cache manager case, where emit() is crucial.
+   * - buffer de-allocation will trigger a heuristic clean-up, taking
+   *   into account how successfully each allocation in the pool was
+   *   used recently, to prevent accumulating excess allocations.
+   * This implementation of the BufferProvider::BufferStore interface
+   * deliberately skips further sanity checks, beyond what is enforced
+   * through the BufferMetadata lifecycle. Allocation requests are
+   * passed to the LocalMemPool for the current thread.
    */
   class LocalBufferStore
     : public BufferProviderSetup::Store
@@ -73,6 +104,7 @@ namespace mem   {
     public:
       LocalBufferStore()
         { }
+      
       
       
       /* ==== Implementation of the BufferStore interface ==== */

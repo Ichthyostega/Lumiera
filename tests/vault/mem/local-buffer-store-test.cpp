@@ -18,19 +18,18 @@
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
-//#include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/local-buffer-store.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
 #include "vault/mem/engine-buffer-allocator.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/thread.hpp"
-//#include "lib/error.hpp"
 #include "lib/util.hpp"
-#include "test/diagnostic-output.hpp"
+#include "test/diagnostic-output.hpp"///////////////////////TODO
 
 #include <algorithm>
 
 using util::isSameAdr;
+
 using lib::Thread;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
@@ -80,7 +79,17 @@ namespace test  {
       
       
       
-      /** @test  */
+      /** @test demonstrate a typical usage cycle of the BufferStore in concurrent setup
+       *      - the main thread provides a mock instance of the EngineBufferManager
+       *      - furthermore, the LocalBufferStore instance is created here
+       *      - yet note: LocalBufferStore includes a LocalMemPool per thread
+       *      - a test thread is launched to issue some allocation requests
+       *      - announce some memory allocation demand
+       *      - claim and use one buffer
+       *      - generate further demand to trigger further allocation supply
+       *      - terminate the thread
+       *      - verify the number of allocations seen in the EngineBufferManager
+       */
       void
       verify_API()
         {
@@ -163,18 +172,14 @@ namespace test  {
           // before shutdown, LocalMemPool has sent back  all allocations;
           // these should sit now in the EngineBufferManager's input queue,
           // unprocessed yet; same for the additional buffer requested later.
-SHOW_EXPR(watch(*globalPool).numAllocs());
-          CHECK ( CNT        == watch(*globalPool).numAllocs());
-          CHECK ((CNT)*ALLOC == watch(*globalPool).bytesLeased());
+          // EngineBufferManager only sees the first CNT allocations actually dispatched
+          CHECK (CNT       == watch(*globalPool).numAllocs());
+          CHECK (CNT*ALLOC == watch(*globalPool).bytesLeased());
           
-          // process in-queue and retrieve all allocations..
-SHOW_EXPR("Kaka")
+          // process the in-queue and retrieve all allocations...
           globalPool->processPendingRequests();
-SHOW_EXPR("Boom")
-SHOW_EXPR(watch(*globalPool).bytesLeased());
-//          CHECK (0 == watch(*globalPool).bytesLeased());
-          sleep_for(1000ms);
-SHOW_EXPR("bye")
+          // everything should be cleaned-up by now...
+          CHECK (0 == watch(*globalPool).bytesLeased());
         }
       
       
