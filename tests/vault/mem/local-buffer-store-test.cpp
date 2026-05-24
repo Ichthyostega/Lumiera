@@ -75,7 +75,6 @@ namespace test  {
           verify_announce();
           verify_allocate();
           verify_release();
-          verify_heuristic();
         }
       
       
@@ -370,20 +369,90 @@ namespace test  {
       
       
       
-      /** @test 
+      /** @test heuristic clean-up after releasing several allocations
+       *      - at first, a de-allocated block remains available in the local pool
+       *      - after a number of usages, defined as _turnover_, clean-up is triggered
+       *      - this test scenario requests 3 buffers, but repeatedly uses only one
+       *      - after the third round with this usage pattern, the local pool is reduced
        */
       void
       verify_release()
         {
-        }
-      
-      
-      
-      /** @test 
-       */
-      void
-      verify_heuristic()
-        {
+          // »central BufferPool« (transient instance for this test)
+          lib::DependInject<EngineBufferManager>::Local<EngineBufferManager> globalPool;
+          
+          // *test subject*
+          LocalBufferStore localStore;
+          BufferProviderSetup::Store& storeAPI = localStore;
+          
+          const size_t BUFFSIZ = 1024;
+          const HashVal TYPEID = 12345;
+          
+          // coordination of test steps
+          std::atomic_uint step{1};
+          
+          Thread testWorker{[&] /* === Scenario: test subject requests allocation immediately === */
+                              {
+                                // Step-1 : first round
+                                uint avail = storeAPI.prepareBuffers(TYPEID, 3, BUFFSIZ);
+                                CHECK (0 == avail);
+                                CHECK (watch(localStore).isEmpty());
+                                
+                                BuffAlloc slot1 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
+                                auto& [storage,buffSiz,_] = slot1;
+                                CHECK (storage);
+                                
+                                storeAPI.detachBuffer (TYPEID, slot1);
+                                // Result: got three allocations and all three are in the local pool
+                                CHECK (watch(localStore).size()    == 3);
+                                CHECK (watch(localStore).cntFree() == 3);
+                                
+                                ++step;
+                                // Step-2 : repeat same pattern
+                                BuffAlloc slot2 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
+                                CHECK (slot2 == slot1);
+                                CHECK (watch(localStore).size()    == 3);
+                                CHECK (watch(localStore).cntFree() == 2);
+
+                                storeAPI.detachBuffer (TYPEID, slot1);
+                                CHECK (watch(localStore).size()    == 3);
+                                CHECK (watch(localStore).cntFree() == 3);
+
+                                ++step;
+                                // Step-3 : repeat for a third time
+                                BuffAlloc slot3 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
+                                CHECK (slot3 == slot1);
+                                CHECK (watch(localStore).size()    == 3);
+                                CHECK (watch(localStore).cntFree() == 2);
+
+                                storeAPI.detachBuffer (TYPEID, slot1);
+                                // this completed a "turnover" of three buffers
+                                SHOW_EXPR(watch(localStore).size());
+
+                                ++step;
+                                // main thread will now see the partial clean-up
+                                
+                              }}; // block automatically sent back after thread end
+          
+          
+          /* === Main thread: observe effects in the global pool === */
+          
+          // wait until Step-2
+          while (step < 2)
+            sleep_for(1ms);
+          CHECK (watch(*globalPool).numAllocs() == 3);
+          
+          // re-check after Step-2
+          while (step <= 2)
+            sleep_for(1ms);
+          // nothing changed; local pool operates independently
+          CHECK (watch(*globalPool).numAllocs() == 3);
+          
+          // re-check after Step-3
+          while (step <= 3)
+            sleep_for(1ms);
+          globalPool->processPendingRequests();
+          SHOW_EXPR(watch(*globalPool).numAllocs())
         }
     };
   

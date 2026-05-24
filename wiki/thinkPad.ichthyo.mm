@@ -108803,7 +108803,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633240020" ID="ID_1096327457" MODIFIED="1736039593131" TEXT="Dokumentation NodeBuilder">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633240020" ID="ID_1096327457" MODIFIED="1779664645933" TEXT="Dokumentation NodeBuilder">
 <linktarget COLOR="#82878e" DESTINATION="ID_1096327457" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_1693662542" SOURCE="ID_164798551" STARTARROW="None" STARTINCLINATION="1447;0;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1736039852212" ID="ID_607701776" MODIFIED="1736039857079" TEXT="node-builder.hpp">
@@ -145434,7 +145434,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1778947001639" ID="ID_78533321" MODIFIED="1778947098163" TEXT="Idee: &#xbb;turnover&#xab; &#x2014; jedem Block eine Chance geben">
+<node CREATED="1778947001639" ID="ID_78533321" MODIFIED="1779665464192" TEXT="Idee: &#xbb;turnover&#xab; &#x2014; jedem Block eine Chance geben">
+<linktarget COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" SOURCE="ID_1461846299" STARTARROW="Default" STARTINCLINATION="286;13;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1778947114570" ID="ID_914679223" MODIFIED="1778947126240" TEXT="ankommende Bl&#xf6;cke erh&#xf6;hen den Turnover"/>
 <node CREATED="1778947127539" ID="ID_253931638" MODIFIED="1778947136630" TEXT="jede de-Allokation veringert den Turnover"/>
@@ -145669,11 +145670,28 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1778968918381" ID="ID_752345967" MODIFIED="1778968922655" TEXT="verify_release">
 <node CREATED="1778969042432" ID="ID_1262962638" MODIFIED="1778969052166" TEXT="hier sollte auch ein clean-up provoziert werden"/>
+<node CREATED="1779665675415" ID="ID_1685534215" MODIFIED="1779665691018" TEXT="zu zeigen ist da&#xdf; dieser Clean-up mit R&#xfc;cksendung stattfindet"/>
 </node>
-<node CREATED="1778969102656" ID="ID_249806133" MODIFIED="1778969116594" TEXT="verify_heuristic">
-<node CREATED="1778979230293" ID="ID_683051783" MODIFIED="1778979241071" TEXT="meine Idee der Heuristik umsetzen"/>
-<node CREATED="1778979241959" ID="ID_959604784" MODIFIED="1778979251687" TEXT="mit einzelnen Grenz-Szenarien durchspielen"/>
-<node CREATED="1778979252922" ID="ID_1913037138" MODIFIED="1778979264429" TEXT="Verhalten sollte deterministisch vorhersagbar sein"/>
+<node COLOR="#5b280f" CREATED="1778969102656" ID="ID_249806133" MODIFIED="1779664543753" TEXT="verify_heuristic">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      meine Idee der Heuristik umsetzen
+    </p>
+    <p>
+      mit einzelnen Grenz-Szenarien durchspielen
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1779664546343" HGAP="25" ID="ID_453821075" MODIFIED="1779665655342" TEXT="dieser Test geh&#xf6;rt zum LocalMemPool" VSHIFT="18">
+<arrowlink COLOR="#765294" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" STARTARROW="None" STARTINCLINATION="-413;30;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1778800594638" ID="ID_267050112" LINK="#ID_318881353" MODIFIED="1778800638798" TEXT="siehe EngineBufferManager_test"/>
@@ -146750,7 +146768,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1777050453251" FOLDED="true" ID="ID_1529547535" MODIFIED="1778788655476" TEXT="Implementieren">
+<node COLOR="#338800" CREATED="1777050453251" ID="ID_1529547535" MODIFIED="1779664626549" TEXT="Implementieren">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777084853433" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
 <icon BUILTIN="button_ok"/>
@@ -146856,6 +146874,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777164514849" ID="ID_489761092" MODIFIED="1777164525297" TEXT="und gew&#xe4;hlt wird nach maximalem selectionScore"/>
 <node CREATED="1777164528024" ID="ID_1047876896" MODIFIED="1777164541639" TEXT="dieser gew&#xe4;hlte Buffer bekommt dann einen Score-Update"/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1779664650625" ID="ID_1141255727" MODIFIED="1779664857110" TEXT="Dazu einen 2.Layer &#x27f9; Heuristik zum Triggern">
+<linktarget COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" SOURCE="ID_1129342480" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1779664722365" ID="ID_1461846299" MODIFIED="1779665464192" TEXT="im Kontext vom LocalBufferStore : erweiterte Heuristik skizziert">
+<arrowlink COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" STARTARROW="Default" STARTINCLINATION="286;13;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1777206625753" ID="ID_1782953860" MODIFIED="1777245252573" TEXT="Vor-Reservierung implementieren">
 <icon BUILTIN="button_ok"/>
@@ -146953,6 +146980,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#5b280f" CREATED="1777052670304" ID="ID_924547131" MODIFIED="1777315077071" TEXT="verify_pruneAlloc">
 <arrowlink COLOR="#f2ddc1" DESTINATION="ID_1195705832" ENDARROW="Default" ENDINCLINATION="16;47;" ID="Arrow_ID_296050493" STARTARROW="None" STARTINCLINATION="85;12;"/>
 <icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1778969102656" ID="ID_1242239297" MODIFIED="1779665655342" TEXT="verify_heuristic">
+<linktarget COLOR="#765294" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" SOURCE="ID_453821075" STARTARROW="None" STARTINCLINATION="-413;30;"/>
+<node CREATED="1778979230293" ID="ID_1129342480" MODIFIED="1779664866045" TEXT="meine Idee der Heuristik umsetzen">
+<arrowlink COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
+</node>
+<node CREATED="1778979241959" ID="ID_241540634" MODIFIED="1778979251687" TEXT="mit einzelnen Grenz-Szenarien durchspielen"/>
+<node CREATED="1778979252922" ID="ID_155080806" MODIFIED="1778979264429" TEXT="Verhalten sollte deterministisch vorhersagbar sein"/>
 </node>
 </node>
 </node>
@@ -171129,7 +171164,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <arrowlink COLOR="#82878e" DESTINATION="ID_1833389965" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_1228391309" STARTARROW="None" STARTINCLINATION="1447;0;"/>
 <icon BUILTIN="pencil"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633109131" ID="ID_164798551" MODIFIED="1736039585332" TEXT="NodeBuilder">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1734633109131" ID="ID_164798551" MODIFIED="1779664645933" TEXT="NodeBuilder">
 <arrowlink COLOR="#82878e" DESTINATION="ID_1096327457" ENDARROW="Default" ENDINCLINATION="-1293;117;" ID="Arrow_ID_1693662542" STARTARROW="None" STARTINCLINATION="1447;0;"/>
 <icon BUILTIN="pencil"/>
 </node>

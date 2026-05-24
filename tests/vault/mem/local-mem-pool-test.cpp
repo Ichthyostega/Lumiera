@@ -76,6 +76,7 @@ namespace test  {
           simpleUse();
           verify_matchAlloc();
           verify_selectAlloc();
+          verify_turnoverTrigger();
         }
       
       
@@ -273,7 +274,7 @@ namespace test  {
           // perform a rather aggressive clean-up
           cnt = pool.cleanup(0.7 ,returnAlloc);                // max score is 15, so anything below 0.7*15 ≡ 10 will be expunged
           CHECK (cnt == 3);
-          CHECK (join(returned) == "12, 33, 32"_expect);       // MEM12, MEM33 and MEM32 returned, since their score as <= 10
+          CHECK (join(returned) == "12, 33, 32"_expect);       // MEM12, MEM33 and MEM32 returned, since their score was <= 10
           CHECK (watch(pool).cntFree()  == 1);
           CHECK (watch(pool).size()     == 2);
           
@@ -297,6 +298,20 @@ namespace test  {
           CHECK (join(returned) == "12, 33, 32, 31, 11"_expect);
           CHECK (pool.empty());
         }
+      
+      
+      
+      /** @test heuristic trigger mechanism for pool clean-up
+       *      - create abbreviated notation to play through various scenarios
+       *      - watch how turnover and max-score are computed for each step
+       *      - document the trigger points for heuristic clean-up.
+       */
+      void
+      verify_turnoverTrigger()
+        {
+          
+        }
+      
     };
   
   
