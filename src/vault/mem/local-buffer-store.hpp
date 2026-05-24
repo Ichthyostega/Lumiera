@@ -154,10 +154,16 @@ namespace mem   {
         
         // possibly the request was not announced beforehand...?
         if (not storage)
-          alloc = globalPool_().requestAllocation (sizRequest);
-        if (not storage)
-          throw err::State{_Fmt{"Unable to provide further %d bytes of buffer memory."} % sizRequest
-                          ,LUMIERA_ERROR_BUFFER_MANAGEMENT};
+          { // as last resort, retrieve memory by synchronised direct call
+            alloc = globalPool_().requestAllocation (sizRequest);
+            if (not storage)
+              throw err::State{_Fmt{"Unable to provide further %d bytes of buffer memory."} % sizRequest
+                              ,LUMIERA_ERROR_BUFFER_MANAGEMENT
+                              };
+            localPool_->supplyImmediately (alloc);
+            alloc = localPool_->retrieve (sizRequest);
+            ENSURE (storage);
+          }
         
         return std::make_tuple (storage, buffSiz, specifics);
       }
@@ -193,7 +199,7 @@ namespace mem   {
       friend PoolDiagnostic watch (LocalBufferStore const&);
     };
   
-    
+  
   /** entrance point to inspection for test */
   inline PoolDiagnostic
   watch (LocalBufferStore const& lstor)

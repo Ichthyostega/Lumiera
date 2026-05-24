@@ -281,11 +281,91 @@ namespace test  {
       
       
       
-      /** @test 
+      /** @test request an allocation from the local store, without prior announcement
+       *      - again, a coordinated test setup is necessary to watch the effects
+       *      - Step-1: test worker triggers the allocation and retrieves it immediately
+       *      - Step-2: allocation and the leased-out memory is visible in the global pool
+       *      - test worker unwinds, allocations are returned
        */
       void
       verify_allocate()
         {
+          // »central BufferPool« (transient instance for this test)
+          lib::DependInject<EngineBufferManager>::Local<EngineBufferManager> globalPool;
+          
+          // *test subject*
+          LocalBufferStore localStore;
+          BufferProviderSetup::Store& storeAPI = localStore;
+          
+          const size_t BUFFSIZ = 1024;
+          const HashVal TYPEID = 12345;
+          
+          // coordination of test steps
+          std::atomic_uint step{1};
+          
+          Thread testWorker{[&] /* === Scenario: test subject requests allocation immediately === */
+                              {
+                                // Step-1
+                                CHECK (watch(localStore).isEmpty());
+                                
+                                BuffAlloc slot1 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
+                                auto& [storage,buffSiz,_] = slot1;
+                                CHECK (storage);
+                                CHECK (BUFFSIZ <= buffSiz);
+                                
+                                CHECK (not watch(localStore).isEmpty());
+                                CHECK (watch(localStore).size()    == 1);
+                                CHECK (watch(localStore).cntFree() == 0);
+
+                                ++step;
+                                // allocation can be re-used locally,
+                                // without any further exchange with the global pool
+                                
+                                storeAPI.detachBuffer (TYPEID, slot1);
+
+                                CHECK (watch(localStore).canServe(BUFFSIZ));
+                                CHECK (watch(localStore).cntFree() == 1);
+                                CHECK (watch(localStore).size()    == 1);
+
+                                BuffAlloc slot2 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
+                                CHECK (watch(localStore).cntFree() == 0);
+                                
+                                // the same memory address was re-used
+                                CHECK (slot1 == slot2);
+                                
+                                storeAPI.detachBuffer (TYPEID, slot2);
+                                
+                                // can even reserve that memory without any round-trip to the global pool
+                                CHECK (watch(localStore).cntFree() == 1);
+                                CHECK (watch(localStore).cntResd() == 0);
+                                
+                                uint avail = storeAPI.prepareBuffers(TYPEID, 1, BUFFSIZ);
+                                CHECK (1 == avail);
+                                CHECK (watch(localStore).cntFree() == 1);
+                                CHECK (watch(localStore).cntResd() == 1);
+                                CHECK (watch(localStore).size()    == 1);
+                                CHECK (watch(localStore).canServe(BUFFSIZ));
+                                
+                              }}; // block automatically sent back after thread end
+          
+          
+          /* === Main thread: observe effects in the global pool === */
+          
+          // wait until memory was claimed
+          while (step < 2)
+            sleep_for(1ms);
+          
+          // Step-2
+          CHECK (watch(*globalPool).numAllocs() == 1);
+          CHECK (watch(*globalPool).bytesLeased() >= BUFFSIZ);
+          
+          // wait until test thread terminates
+          while (testWorker)
+            sleep_for(1ms);
+          sleep_for(1ms); // additional wait for the dtor
+          
+          globalPool->processPendingRequests();
+          CHECK (watch(*globalPool).bytesLeased() == 0);
         }
       
       

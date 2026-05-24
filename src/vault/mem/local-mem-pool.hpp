@@ -255,6 +255,20 @@ namespace mem   {
         }
       
       /**
+       * Pass an allocation directly and transfer discretionary power.
+       * @warning this call is _not_ threadsafe and can only be used by the worker itself,
+       *       after forcibly retrieving an allocation by synchronised direct request.
+       * @remark similar to the regular case, LocalMemPool is responsible for clean-up.
+       */
+      void
+      supplyImmediately (Alloc alloc)
+        {
+          if (alloc.mem)
+            blocks_.emplace_front (move(alloc));
+          // otherwise: allocation not serviced, do not add anything
+        }
+      
+      /**
        * Return an used memory block back to the pool
        * @param mem a chunk of memory previously handed out by \ref retrieve()
        * @throw err::Logic in case the indicated allocation is not known
@@ -397,12 +411,7 @@ namespace mem   {
       void
       ingest()
         {
-          inQueue_.consume_all ([this](Alloc alloc)
-                                      {
-                                        if (alloc.mem)
-                                          blocks_.emplace_front (move(alloc));
-                                        // otherwise: allocation not possible, do not add anything
-                                      });
+          inQueue_.consume_all ([this](Alloc alloc){ supplyImmediately (move(alloc)); });
         }
       
       template<class PRED>

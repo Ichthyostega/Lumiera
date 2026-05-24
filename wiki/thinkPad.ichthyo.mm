@@ -145647,10 +145647,24 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </richcontent>
 </node>
 </node>
-<node CREATED="1778949021417" ID="ID_1256480563" MODIFIED="1778968909103" TEXT="verify_allocate">
+<node COLOR="#338800" CREATED="1778949021417" ID="ID_1256480563" MODIFIED="1779645581994" TEXT="verify_allocate">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778969027419" ID="ID_1633706484" MODIFIED="1778969039237" TEXT="gemeint ist: eine direkte Allokation, ohne Ank&#xfc;ndigung"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779640817389" ID="ID_223109084" MODIFIED="1779640846459" TEXT="auch hier mu&#xdf; Beobachtung bei noch laufendem Worker erfolgen">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1779643076207" ID="ID_170158518" MODIFIED="1779645577004" STYLE="fork" TEXT="lokaler Pool ist empty() nach direkter Allokation">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b80267" CREATED="1779643541361" ID="ID_1231489502" MODIFIED="1779643558593" TEXT="oh wie interessant ....">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#e2aa99" COLOR="#990033" CREATED="1779643563479" ID="ID_130728323" MODIFIED="1779643615605" TEXT="da habe ich ganz locker die Konsistenzbedingung &#xfc;bersehen">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node COLOR="#338800" CREATED="1779643623630" ID="ID_1926698633" MODIFIED="1779645568403" TEXT="mu&#xdf; den direkt geholten Block schon auch in die lokale Block-Liste einspeisen">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1778968918381" ID="ID_752345967" MODIFIED="1778968922655" TEXT="verify_release">
