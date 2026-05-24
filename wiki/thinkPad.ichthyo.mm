@@ -145226,8 +145226,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Man m&#252;&#223;te dazu also den AllocReceiver umformulieren und zudem auch noch die Requests im EngineBufferManager. Vermutlich l&#228;uft das auf einen speziellen smart-Handle-Typ hinaus. Dieser w&#252;rde eine Pr&#252;fsumme beinhalten, die dann auf der Empf&#228;ngerseite genauso im Speicher vorzufinden sein mu&#223;. Die Pr&#252;fsumme w&#252;rde auf einer Nonce plus der Ziel-Addresse beruhen, und k&#246;nnte damit so nur ein einziges Mal pro Programmlauf auftreten (modulo 64-bit Hash-Kollision). Die Sperr-Flag best&#252;nde dann einfach darin, die empf&#228;ngerseitige Pr&#252;fsumme auf Null zu setzen (kein Match, kein Zugriff). Diese empf&#228;ngerseitige Pr&#252;fsumme m&#252;&#223;te ein Atomic sein, und beim Zugriff w&#252;rde eine Lese-Barriere angewendet, beim &#196;ndern eine Schreibbarriere. Das w&#228;re v&#246;llig akzeptabel. Dar&#252;berhinaus g&#228;be es keine Contention (au&#223;er beim Neuerzeugen eines Objekts, weil dann die Nonce inkrementiert werden mu&#223;).
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#effec1" DESTINATION="ID_86232371" ENDARROW="Default" ENDINCLINATION="590;70;" ID="Arrow_ID_1616330137" STARTARROW="None" STARTINCLINATION="89;231;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -145245,8 +145244,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_668417083" SOURCE="ID_1820292066" STARTARROW="None" STARTINCLINATION="-634;41;"/>
 <linktarget COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_1142922633" SOURCE="ID_142165791" STARTARROW="None" STARTINCLINATION="-634;41;"/>
+<linktarget COLOR="#3d7395" DESTINATION="ID_332907520" ENDARROW="Default" ENDINCLINATION="-1840;207;" ID="Arrow_ID_668417083" SOURCE="ID_1820292066" STARTARROW="None" STARTINCLINATION="-634;41;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1779302523581" ID="ID_272378166" MODIFIED="1779302536450" TEXT="wird inkorporiert"/>
 <node CREATED="1779302591078" ID="ID_1400105754" MODIFIED="1779302599488" TEXT="initialisiert sich automatisch mit einer Nonce"/>
@@ -145592,12 +145591,67 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1778948944946" ID="ID_399276838" MODIFIED="1778948954589" TEXT="verify_announce">
-<node CREATED="1778948971327" ID="ID_655345868" MODIFIED="1778948993943" TEXT="mu&#xdf; hier die Pr&#xfc;fung bei laufendem Worker-Thread machen (barrier)"/>
-<node CREATED="1778948997109" ID="ID_1331981737" MODIFIED="1778949018089" TEXT="Announcment mu&#xdf; im Engine-Pool sichtbar sein"/>
+<node COLOR="#338800" CREATED="1778948944946" ID="ID_399276838" MODIFIED="1779640869852" TEXT="verify_announce">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778948997109" ID="ID_1331981737" MODIFIED="1779640861359" TEXT="Announcement mu&#xdf; im Engine-Pool sichtbar sein">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1778948971327" ID="ID_655345868" MODIFIED="1779640850047" TEXT="mu&#xdf; hier die Pr&#xfc;fung bei laufendem Worker-Thread machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn nach dem Thread-Ende wird die Allokation automatisch zur&#252;ckgef&#252;hrt, so da&#223; sich der Effekt nicht mehr beobachten l&#228;&#223;t
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1779633633221" ID="ID_580266326" MODIFIED="1779633638449" TEXT="schwierig zu testen">
+<node CREATED="1779633639193" ID="ID_1983957454" MODIFIED="1779633649944" TEXT="da nun ja die Queue erst mal nicht bedient wird"/>
+<node CREATED="1779633660674" ID="ID_552359761" MODIFIED="1779633677035" TEXT="au&#xdf;erdem: nach dem Thread-Ende soll der Request ignoriert werden"/>
+</node>
+<node CREATED="1779633705814" ID="ID_1901638981" MODIFIED="1779640605148" TEXT="brauche koordinierten mehrstufigen Test">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...wenn man das erst mal akzeptiert, ist es auch nicht so schlimm: man inkrementiert einen Atomic
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1779640700775" ID="ID_333012616" MODIFIED="1779640867890" TEXT="nach Zustellung mu&#xdf; die Allokation im lokalen Pool frei verf&#xfc;gbar sein"/>
+<node COLOR="#435e98" CREATED="1779640715451" ID="ID_1548631619" MODIFIED="1779640867886">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ein weiters Announcement,
+    </p>
+    <p>
+      das nicht mehr zugestellt wird
+    </p>
+    <p>
+      wird transparent ignoriert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 <node CREATED="1778949021417" ID="ID_1256480563" MODIFIED="1778968909103" TEXT="verify_allocate">
 <node CREATED="1778969027419" ID="ID_1633706484" MODIFIED="1778969039237" TEXT="gemeint ist: eine direkte Allokation, ohne Ank&#xfc;ndigung"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779640817389" ID="ID_223109084" MODIFIED="1779640846459" TEXT="auch hier mu&#xdf; Beobachtung bei noch laufendem Worker erfolgen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node CREATED="1778968918381" ID="ID_752345967" MODIFIED="1778968922655" TEXT="verify_release">
 <node CREATED="1778969042432" ID="ID_1262962638" MODIFIED="1778969052166" TEXT="hier sollte auch ein clean-up provoziert werden"/>

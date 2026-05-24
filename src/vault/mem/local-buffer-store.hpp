@@ -53,6 +53,9 @@ namespace mem   {
   
   using util::_Fmt;
   
+  class LocalStoreDiagnostic;
+  
+  
   
   /**
    * Production-grade implementation of buffer allocation
@@ -98,8 +101,8 @@ namespace mem   {
             }
         };
       
-      LocalPool localReg_;
-      GlobalPool globalReg_;
+      LocalPool localPool_;
+      GlobalPool globalPool_;
       
     public:
       LocalBufferStore()
@@ -118,9 +121,9 @@ namespace mem   {
       uint
       prepareBuffers (HashVal, uint numBuffers, size_t sizRequest)  override
       {
-        uint cnt = localReg_->reserve(numBuffers, sizRequest);
+        uint cnt = localPool_->reserve(numBuffers, sizRequest);
         for (uint n{cnt}; n < numBuffers; ++n)
-          globalReg_().async_requestAllocation (*localReg_, sizRequest);
+          globalPool_().async_requestAllocation (*localPool_, sizRequest);
         // signal back the number of buffers reserved and thus immediately available
         return cnt;
       }
@@ -142,16 +145,16 @@ namespace mem   {
       BuffAlloc
       provideBuffer (HashVal, size_t sizRequest, LocalTag specifics, int64_t)  override
       {
-        if (not localReg_->canServe(sizRequest))
-          globalReg_().processPendingRequests();
+        if (not localPool_->canServe(sizRequest))
+          globalPool_().processPendingRequests();
         
         // attempt to satisfy allocation request from the local pool...
-        Alloc alloc = localReg_->retrieve (sizRequest);
+        Alloc alloc = localPool_->retrieve (sizRequest);
         auto& [storage,buffSiz] = alloc;
         
         // possibly the request was not announced beforehand...?
         if (not storage)
-          alloc = globalReg_().requestAllocation (sizRequest);
+          alloc = globalPool_().requestAllocation (sizRequest);
         if (not storage)
           throw err::State{_Fmt{"Unable to provide further %d bytes of buffer memory."} % sizRequest
                           ,LUMIERA_ERROR_BUFFER_MANAGEMENT};
@@ -181,12 +184,23 @@ namespace mem   {
       {
         auto& [storage,buffSiz,specifics] = storageSlot;
         REQUIRE (storage);
-        localReg_->reSupply (storage);
+        localPool_->reSupply (storage);
         /////////////////////////////////////////////////////OOO trigger heuristic clean-up here
       }
+      
+    private:
+      /** diagnostic access for unit testing */
+      friend PoolDiagnostic watch (LocalBufferStore const&);
     };
   
-  
+    
+  /** entrance point to inspection for test */
+  inline PoolDiagnostic
+  watch (LocalBufferStore const& lstor)
+  {
+    return PoolDiagnostic{*lstor.localPool_};
+  }
+
   
 }} // namespace vault::mem
 #endif /*VAULT_MEM_LOCAL_BUFFER_STORE_H*/

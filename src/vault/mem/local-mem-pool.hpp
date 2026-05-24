@@ -508,6 +508,19 @@ namespace mem   {
                                        ,[](Block const& b){ return not b.used; });
         }
       
+      size_t
+      cntResd()
+        {
+          return std::ranges::count_if (memPool_.blocks_
+                                       ,[](Block const& b){ return b.resd; });
+        }
+      
+      bool
+      canServe (size_t sizRequest)
+        {
+          return memPool_.canServe (sizRequest);
+        }     // map to the pool's diagnostic API for uniform access
+      
       bool
       isFree (Buff* mem)
         {

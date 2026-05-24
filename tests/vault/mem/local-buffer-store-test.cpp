@@ -27,6 +27,7 @@
 #include "test/diagnostic-output.hpp"///////////////////////TODO
 
 #include <algorithm>
+#include <atomic>
 
 using util::isSameAdr;
 
@@ -97,8 +98,8 @@ namespace test  {
           lib::DependInject<EngineBufferManager>::Local<EngineBufferManager> globalPool;
           
           // provide the *test subject*,
-          // which implements the BufferStage API
-          // and uses a thread-local metadata table internally
+          // which implements the BufferStore API
+          // and uses a thread-local allocation pool internally
           LocalBufferStore localStore;
           BufferProviderSetup::Store& storeAPI = localStore;
           
@@ -184,11 +185,98 @@ namespace test  {
       
       
       
-      /** @test 
+      
+      /** @test announcement of capacity demand is propagated eventually
+       *      - test thread must proceed in lockstep to make effects observable
+       *      - Step-1: test thread announces demand on the subject (`BufferStore` API)
+       *      - Step-2: „someone“ processes pending requests in the EngineBufferManager
+       *      - Step-3: test thread announces further demand that remains unprocessed
+       *      - test thread then terminates, sends back all allocations
+       *      - the pending request is ignored transparently
        */
       void
       verify_announce()
         {
+          // »central BufferPool« (transient instance for this test)
+          lib::DependInject<EngineBufferManager>::Local<EngineBufferManager> globalPool;
+          
+          // *test subject*
+          LocalBufferStore localStore;
+          BufferProviderSetup::Store& storeAPI = localStore;
+          
+          const size_t BUFFSIZ = 1024;
+          const HashVal TYPEID = 12345;
+          
+          // coordination of test steps
+          std::atomic_uint step{1};
+          
+          Thread testWorker{[&] /* === Scenario: test subject announces capacity demand === */
+                              {
+                                // Step-1
+                                uint avail = storeAPI.prepareBuffers(TYPEID, 1, BUFFSIZ);
+                                CHECK (0 == avail);
+                                
+                                CHECK (watch(localStore).isEmpty());
+                                
+                                // wait for being serviced...
+                                ++step;
+                                while (step < 3)
+                                  sleep_for(1ms);
+                                
+                                // Step-3
+                                CHECK (not watch(localStore).isEmpty());
+                                CHECK (watch(localStore).canServe(BUFFSIZ));
+                                CHECK (watch(localStore).cntFree() == 1);
+                                CHECK (watch(localStore).size()    == 1);
+                                
+                                // Note: this block was supplied but the local pool does not know why,
+                                //       since reservations are only tracked on blocks already available
+                                CHECK (watch(localStore).cntResd() == 0);
+                                
+                                // Now, instead of using this buffer block,
+                                // rather generate another capacity announcement...
+                                avail = storeAPI.prepareBuffers(TYPEID, 2, BUFFSIZ);
+                                CHECK (1 == avail);
+
+                                CHECK (watch(localStore).cntResd() == 1);
+                                CHECK (watch(localStore).cntFree() == 1);
+                                CHECK (watch(localStore).size()    == 1);
+                                CHECK (watch(localStore).canServe(BUFFSIZ));
+                                
+                                // Note: while a further request is "out there",
+                                //       only a single block was received up to now.
+                                //       LocalMemPool winds down automatically at end of thread
+                              }};
+          
+          
+          /* === Main thread: observe effects in the global pool === */
+          
+          // wait until the first announcement was made
+          while (step < 2)
+            sleep_for(1ms);
+          
+          // Step-2
+          CHECK (watch(*globalPool).numAllocs() == 0);
+          
+          // process the in-queue and service the allocation request...
+          globalPool->processPendingRequests();
+          
+          CHECK (watch(*globalPool).numAllocs() == 1);
+          CHECK (watch(*globalPool).bytesLeased() >= BUFFSIZ);
+          
+          // let the test thread proceed...
+          step = 3;
+          
+          // wait until test thread has wound down
+          while (testWorker)
+            sleep_for(1ms);
+          
+          // additional delay to be sure the destructor of the local pool has finished
+          sleep_for(1ms);
+          
+          CHECK (watch(*globalPool).numAllocs() == 1);
+          globalPool->processPendingRequests();
+          CHECK (watch(*globalPool).bytesLeased() == 0);
         }
       
       
