@@ -146986,7 +146986,28 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778979230293" ID="ID_1129342480" MODIFIED="1779664866045" TEXT="meine Idee der Heuristik umsetzen">
 <arrowlink COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
 </node>
-<node CREATED="1778979241959" ID="ID_241540634" MODIFIED="1778979251687" TEXT="mit einzelnen Grenz-Szenarien durchspielen"/>
+<node CREATED="1778979241959" ID="ID_241540634" MODIFIED="1778979251687" TEXT="mit einzelnen Grenz-Szenarien durchspielen">
+<node COLOR="#338800" CREATED="1779670307076" ID="ID_850518169" MODIFIED="1779677812089" TEXT="brauche daf&#xfc;r ein &#xbb;Baukastensystem&#xab; f&#xfc;r Szenarien">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779670329822" ID="ID_1971093649" MODIFIED="1779677820109" TEXT="Idee: eine &#x3bb;-DSL">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1779670579244" ID="ID_1221276556" MODIFIED="1779677834308" TEXT="Primitive">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="list"/>
+<node CREATED="1779670594268" ID="ID_1451616229" MODIFIED="1779670611189" TEXT="eine kontexturell vorgegebene SIZE"/>
+<node CREATED="1779677581012" ID="ID_1406506279" MODIFIED="1779677594870" TEXT="einen kontextuellen &#xbb;globalen Pool&#xab;"/>
+<node CREATED="1779670699998" ID="ID_954266367" MODIFIED="1779670719943" TEXT="einen kontextuellen Stack mit belegten Allocs"/>
+<node CREATED="1779670614712" ID="ID_603310345" MODIFIED="1779670676968" TEXT="reserve(N)"/>
+<node CREATED="1779670677760" ID="ID_1175480047" MODIFIED="1779670681979" TEXT="supply(N)"/>
+<node CREATED="1779670733857" ID="ID_1430519739" MODIFIED="1779670739180" TEXT="claim(N)"/>
+<node CREATED="1779670739992" ID="ID_1222609344" MODIFIED="1779670767260" TEXT="free(N)"/>
+</node>
+<node COLOR="#338800" CREATED="1779677790937" ID="ID_60505507" MODIFIED="1779677803941" TEXT="einfachen Fall mit pretty-Printing durchspielen...">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 <node CREATED="1778979252922" ID="ID_155080806" MODIFIED="1778979264429" TEXT="Verhalten sollte deterministisch vorhersagbar sein"/>
 </node>
 </node>

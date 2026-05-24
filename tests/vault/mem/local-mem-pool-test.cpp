@@ -19,11 +19,16 @@
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
 #include "vault/mem/local-mem-pool.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/format-util.hpp"
+#include "test/diagnostic-output.hpp"////////////TODO
 
+#include <concepts>
 
 using util::join;
+using lib::explore;
+using std::invocable;
 
 namespace vault {
 namespace mem   {
@@ -302,6 +307,7 @@ namespace test  {
       
       
       /** @test heuristic trigger mechanism for pool clean-up
+       *      - use a setup where the global pool is just a queue of buffer pointers
        *      - create abbreviated notation to play through various scenarios
        *      - watch how turnover and max-score are computed for each step
        *      - document the trigger points for heuristic clean-up.
@@ -309,7 +315,101 @@ namespace test  {
       void
       verify_turnoverTrigger()
         {
+          LocalMemPool pool;
+          lib::IterQueue<Buff*> globalPool;
+          lib::IterStack<Buff*> usedBuff;
+          size_t SIZ = SIZ10;
           
+          //------------ pretty printing of "allocations"
+          auto buffID  = [](Buff* buff){ return size_t(buff); };
+          auto show    = [&](auto coll){ return join (explore(coll).transform(buffID)); };
+          
+          
+          //------------ define abstracted form of the basic actions on the pool...
+          
+          auto pullMem = [&]{ // retrieve one allocation from global pool
+                              if (globalPool)
+                                {
+                                  pool.supply (*globalPool, SIZ);
+                                  pool.ingest();
+                                  ++globalPool;
+                                }
+                            };
+          
+          auto pushMem = [&](Buff* mem, size_t)
+                            { // return one allocation into global pool
+                              globalPool.feed (mem);
+                            };
+          
+          auto useMem  = [&]{ // claim one allocation from local pool
+                              auto [mem,_] = pool.retrieve (SIZ);
+                              usedBuff.push(mem);
+                            };
+          
+          auto freeMem = [&]{ // return one used allocation into local pool
+                              if (usedBuff)
+                                {
+                                  pool.reSupply (*usedBuff);
+                                  ++usedBuff;
+                                }
+                            };
+          
+          auto repeat  = [](uint n, invocable<> auto action)
+                            {
+                              for (uint i=0; i<n; ++i)
+                                action();
+                            };
+          
+          
+          //------------ define four building blocks for scenarios
+          
+          auto reserve = [&](uint n){ pool.reserve(n, SIZ); };
+          auto supply  = [&](uint n){ repeat(n, pullMem);   };
+          auto claim   = [&](uint n){ repeat(n, useMem );   };
+          auto free    = [&](uint n){ repeat(n, freeMem);   };
+          
+          // populate the global pool with some "allocations"
+          globalPool.feed(MEM11)
+                    .feed(MEM12)
+                    .feed(MEM13)
+                    .feed(MEM21)
+                    .feed(MEM31)
+                    .feed(MEM32)
+                    .feed(MEM33);
+          
+SHOW_EXPR(show(globalPool));
+SHOW_EXPR(watch(pool).size())
+          
+          supply(3);
+          
+SHOW_EXPR(show(globalPool));
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+          
+          reserve(2);
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+          
+          claim(3);
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(show(usedBuff));
+          
+          free(3);
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(show(usedBuff));
+          
+          pool.yield (3, SIZ, pushMem);
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(show(globalPool));
         }
       
     };

@@ -407,13 +407,13 @@ namespace mem   {
           ENSURE (this->empty());
         }
       
-    private:
       void
       ingest()
         {
           inQueue_.consume_all ([this](Alloc alloc){ supplyImmediately (move(alloc)); });
         }
       
+    private:
       template<class PRED>
       Block const*
       findMatch (PRED&& predicate)  const
