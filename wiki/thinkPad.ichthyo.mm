@@ -145434,8 +145434,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1778947001639" ID="ID_78533321" MODIFIED="1779665464192" TEXT="Idee: &#xbb;turnover&#xab; &#x2014; jedem Block eine Chance geben">
-<linktarget COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" SOURCE="ID_1461846299" STARTARROW="Default" STARTINCLINATION="286;13;"/>
+<node CREATED="1778947001639" ID="ID_78533321" MODIFIED="1779724531120" TEXT="Idee: &#xbb;turnover&#xab; &#x2014; jedem Block eine Chance geben">
+<linktarget COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" SOURCE="ID_1461846299" STARTARROW="Default" STARTINCLINATION="345;16;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1778947114570" ID="ID_914679223" MODIFIED="1778947126240" TEXT="ankommende Bl&#xf6;cke erh&#xf6;hen den Turnover"/>
 <node CREATED="1778947127539" ID="ID_253931638" MODIFIED="1778947136630" TEXT="jede de-Allokation veringert den Turnover"/>
@@ -145469,7 +145469,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1778948068575" ID="ID_855345858" MODIFIED="1778948159062" TEXT="verwende also MaxScore / MATCH_SCORE als Triggerschwelle gegen den Turnout"/>
+<node CREATED="1778948068575" ID="ID_855345858" MODIFIED="1779725685738" TEXT="verwende also MaxScore / MATCH_SCORE als Triggerschwelle gegen den Turnover"/>
 <node CREATED="1778948224807" ID="ID_1282800052" MODIFIED="1778948275175" TEXT="zus&#xe4;tzlicher Gewichtsfaktor um die Sch&#xe4;rfe der &#xdc;berpr&#xfc;fung zu regulieren"/>
 </node>
 </node>
@@ -146874,13 +146874,32 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777164514849" ID="ID_489761092" MODIFIED="1777164525297" TEXT="und gew&#xe4;hlt wird nach maximalem selectionScore"/>
 <node CREATED="1777164528024" ID="ID_1047876896" MODIFIED="1777164541639" TEXT="dieser gew&#xe4;hlte Buffer bekommt dann einen Score-Update"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1779664650625" ID="ID_1141255727" MODIFIED="1779664857110" TEXT="Dazu einen 2.Layer &#x27f9; Heuristik zum Triggern">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779664650625" ID="ID_1141255727" MODIFIED="1779729238478" TEXT="Dazu einen 2.Layer &#x27f9; Heuristik zum Triggern">
 <linktarget COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" SOURCE="ID_1129342480" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1779664722365" ID="ID_1461846299" MODIFIED="1779665464192" TEXT="im Kontext vom LocalBufferStore : erweiterte Heuristik skizziert">
-<arrowlink COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" STARTARROW="Default" STARTINCLINATION="286;13;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1779664722365" ID="ID_1461846299" MODIFIED="1779724531120" TEXT="im Kontext vom LocalBufferStore : erweiterte Heuristik skizziert">
+<arrowlink COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" STARTARROW="Default" STARTINCLINATION="345;16;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1779678327953" ID="ID_1985264283" MODIFIED="1779724920127" TEXT="turnover-Variable einf&#xfc;hren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1779678344575" ID="ID_1954145577" MODIFIED="1779726996289" TEXT="turnover mit aktualisieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1779678355221" ID="ID_877262822" MODIFIED="1779678368820" TEXT="beim supply (neue Allokation bereitstellen)"/>
+<node CREATED="1779678382051" ID="ID_466975997" MODIFIED="1779678394545" TEXT="beim retrieve (Allokation verwenden)"/>
+<node CREATED="1779678403727" ID="ID_838943223" MODIFIED="1779678413410" TEXT="beim reSupply (Allokation zur&#xfc;ckgeben)"/>
+<node COLOR="#338800" CREATED="1779678418733" ID="ID_763664892" MODIFIED="1779729233065" TEXT="re-Initialisieren nach clean-Up">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1779678431787" ID="ID_1226724466" MODIFIED="1779733305968" TEXT="Accessor: Trigger-Status abfragen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1779678456264" ID="ID_1362166348" MODIFIED="1779678461993" TEXT="das ist eine pure function">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1779678463307" ID="ID_542497413" MODIFIED="1779678482680" TEXT="&quot;w&#xe4;re aktuell ein heuristisches clean-up gerechtfertigt?&quot;"/>
 </node>
 </node>
 </node>
@@ -147007,8 +147026,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1779678269323" ID="ID_1821389812" MODIFIED="1779733357622" TEXT="Szenario-1">
+<node CREATED="1779678286438" ID="ID_1816083165" MODIFIED="1779678297036" TEXT="3 gleichzeitig allozieren"/>
 </node>
-<node CREATED="1778979252922" ID="ID_155080806" MODIFIED="1778979264429" TEXT="Verhalten sollte deterministisch vorhersagbar sein"/>
+<node COLOR="#435e98" CREATED="1779733314454" ID="ID_284062895" MODIFIED="1779733357623" TEXT="Szenario-2">
+<node CREATED="1779733320086" ID="ID_1528731299" MODIFIED="1779733324664" TEXT="nur einen verwenden"/>
+</node>
+<node COLOR="#435e98" CREATED="1779733330072" ID="ID_582928434" MODIFIED="1779733357623" TEXT="Szenario-3">
+<node CREATED="1779733339598" ID="ID_1362814231" MODIFIED="1779733343707" TEXT="zwischendurch nachf&#xfc;llen"/>
+<node CREATED="1779733348313" ID="ID_1867741071" MODIFIED="1779733353992" TEXT="wechselnd partiell verwenden"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778979252922" ID="ID_155080806" MODIFIED="1779733388847" TEXT="Verhalten sollte deterministisch sein und Erwartung entsprechen">
+<icon BUILTIN="pencil"/>
+</node>
 </node>
 </node>
 </node>

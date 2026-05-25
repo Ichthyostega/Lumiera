@@ -379,36 +379,205 @@ namespace test  {
           
 SHOW_EXPR(show(globalPool));
 SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
           
           supply(3);
           
+SHOW_EXPR("supply")
 SHOW_EXPR(show(globalPool));
 SHOW_EXPR(watch(pool).size())
 SHOW_EXPR(watch(pool).cntFree())
           
           reserve(2);
           
+SHOW_EXPR("reserve")
 SHOW_EXPR(watch(pool).size())
 SHOW_EXPR(watch(pool).cntFree())
 SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
           
           claim(3);
           
+SHOW_EXPR("claim")
 SHOW_EXPR(watch(pool).size())
 SHOW_EXPR(watch(pool).cntFree())
 SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
 SHOW_EXPR(show(usedBuff));
           
           free(3);
           
+SHOW_EXPR("free")
 SHOW_EXPR(watch(pool).size())
 SHOW_EXPR(watch(pool).cntFree())
 SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
 SHOW_EXPR(show(usedBuff));
+
+SHOW_EXPR(pool.shouldCleanup())
           
-          pool.yield (3, SIZ, pushMem);
+          uint removed = pool.cleanup(0.5, pushMem);
+SHOW_EXPR(removed)
           
 SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(globalPool));
+          
+          claim(1);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+          
+          free(1);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+SHOW_EXPR(pool.shouldCleanup())
+          
+          claim(1);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+          
+          free(1);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+SHOW_EXPR(pool.shouldCleanup())
+          
+          removed = pool.cleanup(0.5, pushMem);
+SHOW_EXPR(removed)
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(globalPool));
+          
+          supply(4);
+SHOW_EXPR("supply")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(globalPool));
+          
+          claim(3);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+          
+          free(2);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+SHOW_EXPR(pool.shouldCleanup())
+          
+          claim(2);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+          
+          supply(4);
+SHOW_EXPR("supply")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(globalPool));
+
+          free(2);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(usedBuff));
+          
+          claim(1);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+          free(1);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(usedBuff));
+
+SHOW_EXPR(pool.shouldCleanup())
+          removed = pool.cleanup(0.5, pushMem);
+SHOW_EXPR(removed)
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+SHOW_EXPR(show(globalPool));
+          
+          claim(1);
+          
+SHOW_EXPR("claim")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).cntResd())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+          free(2);
+          
+SHOW_EXPR("free")
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).cntFree())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
+
+SHOW_EXPR(pool.shouldCleanup())
+          removed = pool.cleanup(0.5, pushMem);
+SHOW_EXPR(removed)
+          
+SHOW_EXPR(watch(pool).size())
+SHOW_EXPR(watch(pool).getMaxScore())
+SHOW_EXPR(watch(pool).getTurnover())
 SHOW_EXPR(show(globalPool));
         }
       

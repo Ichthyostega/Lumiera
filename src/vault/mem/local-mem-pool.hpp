@@ -100,6 +100,7 @@ namespace mem   {
   using std::move;
   using std::forward;
   using std::invocable;
+  using util::max;
   using util::unConst;
   using util::isLimited;
   using std::this_thread::sleep_for;
@@ -147,6 +148,7 @@ namespace mem   {
       BlockList blocks_;
       
       int32_t maxScore_{1};
+      int32_t turnover_{0};
       
       std::function<void(LocalMemPool&)> shutdownHook_{};
       
@@ -201,6 +203,13 @@ namespace mem   {
           return bool(anyFree (sizRequest));
         }
       
+      /** turnover-based trigger for heuristic pool clean-up */
+      bool
+      shouldCleanup (float sharpen =1.0f)  const
+        {
+          return turnover_ * float(MATCH_SCORE) <= maxScore_ * sharpen;
+        }
+      
       /**
        * Determine to what extent the indicated allocation request
        * could be handled, given the current memory available in the pool.
@@ -252,6 +261,8 @@ namespace mem   {
         {
           Alloc alloc{mem,siz};
           AllocReceiver::supply (alloc);
+          if (alloc.mem)
+            ++turnover_;
         }
       
       /**
@@ -264,7 +275,10 @@ namespace mem   {
       supplyImmediately (Alloc alloc)
         {
           if (alloc.mem)
-            blocks_.emplace_front (move(alloc));
+            {
+              blocks_.emplace_front (move(alloc));
+              ++turnover_;
+            }
           // otherwise: allocation not serviced, do not add anything
         }
       
@@ -285,6 +299,7 @@ namespace mem   {
             throw err::Logic{"returning known allocation that is not marked as used"};
           block->used = false;
           ENSURE (not block->resd);
+          --turnover_;
         }
       
       /**
@@ -325,7 +340,11 @@ namespace mem   {
       yield (uint cnt, size_t siz, FUN&& consumer)
         {
           ingest();
+          if (blocks_.empty())
+            return 0;
+          uint remain{0};
           uint removed{0};
+          int32_t newMax{0};
           for (auto pos = blocks_.begin()
               ; pos != blocks_.end()
               ; )
@@ -341,8 +360,16 @@ namespace mem   {
                 --cnt;
               }
             else
-              ++pos;
-            
+              {
+                newMax = max (newMax, pos->score);
+                ++remain;
+                ++pos;
+              }
+          // recalibrate proportionally
+          uint prevSiz{removed+remain};
+          ENSURE (0 < prevSiz);
+          turnover_ *= float(remain)/prevSiz;
+          maxScore_ = max (newMax,1);
           return removed;
         }
       
@@ -359,6 +386,7 @@ namespace mem   {
       cleanup (double degree, FUN&& consumer)
         {
           ingest();
+          uint remain{0};
           uint removed{0};
           int32_t killLevel = degree * maxScore_;
           for (auto pos = blocks_.begin()
@@ -373,12 +401,14 @@ namespace mem   {
               }
             else
               {
+                ++remain;
                 pos->score -= killLevel;
                 ++pos;
               }
            // recalibrate all score levels
           maxScore_ -= killLevel;
-          maxScore_ = util::max (maxScore_, 1);
+          maxScore_ = max (maxScore_, 1);
+          turnover_ = remain;
           return removed;
         }
       
@@ -544,6 +574,18 @@ namespace mem   {
           Block const* entry = memPool_.find (mem);
           REQUIRE (entry, "Test refers to entry unknown in pool");
           return entry->score;
+        }
+      
+      int32_t
+      getMaxScore()
+        {
+          return memPool_.maxScore_;
+        }
+      
+      int32_t
+      getTurnover()
+        {
+          return memPool_.turnover_;
         }
     };
   
