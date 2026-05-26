@@ -205,9 +205,9 @@ namespace mem   {
       
       /** turnover-based trigger for heuristic pool clean-up */
       bool
-      shouldCleanup (float sharpen =1.0f)  const
+      shouldCleanup (double sharpen =1.0f)  const
         {
-          return turnover_ * float(MATCH_SCORE) <= maxScore_ * sharpen;
+          return turnover_ * double(MATCH_SCORE) <= maxScore_ * sharpen;
         }
       
       /**

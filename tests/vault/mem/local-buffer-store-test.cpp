@@ -24,7 +24,6 @@
 #include "lib/depend-inject.hpp"
 #include "lib/thread.hpp"
 #include "lib/util.hpp"
-#include "test/diagnostic-output.hpp"///////////////////////TODO
 
 #include <algorithm>
 #include <atomic>
@@ -40,28 +39,11 @@ namespace vault {
 namespace mem   {
 namespace test  {
   
-//  using LERR_(LOGIC);
-//  using LERR_(LIFECYCLE);
   
   
-  namespace { // Test helper
-    
-//    template<typename X>
-//    Buff*
-//    mark_as_Buffer(X& something)
-//      {
-//        return reinterpret_cast<Buff*> (std::addressof(something));
-//      }
-//    
-  }
-  
-  
-  
-  
-  
-  
-  /**************************************************************************//**
-   * @test verify worker memory handling that relies on a thread-local allocator.
+  /*********************************************//**
+   * @test verify memory handling in worker
+   *  that relies on a thread-local allocation pool.
    */
   class LocalBufferStore_test : public Test
     {
@@ -69,8 +51,6 @@ namespace test  {
       virtual void
       run (Arg)
         {
-//          seedRand();
-          
           verify_API();
           verify_announce();
           verify_allocate();
@@ -372,7 +352,7 @@ namespace test  {
       /** @test heuristic clean-up after releasing several allocations
        *      - at first, a de-allocated block remains available in the local pool
        *      - after a number of usages, defined as _turnover_, clean-up is triggered
-       *      - this test scenario requests 3 buffers, but repeatedly uses only one
+       *      - this test scenario requests 5 buffers, but repeatedly uses only one
        *      - after the third round with this usage pattern, the local pool is reduced
        */
       void
@@ -394,7 +374,7 @@ namespace test  {
           Thread testWorker{[&] /* === Scenario: test subject requests allocation immediately === */
                               {
                                 // Step-1 : first round
-                                uint avail = storeAPI.prepareBuffers(TYPEID, 3, BUFFSIZ);
+                                uint avail = storeAPI.prepareBuffers(TYPEID, 5, BUFFSIZ);
                                 CHECK (0 == avail);
                                 CHECK (watch(localStore).isEmpty());
                                 
@@ -403,36 +383,40 @@ namespace test  {
                                 CHECK (storage);
                                 
                                 storeAPI.detachBuffer (TYPEID, slot1);
-                                // Result: got three allocations and all three are in the local pool
-                                CHECK (watch(localStore).size()    == 3);
-                                CHECK (watch(localStore).cntFree() == 3);
+                                // Result: got five allocations and all are in the local pool
+                                CHECK (watch(localStore).size()    == 5);
+                                CHECK (watch(localStore).cntFree() == 5);
                                 
                                 ++step;
-                                // Step-2 : repeat same pattern
+                                // Step-2 : repeat same pattern -- again only using one of the five buffers
                                 BuffAlloc slot2 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
                                 CHECK (slot2 == slot1);
-                                CHECK (watch(localStore).size()    == 3);
-                                CHECK (watch(localStore).cntFree() == 2);
+                                CHECK (watch(localStore).size()    == 5);
+                                CHECK (watch(localStore).cntFree() == 4);
 
                                 storeAPI.detachBuffer (TYPEID, slot1);
-                                CHECK (watch(localStore).size()    == 3);
-                                CHECK (watch(localStore).cntFree() == 3);
+                                CHECK (watch(localStore).size()    == 5);
+                                CHECK (watch(localStore).cntFree() == 5);
 
                                 ++step;
                                 // Step-3 : repeat for a third time
                                 BuffAlloc slot3 = storeAPI.provideBuffer (TYPEID, BUFFSIZ, 0,0);
                                 CHECK (slot3 == slot1);
-                                CHECK (watch(localStore).size()    == 3);
-                                CHECK (watch(localStore).cntFree() == 2);
+                                CHECK (watch(localStore).size()    == 5);
+                                CHECK (watch(localStore).cntFree() == 4);
 
                                 storeAPI.detachBuffer (TYPEID, slot1);
-                                // this completed a "turnover" of three buffers
-                                SHOW_EXPR(watch(localStore).size());
+                                // this triggered a clean-up and detected the unused capacity
+                                CHECK (watch(localStore).size()    == 1);
+                                CHECK (watch(localStore).cntFree() == 1);
 
                                 ++step;
                                 // main thread will now see the partial clean-up
                                 
-                              }}; // block automatically sent back after thread end
+                                while (step == 4) // wait until main thread could investigate
+                                  sleep_for(1ms);
+                                
+                              }}; // remaining buffer automatically sent back after thread end
           
           
           /* === Main thread: observe effects in the global pool === */
@@ -440,19 +424,31 @@ namespace test  {
           // wait until Step-2
           while (step < 2)
             sleep_for(1ms);
-          CHECK (watch(*globalPool).numAllocs() == 3);
+          CHECK (watch(*globalPool).numAllocs() == 5);
           
           // re-check after Step-2
           while (step <= 2)
             sleep_for(1ms);
           // nothing changed; local pool operates independently
-          CHECK (watch(*globalPool).numAllocs() == 3);
+          CHECK (watch(*globalPool).numAllocs() == 5);
+          CHECK (watch(*globalPool).bytesLeased() == 5*BUFFSIZ);
           
           // re-check after Step-3
           while (step <= 3)
             sleep_for(1ms);
           globalPool->processPendingRequests();
-          SHOW_EXPR(watch(*globalPool).numAllocs())
+          CHECK (watch(*globalPool).bytesLeased() == 1*BUFFSIZ);
+          // Note: local pool sent back excess capacity
+          
+          ++step; // allow the worker to terminate after that
+          
+          while (testWorker)
+            sleep_for(1ms);
+          sleep_for(1ms); // additional wait for the dtor
+          
+          globalPool->processPendingRequests();
+          CHECK (watch(*globalPool).bytesLeased() == 0);
+          // all capacity properly returned into global pool
         }
     };
   

@@ -51,6 +51,12 @@
 namespace vault {
 namespace mem   {
   
+  namespace { // tuning parameters for clean-up heuristics
+    
+    const double TRIGGER_SENSITIVIY = 1.0;  ///< sensitivity of re-triggering based on max-score and turnover
+    const double HEURISTIC_CLEANUP  = 0.5;  ///< cut-off percentage of max-score; blocks with lower score will be sent back
+  }
+  
   using util::_Fmt;
   
   class LocalStoreDiagnostic;
@@ -73,16 +79,28 @@ namespace mem   {
    * This implementation of the BufferProvider::BufferStore interface
    * deliberately skips further sanity checks, beyond what is enforced
    * through the BufferMetadata lifecycle. Allocation requests are
-   * passed to the LocalMemPool for the current thread.
+   * delegated to the LocalMemPool for the current thread.
+   * 
+   * The PoolSetup creates a connection to the EngineBufferManager,
+   * retrieved via lib::Depend, so each thread-local pool can unwind
+   * automatically at thread end and return all leased storage.
    */
   class LocalBufferStore
     : public BufferProviderSetup::Store
     {
-      struct SetupPool;
-      using LocalPool = lib::LocalSlice<LocalMemPool, SetupPool>;
+      struct PoolSetup;
+      using LocalPool = lib::LocalSlice<LocalMemPool, PoolSetup>;
       using GlobalPool = lib::Depend<EngineBufferManager>;
       
-      struct SetupPool
+      static void
+      send_back2globalPool (Buff* mem, size_t siz)
+        {
+          Alloc alloc{mem,siz};
+          GlobalPool globalPool;
+          globalPool().supply(alloc);
+        }
+      
+      struct PoolSetup
         {
           using Service = LocalMemPool;
           
@@ -91,12 +109,7 @@ namespace mem   {
             {
               return LocalMemPool{[](LocalMemPool& pool2close)
                                     {
-                                      pool2close.purge([](Buff* mem, size_t siz)
-                                                        {
-                                                          Alloc alloc{mem,siz};
-                                                          GlobalPool globalPool;
-                                                          globalPool().supply(alloc);
-                                                        });
+                                      pool2close.purge (send_back2globalPool);
                                     }};
             }
         };
@@ -105,8 +118,7 @@ namespace mem   {
       GlobalPool globalPool_;
       
     public:
-      LocalBufferStore()
-        { }
+      LocalBufferStore() { }
       
       
       
@@ -191,13 +203,17 @@ namespace mem   {
         auto& [storage,buffSiz,specifics] = storageSlot;
         REQUIRE (storage);
         localPool_->reSupply (storage);
-        /////////////////////////////////////////////////////OOO trigger heuristic clean-up here
+        if (localPool_->shouldCleanup (TRIGGER_SENSITIVIY))
+          localPool_->cleanup (HEURISTIC_CLEANUP
+                              ,send_back2globalPool);
       }
+      
       
     private:
       /** diagnostic access for unit testing */
       friend PoolDiagnostic watch (LocalBufferStore const&);
     };
+  
   
   
   /** entrance point to inspection for test */

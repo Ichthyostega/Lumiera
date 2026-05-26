@@ -145325,7 +145325,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778802491003" ID="ID_1880673250" MODIFIED="1778979225756" TEXT="brauche noch einen Trigger-Mechanismus f&#xfc;r das heuristische Clean-up">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1778802491003" ID="ID_1880673250" MODIFIED="1779762406992" TEXT="brauche noch einen Trigger-Mechanismus f&#xfc;r das heuristische Clean-up">
 <icon BUILTIN="yes"/>
 <node CREATED="1778805833301" ID="ID_493965127" MODIFIED="1778806330596" TEXT="man k&#xf6;nnte nach jeder de-Allokation einen partiellen clean-up machen">
 <node CREATED="1778805853860" ID="ID_1555068699" MODIFIED="1778806001396" TEXT="w&#xe4;re wirksam, da nur unterhalb der Schwelle aufger&#xe4;umt wird">
@@ -145412,7 +145412,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778946963640" ID="ID_993736225" MODIFIED="1778946997115" TEXT="bei Leerlauf w&#xe4;chst der Score weniger Bl&#xf6;cke (und damit der Max-Score) &#xfc;berproportional"/>
 <node CREATED="1778807937581" ID="ID_1900765984" MODIFIED="1778807970854" TEXT="bei lokaler Knappheit werden viele Allokations-Anforderungen gesandt"/>
 </node>
-<node CREATED="1778945962154" ID="ID_535774391" MODIFIED="1778945972518" TEXT="daraus einen Mechanismus entwickeln">
+<node COLOR="#435e98" CREATED="1778945962154" ID="ID_535774391" MODIFIED="1779762420870" TEXT="daraus einen Mechanismus entwickeln">
 <icon BUILTIN="idea"/>
 <node CREATED="1778946005609" ID="ID_1483973980" MODIFIED="1778946757293" TEXT="Ansatz: die bereits implementierte Aufr&#xe4;um-Heuristik ist zielf&#xfc;hrend">
 <richcontent TYPE="NOTE"><html>
@@ -145482,9 +145482,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778800559849" ID="ID_1776275235" MODIFIED="1778800646883" TEXT="LocalBufferStore_test">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1778800660632" ID="ID_864970874" MODIFIED="1778979160301" TEXT="Zweck">
+<node COLOR="#338800" CREATED="1778800559849" ID="ID_1776275235" MODIFIED="1779762439896" TEXT="LocalBufferStore_test">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1778800660632" ID="ID_864970874" MODIFIED="1779762437163" TEXT="Zweck">
 <icon BUILTIN="yes"/>
 <node CREATED="1778800664656" ID="ID_690903258" MODIFIED="1778800678906" TEXT="Aufbau der Implemenrierung treiben"/>
 <node CREATED="1778800684264" ID="ID_1722512715" MODIFIED="1778800718145" TEXT="korrektes Verhalten auf API-Level zeigen"/>
@@ -145668,9 +145668,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1778968918381" ID="ID_752345967" MODIFIED="1778968922655" TEXT="verify_release">
+<node COLOR="#338800" CREATED="1778968918381" ID="ID_752345967" MODIFIED="1779762376165" TEXT="verify_release">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778969042432" ID="ID_1262962638" MODIFIED="1778969052166" TEXT="hier sollte auch ein clean-up provoziert werden"/>
-<node CREATED="1779665675415" ID="ID_1685534215" MODIFIED="1779665691018" TEXT="zu zeigen ist da&#xdf; dieser Clean-up mit R&#xfc;cksendung stattfindet"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779665675415" ID="ID_1685534215" MODIFIED="1779762386504" TEXT="zu zeigen ist da&#xdf; dieser Clean-up mit R&#xfc;cksendung stattfindet">
+<linktarget COLOR="#1b26b8" DESTINATION="ID_1685534215" ENDARROW="Default" ENDINCLINATION="408;19;" ID="Arrow_ID_1702718350" SOURCE="ID_1035469430" STARTARROW="None" STARTINCLINATION="577;30;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node COLOR="#5b280f" CREATED="1778969102656" ID="ID_249806133" MODIFIED="1779664543753" TEXT="verify_heuristic">
 <richcontent TYPE="NOTE"><html>
@@ -145688,8 +145692,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html>
 </richcontent>
 <icon BUILTIN="button_cancel"/>
-<node CREATED="1779664546343" HGAP="25" ID="ID_453821075" MODIFIED="1779665655342" TEXT="dieser Test geh&#xf6;rt zum LocalMemPool" VSHIFT="18">
-<arrowlink COLOR="#765294" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" STARTARROW="None" STARTINCLINATION="-413;30;"/>
+<node CREATED="1779664546343" HGAP="25" ID="ID_453821075" MODIFIED="1779762367351" TEXT="dieser Test geh&#xf6;rt zum LocalMemPool" VSHIFT="18">
+<arrowlink COLOR="#333263" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" STARTARROW="None" STARTINCLINATION="-413;30;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -145755,15 +145759,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1776605858192" ID="ID_563549971" MODIFIED="1776605951752" TEXT="bleibe aber bei dem Namen &#x2014; weil er klar ist">
+<node CREATED="1776605858192" ID="ID_563549971" MODIFIED="1779762245934" TEXT="bleibe aber bei dem Namen &#x2014; weil er klar ist">
 <richcontent TYPE="NOTE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
       das hier ist keine generische Library, sondern ein Application-Framework. Auch &#187;Vault&#171; ist inhaltlich genau auf Lumiera ausgerichtet, der Unterschied liegt nur im Grad der Integration mit Application-level Services
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 </node>
 <node COLOR="#338800" CREATED="1776611511064" ID="ID_419155046" MODIFIED="1776639433744" TEXT="Mutex-Locking einf&#xfc;hren">
 <linktarget COLOR="#4ff278" DESTINATION="ID_419155046" ENDARROW="Default" ENDINCLINATION="1269;0;" ID="Arrow_ID_703288918" SOURCE="ID_808614387" STARTARROW="None" STARTINCLINATION="1269;0;"/>
@@ -147000,8 +147007,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#f2ddc1" DESTINATION="ID_1195705832" ENDARROW="Default" ENDINCLINATION="16;47;" ID="Arrow_ID_296050493" STARTARROW="None" STARTINCLINATION="85;12;"/>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node CREATED="1778969102656" ID="ID_1242239297" MODIFIED="1779665655342" TEXT="verify_heuristic">
-<linktarget COLOR="#765294" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" SOURCE="ID_453821075" STARTARROW="None" STARTINCLINATION="-413;30;"/>
+<node COLOR="#338800" CREATED="1778969102656" ID="ID_1242239297" MODIFIED="1779762145111" TEXT="verify_heuristic">
+<linktarget COLOR="#333263" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" SOURCE="ID_453821075" STARTARROW="None" STARTINCLINATION="-413;30;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1778979230293" ID="ID_1129342480" MODIFIED="1779664866045" TEXT="meine Idee der Heuristik umsetzen">
 <arrowlink COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
 </node>
@@ -147037,8 +147045,23 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779733348313" ID="ID_1867741071" MODIFIED="1779733353992" TEXT="wechselnd partiell verwenden"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1778979252922" ID="ID_155080806" MODIFIED="1779733388847" TEXT="Verhalten sollte deterministisch sein und Erwartung entsprechen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1778979252922" ID="ID_155080806" MODIFIED="1779762143255" TEXT="Verhalten sollte deterministisch sein und Erwartung entsprechen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1779762175999" ID="ID_1035469430" MODIFIED="1779762350703" TEXT="Clean-up ist auch in globaler Kommunikation sichtbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wenn man eine gr&#246;&#223;ere Kapazit&#228;t reserviert, aber dann wiederholt immer nur einzelne Buffer belegt und wieder freigibt, sollte relativ bald der lokale Pool getrimmt werden, und die freigegebenen Buffer an den globaeln Pool zur&#252;ckgessend
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#1b26b8" DESTINATION="ID_1685534215" ENDARROW="Default" ENDINCLINATION="408;19;" ID="Arrow_ID_1702718350" STARTARROW="None" STARTINCLINATION="577;30;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

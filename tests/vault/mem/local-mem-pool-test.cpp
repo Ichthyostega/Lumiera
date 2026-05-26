@@ -306,6 +306,7 @@ namespace test  {
       
       
       
+      
       /** @test heuristic trigger mechanism for pool clean-up
        *      - use a setup where the global pool is just a queue of buffer pointers
        *      - create abbreviated notation to play through various scenarios
@@ -377,208 +378,199 @@ namespace test  {
                     .feed(MEM32)
                     .feed(MEM33);
           
-SHOW_EXPR(show(globalPool));
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          
+          CHECK (0 == watch(pool).size() );
+          CHECK (0 == watch(pool).getTurnover() );
           
           supply(3);
-          
-SHOW_EXPR("supply")
-SHOW_EXPR(show(globalPool));
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-          
           reserve(2);
           
-SHOW_EXPR("reserve")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK (3 == watch(pool).size() );
+          CHECK (3 == watch(pool).cntFree() );
+          CHECK (2 == watch(pool).cntResd() );
+          CHECK (1 == watch(pool).getMaxScore() );
+          CHECK (3 == watch(pool).getTurnover() );
           
+          
+          //------------ PATTERN-1 : use complete local capacity
           claim(3);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(usedBuff));
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 0 == watch(pool).cntFree() );
+          CHECK ( 0 == watch(pool).cntResd() );
+          CHECK (10 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
           
           free(3);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(usedBuff));
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 3 == watch(pool).cntFree() );
+          CHECK (10 == watch(pool).getMaxScore() );
+          CHECK ( 0 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
+          // heuristic trigger fires at that point,
+          // since full capacity was »turned over« once
+          CHECK (pool.shouldCleanup() );
           
           uint removed = pool.cleanup(0.5, pushMem);
-SHOW_EXPR(removed)
+          // However, nothing was removed, since all elements
+          // were used efficiently and are thus close to maxScore
+          CHECK (0 == removed);
+          CHECK (show(globalPool) == "21, 31, 32, 33"_expect);
           
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 5 == watch(pool).getMaxScore() );
+          // turnover is re-set to current pool size
+          CHECK ( 3 == watch(pool).getTurnover() );
           
+          
+          //------------ PATTERN-2 : use only one buffer a time (inefficient)
           claim(1);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 2 == watch(pool).cntFree() );
+          CHECK (15 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
           
           free(1);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 3 == watch(pool).cntFree() );
+          CHECK (15 == watch(pool).getMaxScore() );
+          CHECK ( 2 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
+          // not yet hitting the trigger...
+          CHECK (not pool.shouldCleanup() );
           
           claim(1);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 2 == watch(pool).cntFree() );
+          CHECK (25 == watch(pool).getMaxScore() );
+          CHECK ( 2 == watch(pool).getTurnover() );
           
           free(1);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 3 == watch(pool).size() );
+          CHECK ( 3 == watch(pool).cntFree() );
+          CHECK (25 == watch(pool).getMaxScore() );
+          CHECK ( 1 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
+          // maxScore did increase a lot,
+          // since effectively just a single buffer was used all the time
+          
+          CHECK (pool.shouldCleanup() );
           
           removed = pool.cleanup(0.5, pushMem);
-SHOW_EXPR(removed)
+          // Consequently the two superfluous buffers will be sent back
+          // (cutoff-score is at 12; maxScore will be lowered by that amount afterwards)
+          CHECK (2 == removed );
+          CHECK (show(globalPool) == "21, 31, 32, 33, 12, 11"_expect);
+
+          CHECK ( 1 == watch(pool).size() );
+          CHECK ( 1 == watch(pool).cntFree() );
+          CHECK (13 == watch(pool).getMaxScore() );
+          CHECK ( 1 == watch(pool).getTurnover() );
           
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
           
+          //------------ PATTERN-3 : dynamic partially overlapping usage
           supply(4);
-SHOW_EXPR("supply")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
+          
+          CHECK ( 5 == watch(pool).size() );
+          CHECK ( 5 == watch(pool).cntFree() );
+          CHECK (13 == watch(pool).getMaxScore() );
+          CHECK ( 5 == watch(pool).getTurnover() );
+          // turnover was bumped +4 due to increased supply
           
           claim(3);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 5 == watch(pool).size() );
+          CHECK ( 2 == watch(pool).cntFree() );
+          CHECK (13 == watch(pool).getMaxScore() );
+          CHECK ( 5 == watch(pool).getTurnover() );
           
           free(2);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 5 == watch(pool).size() );
+          CHECK ( 4 == watch(pool).cntFree() );
+          CHECK (13 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
+          CHECK (not pool.shouldCleanup() );
+          // no complete turnover cycle yet
           
           claim(2);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 5 == watch(pool).size() );
+          CHECK ( 2 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
           
           supply(4);
-SHOW_EXPR("supply")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
+          
+          CHECK ( 7 == watch(pool).size() );
+          CHECK ( 4 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 5 == watch(pool).getTurnover() );
 
           free(2);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(usedBuff));
+          CHECK ( 7 == watch(pool).size() );
+          CHECK ( 6 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
           
           claim(1);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 7 == watch(pool).size() );
+          CHECK ( 5 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 3 == watch(pool).getTurnover() );
 
           free(1);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(usedBuff));
+          CHECK ( 7 == watch(pool).size() );
+          CHECK ( 6 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 2 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
+          CHECK (pool.shouldCleanup());
+          // triggering now, since 20/MATCH_SCORE ≡ 2
+
           removed = pool.cleanup(0.5, pushMem);
-SHOW_EXPR(removed)
+          CHECK (3 == removed);
+          CHECK (show(globalPool) == "11, 12, 21"_expect);
           
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
+          CHECK ( 4 == watch(pool).size() );
+          CHECK ( 3 == watch(pool).cntFree() );
+          CHECK (10 == watch(pool).getMaxScore() );
+          CHECK ( 4 == watch(pool).getTurnover() );
           
+          
+          //------------ PATTERN-4 : decreasing the fraction used
           claim(1);
           
-SHOW_EXPR("claim")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).cntResd())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 4 == watch(pool).size() );
+          CHECK ( 2 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 4 == watch(pool).getTurnover() );
 
           free(2);
           
-SHOW_EXPR("free")
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).cntFree())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
+          CHECK ( 4 == watch(pool).size() );
+          CHECK ( 4 == watch(pool).cntFree() );
+          CHECK (20 == watch(pool).getMaxScore() );
+          CHECK ( 2 == watch(pool).getTurnover() );
 
-SHOW_EXPR(pool.shouldCleanup())
-          removed = pool.cleanup(0.5, pushMem);
-SHOW_EXPR(removed)
+          CHECK (pool.shouldCleanup() );
           
-SHOW_EXPR(watch(pool).size())
-SHOW_EXPR(watch(pool).getMaxScore())
-SHOW_EXPR(watch(pool).getTurnover())
-SHOW_EXPR(show(globalPool));
+          removed = pool.cleanup(0.5, pushMem);
+          CHECK (3 == removed);
+          CHECK (show(globalPool) == "11, 12, 21, 33, 31, 13"_expect);
+          
+          CHECK ( 1 == watch(pool).size() );
+          CHECK (10 == watch(pool).getMaxScore() );
+          CHECK ( 1 == watch(pool).getTurnover() );
         }
       
     };
