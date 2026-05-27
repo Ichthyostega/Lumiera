@@ -87,7 +87,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (SchedulerUsage_test, "unit engine");
+  LAUNCHER (SchedulerUsage_test, "integration engine");
   
   
   

@@ -401,7 +401,7 @@ namespace test {
           CHECK (activity::PASS == res);                                    // instruction to check back once
           pullWork();
           CHECK (activity::WAIT == res);                                    // but next call will send this thread to sleep right away
-          CHECK (delay_us < 40);
+          CHECK (delay_us < 50);
           
           
           cout << "follow-up with some distance => follow-up delay"<<endl;

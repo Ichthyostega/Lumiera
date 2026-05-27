@@ -1324,6 +1324,7 @@ namespace test {
       microseconds timeBase = LOAD_DEFAULT_TIME;
       size_t       sizeBase = LOAD_DEFAULT_MEM_SIZE;
       bool useAllocation = false;
+      size_t* externalBuff{nullptr};
       
       /** cause a delay by computational load */
       double
@@ -1366,16 +1367,22 @@ namespace test {
           return computationSpeed(false) != LOAD_SPEED_BASELINE;
         }
       
+      size_t
+      requiredBuffSiz (uint scaleStep)  const
+        {
+          return useAllocation? allocNeeded(scaleStep).first : 0;
+        }
+      
     private:
       uint64_t
-      roundsNeeded (uint scaleStep)
+      roundsNeeded (uint scaleStep)  const
         {
           auto desiredMicros = scaleStep*timeBase.count();
           return uint64_t(desiredMicros*computationSpeed(useAllocation));
         }
       
-      auto
-      allocNeeded (uint scaleStep)
+      std::pair<size_t,size_t>
+      allocNeeded (uint scaleStep)  const
         {
           auto cnt = roundsNeeded(scaleStep);
           auto siz = max (scaleStep * sizeBase, 1u);
@@ -1401,13 +1408,15 @@ namespace test {
       causeMemProcessLoad (uint scaleStep)
         {
           auto [siz,round] = allocNeeded (scaleStep);
-          lib::UninitialisedDynBlock<size_t> memBlock{siz};
+          lib::UninitialisedDynBlock<size_t> memBlock;
+          size_t* mem = externalBuff? externalBuff
+                                    : memBlock.allocate (siz);
           Sink sink;
-          *memBlock.front() = sink+1;
+          *mem = sink+1;
           for ( ; 0 < round; --round)
-            for (size_t i=0; i<memBlock.size()-1; ++i)
-              memBlock[i+1] += memBlock[i];
-          sink = *memBlock.back();
+            for (size_t i=0; i<siz-1; ++i)
+              mem[i+1] += mem[i];
+          sink = mem[siz-1];
           sink = sink + 1;
         }
       
