@@ -147095,8 +147095,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#a4c8cf" COLOR="#22695a" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1779579198844" TEXT="EngineBufferManager">
-<linktarget COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" SOURCE="ID_1791813360" STARTARROW="None" STARTINCLINATION="-438;24;"/>
 <linktarget COLOR="#2270cc" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="389;-2271;" ID="Arrow_ID_58701695" SOURCE="ID_853514765" STARTARROW="None" STARTINCLINATION="-1483;82;"/>
+<linktarget COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" SOURCE="ID_1791813360" STARTARROW="None" STARTINCLINATION="-438;24;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#338800" CREATED="1776819156872" ID="ID_1476925601" MODIFIED="1778788622379" TEXT="Grundkonzeption schaffen">
 <icon BUILTIN="button_ok"/>
@@ -148526,8 +148526,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       konkret m&#252;ssen giftige Situationen provoziert werden, um zu sehen da&#223; der Code selbst dann nicht entgleist, wenn man ihn an die Grenzen treibt. Diese Grenzen sind jedoch ohne eine vertiefte Analyse nicht bekannt, und diese Analyse m&#246;chte ich (jetzt aus Zeitgr&#252;nden) nicht machen. Daher der Ansatz, m&#246;glichst viel relevante Unregelm&#228;&#223;igkeiten reinzubringen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1779844392008" ID="ID_31203292" MODIFIED="1779844470562" TEXT="an sp&#xe4;ter denken: man m&#xf6;chte vielleicht mal den Einflu&#xdf; des CPU-cache betrachten">
 <richcontent TYPE="NOTE"><html>
@@ -148563,8 +148562,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1779896398730" ID="ID_1701977765" MODIFIED="1779896412644" TEXT="diese Aufruf-Ordnung erfolgt im Main-Thread und ist deterministisch"/>
 </node>
@@ -148579,8 +148577,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       der default-Wert sind 1KiB &#8212; aber die zu erwartenden Repetitionen f&#252;r 100&#181;s sind bereits so ca 10k. Deshalb wird mit diesen Standard-Settings der Buffer x mal bespielt, und f&#252;r etwas gr&#246;&#223;ere Last-Zeiten (1ms und mehr) f&#228;llt die Granularit&#228;t des Buffers kaum noch ins Gewicht
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1779928703245" ID="ID_1631634789" MODIFIED="1779928962463" TEXT="ein gro&#xdf;er Buffer wird mindestens einmal bespielt">
 <richcontent TYPE="NOTE"><html>
@@ -148600,8 +148597,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Extrembeispiel: angenommen, die Kalibrierung ist nahe am default, also 100 Schritte pro &#181;s, dann brauchen wir 10000 Schritte f&#252;r 100&#181;s. Wenn der Buffer aber 1 MiB gro&#223; ist, machen wir 1 Mio Schritte. Das bedeutet, egal was wir vorgeben, wir landen bei ~10ms. Die Kalibrierung wird sich zwar &#187;auf den Kopf stellen&#171;, aber das Aufrunden verhindert, das die Kalibrierung zum Tragen kommt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#338800" CREATED="1779929352367" ID="ID_381566945" MODIFIED="1779932443069" TEXT="man k&#xf6;nnte das mit einer Modulus-Rechnung korrekt l&#xf6;sen">
 <icon BUILTIN="idea"/>
@@ -148622,8 +148618,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Aber nun lasse ich die Schleife stets bis zur kalibrierten Rundenzahl laufen, und lediglich die Schreib-Position rotiert, gesteuert durch einen modulus auf (size - 1), da wir ja eine zus&#228;tzliche Speicherzelle brauchen, um jeweils die summe mit dem Vorg&#228;nger reinzuschreiben.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node COLOR="#435e98" CREATED="1779932445997" ID="ID_1079860125" MODIFIED="1779933985655" TEXT="Test ComputationalLoad">
@@ -148690,16 +148685,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779938411204" ID="ID_1370099969" MODIFIED="1779938428022" TEXT="sollte sich an der Verwendung in der Engine orientieren..."/>
 <node CREATED="1779938428956" ID="ID_1626444519" MODIFIED="1779938438163" TEXT="also in der Vorbereitungsphase">
 <node CREATED="1779938470147" ID="ID_1823680981" MODIFIED="1779938483599" TEXT="konkret: im Worker-Init"/>
-<node CREATED="1779938484443" ID="ID_355256150" MODIFIED="1779938501748" TEXT="per EngineCtx::access().mem auf den BufferProvider zugreifen"/>
+<node COLOR="#5b280f" CREATED="1779938484443" ID="ID_355256150" MODIFIED="1779982781115" TEXT="per EngineCtx::access().mem auf den BufferProvider zugreifen">
+<icon BUILTIN="closed"/>
+<node CREATED="1779982783249" ID="ID_68750997" MODIFIED="1779982786710" TEXT="geht so nicht"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779982787666" ID="ID_431944041" MODIFIED="1779982801101" TEXT="&#xbb;Engine&#xab; liegt im Steam-Layer">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 <node CREATED="1779938502773" ID="ID_794046860" MODIFIED="1779938532040" TEXT="von diesem die Typ-Deskriptoren geben lassen"/>
 <node CREATED="1779938532878" ID="ID_17738" MODIFIED="1779938548302" TEXT="passiert effektiv sequenziert im Main-Thread"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1779938554185" ID="ID_609113292" MODIFIED="1779938666502" TEXT="&#x27f9; mu&#xdf; also Depend&lt;EngineFacilities&gt; instrumentieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1779938554185" ID="ID_609113292" MODIFIED="1779982844157" TEXT="&#x27f9; mu&#xdf; daher lib::Depend instrumentieren...">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1779938710204" ID="ID_1736771261" MODIFIED="1779938720856" TEXT="brauche eine Subklasse von EngineFacilities"/>
-<node CREATED="1779938736586" ID="ID_452153689" MODIFIED="1779938768255" TEXT="diese liefert die produktiv-Konfiguration des BufferProviders"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1779982847525" ID="ID_1455958640" MODIFIED="1779982879491" TEXT="eine produktiv-Konfiguration des BufferProviders">
+<icon BUILTIN="flag-pink"/>
 </node>
-<node CREATED="1779938777523" ID="ID_792406911" MODIFIED="1779938786046" TEXT="au&#xdf;erdem...">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1779938787106" ID="ID_1927878895" MODIFIED="1779938806832" TEXT="EngineMetadata instrumentieren">
 <icon BUILTIN="flag-yellow"/>
 </node>
@@ -148707,9 +148707,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="flag-yellow"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779938827316" ID="ID_1745334491" MODIFIED="1779938944463" TEXT="der Service-Zugriff allerdings erfolgt &#xbb;kanonisch&#xab; (ohne R&#xfc;cksicht auf die Instrumentierung)">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1779938827316" ID="ID_1745334491" MODIFIED="1779982883437" TEXT="der Service-Zugriff allerdings erfolgt &#xbb;kanonisch&#xab; (ohne R&#xfc;cksicht auf die Instrumentierung)">
 <richcontent TYPE="NOTE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
       ...das ist sogar wichtig, damit wir uns &#228;hnlich wie in der echten Engine verhalten, incl. Zugriff &#252;ber double-checked locking;
@@ -148721,8 +148723,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       F&#252;r das korrekte Test-Setup ist es <i>lediglich erforderlich, da&#223; effektiv</i>&#160;die instrumentierung stattfindet <i>bevor</i>&#160;der jeweilige Test-Worker gestartet wird.
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1779988096766" ID="ID_505434940" MODIFIED="1779988102193" TEXT="Anordnung im Test-Code">
+<node CREATED="1779988104069" ID="ID_197563801" MODIFIED="1779988109480" TEXT="verwende einen Mock-Ctx"/>
+<node CREATED="1779988112724" ID="ID_1508494695" MODIFIED="1779988129476" TEXT="dieser h&#xe4;lt die drei instrumentierten Mock-Instanzen"/>
+<node CREATED="1779988130330" ID="ID_743202526" MODIFIED="1779988137709" TEXT="sowie den globalen API-Zugang"/>
+<node CREATED="1779988138597" ID="ID_1934175122" MODIFIED="1779988148072" TEXT="und prekonfigurierte Buffer-Descriptoren"/>
+<node CREATED="1779988156254" ID="ID_1478428488" MODIFIED="1779988193895" TEXT="definiere die TestWorker-Klasse daneben (&#x27f6; lokaler Zugriff in der translation-Unit)">
+<icon BUILTIN="idea"/>
+</node>
 </node>
 </node>
 <node CREATED="1779937246315" ID="ID_863725806" MODIFIED="1779937253926" TEXT="Job-Laststruktur erzeugen">
@@ -153351,8 +153363,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node COLOR="#338800" CREATED="1702180165409" ID="ID_168687387" MODIFIED="1779842195670" TEXT="verify_computation_load">
-<linktarget COLOR="#c26a36" DESTINATION="ID_168687387" ENDARROW="Default" ENDINCLINATION="-214;715;" ID="Arrow_ID_917319622" SOURCE="ID_257805938" STARTARROW="None" STARTINCLINATION="-169;-474;"/>
 <linktarget COLOR="#0f90ad" DESTINATION="ID_168687387" ENDARROW="Default" ENDINCLINATION="561;-1397;" ID="Arrow_ID_1543255992" SOURCE="ID_734254741" STARTARROW="None" STARTINCLINATION="-843;54;"/>
+<linktarget COLOR="#c26a36" DESTINATION="ID_168687387" ENDARROW="Default" ENDINCLINATION="-214;715;" ID="Arrow_ID_917319622" SOURCE="ID_257805938" STARTARROW="None" STARTINCLINATION="-169;-474;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1702180170904" ID="ID_1257116598" MODIFIED="1702317797128" TEXT="pr&#xfc;ft die konfigurierbare CPU-Last">
 <icon BUILTIN="button_ok"/>
