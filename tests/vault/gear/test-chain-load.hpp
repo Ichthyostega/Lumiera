@@ -1306,6 +1306,9 @@ namespace test {
    *   speed in a microbenchmark with `LOAD_BENCHMARK_RUNS`
    *   repetitions; the result is stored in a static
    *   variable and can thus be reused.
+   * @see TestChainLoad_test::verify_computation_load
+   * @warning for longer times, especially the memory load performs
+   *   increasingly slower than calibrated. See the details in the test.
    */
   class ComputationalLoad
     : util::MoveAssign
@@ -1368,9 +1371,10 @@ namespace test {
         }
       
       size_t
-      requiredBuffSiz (uint scaleStep)  const
+      requiredBuffSiz (uint scaleStep)  const    ///< @return required size for external buffer in bytes.
         {
-          return useAllocation? allocNeeded(scaleStep).first : 0;
+          return sizeof(size_t)
+               * (useAllocation? allocNeeded(scaleStep).first : 0);
         }
       
     private:
@@ -1385,11 +1389,11 @@ namespace test {
       allocNeeded (uint scaleStep)  const
         {
           auto cnt = roundsNeeded(scaleStep);
-          auto siz = max (scaleStep * sizeBase, 1u);
+          auto siz = max (scaleStep * sizeBase, 2u);
           auto rep = max (cnt/siz, 1u);
           // increase size to fit
           siz = cnt / rep;
-          return make_pair (siz,rep);
+          return make_pair (siz,cnt);
         }
       
       void
@@ -1407,15 +1411,17 @@ namespace test {
       void
       causeMemProcessLoad (uint scaleStep)
         {
-          auto [siz,round] = allocNeeded (scaleStep);
+          auto [siz,cnt] = allocNeeded (scaleStep);
           lib::UninitialisedDynBlock<size_t> memBlock;
           size_t* mem = externalBuff? externalBuff
                                     : memBlock.allocate (siz);
           Sink sink;
           *mem = sink+1;
-          for ( ; 0 < round; --round)
-            for (size_t i=0; i<siz-1; ++i)
+          for ( ; 0 < cnt; --cnt)
+            {
+              size_t i = cnt % (siz-1);
               mem[i+1] += mem[i];
+            }
           sink = mem[siz-1];
           sink = sink + 1;
         }
@@ -1423,7 +1429,7 @@ namespace test {
       double
       determineSpeed()
         {
-          uint step4gauge = 1;
+          uint step4gauge = 10;
           double micros   = benchmark (step4gauge);
           auto stepsDone  = roundsNeeded (step4gauge);
           return stepsDone / micros;

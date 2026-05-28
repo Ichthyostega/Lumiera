@@ -57,7 +57,7 @@ namespace test {
       virtual void run(Arg arg)  = 0;
       
       void seedRand();                                  ///< draw a new random seed from a common nucleus, and re-seed the default-Gen.
-      lib::Random makeRandGen();                        ///< build a dedicated new RandomGen, seeded from the default-Gen
+      static lib::Random makeRandGen();                 ///< build a dedicated new RandomGen, seeded from the default-Gen
       static string firstTok (Arg);                     ///< conveniently pick the first token from the argument line
       static uint   firstVal (Arg, uint =1);            ///< conveniently use some number given as argument, with optional default
     };

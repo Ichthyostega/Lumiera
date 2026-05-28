@@ -166,6 +166,7 @@ namespace mem {
       
       /****************************************************************//**
        * Core function: satisfy a request for allocation
+       * @param sizRequest minimum required buffer size to allocate, in bytes.
        * @return an \ref Alloc struct representing the desired allocation,
        *         can be empty to signal that the request can not be satisfied.
        * @warning whoever accepts a non-empty result from this call
