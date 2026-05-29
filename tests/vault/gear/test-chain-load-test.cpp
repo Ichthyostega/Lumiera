@@ -904,7 +904,7 @@ namespace test {
           CHECK (micros < 1100);
           micros = cpuLoad.invoke(5);
           CHECK (micros > 4600);
-          CHECK (micros > 5400);           // usually quite precise, less than 1% off
+          CHECK (micros < 5400);           // usually quite precise, less than 1% off
           micros = cpuLoad.invoke(10);
           CHECK (micros > 9500);
           micros = cpuLoad.invoke(100);

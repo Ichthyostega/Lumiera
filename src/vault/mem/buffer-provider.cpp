@@ -107,19 +107,15 @@ namespace mem   {
    *  various kinds of buffers (e.g. of differing size), which are
    *  distinguished by _the type embodied into_ the BuffDescr.
    * @return maximum number of simultaneously usable buffers of this type,
-   *         to be retrieved later through calls to #lockBuffer.
-   * @throw error::State when no buffer of this kind can be provided
+   *         guaranteed to be retrieved later through calls to #lockBuffer.
    * @note the returned count may differ from the requested count.
    */
   uint
   BufferProvider::announce (uint cnt, BuffDescr const& type)
   {
     size_t buffSiz = getBufferSize (type);
-    uint actually_possible = bufferStore_->prepareBuffers (type, cnt, buffSiz);
-    if (!actually_possible)
-      throw err::State ("unable to fulfil request for buffers"
-                       ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
-    return actually_possible;
+    uint immediately_possible = bufferStore_->prepareBuffers (type, cnt, buffSiz);
+    return immediately_possible;
   }
   
   

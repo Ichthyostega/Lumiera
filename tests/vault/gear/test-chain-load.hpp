@@ -1390,9 +1390,6 @@ namespace test {
         {
           auto cnt = roundsNeeded(scaleStep);
           auto siz = max (scaleStep * sizeBase, 2u);
-          auto rep = max (cnt/siz, 1u);
-          // increase size to fit
-          siz = cnt / rep;
           return make_pair (siz,cnt);
         }
       
@@ -1417,19 +1414,19 @@ namespace test {
                                     : memBlock.allocate (siz);
           Sink sink;
           *mem = sink+1;
-          for ( ; 0 < cnt; --cnt)
+          for (uint c=0; c < cnt; ++c)
             {
-              size_t i = cnt % (siz-1);
+              size_t i = c % (siz-1);
               mem[i+1] += mem[i];
             }
-          sink = mem[siz-1];
+          sink = mem[1 + (cnt-1) % (siz-1)];
           sink = sink + 1;
         }
       
       double
       determineSpeed()
         {
-          uint step4gauge = 10;
+          uint step4gauge = 1;
           double micros   = benchmark (step4gauge);
           auto stepsDone  = roundsNeeded (step4gauge);
           return stepsDone / micros;
