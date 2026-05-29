@@ -1206,29 +1206,41 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
-<div title="BuffHandle" modifier="Ichthyostega" created="201109021617" modified="201109232348" tags="Rendering spec draft">
+<div title="BuffHandle" modifier="Ichthyostega" created="201109021617" modified="202605300134" tags="Rendering spec draft" changecount="6">
 <pre>All rendering, transformations and output of media data requires using ''data buffers'' -- but the actual layout and handling of these buffers is closely related to the actual implementation of these operations. As we're relying heavily on external libraries and plug-ins for performing these operations, there is no hope getting away with just one single {{{Buffer}}} data type definition. Thus, we need to confine ourselves to a common denominator of basic operations regarding data buffers and abstract the access to these operations through a BufferProvider entity. Beyond these basic operations, mostly we just need to assure that //a buffer exists as an distinguishable element// -- which in practice boils down to pushing around {{{void*}}} variables. 
 
-Obviously, overloading a pointer with semantic meaning isn't exactly a brilliant idea -- and the usual answer is to embed this pointer into a smart handle, which also yields the nice side-effect of explaining this design to the reader. Thus a buffer handle
+Obviously, overloading a pointer with semantic meaning isn't exactly a brilliant idea -- and the usual answer is to embed this pointer into some wrapper or handle, which also yields the additional benefit of explaining this design to the reader. Thus a buffer handle
 * can only be obtained from a BufferProvider
 * can be used to identify a buffer
 * can be dereferenced
 * can be copied 
 
-!design quest: buffer type information
-To perform anything useful with such a buffer handle, the client code needs some additional information, which can be generalised into a //type information:// Either, the client needs to know the size and kind of data to expect in the buffer, maybe just assume to get a specific buffer with suitably dimensions, or the client needs to know which buffer provider to contact for any management operations on that buffer (handle). And, at some point there needs to be a mechanism to verify the validity of a handle. But all of this doesn't mean that it's necessary to encode or embedd this information directly into the handle -- it might also be stored into a registration table (which has the downside of creating contention), or it might just be attached implicitly to the invocation context.
+!A design challenge: buffer type information
+To perform anything useful with such a buffer handle, the client code needs some additional information, which can be generalised into a //type information:// Either, the client needs to know the size and kind of data to expect in the buffer, maybe just assume to get a specific buffer with suitably dimensions, or the client needs to know which buffer provider to contact for any management operations on that buffer (handle). And, at some point there needs to be a mechanism to verify the validity of a handle. But all of this doesn't mean that it's necessary to encode or embed this information directly into the handle -- it might also be stored into a registration table (which has the downside of creating contention), or it might just be attached directly or implicitly to the invocation context.
 
-Just linking this type information to the context is certainly the most elegant solution, but also by far the most difficult to achieve -- not to mention the implicit dependency on a very specific invocation situation. So for now (9/2011) it seems best to stick to the simple and explicit implementation, just keeping that structural optimisation in mind. And the link to this buffer type information should be made explicit within the definition anyway, even if we choose to employ another design tradeoff later.
-* thus the conclusion is: we introduce a ''descriptor object'', which will be stored within the handle
-* each BufferProvider exposes a ''descriptor prototype''; it can be specialised and used by to [[organise implementation details|BufferMetadata]]
+Within the realm of the Render Engine, various different activities are finally translated into some function that accesses a block of memory. However, this common scheme is only the point of access, since different kinds of processing will require different handling patterns -- and there is the danger that varying requirements will leak into the basic structure of the render processing. An ever increasing complexity in this central region of the application is seen as an essential threat -- and so ''abstraction'' is seen as the primary goal of this design.
+* whenever //some kind of buffer// needs to be used, a ''handle'' is passed
+* this handle is only marked with a hash-ID and a backlink to some //managing service//
+* which in turn must be structured in such a way that //differing back-ends can be built// -- to serve the different use cases
 
+The purpose of the Lumiera Render Engine is to coordinate the media processing -- but not to conduct the processing itself. Within the Render Node network, the different kinds of activities associated with „just a buffer“ can thus be translated into a ''buffer type''. For invoking and instructing render operations, this type remains opaque -- in accordance with the actual usage, this implied additional knowledge can even be separated into two different relations:
+* we introduce a ''descriptor'' that encodes the //properties// of the buffer, most notably its size, possibly also a handler function &amp;rarr; BufferMetadata
+* yet we also include a link to a ''backing service'' -- which can be configured to suit the purpose of the processing
+** the standard case of a BufferProvider is, well, to provide buffers
+** yet, at various places in the Render Node network, these buffers are linked to a //frame cache//
+** furthermore, at the source side, buffers must be filled by file-I/O operations
+** while at the output side, buffers participate in a precisely timed protocol for media output.
 
-!sanity checks
-there are only limited sanity checks, and they can be expected to be optimised away for production builds.
-Basically the client is responsible for sane buffer access.
-</pre>
+!!!performance considerations
+While the backing service remains opaque, it should be noted that accessing this service can be performance critical. Any »service« always carries some element of central management -- and accessing a central coordinator can be a dangerous task when operating within a highly concurrent environment. Careful consideration is necessary regarding the location of //state// embedded into such a service: as long as some call is just propagated through layers of API functions, the effects remain confined into the current call stack. At some point however, long-lived state must be accessed (otherwise the service would be devoid of any meaning).
+
+At this point, a separation is introduced into the //local coordinator// (which is implemented as a thread-local object) and the //central hub// of the service. As far as possible, the communication with the latter should be implemented as ''asynchronous messaging''
+
+!!!sanity checks
+There are only limited sanity checks, and they can be expected to be optimised away for production builds.
+The render processing is assumed to proceed along preconfigured processing pipelines, which are instantiated from a »blueprint« -- and the [[Builder]] is responsible to arrange this calculation prototype in such a way, that only valid data accesses are possible. The processing functions and the buffer descriptors are preconfigured to match up.</pre>
 </div>
-<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202602150137" tags="Rendering Player spec draft" changecount="3">
+<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202605300050" tags="Rendering Player spec draft" changecount="4">
 <pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
 
 Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. The actual implementation backing these operations is a matter of configuration, which will be setup as part of the ''build process'', when the Render Node network is created.
@@ -1243,7 +1255,7 @@ Mostly, the //client code,// i.e. code in need of using buffers, can access some
 
 !primary implementations
 ;memory pool
-:in all those situations, where we just need a working buffer for some time, a dedicated custom allocator will be used within the Render Engine. Access to this allocator from the actual worker threads is another, quite advanced topic, since we can not effort to contact a central manager component for each buffer access.
+:in all those situations, where we just need a working buffer for some time, a dedicated custom allocator will be used within the Render Engine. Access to this allocator from the actual worker threads is another, quite advanced topic, since we can not effort to contact a central manager component for each buffer access. Within each worker thread, a small //local allocation pool// is used, exchanging allocations with the central {{{EngineBufferManager}}} through lock-free queues.
 ;frame cache
 :whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
 :The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
@@ -1271,8 +1283,8 @@ Beyond that, it can be necessary to associate at least a state flag with //indiv
 __Note__: while the API to access this service is uniform, conceptually there is a difference between just using the (shared) type information and associating individual metadata, like the buffer state. Type-~IDs, once allocated, will never be discarded (within the lifetime of an Lumiera application instance -- while buffer associations, and  further individual metadata //will be discarded,// when releasing the corresponding buffer. According to the ''prototype pattern'', individual metadata is treated as a one-way-off specialisation.
 </pre>
 </div>
-<div title="BufferProvider" modifier="Ichthyostega" created="201107082330" modified="202602150142" tags="Rendering spec draft" changecount="12">
-<pre>Analysis of requirement shows that direct access to the buffers holding actual media data is not necessary -- at leas within the entire implementation of the Render Nodes Network. This finding is based on the assumption, that Lumiera does not perform any media processing on its own; all processing is delegated to external libraries. When taking this approach, buffers can be reduced to just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// So the code within the render engine just pushes around ''smart-ptr like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and are linked to a {{{BufferProvider}}} implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a strict call scheme, which ensures that all buffers are provided before invoking an operation and that buffers are released afterwards. Buffer management can thus be reduced to the following primitive operations...
+<div title="BufferProvider" modifier="Ichthyostega" created="201107082330" modified="202605300055" tags="Rendering spec draft" changecount="14">
+<pre>In-depth analysis of requirements indicates that direct access to the buffers holding actual media data is not necessary -- at least //within the implementation// of the Render Nodes Network. This finding is based on the assumption that Lumiera does not perform any media processing on its own; all processing is delegated to external libraries. When taking this approach, buffers can be reduced to just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// So access for the code within the render engine can be reduced to exchanging //light-weight handles//. These [[buffer handles|BuffHandle]] act as a front-end, being created by and are linked to a {{{BufferProvider}}} implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a strict call scheme, which ensures that all buffers are provided before invoking an operation and that buffers are released afterwards. Buffer management can thus be reduced to the following primitive operations...
 * declaring the ''type'', i.e. the size of a buffer, and optionally an object to construct into the buffer storage
 * (optionally) an ''announcement'' that a given amount of buffers will be required soon
 * the next step is to ensure the necessary buffers are available, by obtaining (''locking'') a buffer handle

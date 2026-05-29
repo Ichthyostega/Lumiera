@@ -88,6 +88,16 @@
  ** implementation; when used from the actual [Render Environment](\ref render-environment.hpp),
  ** this will be backed by a production-strenght and concurrency-safe implementation.
  ** 
+ ** \par Production-grade implementation
+ ** For use in the actual Render Engine, operation within a massively concurrent environment
+ ** must be taken into account. In spring 2026, a first prototype of such an implementation
+ ** setup was created, using a thread-local back-end for both the _Stage_ and _Store_ parts.
+ ** The actual allocations are managed by \ref EngineBufferManager and will be transported
+ ** to and from the \ref LocalMemPool in each thread through an asynchronous messaging queue.
+ ** The number of allocations to retain in those thread-local memory pools is coordinated
+ ** by a heuristic, based on an efficiency score maintained at each local entry.
+ ** @todo 2026 if this scheme is able to deliver adequate performance remains to be seen...
+ ** 
  ** \par Design critique
  ** In its current shape, BufferProvider is both a rather large front-end facade,
  ** while also containing some »code behind« to translate the API invocations into
@@ -110,6 +120,7 @@
  ** @todo 2026 we might consider adding alignment information to the associated TypeHandler.
  ** 
  ** @see buffer-provider-protocol-test.cpp
+ ** @see buffer-provider-load-test.cpp
  ** @see output-slot.hpp
  ** @see engine-ctx.hpp
  ** @see proc-node.hpp

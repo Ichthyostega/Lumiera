@@ -19,7 +19,7 @@
  ** are sent back and collected by the EngineBufferManager, which serves
  ** thus as an background collector and manager for the buffer memory.
  ** 
- ** @todo WIP-WIP 4/2026 The intention is to use a family of pools eventually,
+ ** @todo WIP 4/2026 The intention is to use a family of pools eventually,
  **       with some of the most relevant tile sizes. The EngineBufferManager
  **       would then actually retain ownership of all allocations and just
  **       _lease_ them to the LocalMemPool instances. Allocations would be
@@ -44,31 +44,18 @@
 #include "lib/error.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/allocator-handle.hpp"
-//#include "lib/hash-value.h"
 #include "vault/mem/engine-buffer-manager.hpp"
-//#include "vault/mem/type-handler.hpp"
-//#include "vault/mem/buffer-local-tag.hpp"
 #include "lib/nocopy.hpp"
-//#include "lib/util.hpp"
 
+#include <memory>
+#include <array>
 
 
 namespace vault{
 namespace mem {
-  
-//  using lib::HashVal;
-//  using util::unConst;
-  
-#include <memory>
-#include <array>
   namespace err = lumiera::error;
   
   using std::byte;
-  
-  
-  namespace { // config and internal helpers...
-    
-  }
   
   
   
@@ -134,11 +121,6 @@ namespace mem {
           AlloT::deallocate (allo, mem, cnt);
         }
     };
-  
-  
-  
-  
-  
   
   
   

@@ -143764,6 +143764,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303576693" ID="ID_399072135" MODIFIED="1770828085997" TEXT="die Implementierung ist nicht ausreichend auf Zustands&#xfc;berg&#xe4;nge zentriert">
 <icon BUILTIN="messagebox_warning"/>
 </node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780099972923" ID="ID_1019040694" MODIFIED="1780100051757" TEXT="eine neutralere Beurteilung wird erst viel sp&#xe4;ter m&#xf6;glich sein">
+<arrowlink COLOR="#675e8f" DESTINATION="ID_186086868" ENDARROW="Default" ENDINCLINATION="-794;-26;" ID="Arrow_ID_1805633100" STARTARROW="None" STARTINCLINATION="-758;36;"/>
+<icon BUILTIN="hourglass"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770828113207" ID="ID_1891198177" MODIFIED="1770828493362" TEXT="Konzeption der Fundemente">
 <linktarget COLOR="#f50221" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" SOURCE="ID_1154484414" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
@@ -143863,7 +143867,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#ede2a7" COLOR="#242380" CREATED="1778802024913" ID="ID_575451700" MODIFIED="1778802301707">
+<node BACKGROUND_COLOR="#ede2a7" COLOR="#242380" CREATED="1778802024913" ID="ID_575451700" MODIFIED="1780099939112">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -143876,7 +143880,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      ...wodurch die Worker-Threads diese Aufgabe probabilistisch mit erledigen: wannimmer ein Worker eine Allokation angefordert hat, diese aber noch nicht zugestellt wurde, macht er mit globalem Lock eine Runde der Allokations-Arbeit
+      ...wodurch die Worker-Threads diese Aufgabe probabilistisch mit erledigen: wann immer ein Worker eine Allokation angefordert hat, diese aber noch nicht zugestellt wurde, macht er mit globalem Lock eine Runde der Allokations-Arbeit
     </p>
   </body>
 </html></richcontent>
@@ -144066,7 +144070,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1776195351345" TEXT="Problem der Code-Struktur">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#370f69" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1780099646308" TEXT="Problem der Code-Struktur">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776195352772" ID="ID_865032756" MODIFIED="1776195928687">
 <richcontent TYPE="NODE"><html>
@@ -144137,7 +144141,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776196630096" ID="ID_1510075065" MODIFIED="1776196674318" TEXT="jedes Slice mu&#xdf; stets von Null-auf handlungsf&#xe4;hig sein"/>
 <node CREATED="1776196881798" ID="ID_1250147382" MODIFIED="1776196902243" TEXT="jedes Slice mu&#xdf; als eigenst&#xe4;ndige Instanz mit einer Zentrale kommunizieren k&#xf6;nnen"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1776196927192" ID="ID_1790936937" MODIFIED="1776196934764" TEXT="Analyse: ist das m&#xf6;glich?">
+<node BACKGROUND_COLOR="#bab6c8" COLOR="#564398" CREATED="1776196927192" FOLDED="true" ID="ID_1790936937" MODIFIED="1780099570236" TEXT="Analyse: ist das m&#xf6;glich?">
 <icon BUILTIN="help"/>
 <node CREATED="1776199263823" ID="ID_11659909" MODIFIED="1776199286039" TEXT="Store">
 <node CREATED="1776199287308" ID="ID_1968928582" MODIFIED="1776199292991" TEXT="erscheint einfach...."/>
@@ -146314,7 +146318,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776814507533" ID="ID_189865287" MODIFIED="1776814576271" TEXT="Ownership / Transaktionelle Sicherheit">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776814507533" FOLDED="true" ID="ID_189865287" MODIFIED="1780099368869" TEXT="Ownership / Transaktionelle Sicherheit">
+<icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#d9b592" COLOR="#5a0f69" CREATED="1776816810560" ID="ID_1402352728" MODIFIED="1779578509948" TEXT="das System mu&#xdf; auch korrekt arbeiten, wenn ein Worker-Thread terminiert">
 <arrowlink COLOR="#e01436" DESTINATION="ID_609664480" ENDARROW="None" ENDINCLINATION="-1139;0;" ID="Arrow_ID_649333039" STARTARROW="Default" STARTINCLINATION="1057;40;"/>
 <icon BUILTIN="yes"/>
@@ -146359,7 +146364,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" ID="ID_1964767554" MODIFIED="1778792259242" TEXT="Diskussion und Abw&#xe4;gung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" FOLDED="true" ID="ID_1964767554" MODIFIED="1778792259242" TEXT="Diskussion und Abw&#xe4;gung">
 <linktarget COLOR="#651733" DESTINATION="ID_1964767554" ENDARROW="Default" ENDINCLINATION="-51;-1908;" ID="Arrow_ID_1601176637" SOURCE="ID_471365898" STARTARROW="None" STARTINCLINATION="-1556;58;"/>
 <node CREATED="1776817881283" ID="ID_1958629364" MODIFIED="1776817923320" TEXT="tats&#xe4;chlich liegen die Modelle gar nicht so weit auseinander....">
 <richcontent TYPE="NOTE"><html>
@@ -146621,7 +146626,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776993954400" ID="ID_864271040" MODIFIED="1777317529563" TEXT="nochmal nachdenken!">
 <icon BUILTIN="yes"/>
-<node CREATED="1776993967934" ID="ID_1550862400" MODIFIED="1776993981224" TEXT="ich sehe jetzt drei m&#xf6;gliche L&#xf6;sungen">
+<node COLOR="#435e98" CREATED="1776993967934" FOLDED="true" ID="ID_1550862400" MODIFIED="1780099341634" TEXT="ich sehe jetzt drei m&#xf6;gliche L&#xf6;sungen">
 <node CREATED="1776993982660" ID="ID_1304666636" MODIFIED="1776994204836" TEXT="alles neu implementieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -146758,9 +146763,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776818369490" ID="ID_1521404080" MODIFIED="1777317328349" TEXT="Konsequenzen und Aufgaben">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1776818377985" ID="ID_892319469" MODIFIED="1776819082287" TEXT="BufferMetadata">
+<node COLOR="#338800" CREATED="1776818369490" ID="ID_1521404080" MODIFIED="1780099505261" TEXT="Konsequenzen und Aufgaben">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1776818377985" FOLDED="true" ID="ID_892319469" MODIFIED="1780099616520" TEXT="BufferMetadata">
 <icon BUILTIN="yes"/>
 <node CREATED="1777024713120" ID="ID_24309556" MODIFIED="1777024728172" TEXT="eigentlich keine Anpassung notwendig">
 <icon BUILTIN="idea"/>
@@ -146769,9 +146774,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="hourglass"/>
 <node CREATED="1777024765911" ID="ID_596148209" MODIFIED="1777024771000" TEXT="Eintr&#xe4;ge stehen lassen"/>
 <node CREATED="1777024772191" ID="ID_645148091" MODIFIED="1777024802721" TEXT="erneute Allokation mit gleicher Adresse aus FREE-State zulassen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ab020b" CREATED="1780099294357" ID="ID_822626107" MODIFIED="1780099329523" TEXT="Vorsicht: durch die replizierte Datenhaltung wird L&#xf6;schen von Eintr&#xe4;gen problematisch">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1777050407430" ID="ID_1385383632" MODIFIED="1778800333726" TEXT="LocalMemPool">
+</node>
+<node COLOR="#435e98" CREATED="1777050407430" FOLDED="true" ID="ID_1385383632" MODIFIED="1780099614885" TEXT="LocalMemPool">
 <linktarget COLOR="#357fd6" DESTINATION="ID_1385383632" ENDARROW="Default" ENDINCLINATION="-1147;-1723;" ID="Arrow_ID_997338547" SOURCE="ID_1140947088" STARTARROW="None" STARTINCLINATION="-513;25;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1777050440887" ID="ID_1006627416" MODIFIED="1777066692859" TEXT="Verhalten spezifizieren">
@@ -146811,7 +146819,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1777052048904" ID="ID_1403107789" MODIFIED="1777084853433" TEXT="die Eingangs-Queue wird komplett (transparent) integriert">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1777078419796" ID="ID_1966959598" MODIFIED="1777084265167" TEXT="verwende boost::lockfree::queue"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#470f69" CREATED="1777078428098" ID="ID_1939142827" MODIFIED="1777084838373" TEXT="ist das die richtige Wahl?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#470f69" CREATED="1777078428098" FOLDED="true" ID="ID_1939142827" MODIFIED="1780099279101" TEXT="ist das die richtige Wahl?">
 <icon BUILTIN="help"/>
 <node CREATED="1777078440070" ID="ID_885005752" MODIFIED="1777078470502" TEXT="verlangt &#xbb;trivial assignment&#xab; und Destructor"/>
 <node CREATED="1777078471365" ID="ID_769328039" MODIFIED="1777078487222" TEXT="hei&#xdf;t im Klartext: darf keine default-Initialiser haben">
@@ -146854,12 +146862,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="stop-sign"/>
 <node COLOR="#338800" CREATED="1777074497539" ID="ID_1587444173" MODIFIED="1777084232736" TEXT="sollte eine std::list verwenden (double-linked)">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1777074521660" ID="ID_1763982951" MODIFIED="1777074532534" TEXT="grunds&#xe4;tzlich: gehe von einer kleinen Anzahl an Eintr&#xe4;gen aus"/>
 </node>
-<node COLOR="#338800" CREATED="1777159795008" ID="ID_851031995" MODIFIED="1777317278947" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
+<node COLOR="#338800" CREATED="1777159795008" FOLDED="true" ID="ID_851031995" MODIFIED="1780099251457" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1777160636295" ID="ID_1174478817" MODIFIED="1777160642510" TEXT="gew&#xfc;nschter Effekt">
 <node CREATED="1777160710978" ID="ID_393248452" MODIFIED="1777160729106" TEXT="m&#xf6;glichst wenige und m&#xf6;glichst gut passende Buffer lokal halten"/>
@@ -146912,9 +146921,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777164514849" ID="ID_489761092" MODIFIED="1777164525297" TEXT="und gew&#xe4;hlt wird nach maximalem selectionScore"/>
 <node CREATED="1777164528024" ID="ID_1047876896" MODIFIED="1777164541639" TEXT="dieser gew&#xe4;hlte Buffer bekommt dann einen Score-Update"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779664650625" ID="ID_1141255727" MODIFIED="1779729238478" TEXT="Dazu einen 2.Layer &#x27f9; Heuristik zum Triggern">
+<node COLOR="#338800" CREATED="1779664650625" ID="ID_1141255727" MODIFIED="1780099246071" TEXT="Dazu einen 2.Layer &#x27f9; Heuristik zum Triggern">
 <linktarget COLOR="#4d5f6c" DESTINATION="ID_1141255727" ENDARROW="Default" ENDINCLINATION="-376;22;" ID="Arrow_ID_514664149" SOURCE="ID_1129342480" STARTARROW="None" STARTINCLINATION="-76;-210;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1779664722365" ID="ID_1461846299" MODIFIED="1779724531120" TEXT="im Kontext vom LocalBufferStore : erweiterte Heuristik skizziert">
 <arrowlink COLOR="#4f65bc" DESTINATION="ID_78533321" ENDARROW="Default" ENDINCLINATION="-548;697;" ID="Arrow_ID_1519732497" STARTARROW="Default" STARTINCLINATION="345;16;"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -146972,7 +146981,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777206798288" ID="ID_226587276" MODIFIED="1777230690484" TEXT="m&#xf6;gliche Ans&#xe4;tze">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1777206798288" FOLDED="true" ID="ID_226587276" MODIFIED="1780099240162" TEXT="m&#xf6;gliche Ans&#xe4;tze">
 <icon BUILTIN="edit"/>
 <icon BUILTIN="help"/>
 <node CREATED="1777206894812" ID="ID_1484542373" MODIFIED="1777206896343" TEXT="Pass-1 gute Matches"/>
@@ -147038,7 +147047,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#f2ddc1" DESTINATION="ID_1195705832" ENDARROW="Default" ENDINCLINATION="16;47;" ID="Arrow_ID_296050493" STARTARROW="None" STARTINCLINATION="85;12;"/>
 <icon BUILTIN="button_cancel"/>
 </node>
-<node COLOR="#338800" CREATED="1778969102656" ID="ID_1242239297" MODIFIED="1779762145111" TEXT="verify_heuristic">
+<node COLOR="#338800" CREATED="1778969102656" FOLDED="true" ID="ID_1242239297" MODIFIED="1780099212263" TEXT="verify_heuristic">
 <linktarget COLOR="#333263" DESTINATION="ID_1242239297" ENDARROW="Default" ENDINCLINATION="-1163;-399;" ID="Arrow_ID_1851213418" SOURCE="ID_453821075" STARTARROW="None" STARTINCLINATION="-413;30;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1778979230293" ID="ID_1129342480" MODIFIED="1779664866045" TEXT="meine Idee der Heuristik umsetzen">
@@ -147094,7 +147103,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#a4c8cf" COLOR="#22695a" CREATED="1776819109351" ID="ID_1998897998" MODIFIED="1779579198844" TEXT="EngineBufferManager">
+<node BACKGROUND_COLOR="#a4c8cf" COLOR="#22695a" CREATED="1776819109351" FOLDED="true" ID="ID_1998897998" MODIFIED="1779579198844" TEXT="EngineBufferManager">
 <linktarget COLOR="#2270cc" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="389;-2271;" ID="Arrow_ID_58701695" SOURCE="ID_853514765" STARTARROW="None" STARTINCLINATION="-1483;82;"/>
 <linktarget COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" SOURCE="ID_1791813360" STARTARROW="None" STARTINCLINATION="-438;24;"/>
 <icon BUILTIN="yes"/>
@@ -147681,7 +147690,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776819169143" ID="ID_1367745941" MODIFIED="1778694413443" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
+<node COLOR="#338800" CREATED="1776819169143" FOLDED="true" ID="ID_1367745941" MODIFIED="1778694413443" TEXT="Schnittstelle f&#xfc;r asynchrones Messaging bedenken">
 <arrowlink COLOR="#fefab1" DESTINATION="ID_1503539674" ENDARROW="Default" ENDINCLINATION="-233;10;" ID="Arrow_ID_451160831" STARTARROW="None" STARTINCLINATION="92;5;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1778593688734" HGAP="35" ID="ID_730263664" MODIFIED="1778593713957" TEXT="Kern: die Verarbeitungs-Funktionalit&#xe4;t" VSHIFT="-9">
@@ -147858,8 +147867,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777324494396" ID="ID_23718162" MODIFIED="1777324511253" TEXT="m&#xf6;glicherweise ist eine dynamische Steuerung notwendig + fall-Back auf den Heap-Allokator"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778507655159" ID="ID_662701381" MODIFIED="1778507661951" TEXT="Setup und Lebenszyklus">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778507655159" FOLDED="true" ID="ID_662701381" MODIFIED="1780099423027" TEXT="Setup und Lebenszyklus">
 <icon BUILTIN="hourglass"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778507710093" ID="ID_86258163" MODIFIED="1778507821841" TEXT="jemand mu&#xdf; die Instanz erzeugen">
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507726771" ID="ID_1303340175" MODIFIED="1778507800975" TEXT="Notwendig sofern irgend etwas konfitguriert und verdrahtet werden soll">
@@ -147943,7 +147953,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1778507847611" ID="ID_1394284825" MODIFIED="1779328009963" TEXT="Race wegen terminierendem Thread">
+<node BACKGROUND_COLOR="#e6cfb0" COLOR="#a50125" CREATED="1778507847611" ID="ID_1394284825" MODIFIED="1780099405364" TEXT="Race wegen terminierendem Thread">
 <arrowlink COLOR="#ff1b15" DESTINATION="ID_931645192" ENDARROW="Default" ENDINCLINATION="-937;191;" ID="Arrow_ID_801625969" STARTARROW="None" STARTINCLINATION="171;-11;"/>
 <icon BUILTIN="clanbomber"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1779327845116" HGAP="31" ID="ID_1344328276" MODIFIED="1779327990693" TEXT="konnte den Race nur mit Restrisiko abdichten..." VSHIFT="23">
@@ -148014,7 +148024,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1778595475430" ID="ID_992537338" MODIFIED="1778635094590" TEXT="Diagnose-Zugang schaffen: watch(manager)">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1778599970816" ID="ID_346337478" MODIFIED="1778635102267" TEXT="verify_syncRequest">
+<node COLOR="#338800" CREATED="1778599970816" FOLDED="true" ID="ID_346337478" MODIFIED="1780099427490" TEXT="verify_syncRequest">
 <node CREATED="1778599985224" ID="ID_1402142899" MODIFIED="1778599992550" TEXT="eine Allokation machen"/>
 <node CREATED="1778599993498" ID="ID_1315033221" MODIFIED="1778600012854" TEXT="Diagnose der belegten Bytes checken"/>
 <node CREATED="1778600013692" ID="ID_245317435" MODIFIED="1778600031040" TEXT="was in den Speicher schreiben">
@@ -148041,7 +148051,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778635075937" ID="ID_1005055901" MODIFIED="1778635080660" TEXT="alles wieder freigeben"/>
 <node CREATED="1778635083791" ID="ID_227876159" MODIFIED="1778635088455" TEXT="Diagnostik pr&#xfc;fen"/>
 </node>
-<node COLOR="#338800" CREATED="1778599975152" ID="ID_1790536650" MODIFIED="1778788462054" TEXT="verify_asyncRequest">
+<node COLOR="#338800" CREATED="1778599975152" FOLDED="true" ID="ID_1790536650" MODIFIED="1780099429043" TEXT="verify_asyncRequest">
 <node CREATED="1778641426736" ID="ID_460139955" MODIFIED="1778641441187" TEXT="sollte hier gleich etwas &#xbb;massives&#xab; machen"/>
 <node CREATED="1778641442270" ID="ID_1826595532" MODIFIED="1778641456169" TEXT="f&#xfc;hre eine typische usage-sequence in jedem Thread aus">
 <node CREATED="1778641462236" ID="ID_51963277" MODIFIED="1778641469666" TEXT="fordere eine Allokation"/>
@@ -148357,8 +148367,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779807848109" ID="ID_1050489006" MODIFIED="1780020337157" TEXT="Zusammenspiel aller Komponenten">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1779807848109" FOLDED="true" ID="ID_1050489006" MODIFIED="1780099622207" TEXT="Zusammenspiel aller Komponenten">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1779811658144" ID="ID_48160877" MODIFIED="1779811912507" TEXT="Beschlu&#xdf;: einen Lasttest machen...">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -148406,11 +148416,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1779839354828" ID="ID_518513597" MODIFIED="1780020400282" TEXT="Test-Worker">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1779839360162" ID="ID_328313949" MODIFIED="1779839367916" TEXT="mu&#xdf; sich in einem Thread betreiben lassen">
+<node CREATED="1779839360162" FOLDED="true" ID="ID_328313949" MODIFIED="1780099163836" TEXT="mu&#xdf; sich in einem Thread betreiben lassen">
 <node CREATED="1779839374568" ID="ID_583136761" MODIFIED="1779839386715" TEXT="idealerweise default-konstruiert"/>
 <node CREATED="1779839387637" ID="ID_15747866" MODIFIED="1779839400817" TEXT="mu&#xdf; eine eigene RandomGen-Instanz verwenden"/>
 </node>
-<node CREATED="1779839406426" ID="ID_938874821" MODIFIED="1779839430240" TEXT="sollte ein Repetitions-Muster ausf&#xfc;hren">
+<node CREATED="1779839406426" FOLDED="true" ID="ID_938874821" MODIFIED="1780099159045" TEXT="sollte ein Repetitions-Muster ausf&#xfc;hren">
 <node CREATED="1779839432034" ID="ID_36959428" MODIFIED="1779839458946" TEXT="sollte das Ausf&#xfc;hren mehrerer Jobs hintereinander in einem Worker emulieren"/>
 <node CREATED="1779839464064" ID="ID_1404791709" MODIFIED="1779839736804" TEXT="zwischen den Arbeits-Bl&#xf6;cken sollte eine konfigurierbare Schlaf-Pause liegen">
 <richcontent TYPE="NOTE"><html>
@@ -148423,7 +148433,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1779839738171" ID="ID_826633055" MODIFIED="1779839753017" TEXT="die Arbeits-Bl&#xf6;cke">
+<node CREATED="1779839738171" FOLDED="true" ID="ID_826633055" MODIFIED="1780099155740" TEXT="die Arbeits-Bl&#xf6;cke....">
 <node CREATED="1779839754672" ID="ID_653852637" MODIFIED="1779839775894" TEXT="m&#xfc;ssen mehrfach eine unregelm&#xe4;&#xdf;ige Speicherlast erzeugen"/>
 <node CREATED="1779839817085" ID="ID_963086421" MODIFIED="1779839826640" TEXT="das k&#xf6;nnte ein random-Walk sein">
 <node CREATED="1779839833907" ID="ID_299250287" MODIFIED="1779839844366" TEXT="f&#xfc;r die Zahl der Allokationen / Deallokationen"/>
@@ -148517,7 +148527,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1779839960562" ID="ID_1753843907" MODIFIED="1779840001751" TEXT="dieser Testworker sollte f&#xfc;r alle verschiedenen Test-Szenarien verwendbar sein">
+<node COLOR="#435e98" CREATED="1779839960562" FOLDED="true" ID="ID_1753843907" MODIFIED="1780099138316" TEXT="dieser Testworker sollte f&#xfc;r alle verschiedenen Test-Szenarien verwendbar sein">
+<icon BUILTIN="idea"/>
 <node CREATED="1779842388022" ID="ID_920297873" MODIFIED="1779842397154" TEXT="Varianten">
 <node CREATED="1779842408499" ID="ID_1477831827" MODIFIED="1779842424412" TEXT="mit/ohne Pausen zwischen den Arbeits-Bl&#xf6;cken"/>
 <node CREATED="1779842705255" ID="ID_580582504" MODIFIED="1779842719147" TEXT="den BufferProvider &#xfc;berhaupt nicht verwenden"/>
@@ -148532,7 +148543,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1779842883659" ID="ID_1608712431" MODIFIED="1779842890011" TEXT="Dimension der ComutationalLoad"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1779844131758" ID="ID_1023337515" MODIFIED="1779844139684" TEXT="Relevanz f&#xfc;r die Testziele?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#510f69" CREATED="1779844131758" ID="ID_1023337515" MODIFIED="1780099179426" TEXT="Relevanz f&#xfc;r die Testziele?">
 <icon BUILTIN="help"/>
 <node CREATED="1779844141250" ID="ID_1078777958" MODIFIED="1779844167168" TEXT="zur Erinnerung: es geht nur um Korrektheit &#x2014; nicht um quantitative Messung"/>
 <node CREATED="1779844170153" ID="ID_1952885501" MODIFIED="1779844355676" TEXT="ABER die Fallabdeckung ist relevant f&#xfc;r die Pr&#xfc;ftiefe">
@@ -148556,7 +148567,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1779896309364" ID="ID_585456943" MODIFIED="1780020269167" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1779896309364" FOLDED="true" ID="ID_585456943" MODIFIED="1780099121889" TEXT="Implementierung">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1779896314395" ID="ID_808195038" MODIFIED="1779896326428" TEXT="Policy-based Design mit einem Setup-Record">
 <node CREATED="1779896334691" ID="ID_830197460" MODIFIED="1779896350540" TEXT="vor allem damit die Parameter im Test selber klar benannt sind"/>
@@ -148842,14 +148853,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1780020283668" ID="ID_475125993" MODIFIED="1780020384893" TEXT="Testf&#xe4;lle">
+<node COLOR="#338800" CREATED="1780020283668" ID="ID_475125993" MODIFIED="1780099079659" TEXT="Testf&#xe4;lle">
 <linktarget COLOR="#4587d6" DESTINATION="ID_475125993" ENDARROW="Default" ENDINCLINATION="-174;35;" ID="Arrow_ID_1000436933" SOURCE="ID_200114754" STARTARROW="None" STARTINCLINATION="93;10;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1780020287468" ID="ID_1223809546" MODIFIED="1780020317672" TEXT="Test-Worker single-threaded beobachtet">
 <arrowlink COLOR="#2413bd" DESTINATION="ID_741681228" ENDARROW="Default" ENDINCLINATION="-43;77;" ID="Arrow_ID_1505722901" STARTARROW="None" STARTINCLINATION="166;11;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1780060686656" ID="ID_1839375531" MODIFIED="1780072490179" TEXT="massiv pressen mit vielen Threads">
+<node COLOR="#338800" CREATED="1780060686656" FOLDED="true" ID="ID_1839375531" MODIFIED="1780099456780" TEXT="massiv pressen mit vielen Threads">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1780060737800" ID="ID_1373121543" MODIFIED="1780060779999" TEXT="das gleiche Setup &#x2014; jetzt eine ScopedCollection der Threads">
 <icon BUILTIN="idea"/>
@@ -148860,15 +148871,16 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#adddc4" COLOR="#435e98" CREATED="1780060787082" ID="ID_1615088563" MODIFIED="1780060897085" TEXT="gut: terminiert sauber, ohne Speicherlecks">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780060842619" ID="ID_322729434" MODIFIED="1780072470533" TEXT="bedenklich: nur 33% Last und dauert ewig">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780060842619" FOLDED="true" ID="ID_322729434" MODIFIED="1780099109352" TEXT="bedenklich: nur 33% Last und dauert ewig">
 <icon BUILTIN="smiley-oh"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1780061882332" ID="ID_626403939" MODIFIED="1780061941839" TEXT="okok ... offensichtlicher Fehler"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780061893706" ID="ID_1709176021" MODIFIED="1780061944989" TEXT="die Trigger-Bedingung f&#xfc;r die Kalibrierung war falsch">
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1780061907953" ID="ID_908839538" MODIFIED="1780061930093" TEXT="d.h. wir haben fast die ganze Zeit kalibriert und praktisch nicht concurent gearbeitet"/>
 </node>
-<node COLOR="#435e98" CREATED="1780061953369" ID="ID_773467214" MODIFIED="1780072470532" TEXT="Assertion-Fail: mehrere Threads senden einen size-Request 0">
+<node COLOR="#435e98" CREATED="1780061953369" FOLDED="true" ID="ID_773467214" MODIFIED="1780099094311" TEXT="Assertion-Fail: mehrere Threads senden einen size-Request 0">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1780062937804" ID="ID_529419900" MODIFIED="1780062966300" TEXT="das mu&#xdf; vom announce() kommen"/>
 <node CREATED="1780063011162" ID="ID_1132794490" MODIFIED="1780063025636" TEXT="es sind sofort die ersten Announcements von jedem Thread"/>
@@ -148908,8 +148920,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       etwas anderes <i>ist an der Stelle auch relativ unwahrscheinlich:</i>&#160;die BASE_BUFFSIZ steckt ja eben grade statisch in der jeweilgen Thread-Klasse. Das w&#252;rde nur abweichen, wenn man im gleichen Testfall mit mehreren verschiedenen Thread-Klassen operiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#93064b" CREATED="1780065580520" ID="ID_1314933188" MODIFIED="1780066858279" TEXT="Ha! da ist wohl doch noch ein weiterer Bug versteckt...">
 <icon BUILTIN="smiley-oh"/>
 </node>
@@ -148921,8 +148932,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       lookup liefert <b>nicht</b>&#160;Key::INVALID
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1780064640040" ID="ID_1881464215" MODIFIED="1780064655446" TEXT="nur die Kalibrierung kann man so eigentlich nicht feststellen">
@@ -148941,7 +148951,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1780067514967" ID="ID_504824325" MODIFIED="1780067537524" TEXT="Problem in der Test-Logik (vielleicht noch mehr?)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780067514967" ID="ID_504824325" MODIFIED="1780099090974" TEXT="Problem in der Test-Logik (vielleicht noch mehr?)">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1780067539952" ID="ID_1338317341" MODIFIED="1780067565148" TEXT="die lokale Metadata-Registry vom Main-Thread kennt die Buffer-Typen noch"/>
 <node CREATED="1780067600867" ID="ID_57805001" MODIFIED="1780067628179" TEXT="deshalb greift die (&#xfc;berarbeitete) Trigger-Bedingung nicht beim Thread-Start"/>
@@ -149018,8 +149028,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780072494794" ID="ID_1052771449" MODIFIED="1780072502590" TEXT="gezielte saubere Vollast">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1780072494794" FOLDED="true" ID="ID_1052771449" MODIFIED="1780099459208" TEXT="gezielte saubere Vollast">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#b00f54" CREATED="1780072509452" ID="ID_1373816448" MODIFIED="1780072598144" TEXT="sollte dann endg&#xfc;ltig nur mit 4 Threads laufen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -149031,9 +149041,85 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1780072605183" ID="ID_95023696" MODIFIED="1780072611554" TEXT="spezielle Konfiguration">
+<node COLOR="#435e98" CREATED="1780072605183" ID="ID_95023696" MODIFIED="1780098111540" TEXT="spezielle Konfiguration">
 <node CREATED="1780072613110" ID="ID_1162990013" MODIFIED="1780072682240" TEXT="kein pre-delay &#x2014; jeder Thread soll &#xbb;hei&#xdf;&#xab; laufen"/>
 <node CREATED="1780072646666" ID="ID_111344849" MODIFIED="1780072662739" TEXT="scaleStep auf 1 begrenzen &#x27f9; vorhersagbare Laufzeit"/>
+<node CREATED="1780097442905" ID="ID_425445730" MODIFIED="1780097455784" TEXT="nur minimale Variation der Allokationen/Deallokationen"/>
+<node CREATED="1780097463831" ID="ID_376482016" MODIFIED="1780097479017" TEXT="mehr Schritte im Job: 100 statt 10">
+<node CREATED="1780098015244" ID="ID_135741454" MODIFIED="1780098064547" TEXT="die Annoucements sorgen deutlich f&#xfc;r zus&#xe4;tzliche Last">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wird ersichtlich, wenn man die Verteilung auf Jobs bei gleicher Gesamtzahl variiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1780098086490" ID="ID_906751866" MODIFIED="1780098114790" TEXT="Laufzeit der Worker-Threads messen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#434798" CREATED="1780098116221" ID="ID_484624436" MODIFIED="1780098820124" TEXT="Beobachtungen">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a906a6" CREATED="1780098127304" ID="ID_507636841" MODIFIED="1780098147726" TEXT="nich so dolle">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node BACKGROUND_COLOR="#e3b79c" COLOR="#690f14" CREATED="1780098198840" ID="ID_755929474" MODIFIED="1780098230152" TEXT="in der Standard-Konfiguration kommt Faktor 2.5 raus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1780098249148" ID="ID_711448005" MODIFIED="1780098270168" TEXT="wenn die Threads insgesamt l&#xe4;nger laufen, wird&apos;s deutlich besser">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1780098307618" ID="ID_1949307861" MODIFIED="1780098530986" TEXT="nicht alle Cores verwenden &#x27f9; Zeit sinkt von 1.6sec auf 1.3sec">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was darauf hindeutet, da&#223; <i>sonstige Aktivit&#228;ten</i>&#160;hier erheblich st&#246;rend wirken. So z.B. das regelm&#228;&#223;ige Polling vom Main-Thread (was im Debug-Mode auch relativ aufwendig ist, weil ich iterExplorer verwende).
+    </p>
+    <p>
+      Zudem laufen mehrere Monster auf meinem Rechner, die allesamt einen Threadpool haben und auch normalerweise keine Ruhe geben (Firefox, Thunderbird, Eclipse, GTK/XFCE)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780098534684" ID="ID_1114713478" MODIFIED="1780099063889">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist aber <i>&#252;berhaupt nicht klar</i>&#160;wo der Overhead herkommt
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#6d5a82" DESTINATION="ID_1114713478" ENDARROW="Default" ENDINCLINATION="-16;179;" ID="Arrow_ID_1991911025" SOURCE="ID_1355000856" STARTARROW="None" STARTINCLINATION="258;10;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1780098564251" ID="ID_1883425778" MODIFIED="1780098584352" TEXT="ich kann nur die erwartete/kalibrierte Verz&#xf6;gerung als Bezugspunkt nehmen"/>
+<node CREATED="1780098585333" ID="ID_1448082727" MODIFIED="1780098606341" TEXT="es ist ziemlich wahrscheinlich, da&#xdf; die ComputationalLoad durch St&#xf6;rungen langsamer wird"/>
+<node CREATED="1780098856857" ID="ID_159621226" MODIFIED="1780098961283" TEXT="zudem l&#xe4;&#xdf;t sich &#xfc;berhaupt nicht absch&#xe4;tzen, wie viel Kommunikation/Allokation es gab">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...bedingt durch die Randomisierung, kann es n&#228;mlich durchaus sein, da&#223; eine gewisse Teil-Kapazit&#228;t permanent hin- und herschwappt; diese w&#252;rde aktuell dann jeweils de-alloziert und kurz darauf wieder neu alloziert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780098609569" ID="ID_1849632026" MODIFIED="1780098789757" TEXT="man m&#xfc;&#xdf;te also eine detailierte Performance-Analyse machen (&#x27f9; IncidenceCount verwenden)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...leider w&#252;rde das eine spezielle Instrumentierung des Test-Subjects voraussetzen, und vermutlich auch eine genauere Steuerung des Verhaltens (die Randomisierung macht die Verh&#228;ltnisse schwer absch&#228;tzbar). Erst damit lie&#223;e sich entscheiden, <i>wie viel zus&#228;tzliche Zeit denn tats&#228;chlich verbraucht wird.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -149044,10 +149130,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1779806981481" ID="ID_339298449" MODIFIED="1779807068096" TEXT="Integration und Tests">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1779811803748" ID="ID_1356647567" MODIFIED="1779811814407" TEXT="Tests">
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779811854629" ID="ID_200114754" MODIFIED="1780020384893" TEXT="BufferProviderLoad_test">
+<node COLOR="#1f5672" CREATED="1779811854629" ID="ID_200114754" MODIFIED="1780099481123" TEXT="BufferProviderLoad_test">
 <arrowlink COLOR="#4587d6" DESTINATION="ID_475125993" ENDARROW="Default" ENDINCLINATION="-174;35;" ID="Arrow_ID_1000436933" STARTARROW="None" STARTINCLINATION="93;10;"/>
 <linktarget COLOR="#6b414a" DESTINATION="ID_200114754" ENDARROW="Default" ENDINCLINATION="74;-150;" ID="Arrow_ID_961812501" SOURCE="ID_48160877" STARTARROW="Default" STARTINCLINATION="-330;-11;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1780098989758" HGAP="47" ID="ID_767803243" MODIFIED="1780099004035" TEXT="Zwischenergebnisse..." VSHIFT="11">
+<icon BUILTIN="info"/>
+<node CREATED="1780099005216" ID="ID_1294571105" MODIFIED="1780099020869" TEXT="das Gesamtsystem verh&#xe4;lt sich korrekt, auch unter Druck"/>
+<node CREATED="1780099035213" ID="ID_1355000856" MODIFIED="1780099878662" TEXT="erheblicher Koordinations-Oberhead ist zu bef&#xfc;rchten (aber nicht belegt)">
+<arrowlink COLOR="#6d5a82" DESTINATION="ID_1114713478" ENDARROW="Default" ENDINCLINATION="-16;179;" ID="Arrow_ID_1991911025" STARTARROW="None" STARTINCLINATION="258;10;"/>
+<linktarget COLOR="#8c8696" DESTINATION="ID_1355000856" ENDARROW="Default" ENDINCLINATION="8;124;" ID="Arrow_ID_1951616615" SOURCE="ID_1283287015" STARTARROW="None" STARTINCLINATION="167;5;"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -149067,7 +149161,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="forward"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776820446435" ID="ID_186086868" MODIFIED="1776820472657" TEXT="Ich wei&#xdf;: eine empirsche &#xdc;berpr&#xfc;fung ist schwer &#x2014; und liegt JAHRE in der Zukunft">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776820446435" ID="ID_186086868" MODIFIED="1780100051757" TEXT="Ich wei&#xdf;: eine empirsche &#xdc;berpr&#xfc;fung ist schwer &#x2014; und liegt JAHRE in der Zukunft">
+<linktarget COLOR="#675e8f" DESTINATION="ID_186086868" ENDARROW="Default" ENDINCLINATION="-794;-26;" ID="Arrow_ID_1805633100" SOURCE="ID_1019040694" STARTARROW="None" STARTINCLINATION="-758;36;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1776820478727" ID="ID_1441494881" MODIFIED="1776820524756">
@@ -149084,6 +149179,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776820777578" ID="ID_451964463" MODIFIED="1776820806456" TEXT="deshalb mu&#xdf; ich den m&#xfc;hsamen Weg einer Durchdringung und schrittweisen Ausreifung gehen"/>
 <node CREATED="1776820816987" ID="ID_1627919962" MODIFIED="1776820877607" TEXT="was mich dazu zwingt, mir architektonisch den rechten Spielraum f&#xfc;r die Zukunft zu schaffen">
 <icon BUILTIN="forward"/>
+</node>
+<node CREATED="1780099676574" ID="ID_1283287015" MODIFIED="1780099878661" TEXT="Risiko: das Gesamtsystem wird sofort ziemlich komplex &#x2014; und bringt nur m&#xe4;&#xdf;ige Performance">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dabei mu&#223; aber <b>nochmal betont</b>&#160;werden, da&#223; es keinerlei Bezugspunkt gibt, denn ich habe nicht &#187;naiv&#171; angefangen; es k&#246;nnte n&#228;mlich durchaus sein, da&#223; sich eine naive Implementierung noch viel schlechter schl&#228;gt, und dann schwer zu verbessern ist &#8212; es k&#246;nnte aber auch sein, da&#223; dieses System irrsinnig overengineered ist, und letztlich nicht gut auf Performance getuned werden kann
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#8c8696" DESTINATION="ID_1355000856" ENDARROW="Default" ENDINCLINATION="8;124;" ID="Arrow_ID_1951616615" STARTARROW="None" STARTINCLINATION="167;5;"/>
 </node>
 </node>
 </node>

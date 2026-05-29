@@ -71,6 +71,7 @@ namespace test  {
    * for diagnostics and does not actually _manage_ buffers; rather each buffer
    * is allocated on the heap and never released, so that any allocation and
    * all buffer contents can be verified after the fact.
+   * @see BufferProviderLoad_test for a production-grade setup.
    */
   class BufferProviderProtocol_test : public Test
     {

@@ -18,6 +18,7 @@
 
 #include "test/run.hpp"
 #include "test/test-helper.hpp"
+#include "test/microbenchmark.hpp"
 #include "vault/mem/buffer-provider-setup.hpp"
 #include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
@@ -30,22 +31,16 @@
 #include "lib/sync-barrier.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/thread.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/random.hpp"
-#include "test/diagnostic-output.hpp"////////////TODO
-
-//#include <algorithm>
-//#include <string>
-#include <array>
 
 using lib::Random;
 using lib::Depend;
 using lib::DependInject;
 using lib::explore;
-//using lib::Literal;
 using lib::Thread;
 using lib::SyncBarrier;
 using lib::ScopedCollection;
+using test::benchmarkTime;
 using vault::gear::test::ComputationalLoad;
 using std::this_thread::yield;
 using std::this_thread::sleep_for;
@@ -59,7 +54,8 @@ namespace test  {
   
   namespace { // ========== Test Setup ==========
     
-    const size_t MANY_THREADS = 100;      ///< press concurrently
+    const size_t MANY_THREADS  = 100;     ///< press concurrently
+    const size_t FULL_LOAD_CORES = 4;     ///< workers to use for a _full load run_
     const size_t MAX_SCALE = 5;           ///< maximum scale step for randomised buffer types
     
     
@@ -158,7 +154,6 @@ namespace test  {
       workActivity()
         {
           SyncBarrier::sync();
-cout<<"Start:"<<std::this_thread::get_id()<<endl;
           
           for (uint i=0; i<CONF::NUM_JOBS; ++i)
             {
@@ -171,13 +166,15 @@ cout<<"Start:"<<std::this_thread::get_id()<<endl;
       
       /**
        * Simulated calculation job.
-       * A random-walk like memory load pattern is generated
-       * by claiming and releasing a random number of buffers, picking one
+       * A random-walk-like memory load pattern is generated
+       * by claiming and releasing a random number of buffers, and picking one
        * of the preconfigured »buffer types« (size) randomly. The corresponding
        * BuffHandle(s) are passed through a queue; the head element from that queue
        * is used to generate a combined CPU and memory load in each step.
        * Deliberately, the pre-announced capacity does not exactly fit the generated
        * load, so that constant rebalancing between local and global pool is provoked.
+       * @remark this test attempts to be _nasty_ — because the goal is to
+       *         demonstrate correct behaviour under pressure.
        */
       void
       jobActivity()
@@ -211,9 +208,9 @@ cout<<"Start:"<<std::this_thread::get_id()<<endl;
                                 };
           
           
-          //---Announce-guess-of-average-required-capacity-----------
+          //---Announce-some-random-capacity-beforehand------
           for (BuffDescr& buffType : Ctx::buffType_)
-            buffType.announce (util::ceilDiv (CONF::STEP_SPREAD, 2u));
+            buffType.announce (rand_.i (CONF::STEP_SPREAD));
           
           //---Process-sequence-of-work-steps-----
           for (uint i=0; i<CONF::JOB_STEPS; ++i)
@@ -255,7 +252,6 @@ cout<<"Start:"<<std::this_thread::get_id()<<endl;
           if (Ctx::buffType_.empty()
               or not isKnown (Ctx::buffType_[0]))
             {
-cout<<"init-types"<<endl;
               Ctx::buffType_.clear();
               Ctx::buffType_.populate_by(
                   BuffTypes::invoke(
@@ -268,7 +264,6 @@ cout<<"init-types"<<endl;
             }
           if (Ctx::calibrated_ != load_.sizeBase)
             {
-cout<<"calibrate"<<endl;
               load_.calibrate();
               Ctx::calibrated_ = load_.sizeBase;
             }
@@ -294,7 +289,7 @@ cout<<"calibrate"<<endl;
   
   
   
-    
+  
   /**************************************************************************//**
    * @test Integration test of the Render Engine buffer management subsystem.
    *     - this test uses a setup and wiring of components similar to the
@@ -335,21 +330,16 @@ cout<<"calibrate"<<endl;
           while (worker)
             sleep_for (200us);
           
-SHOW_EXPR("hurgha")
-SHOW_EXPR(bool(mockEngine.globalPool))
-SHOW_EXPR(bool(mockEngine.metaHub))
           // the central services were indeed requested / created
           CHECK (mockEngine.globalPool);
-          CHECK (mockEngine.globalPool);
+          CHECK (mockEngine.metaHub);
           
-SHOW_EXPR(mockEngine.metaHub->cntEntries())
           // 5 distinct buffer types registered
           CHECK (5 == mockEngine.metaHub->cntEntries());
 
           sleep_for (500us); // additional delay for the local pool's destructor
                             //  (which is invoked after the thread has terminated)
 
-SHOW_EXPR(watch(*mockEngine.globalPool).numAllocs())
           // there must be some allocations, still sitting in the return queue
           CHECK (0 < watch(*mockEngine.globalPool).numAllocs());
           
@@ -357,14 +347,13 @@ SHOW_EXPR(watch(*mockEngine.globalPool).numAllocs())
           // sent back by the local pool's destructor...
           mockEngine.globalPool->processPendingRequests();
           // now there should be no memory leaks.......
-SHOW_EXPR(watch(*mockEngine.globalPool).bytesLeased());
           CHECK (0 == watch(*mockEngine.globalPool).bytesLeased());
         }
       
       
       
-      /** @test 
-       * 
+      /** @test press the same setup using a
+       *        massive overload of concurrent workers
        */
       void
       verify_massiveOverload()
@@ -379,24 +368,51 @@ SHOW_EXPR(watch(*mockEngine.globalPool).bytesLeased());
           while (explore(threads).has_any())
             sleep_for (5ms);
           
-SHOW_EXPR("harumpfha")
-SHOW_EXPR(mockEngine.metaHub->cntEntries())
-SHOW_EXPR(watch(*mockEngine.globalPool).numAllocs())
+          CHECK (mockEngine.globalPool);
+          // again 5 distinct buffer types registered
+          CHECK (5 == mockEngine.metaHub->cntEntries());
+          CHECK (0 < watch(*mockEngine.globalPool).numAllocs());
           
           sleep_for (500us);
           mockEngine.globalPool->processPendingRequests();
-SHOW_EXPR(watch(*mockEngine.globalPool).bytesLeased());
-          
+          CHECK (0 == watch(*mockEngine.globalPool).bytesLeased());
         }
       
       
       
-      /** @test 
-       * 
+          /** worker configuration for seamless full load */
+          struct FullLoadSetup : WorkSetup
+            {
+              static constexpr uint JOB_STEPS = 100;   // number of processing steps in a single job
+              static constexpr uint STEP_SPREAD = 2;   // reduced irregularity of allocations
+              static constexpr uint LOAD_SPREAD = 0;   // effectively disable variation of buffer types
+              static constexpr uint MAX_DELAY   = 0;   // also disable random sleep between jobs
+            };
+      
+      /** @test attempt to create a coordinated _full load_
+       *      - configure the workers to compute without pause
+       *      - use more repetitions in a single job
+       *      - configured load time should be 1000ms per thread
+       *      - use small number of workers; each gets its own core
+       *      - capture the overall run time of the workers
+       *      - coordination overhead should not be excessive
        */
       void
       verify_controlledLoad()
         {
+          Ctx mockEngine;
+          using Threads = ScopedCollection<DummyWorkerThread<FullLoadSetup>>;
+          
+          double time_us = benchmarkTime ([]{ // run a set of threads with full-load config...
+                                              Threads threads{FULL_LOAD_CORES, Threads::fill()};
+                                              while (explore(threads).has_any())
+                                                sleep_for (1ms);
+                                            });
+          
+          CHECK (time_us < 1.6e6);
+          sleep_for (500us);
+          mockEngine.globalPool->processPendingRequests();
+          CHECK (0 == watch(*mockEngine.globalPool).bytesLeased());
         }
     };
   

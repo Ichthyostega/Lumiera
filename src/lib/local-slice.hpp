@@ -27,10 +27,12 @@
  ** 
  ** @warning as of 2022 the implementation of `thread_local` in the GNU runtime
  **          was observed to incur seemingly unnecessary overhead, which however
- **          is relevant only in a high-performance environment.
- ** @todo WIP-WIP 4/2026 prototyping an Engine Buffer manager   /////////////////////////////////////////////TICKET #1425
+ **          is relevant only in a high-performance environment. However, some
+ **          [casual benchmarks](\ref LocalSlice_test::investigatePerformance)
+ **          indicated that the problem does not seem to be _that serious_...
  ** @see LocalSlice_test
- ** @see ////TODO usage example
+ ** @see LocalBufferStage (usage example)
+ ** @see buffer-provider-load-test.cpp
  ** 
  */
 

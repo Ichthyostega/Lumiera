@@ -17,10 +17,18 @@
  ** a new heap block for any buffer, without deallocating memory ever. This allows to
  ** attach additional tracking status flags for each allocated block and validate
  ** allocator behaviour after the fact.
+ ** @remark for use in the actual Render Engine, a much more elaborate setup is necessary,
+ **   to avoid contention due to the centralised nature of memory allocation. In spring 2026,
+ **   an initial prototype was created, comprising
+ **   - LocalBufferStage
+ **   - LocalBufferStore
+ **   - EngineBufferManager
+ **   - EngineMetadata
  ** 
  ** @see DiagnosticOutputSlot
  ** @see DiagnosticBufferProvider
  ** @see buffer-provider-protocol-test.cpp
+ ** @see buffer-provider-load-test.cpp
  ** @see render-environment.cpp
  */
 
