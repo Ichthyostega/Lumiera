@@ -213,7 +213,7 @@ namespace lib {
       
       /* == some pre-defined Builders == */
       
-      /** Builder: ills the given storage slot with a I-instance
+      /** Builder: fills the given storage slot with a I-instance
        *  constructed from copies of the given arguments.
        * @return builder-λ to pass into ScopeCollection's ctor. */
       template<typename...ARGS>

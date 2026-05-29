@@ -26,7 +26,7 @@
 #include "vault/gear/test-chain-load.hpp"
 #include "lib/scoped-collection.hpp"
 #include "lib/depend-inject.hpp"
-//#include "lib/iter-explorer.hpp"
+#include "lib/iter-explorer.hpp"
 #include "lib/sync-barrier.hpp"
 #include "lib/iter-stack.hpp"
 #include "lib/thread.hpp"
@@ -38,10 +38,10 @@
 //#include <string>
 #include <array>
 
-//using lib::explore;
+using lib::Random;
 using lib::Depend;
 using lib::DependInject;
-using lib::Random;
+using lib::explore;
 //using lib::Literal;
 using lib::Thread;
 using lib::SyncBarrier;
@@ -59,7 +59,7 @@ namespace test  {
   
   namespace { // ========== Test Setup ==========
     
-    const size_t NUM_THREADS = 100;       ///< press concurrently
+    const size_t MANY_THREADS = 100;      ///< press concurrently
     const size_t MAX_SCALE = 5;           ///< maximum scale step for randomised buffer types
     
     
@@ -107,6 +107,7 @@ namespace test  {
       {
         static Depend<MultithreadBufferSetup> bufferProvider;
         static BuffTypes buffType_;
+        static size_t calibrated_;
         
         // install mock instances for the relevant services
         DependInject<EngineBufferMetadata>::Local<EngineBufferMetadata> metaHub;
@@ -116,6 +117,7 @@ namespace test  {
     // static storage for the mock-engine entrance point
     Depend<MultithreadBufferSetup> Ctx::bufferProvider;
     BuffTypes Ctx::buffType_{MAX_SCALE};
+    size_t Ctx::calibrated_{0};
   }
   
   
@@ -156,6 +158,7 @@ namespace test  {
       workActivity()
         {
           SyncBarrier::sync();
+cout<<"Start:"<<std::this_thread::get_id()<<endl;
           
           for (uint i=0; i<CONF::NUM_JOBS; ++i)
             {
@@ -241,19 +244,33 @@ namespace test  {
       void
       registerBufferTypes()
         {
+          auto isKnown = [](HashVal typeID)
+                            { // deliberately check the central metadata store
+                              // without accessing the local store of the main thread,
+                              // to avoid carrying stale information beyond test case boundaries
+                              // (the thread constructor runs in the main thread)
+                              Depend<EngineBufferMetadata> metaHub;
+                              return metaHub().isKnown (typeID);
+                            };
           if (Ctx::buffType_.empty()
-              or Ctx::buffType_[0].buffSize() != CONF::BASE_BUFFSIZ )
+              or not isKnown (Ctx::buffType_[0]))
             {
-              load_.calibrate();
+cout<<"init-types"<<endl;
               Ctx::buffType_.clear();
               Ctx::buffType_.populate_by(
-                BuffTypes::invoke(
-                  [&, i=0]() mutable
-                    { // preconfigure »buffer types« with suitable size
-                      // as required by the Mem-method of ComputationalLoad
-                      size_t siz = load_.requiredBuffSiz (++i);
-                      return Ctx::bufferProvider().getDescriptorFor (siz);
-                    }));
+                  BuffTypes::invoke(
+                    [&, i=0]() mutable
+                      { // preconfigure »buffer types« with suitable size
+                        // as required by the Mem-method of ComputationalLoad
+                        size_t siz = load_.requiredBuffSiz (++i);
+                        return Ctx::bufferProvider().getDescriptorFor (siz);
+                      }));
+            }
+          if (Ctx::calibrated_ != load_.sizeBase)
+            {
+cout<<"calibrate"<<endl;
+              load_.calibrate();
+              Ctx::calibrated_ = load_.sizeBase;
             }
         }
       
@@ -352,6 +369,24 @@ SHOW_EXPR(watch(*mockEngine.globalPool).bytesLeased());
       void
       verify_massiveOverload()
         {
+          Ctx mockEngine;
+          
+          // Start a collection of workers....
+          using Threads = ScopedCollection<DummyWorkerThread<>>;
+          Threads threads{MANY_THREADS, Threads::fill()};
+          
+          // wait for all threads to finish...
+          while (explore(threads).has_any())
+            sleep_for (5ms);
+          
+SHOW_EXPR("harumpfha")
+SHOW_EXPR(mockEngine.metaHub->cntEntries())
+SHOW_EXPR(watch(*mockEngine.globalPool).numAllocs())
+          
+          sleep_for (500us);
+          mockEngine.globalPool->processPendingRequests();
+SHOW_EXPR(watch(*mockEngine.globalPool).bytesLeased());
+          
         }
       
       

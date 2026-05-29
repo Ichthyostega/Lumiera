@@ -148740,8 +148740,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       F&#252;r das korrekte Test-Setup ist es <i>lediglich erforderlich, da&#223; effektiv</i>&#160;die instrumentierung stattfindet <i>bevor</i>&#160;der jeweilige Test-Worker gestartet wird.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1779988096766" ID="ID_505434940" MODIFIED="1779988102193" TEXT="Anordnung im Test-Code">
@@ -148849,6 +148848,193 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1780020287468" ID="ID_1223809546" MODIFIED="1780020317672" TEXT="Test-Worker single-threaded beobachtet">
 <arrowlink COLOR="#2413bd" DESTINATION="ID_741681228" ENDARROW="Default" ENDINCLINATION="-43;77;" ID="Arrow_ID_1505722901" STARTARROW="None" STARTINCLINATION="166;11;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1780060686656" ID="ID_1839375531" MODIFIED="1780072490179" TEXT="massiv pressen mit vielen Threads">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1780060737800" ID="ID_1373121543" MODIFIED="1780060779999" TEXT="das gleiche Setup &#x2014; jetzt eine ScopedCollection der Threads">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1780060782379" ID="ID_1007496388" MODIFIED="1780072476728" TEXT="Beobachtungen">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#adddc4" COLOR="#435e98" CREATED="1780060787082" ID="ID_1615088563" MODIFIED="1780060897085" TEXT="gut: terminiert sauber, ohne Speicherlecks">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780060842619" ID="ID_322729434" MODIFIED="1780072470533" TEXT="bedenklich: nur 33% Last und dauert ewig">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1780061882332" ID="ID_626403939" MODIFIED="1780061941839" TEXT="okok ... offensichtlicher Fehler"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780061893706" ID="ID_1709176021" MODIFIED="1780061944989" TEXT="die Trigger-Bedingung f&#xfc;r die Kalibrierung war falsch">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1780061907953" ID="ID_908839538" MODIFIED="1780061930093" TEXT="d.h. wir haben fast die ganze Zeit kalibriert und praktisch nicht concurent gearbeitet"/>
+</node>
+<node COLOR="#435e98" CREATED="1780061953369" ID="ID_773467214" MODIFIED="1780072470532" TEXT="Assertion-Fail: mehrere Threads senden einen size-Request 0">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1780062937804" ID="ID_529419900" MODIFIED="1780062966300" TEXT="das mu&#xdf; vom announce() kommen"/>
+<node CREATED="1780063011162" ID="ID_1132794490" MODIFIED="1780063025636" TEXT="es sind sofort die ersten Announcements von jedem Thread"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780063404126" ID="ID_235179690" MODIFIED="1780063419522" TEXT="tritt nicht auf wenn im gleichen Test kalibriert wird">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c90148" CREATED="1780063464050" ID="ID_93372187" MODIFIED="1780063491982" TEXT="Denkfehler im Test-Setup">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1780063500508" ID="ID_782918158" MODIFIED="1780063535020" TEXT="Buffer-Typen sind an die Metadaten-Instanz gebunden"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1780063547104" ID="ID_186886071" MODIFIED="1780063642436" TEXT="also mu&#xdf; einmal pro Testfall die Initialisierung getriggert werden">
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1780063589258" ID="ID_1053745301" MODIFIED="1780063602977" TEXT="und die Kalibrierung mu&#xdf; separat getriggert werden">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1780063707842" ID="ID_1572347415" MODIFIED="1780064233625" TEXT="Neben-Frage: warum hat das keine Exception ausgel&#xf6;st?">
+<icon BUILTIN="help"/>
+<node CREATED="1780063730991" ID="ID_584976600" MODIFIED="1780063760847" TEXT="es fragt ja ein bestehender Buffer-Descriptor nach einem nicht(mehr) bekannten Typ"/>
+<node CREATED="1780063792115" ID="ID_396201166" MODIFIED="1780063809416" TEXT="BufferProvider::getBufferSize (HashVal)  macht Stage::lookup(id)"/>
+<node CREATED="1780063842712" ID="ID_124502960" MODIFIED="1780063852232" TEXT="die Implementierung liefert Key::INVALID"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780063922289" ID="ID_941364048" MODIFIED="1780064238095" TEXT="BufferProvider::getBufferSize() m&#xfc;&#xdf;te hier einen Fehler ausl&#xf6;sen">
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#338800" CREATED="1780064239306" ID="ID_914795895" MODIFIED="1780064266613" TEXT="eingebaut &#x27f6; jetzt explodieren alle Threads &#xd83d;&#xddf1;">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1780063658617" ID="ID_670026397" MODIFIED="1780071949758" STYLE="fork" TEXT="Also ist eine genauere Trigger-Logik f&#xfc;r die Typ-Initialisierung notwendig">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1780064594602" ID="ID_1962984877" MODIFIED="1780065180122" TEXT="das w&#xe4;re dann einfach BuffDescr::isValid()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      etwas anderes <i>ist an der Stelle auch relativ unwahrscheinlich:</i>&#160;die BASE_BUFFSIZ steckt ja eben grade statisch in der jeweilgen Thread-Klasse. Das w&#252;rde nur abweichen, wenn man im gleichen Testfall mit mehreren verschiedenen Thread-Klassen operiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#93064b" CREATED="1780065580520" ID="ID_1314933188" MODIFIED="1780066858279" TEXT="Ha! da ist wohl doch noch ein weiterer Bug versteckt...">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1780065606685" ID="ID_1296988126" MODIFIED="1780066865913">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      lookup liefert <b>nicht</b>&#160;Key::INVALID
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1780064640040" ID="ID_1881464215" MODIFIED="1780064655446" TEXT="nur die Kalibrierung kann man so eigentlich nicht feststellen">
+<node CREATED="1780064939045" ID="ID_1867500370" MODIFIED="1780064959246" TEXT="weil wir dummerweise nicht speichern worauf kalibriert wurde"/>
+<node CREATED="1780064966586" ID="ID_102465414" MODIFIED="1780064994848" TEXT="jedenfalls nicht im ComputationalLoad">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und das wird auch so bleiben, denn das ist TESTCODE
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#338800" CREATED="1780065016030" ID="ID_1814673063" MODIFIED="1780067509318" TEXT="dann eben direkt im Test-Setup speichern und gut is">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1780067514967" ID="ID_504824325" MODIFIED="1780067537524" TEXT="Problem in der Test-Logik (vielleicht noch mehr?)">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1780067539952" ID="ID_1338317341" MODIFIED="1780067565148" TEXT="die lokale Metadata-Registry vom Main-Thread kennt die Buffer-Typen noch"/>
+<node CREATED="1780067600867" ID="ID_57805001" MODIFIED="1780067628179" TEXT="deshalb greift die (&#xfc;berarbeitete) Trigger-Bedingung nicht beim Thread-Start"/>
+<node CREATED="1780067578982" ID="ID_914651365" MODIFIED="1780067591008" TEXT="global haben wir aber eine neue BufferMetadata-Instanz (leer)"/>
+<node CREATED="1780067706973" ID="ID_754639264" MODIFIED="1780067741446" TEXT="wohl nur ein Test-Problem &#x2014; globale Registry sollte eigentlich alle Threads &#xfc;berleben"/>
+<node BACKGROUND_COLOR="#fed999" COLOR="#7b0141" CREATED="1780067780378" ID="ID_1799641682" MODIFIED="1780067891373" TEXT="aber: latentes Problem &#x27f9; wir d&#xfc;rfen niemals Eintr&#xe4;ge &#xbb;aufr&#xe4;umen&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dann bricht dieser ganze Caching-Mechanismus mit den lokalen Pools zusammen, denn eine solche L&#246;schung m&#252;&#223;te global &#252;berall propagiert werden
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#6801ac" CREATED="1780071492331" ID="ID_1191685492" LINK="https://issues.lumiera.org/ticket/1369#comment:6" MODIFIED="1780071554361" TEXT="im Ticket #1396 / #1412 notiert"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#570f69" CREATED="1780071471555" ID="ID_156549455" MODIFIED="1780071944101" TEXT="da mu&#xdf; ich mich herummogeln...">
+<icon BUILTIN="yes"/>
+<node CREATED="1780071566538" ID="ID_1995278343" MODIFIED="1780071576072" TEXT="es IST nur ein Problem im Test-Setup"/>
+<node CREATED="1780071577626" ID="ID_407091863" MODIFIED="1780071614962" TEXT="m&#xf6;glichst unter den Teppich kehren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das verwirrt nur und tr&#228;gt nichts zum Verst&#228;ndnis des gesamten Konstrukts bei...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f1e59f" COLOR="#690f38" CREATED="1780071616827" ID="ID_1484843847" MODIFIED="1780071859048" TEXT="Trick: frage beim EngineMetadata ob der Typ exisitiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit umgehen wir die verschleppten Daten, obwohl sie nun mal schon da sind. EngineMetadata ist ja eine neue Mock-Instanz, und daher leer. Im n&#228;chsten Schritt gehen wir dann zwar zur Registrierung der Buffer-Typen wieder den kanonischen Weg, und fragen deshalb auch wieder den lokalen Pool &#8212; aber zum Gl&#252;ck hab ich die LocalBufferStage::defineBufferType() so geschrieben, da&#223; sie <i>stillschweigend</i>&#160;einen identisch so bestehenden Eintrag weiterverwendet. Ist auch sinnvoll, aufgrund der Hash-ID. Und zudem wird beim Erstellen eines neuen Typs grunds&#228;tzlich nach oben synchronisiert, und damit sind wir dann wieder sauber.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#d4020e" CREATED="1780071873451" ID="ID_837148853" MODIFIED="1780071930522" TEXT="&#xd83d;&#xddf1; (latentes Problem: nach diesem Testfall sind die lokalen Metadaten im Main-Thread versaut)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d5efb0" COLOR="#1d7213" CREATED="1780071957046" ID="ID_972980288" MODIFIED="1780072470527" TEXT="nun l&#xe4;uft der Testfall auch sauber mit 100 Threads">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1780072006623" ID="ID_574428378" MODIFIED="1780072015753" TEXT="braucht etwa 10 Sekunden"/>
+<node CREATED="1780072016674" ID="ID_212614759" MODIFIED="1780072044670" TEXT="man sieht eine massive Allokation von ~ +1GiB"/>
+<node CREATED="1780072110649" ID="ID_1030064384" MODIFIED="1780072192618" TEXT="nach ~ &#x2154; der Laufzeit nimmt der Speicherbedarf wieder leicht ab">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist ein sehr gutes Zeichen, denn es bedeutet, da&#223; sich &#252;bersch&#252;ssige Allokationen in den lokalen Pools ausbalanciert haben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1780072048658" ID="ID_168045966" MODIFIED="1780072225061" TEXT="alle Cores ausgelastet, allerdings zu ca.50% mit Sys-Aktivit&#xe4;t">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was zu erwarten ist, bedingt durch die massive &#220;berprovisionierung, kombiniert mit den sleep-delays
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780072494794" ID="ID_1052771449" MODIFIED="1780072502590" TEXT="gezielte saubere Vollast">
+<icon BUILTIN="hourglass"/>
+<node COLOR="#b00f54" CREATED="1780072509452" ID="ID_1373816448" MODIFIED="1780072598144" TEXT="sollte dann endg&#xfc;ltig nur mit 4 Threads laufen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist eine informelle Policy, die ich seit langem verfolge: wenn es um quantitative Last/Performance-Messungen geht, setze ich nur 4 Kerne ein, damit die Testsuite auch auf kleineren Maschinen noch brauchbare Ergebnisse liefert.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1780072605183" ID="ID_95023696" MODIFIED="1780072611554" TEXT="spezielle Konfiguration">
+<node CREATED="1780072613110" ID="ID_1162990013" MODIFIED="1780072682240" TEXT="kein pre-delay &#x2014; jeder Thread soll &#xbb;hei&#xdf;&#xab; laufen"/>
+<node CREATED="1780072646666" ID="ID_111344849" MODIFIED="1780072662739" TEXT="scaleStep auf 1 begrenzen &#x27f9; vorhersagbare Laufzeit"/>
+</node>
 </node>
 </node>
 </node>

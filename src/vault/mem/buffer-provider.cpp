@@ -78,6 +78,9 @@ namespace mem   {
   BufferProvider::getBufferSize (HashVal id)  const
   {
     auto& key = bufferStage_->lookup (id);
+    if (metadata::Key::INVALID == key)
+      throw err::State ("encountered unknown buffer type (stale buffer descriptor?"
+                       ,LUMIERA_ERROR_BUFFER_MANAGEMENT);
     return key.storageSize();
   }
   
