@@ -100,17 +100,18 @@ namespace vault::out::test {
        ~MockConnection() { log.call ("MockConnection", "destroy"); }
       };
     
-    
-    inline OutputSlot
-    makeFakeSlot()
-    {
-      const uint NUM_CONNECTIONS = 1;
-      return OutputSlot::allocate<MockConnection> (NUM_CONNECTIONS
-                                                  ,[](auto& storage)
-                                                      {
-                                                        storage.template create<MockConnection>();
-                                                      });
-    }
+    struct FakeSlot
+      : OutputSlot
+      {
+        static constexpr uint NUM_CONNECTIONS = 1;
+        static constexpr bool SINGLE_THREADED_TEST = true;
+        using Connections = lib::ScopedCollection<MockConnection>;
+        using MockConnectState = OutputSlot::AllocState<MockConnection, SINGLE_THREADED_TEST>;
+        
+        FakeSlot()
+          : OutputSlot{std::make_unique<MockConnectState> (NUM_CONNECTIONS, Connections::fill())}
+          { }
+      };
   }//(End) test fixture
   
   
@@ -139,7 +140,7 @@ namespace vault::out::test {
           const FrameCnt FRA_NO = 55;
           {
               log.event("create FakeSlot");
-              auto slot = makeFakeSlot();
+              FakeSlot slot;
               
               log.event("retrieve DataSink");
               auto sinks = slot.getOpenedSinks();

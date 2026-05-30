@@ -14,7 +14,7 @@
 /** @file output-slot.hpp
  ** An (abstract) capability to send media data to an external output.
  ** OutputSlot is the central metaphor for the organisation of actual (system level) outputs;
- ** using this concept allows to separate and abstract the data calculation and the organisation
+ ** using this pattern allows to separate and abstract the data calculation and the organisation
  ** of playback and rendering from the specifics of the actual output sink. Actual output
  ** possibilities can be added and removed dynamically from various components (vault, stage),
  ** all using the same resolution and mapping mechanisms
@@ -185,7 +185,7 @@ namespace out  {
        * @internal Implementation subclass:
        *   manage active connections through this OutputSlot
        */
-      template<class CON>
+      template<class CON, bool isTest=false>
       class AllocState;
       
       
@@ -209,13 +209,14 @@ namespace out  {
        * @note usually there is no need to subclass OutputSlot or AllocState,
        *       rather this factory should be used to establish an activated
        *       OutputSlot configured to use a specific OutputSlot::Connection.
+       * @see output-slot-connection.hpp
        */
+      template<class CON, typename...ARGS>
+        requires std::is_constructible_v<CON, ARGS...>
+      static OutputSlot allocate (size_t cnt, ARGS&&... args);
+      
       template<class CON, class FUN>
-      static OutputSlot
-      allocate (size_t cnt, FUN&& populator)
-        {
-          return OutputSlot{std::make_unique<AllocState<CON>> (cnt, std::forward<FUN>(populator))};
-        }
+      static OutputSlot allocate (size_t cnt, FUN&& populator);
     };
   
   

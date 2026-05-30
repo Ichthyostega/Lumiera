@@ -41,9 +41,10 @@ namespace test  {
    *       rigged such that a pre-existing given buffer (address) can be
    *       passed through and exposed as BuffHandle.
    * @remark while this looks like a rather convoluted implementation setup,
-   *       this feature is crucial to make the »Output Slot Protocol«
+   *       this feature was crucial to make the »Output Slot Protocol«
    *       mesh up well ([1415]) with the »Buffer Provider Protocol«,
    *       used internally within the Render Engine
+   * @see output-buffer-proxy.hpp (the implementation actually used)
    * [1415]: https://issues.lumiera.org/ticket/1415]
    */
   class BufferProxyAdaptor_test : public Test

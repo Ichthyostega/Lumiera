@@ -19,7 +19,7 @@
  **         between the »Buffer Provider Protocol« and the »Output Slot Protocol«.
  **         Ultimately, however, it was not used; instead, a similar, specially
  **         tailored construct was directly integrated.
- ** @see output-proxy-provider-test.cpp
+ ** @see buffer-proxy-adaptor-test.cpp
  ** @see output-buffer-proxy.hpp
  ** @see output-slot.hpp
  */
@@ -60,6 +60,7 @@ namespace mem  {
    * - is there only one resource or is this setup statefull?
    * - callback functors for the lifecycle stages related to the client's access
    * @todo 3/2026 this is prototyping code and was retained for demonstration purposes.
+   * @see output-buffer-proxy.hpp (the actual solution derived from this)
    */
   template<class CONF>
   class BufferProxyAdaptor
@@ -87,7 +88,7 @@ namespace mem  {
             }
           
           BuffAlloc
-          provideBuffer (HashVal,size_t siz,LocalTag targetMarker, int64_t customArg)  override
+          provideBuffer (HashVal,size_t siz,LocalTag targetMarker, int64_t)  override
             {
               BuffAlloc storageSlot{asBuffer(targetMarker), siz, targetMarker};
               CONF::on_lock (storageSlot);

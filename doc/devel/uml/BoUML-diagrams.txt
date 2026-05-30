@@ -49,5 +49,4 @@ On occasion, we'll replace them by drawings from our current UML model.
 128517:    classdiagram 142725 "Time flavours"
 133637:    classdiagram 143877 "Player Entities"
 133637:    objectdiagram 144005 "Play Process Structure"
-133637:    sequencediagram 145157 "output data exchange"
 128773:    classdiagram 158213 "UIBus"

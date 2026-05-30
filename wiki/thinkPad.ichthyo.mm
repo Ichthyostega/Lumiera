@@ -116089,6 +116089,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#fe512a" DESTINATION="ID_799936512" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_177101552" SOURCE="ID_1641863868" STARTARROW="None" STARTINCLINATION="-1254;84;"/>
 <icon BUILTIN="bell"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1906573964" MODIFIED="1780155137456" TEXT="Gefahr: Output-Connection mu&#xdf; threadsafe sein">
+<linktarget COLOR="#fe512a" DESTINATION="ID_1906573964" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1581776573" SOURCE="ID_506159225" STARTARROW="None" STARTINCLINATION="-1048;59;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e2caa2" COLOR="#990000" CREATED="1729956600896" ID="ID_988254887" MODIFIED="1729956915005" STYLE="fork" TEXT="Probleme">
 <edge COLOR="#b14253" STYLE="sharp_linear"/>
@@ -116108,6 +116112,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_149038061" MODIFIED="1770859083820" TEXT="Aufgabe: Hash-Kollisionen in Buffer-Metadata">
 <linktarget COLOR="#fe512a" DESTINATION="ID_149038061" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_680474771" SOURCE="ID_1105815886" STARTARROW="None" STARTINCLINATION="-891;49;"/>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_742422075" MODIFIED="1780157185846" TEXT="Problem: Buffer-Metadata sammeln sich an">
+<linktarget COLOR="#fe512a" DESTINATION="ID_742422075" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1922286656" SOURCE="ID_560462629" STARTARROW="None" STARTINCLINATION="-862;48;"/>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -117383,7 +117391,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#ae0f58" DESTINATION="ID_98767082" ENDARROW="Default" ENDINCLINATION="-622;-143;" ID="Arrow_ID_747040279" STARTARROW="None" STARTINCLINATION="-301;114;"/>
-<linktarget COLOR="#ce2ca4" DESTINATION="ID_588438295" ENDARROW="Default" ENDINCLINATION="-1824;71;" ID="Arrow_ID_1583870066" SOURCE="ID_310075674" STARTARROW="None" STARTINCLINATION="-1484;-73;"/>
+<linktarget COLOR="#2c65ce" DESTINATION="ID_588438295" ENDARROW="Default" ENDINCLINATION="-1824;71;" ID="Arrow_ID_1583870066" SOURCE="ID_310075674" STARTARROW="None" STARTINCLINATION="-1484;-73;"/>
 <icon BUILTIN="smily_bad"/>
 <node COLOR="#6b2f01" CREATED="1765477893150" ID="ID_1841000105" MODIFIED="1765477957923" TEXT="das sieht nach einem &#xbb;Knoten&#xab; aus...">
 <font NAME="SansSerif" SIZE="10"/>
@@ -120562,7 +120570,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1771445380969" FOLDED="true" ID="ID_1703778866" MODIFIED="1774125003754" TEXT="Type-Refinement fehlt">
 <linktarget COLOR="#b43f57" DESTINATION="ID_1703778866" ENDARROW="Default" ENDINCLINATION="-1037;-26;" ID="Arrow_ID_1563102453" SOURCE="ID_1813249595" STARTARROW="None" STARTINCLINATION="-107;797;"/>
 <icon BUILTIN="hourglass"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#b10652" CREATED="1771465736392" ID="ID_983442728" MODIFIED="1771465865302" TEXT="Vorsicht: bekanntes Problem mit der TypeHandler-Identit&#xe4;t">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#b10652" CREATED="1771465736392" ID="ID_983442728" MODIFIED="1780159764871" TEXT="Vorsicht: bekanntes Problem mit der TypeHandler-Identit&#xe4;t">
 <arrowlink COLOR="#f3173a" DESTINATION="ID_1884464720" ENDARROW="Default" ENDINCLINATION="650;39;" ID="Arrow_ID_125159421" STARTARROW="None" STARTINCLINATION="838;36;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1771466249756" HGAP="29" ID="ID_1350706280" MODIFIED="1771466286391" TEXT="dieses neue API w&#xe4;re gradezu eine Einladung hier ins Messer zu laufen" VSHIFT="13">
@@ -124772,6 +124780,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1711550954124" ID="ID_1284191800" MODIFIED="1711550960190" TEXT="Untersuchungen von Benny">
 <icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1780158808936" ID="ID_729730347" MODIFIED="1780158832652" TEXT="dabei kam (nur) heraus: GStreamer ist problematisch">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1711551301631" ID="ID_738125022" MODIFIED="1711551484196" TEXT="f&#xfc;r den Test-Aufbau einbinden">
 <arrowlink COLOR="#fe160d" DESTINATION="ID_920789803" ENDARROW="Default" ENDINCLINATION="435;-485;" ID="Arrow_ID_370130803" STARTARROW="None" STARTINCLINATION="-1332;116;"/>
@@ -143681,12 +143692,12 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1770827570269" ID="ID_1714212607" MODIFIED="1770829554020" TEXT="gr&#xfc;nden: Render-Buffer-Management">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770827570269" ID="ID_1714212607" MODIFIED="1780191270598" TEXT="gr&#xfc;nden: Render-Buffer-Management">
 <linktarget COLOR="#f6e1c2" DESTINATION="ID_1714212607" ENDARROW="Default" ENDINCLINATION="-1996;129;" ID="Arrow_ID_1287950435" SOURCE="ID_83307439" STARTARROW="None" STARTINCLINATION="-2318;330;"/>
-<icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770827599588" ID="ID_310075674" MODIFIED="1770827807325" TEXT="Vorarbeiten: Protokoll-Implementierungen &#xbb;in den Griff bekommen&#xab;">
-<arrowlink COLOR="#ce2ca4" DESTINATION="ID_588438295" ENDARROW="Default" ENDINCLINATION="-1824;71;" ID="Arrow_ID_1583870066" STARTARROW="None" STARTINCLINATION="-1484;-73;"/>
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#b2d2d9" COLOR="#338800" CREATED="1770827599588" ID="ID_310075674" MODIFIED="1780260154487" TEXT="Vorarbeiten: Protokoll-Implementierungen &#xbb;in den Griff bekommen&#xab;">
+<arrowlink COLOR="#2c65ce" DESTINATION="ID_588438295" ENDARROW="Default" ENDINCLINATION="-1824;71;" ID="Arrow_ID_1583870066" STARTARROW="None" STARTINCLINATION="-1484;-73;"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1734654001763" ID="ID_1148074170" MODIFIED="1770828023989" TEXT="Feststellung: rein konzeptionell sind die Protokolle in Ordnung">
 <linktarget COLOR="#263bd0" DESTINATION="ID_1148074170" ENDARROW="Default" ENDINCLINATION="555;-1157;" ID="Arrow_ID_1408757425" SOURCE="ID_900623108" STARTARROW="None" STARTINCLINATION="16;273;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
@@ -143759,10 +143770,46 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#796369" DESTINATION="ID_78273441" ENDARROW="Default" ENDINCLINATION="-357;-789;" ID="Arrow_ID_1295978639" STARTARROW="None" STARTINCLINATION="-470;45;"/>
 </node>
+<node CREATED="1780260378331" ID="ID_803703902" MODIFIED="1780260998240" TEXT="2026 : Prototyp production-grade Buffer-Management">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Aufbauend auf die Einsichten aus der Design-Arbeit zu &#187;BufferProvider Protocol&#171; und &#187;OutputSlot Protocol&#171; habe ich nun eine Gesamt-Implementierung entworfen f&#252;r den Betrieb in einem massive-concurrent-Environment. Dabei hatte ich zun&#228;chst die Idee weiterverfolgt, die Buffer-Metadaten auszubauen zu einem Informationstr&#228;ger zur Koordinierung der internen Verwaltung. Nach erheblichen gedanklichen M&#252;hen bin ich aber zu dem Schlu&#223; gekommen, <i>da&#223; diese Idee mehr Komplikationen und Komplexit&#228;ten schafft, als Klarheit stiftet.</i>&#160;Damit bleiben die Buffer-Metadaten vorerst berschr&#228;nkt auf den Buffer-Typ (+Typ-Handler), sowie das State-Tracking.
+    </p>
+    <p>
+      Au&#223;erdem hat sich nun die Frage gestellt bez&#252;glich Austausch &#252;ber Thread-Grenzen hinweg. Ich habe nun generell dieses Buffer-Management organisiert als eine Menge von thread-lokalen Services, die jeweils mit einem zentralen back-End-Service kommunizieren. Im Falle der BufferMetadaten sind das nun die LocalBufferStage (Implementierung), die das jeweilige LocalSlice&lt;BufferMetadata&gt; tr&#228;gt, sowie der zentrale Setvice EngineBufferMetadata. Es kommt dabei zu einer up/down-Synchronisation an zwei wohldefinierten Punkten &#8212; und in diesem Fall gen&#252;gt mir (vorerst) ein globales Locking der EngineBufferMetadata, da ich diese SItuation <i>als selten einsch&#228;tze.</i>&#160;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Die <b>Allokationen</b>&#160;sind somit <i>komplett getrennt von den Buffer-Metadaten.</i>&#160;Sie werden minimal dargestellt als {Buffer*, size_t} und in dieser Form &#252;ber asynchrone Queues verschickt
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#666a8e" DESTINATION="ID_804866125" ENDARROW="Default" ENDINCLINATION="-736;0;" ID="Arrow_ID_831131977" STARTARROW="None" STARTINCLINATION="-288;15;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303576693" ID="ID_399072135" MODIFIED="1770828085997" TEXT="die Implementierung ist nicht ausreichend auf Zustands&#xfc;berg&#xe4;nge zentriert">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0c3a5" COLOR="#98014b" CREATED="1780159527218" ID="ID_340145386" MODIFIED="1780159578471" TEXT="die Buffer-Metadaten bleiben latent problematisch">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="bell"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780159639265" ID="ID_1182218786" MODIFIED="1780159715461" TEXT="undel&#xf6;stes Problem mit der TypeHandler-Identit&#xe4;t">
+<arrowlink COLOR="#ab053a" DESTINATION="ID_1218434069" ENDARROW="Default" ENDINCLINATION="163;-117;" ID="Arrow_ID_1762052959" STARTARROW="None" STARTINCLINATION="1232;71;"/>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1771465174999" ID="ID_1795268003" LINK="https://issues.lumiera.org/ticket/1411" MODIFIED="1780159772916" TEXT="#1411">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1780159658303" ID="ID_1053543218" MODIFIED="1780159668334" TEXT="Design ist noch nicht wirklich begr&#xfc;ndet"/>
+<node CREATED="1780159586745" ID="ID_22336224" MODIFIED="1780159745457" TEXT="wir akkummulieren Metadaten">
+<arrowlink COLOR="#ec4f6b" DESTINATION="ID_923089948" ENDARROW="Default" ENDINCLINATION="438;-406;" ID="Arrow_ID_507520861" STARTARROW="None" STARTINCLINATION="449;40;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780099972923" ID="ID_1019040694" MODIFIED="1780100051757" TEXT="eine neutralere Beurteilung wird erst viel sp&#xe4;ter m&#xf6;glich sein">
 <arrowlink COLOR="#675e8f" DESTINATION="ID_186086868" ENDARROW="Default" ENDINCLINATION="-794;-26;" ID="Arrow_ID_1805633100" STARTARROW="None" STARTINCLINATION="-758;36;"/>
@@ -143916,7 +143963,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773685436937" ID="ID_1194997795" MODIFIED="1773685524347" TEXT="Buffer-Metadaten werden mutma&#xdf;lich auch vom Storage-Backend mitverwendet">
+<node COLOR="#5b280f" CREATED="1773685436937" ID="ID_1194997795" MODIFIED="1780147762985" TEXT="Buffer-Metadaten werden mutma&#xdf;lich auch vom Storage-Backend mitverwendet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143925,13 +143972,70 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1780147764617" ID="ID_387490859" MODIFIED="1780147866121" TEXT="sieht jetzt nicht mehr danach aus....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nach Aufbau der production-Grade-Implementierung des BufferProviders; hatte da eine lange (schmerzhafte) Diskussion mit mir selber gef&#252;hrt, und bin zu dem Schlu&#223; gekommen, das Thema Allokation doch komplett in-sich abgeschlossen aufzubauen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780147871469" ID="ID_1632085997" MODIFIED="1780147888438" TEXT="immer noch offen: wie pa&#xdf;t das mit dem Cache zusammen?">
+<icon BUILTIN="bell"/>
+</node>
+</node>
 <node CREATED="1773703954354" ID="ID_1415408255" MODIFIED="1773703991156" TEXT="m&#xf6;glicherweise will man gemeinsame Metadaten-Tabellen">
 <linktarget COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" SOURCE="ID_340628735" STARTARROW="None" STARTINCLINATION="468;17;"/>
-</node>
+<node COLOR="#338800" CREATED="1780147902066" ID="ID_523819324" LINK="#ID_1285006287" MODIFIED="1780147976445" TEXT="Mai 26: wir haben jetzt ein System von globalen / thread-lokalen Metadaten"/>
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1773686351857" ID="ID_867612305" MODIFIED="1773686475190" TEXT="Performance und Zusammenspiel mit dem Betriebszustand?">
 <linktarget COLOR="#794397" DESTINATION="ID_867612305" ENDARROW="Default" ENDINCLINATION="-1231;58;" ID="Arrow_ID_535246973" SOURCE="ID_339106431" STARTARROW="None" STARTINCLINATION="-148;960;"/>
 <icon BUILTIN="help"/>
+<node CREATED="1780156822353" ID="ID_1092563753" MODIFIED="1780157027405" TEXT="wir sammeln &#xbb;einmal&#xab;-Metadaten beim Output">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      F&#252;r jeden neuen Output-Vorgang wird ein Satz Connection-Objekte erstellt, und f&#252;r jedes von ihnen ein Buffer-Typ, mit eingebettem Pointer im LocalTag. Diese Buffer-Typen werden massiv verwendet, f&#252;r jeden Frame, solange dieser Output l&#228;uft (Buffer-Lifecycle). Hierf&#252;r propagieren sie auch zun&#228;chst vom Session-Thread in den globalen Store, und von dort in die jeweiligen thread-local BufferMetadata.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Aber nachdem diese Connection geschlossen wird, liegen diese N typen weiterhin in den verteilten BufferMetadata-Instanzen herum
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#cf0429" DESTINATION="ID_816514752" ENDARROW="Default" ENDINCLINATION="45;-685;" ID="Arrow_ID_1101777071" STARTARROW="None" STARTINCLINATION="533;32;"/>
+<node CREATED="1780157041668" ID="ID_923089948" MODIFIED="1780159745457" TEXT="das mit dem Sammeln gilt auch f&#xfc;r alle Buffer-Typen allgemein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...aber bei diesen kann man davon ausgehen, da&#223; sich das irgendwann einpendelt...
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#ec4f6b" DESTINATION="ID_923089948" ENDARROW="Default" ENDINCLINATION="438;-406;" ID="Arrow_ID_507520861" SOURCE="ID_22336224" STARTARROW="None" STARTINCLINATION="449;40;"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="173" ID="ID_560462629" MODIFIED="1780157185846" STYLE="bubble" TEXT="problematische Akkummulation von Metadaten" VSHIFT="27">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_742422075" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1922286656" STARTARROW="None" STARTINCLINATION="-862;48;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_945962387" MODIFIED="1780157218560" STYLE="fork" TEXT="replizierte Storage &#x2014; man kann nicht aufr&#xe4;umen">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1780260195236" ID="ID_761417774" MODIFIED="1780260206879" TEXT="Allokations-Management">
+<node COLOR="#435e98" CREATED="1780260208251" ID="ID_9231521" MODIFIED="1780260305579" TEXT="Heuristik zum Aufr&#xe4;umen der lokalen Pools">
+<arrowlink COLOR="#67a5cd" DESTINATION="ID_851031995" ENDARROW="Default" ENDINCLINATION="-325;-25;" ID="Arrow_ID_857205470" STARTARROW="None" STARTINCLINATION="531;32;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -143951,7 +144055,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1778113600754" ID="ID_688748631" MODIFIED="1778113686162" TEXT="Spezial-Variante: Input-BufferProvider">
 <arrowlink COLOR="#4359d9" DESTINATION="ID_1131259858" ENDARROW="Default" ENDINCLINATION="-1448;-166;" ID="Arrow_ID_863939341" STARTARROW="None" STARTINCLINATION="-1197;90;"/>
 <node CREATED="1778113691625" ID="ID_1816417895" MODIFIED="1778113700651" TEXT="Interface / Verwendung">
-<node CREATED="1778113708111" ID="ID_1426869397" MODIFIED="1779807245515" TEXT="f&#xfc;gt sich nahtlos ein">
+<node CREATED="1778113708111" ID="ID_1426869397" MODIFIED="1780196757484" TEXT="f&#xfc;gt sich nahtlos ein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -143960,7 +144064,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#850b20" DESTINATION="ID_1426869397" ENDARROW="Default" ENDINCLINATION="59;906;" ID="Arrow_ID_881098297" SOURCE="ID_970184894" STARTARROW="None" STARTINCLINATION="-845;-127;"/>
+<linktarget COLOR="#850b20" DESTINATION="ID_1426869397" ENDARROW="Default" ENDINCLINATION="6;603;" ID="Arrow_ID_881098297" SOURCE="ID_970184894" STARTARROW="None" STARTINCLINATION="-845;-127;"/>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1778115434027" ID="ID_147619275" MODIFIED="1778115455653" TEXT="aber: zus&#xe4;tzliche Konventionen">
@@ -144000,14 +144104,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778116492368" ID="ID_847440044" MODIFIED="1778116538951" TEXT="TODO: Struktur der Jobs kl&#xe4;ren">
-<arrowlink COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="28;-1464;" ID="Arrow_ID_934032093" STARTARROW="None" STARTINCLINATION="-552;47;"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1778116492368" ID="ID_847440044" MODIFIED="1780241775089" TEXT="TODO: Struktur der Jobs kl&#xe4;ren">
+<arrowlink COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="-100;-627;" ID="Arrow_ID_934032093" STARTARROW="None" STARTINCLINATION="-552;47;"/>
 <icon BUILTIN="bell"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770828120216" ID="ID_1112258994" MODIFIED="1779805233946" TEXT="vorl&#xe4;ufige Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1770828120216" ID="ID_1112258994" MODIFIED="1780191257916" TEXT="vorl&#xe4;ufige Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1771434625350" ID="ID_87043838" MODIFIED="1779804039943" TEXT="vorgreifende Vereinfachungen">
 <arrowlink COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1038;-32;" ID="Arrow_ID_1903219737" STARTARROW="None" STARTINCLINATION="178;997;"/>
 <node COLOR="#5b280f" CREATED="1771434938648" ID="ID_598910343" MODIFIED="1778792994090" TEXT="Anouncements ignorieren und jeweils per Heap allozieren">
@@ -144070,8 +144174,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#370f69" CREATED="1776195345475" ID="ID_773105612" MODIFIED="1780099646308" TEXT="Problem der Code-Struktur">
-<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0e0aa" COLOR="#232066" CREATED="1776195345475" FOLDED="true" ID="ID_773105612" MODIFIED="1780260324757" TEXT="schrittweise eine tragf&#xe4;hige Code-Struktur aufbauen...">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1776195352772" ID="ID_865032756" MODIFIED="1776195928687">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -144181,13 +144286,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1776200398600" ID="ID_1570370873" MODIFIED="1776200451325" TEXT="sub-Typen h&#xe4;ngen an der konkreten Speicher-Adresse (die unique ist)"/>
 <node CREATED="1776200454105" ID="ID_1248388353" MODIFIED="1776200473996" TEXT="problematisch sind typ-Keys, und zwar bez&#xfc;glich der Type-Handler"/>
 <node CREATED="1776200497774" ID="ID_1039074673" MODIFIED="1776200508694" TEXT="Schlu&#xdf;folgerungen...">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776200510094" ID="ID_1218434069" MODIFIED="1776202055802" TEXT="das Identit&#xe4;ts-Problem im Typ-Funktor mu&#xdf; gel&#xf6;st werden">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1776200510094" ID="ID_1218434069" MODIFIED="1780159763007" TEXT="das Identit&#xe4;ts-Problem im Typ-Funktor mu&#xdf; gel&#xf6;st werden">
 <arrowlink COLOR="#f62244" DESTINATION="ID_1884464720" ENDARROW="Default" ENDINCLINATION="929;56;" ID="Arrow_ID_1092187353" STARTARROW="Default" STARTINCLINATION="652;-35;"/>
+<linktarget COLOR="#ab053a" DESTINATION="ID_1218434069" ENDARROW="Default" ENDINCLINATION="163;-117;" ID="Arrow_ID_1762052959" SOURCE="ID_1182218786" STARTARROW="None" STARTINCLINATION="1232;71;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1776200560492" ID="ID_394534485" MODIFIED="1776200580572" TEXT="niemals d&#xfc;rfen zwei verschiedene Funktionen den gleichen Hash bekommen"/>
 <node CREATED="1776200683846" ID="ID_897159086" MODIFIED="1776200690709" TEXT="erscheint l&#xf6;sbar">
 <node CREATED="1776200691825" ID="ID_522566119" MODIFIED="1776200705923" TEXT="entweder indem der Erzeuger eine SpecID mitliefern mu&#xdf;"/>
-<node CREATED="1776200706983" ID="ID_99543390" MODIFIED="1776203862174" TEXT="oder indem man auf die Funktor-Identit&#xe4;ten abstellt">
+<node CREATED="1776200706983" ID="ID_99543390" MODIFIED="1780159174700" TEXT="oder indem man auf die Funktor-Identit&#xe4;ten abstellt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144207,8 +144313,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780159282877" HGAP="56" ID="ID_1817080344" MODIFIED="1780159387180" TEXT="Vorsicht: Wechselwirkung mit der replizierten Storage f&#xfc;r BufferMetadata" VSHIFT="8">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bisher liegt der TypeHandler als Value-Objekt in den Metadaten, wird also kopiert zur Replikation; das w&#252;rde mit einer <b>Funktor-Identit&#228;t als Objekt-Identit&#228;t kollidieren</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1776202090769" ID="ID_967352308" MODIFIED="1776203851816" TEXT="redundante Duplikate des gleichen Funktors...">
+</node>
+<node CREATED="1776202090769" ID="ID_967352308" MODIFIED="1776202090769" TEXT="redundante Duplikate des gleichen Funktors...">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -144394,8 +144511,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1776204526672" ID="ID_961403309" MODIFIED="1776477618192" TEXT="Prototyping (testgetrieben)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1776204526672" ID="ID_961403309" MODIFIED="1780191082278" TEXT="Prototyping (testgetrieben)">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776293021744" ID="ID_290625266" MODIFIED="1776717333143" TEXT="Problem: dieses Setup ist effektiv statisch/global">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -144414,7 +144531,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#a61032" DESTINATION="ID_808171568" ENDARROW="Default" ENDINCLINATION="11;-94;" ID="Arrow_ID_66477268" STARTARROW="None" STARTINCLINATION="257;14;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node COLOR="#338800" CREATED="1776204565654" ID="ID_45614742" MODIFIED="1776522493293" TEXT="generischer Slice">
+<node COLOR="#338800" CREATED="1776204565654" FOLDED="true" ID="ID_45614742" MODIFIED="1780191089393" TEXT="generischer Slice">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776292208608" ID="ID_1141218614" MODIFIED="1776477482889" TEXT="Zweck: Anbinden eines Slice in einem normalen Objekt-Kontext">
 <icon BUILTIN="info"/>
@@ -144587,7 +144704,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776204569932" ID="ID_1285006287" MODIFIED="1776717570113" TEXT="Technologie: lokaler Metadaten-Store">
+<node COLOR="#338800" CREATED="1776204569932" FOLDED="true" ID="ID_1285006287" MODIFIED="1780191093167" TEXT="Technologie: lokaler Metadaten-Store">
 <linktarget COLOR="#3c578a" DESTINATION="ID_1285006287" ENDARROW="Default" ENDINCLINATION="-27;32;" ID="Arrow_ID_145731778" SOURCE="ID_292130223" STARTARROW="None" STARTINCLINATION="-327;39;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1776522893322" FOLDED="true" ID="ID_1694212347" MODIFIED="1776717948394" TEXT="BufferMetadata um Migration erweitern">
@@ -144771,7 +144888,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776204694205" ID="ID_1617552510" MODIFIED="1776717871305" TEXT="LocalBufferStage">
+<node COLOR="#338800" CREATED="1776204694205" FOLDED="true" ID="ID_1617552510" MODIFIED="1780191096255" TEXT="LocalBufferStage">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1776436907819" ID="ID_1105234662" MODIFIED="1776717877295" TEXT="Rolle der RootID kl&#xe4;ren">
 <linktarget COLOR="#5b39d7" DESTINATION="ID_1105234662" ENDARROW="Default" ENDINCLINATION="113;-353;" ID="Arrow_ID_8614584" SOURCE="ID_1444097357" STARTARROW="None" STARTINCLINATION="-450;30;"/>
@@ -144861,7 +144978,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="idea"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776204702568" ID="ID_1197574712" MODIFIED="1779803959108" TEXT="LocalBufferStore">
+<node COLOR="#338800" CREATED="1776204702568" FOLDED="true" ID="ID_1197574712" MODIFIED="1779803959108" TEXT="LocalBufferStore">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#91c1a7" COLOR="#0f5353" CREATED="1776718325330" ID="ID_675333491" MODIFIED="1779804074905" TEXT="in mehreren Schritten eine &#xbb;einfache&#xab; Implementierung aufbauen">
 <linktarget COLOR="#1d52cb" DESTINATION="ID_675333491" ENDARROW="Default" ENDINCLINATION="-1038;-32;" ID="Arrow_ID_1903219737" SOURCE="ID_87043838" STARTARROW="None" STARTINCLINATION="178;997;"/>
@@ -145739,7 +145856,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1776204765269" ID="ID_1404790840" MODIFIED="1776718452275" TEXT="EngineBufferMetadata">
+<node COLOR="#338800" CREATED="1776204765269" FOLDED="true" ID="ID_1404790840" MODIFIED="1780191104490" TEXT="EngineBufferMetadata">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1776605957061" ID="ID_405169256" MODIFIED="1776606058887" TEXT="eigenst&#xe4;ndiger Service">
 <richcontent TYPE="NOTE"><html>
@@ -145830,7 +145947,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1776204795573" ID="ID_1001789565" MODIFIED="1778800580244" TEXT="EngineBufferManager">
+<node COLOR="#338800" CREATED="1776204795573" FOLDED="true" ID="ID_1001789565" MODIFIED="1778800580244" TEXT="EngineBufferManager">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1778792315684" ID="ID_1791813360" MODIFIED="1778792397575" TEXT="nun doch bereits grunds&#xe4;tzlich fertig implementiert">
 <arrowlink COLOR="#1b1ac0" DESTINATION="ID_1998897998" ENDARROW="Default" ENDINCLINATION="15;-85;" ID="Arrow_ID_1964764365" STARTARROW="None" STARTINCLINATION="-438;24;"/>
@@ -145844,7 +145961,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1776442826894" ID="ID_509761355" MODIFIED="1776442834087" TEXT="OutputSlot mit integrieren">
+<node COLOR="#338800" CREATED="1776442826894" FOLDED="true" ID="ID_509761355" MODIFIED="1780191108333" TEXT="OutputSlot mit integrieren">
+<linktarget COLOR="#1e4d87" DESTINATION="ID_509761355" ENDARROW="Default" ENDINCLINATION="-54;837;" ID="Arrow_ID_569900076" SOURCE="ID_1395244829" STARTARROW="None" STARTINCLINATION="96;-1313;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1776442835820" ID="ID_1709918207" MODIFIED="1776442866636" TEXT="der integrierte OutputBufferProxy hat auch eine BufferStage-Implementierung"/>
 <node CREATED="1776442867383" ID="ID_1166356526" MODIFIED="1776442917901" TEXT="diese ist bisher hart gecodet &#x2014; k&#xf6;nnte nat&#xfc;rlich (statisch) konfigurierbar sein"/>
 <node CREATED="1776442948509" ID="ID_652246892" MODIFIED="1776443208611" TEXT="OutputSlot hinter BuffHandle versteckt &#x27f9; &#xdc;berlegungen zum BufferProvider gelten analog">
@@ -145868,11 +145987,369 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1776443222077" ID="ID_1588377123" MODIFIED="1776443240902" TEXT="AUA! an die Concurrency in OutputSlot habe ich noch gar nicht gedacht">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776443222077" ID="ID_1588377123" MODIFIED="1780190732762" TEXT="AUA! an die Concurrency in OutputSlot habe ich noch gar nicht gedacht">
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1776443274627" ID="ID_1179051881" MODIFIED="1776443293851" TEXT="jeder Frame-Ausgabevorgang kann aus einem anderen Thread kommen"/>
 <node CREATED="1776443294663" ID="ID_603938434" MODIFIED="1776443307734" TEXT="allerdings wird niemals der gleiche Frame contended"/>
-<node CREATED="1776443311725" ID="ID_1518887346" MODIFIED="1776443326639" TEXT="und der Slot ist f&#xfc;r einen einzigen Play-Proze&#xdf;"/>
+<node CREATED="1780152624090" FOLDED="true" ID="ID_1716480866" MODIFIED="1780190827581" TEXT="Analyse der Nutzmuster">
+<icon BUILTIN="edit"/>
+<node CREATED="1776443311725" ID="ID_1518887346" MODIFIED="1780152704806" TEXT="ein OutputSlot ist f&#xfc;r einen einzigen Play-Proze&#xdf; erstellt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit meine ich eigentlich seine &#187;Identit&#228;t&#171; (es ist ja ein ref-counting smart-Handle). Diese <i>verborgene Identit&#228;t</i>&#160;ist tats&#228;chlich der AllocState&lt;CON&gt;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780152756832" ID="ID_1262441113" MODIFIED="1780152845829" TEXT="in diesem Moment werden alle Bufer-Descriptors(&#x2259;Typen) auf einen Schlag registriert"/>
+<node CREATED="1780152801870" ID="ID_627826119" MODIFIED="1780152831496" TEXT="das passiert (mutma&#xdf;lich) aus dem Session-Thread heraus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da es dieser ist, der letztlich einen Play-Proze&#223; aufbaut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780153846990" ID="ID_629355007" MODIFIED="1780155882883" TEXT="DataSinks sind selber einfache kopierbare Values (allerdings mit ref-count)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...d.h. Kopieren hat (geringf&#252;gige) Kosten und kann den andere Threads, die dieses Handle auch verwenden, ausbremsen. Aber an der Oberfl&#228;che bleibt das verborgen, und es handelt sich um einen einfachen Pointer)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780153963495" ID="ID_1888132144" MODIFIED="1780154002854" TEXT="Worker ruft DataSink auf (f&#xfc;r einen Frame) &#x27f6; bufferDescriptor.lockBuffer (frame);"/>
+<node CREATED="1780154045507" ID="ID_1717285049" MODIFIED="1780154057854" TEXT="BufferProvider::lockBuffer (BuffDescr, arg)">
+<node CREATED="1780154094986" ID="ID_1752872739" MODIFIED="1780154103267" TEXT="BufferStage::lookup(type)">
+<node CREATED="1780154499223" ID="ID_840924385" MODIFIED="1780154515557" TEXT="beim erster Verwendung im Worker: Lock und Sync"/>
+<node CREATED="1780154516488" ID="ID_1651500642" MODIFIED="1780154523279" TEXT="sp&#xe4;ter: thread-local lookup"/>
+</node>
+<node CREATED="1780154104068" ID="ID_1742013252" MODIFIED="1780154113198" TEXT="BufferStore::provideBuffer">
+<node CREATED="1780154554186" ID="ID_869466051" MODIFIED="1780154572058" TEXT="ruft (nach cast) die virtuelle Funktion CON::claimBufferFor"/>
+<node CREATED="1780154598681" ID="ID_755767118" MODIFIED="1780154608589" TEXT="hier irrelevant"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780154610448" ID="ID_850357201" MODIFIED="1780154727396">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ABER beachte: CON-Implementation mu&#223; <b>threadsafe</b>&#160;sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_506159225" MODIFIED="1780155137455" STYLE="bubble" TEXT="Problem: Concurrency in der Output-Connection" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1906573964" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1581776573" STARTARROW="None" STARTINCLINATION="-1048;59;"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_503976809" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_744367367" STARTARROW="None" STARTINCLINATION="-943;53;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_280273112" MODIFIED="1780155152634" STYLE="fork" TEXT="das ist &#xfc;berhaupt nicht offensichtlich">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1780155160703" ID="ID_1242289323" MODIFIED="1780155185068" STYLE="fork" TEXT="und sehr un&#xfc;blich!">
+<edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1780154119810" ID="ID_1236065579" MODIFIED="1780154128126" TEXT="BufferStage::mark_locked()">
+<node CREATED="1780155844247" ID="ID_1144004586" MODIFIED="1780155857918" TEXT="hier stets eine Interaktion im lokalen Metadata-Store"/>
+</node>
+</node>
+<node CREATED="1780156306958" ID="ID_995156023" MODIFIED="1780156316809" TEXT="der Rest l&#xe4;uft dann vergleichbar ab...">
+<node BACKGROUND_COLOR="#deae92" COLOR="#990033" CREATED="1780156382380" ID="ID_1577300158" MODIFIED="1780156432277" TEXT="man kann das nicht durch eine globale Instanz ersetzen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780156433734" ID="ID_1882566000" MODIFIED="1780156451104" TEXT="d.h. die naive-Implementierung ist sogar broken">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1780156492073" ID="ID_1362852469" MODIFIED="1780156492073">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      zwar w&#252;rden die Typen zun&#228;chst von einem Thread gemeinsam populiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780156495221" ID="ID_381987195" MODIFIED="1780156506520" TEXT="aber dann passieren ganz fragile, concurrent updates"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780156516185" ID="ID_573136962" MODIFIED="1780156556233">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      im Besonderen werden <font color="#d6082e">sub-Typen hinzugef&#252;gt und wieder gel&#246;scht</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1780156394091" ID="ID_1097392088" MODIFIED="1780156631676" TEXT="aber im verteilt-lokalen System ist das kein wirkliches Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mit dem gleichen Argument, welches ich generell f&#252;r den BufferManager mache: nach einem initialen <i>Priming</i>&#160;m&#252;&#223;te jeder Worker alsbald alle Daten bei sich haben, und diese dann sehr viel h&#228;ufiger einfach lokal lesen und modifizieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1780156323300" ID="ID_1425727154" MODIFIED="1780190894161">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>Fazit</b>: wir brauchen das gleiche Setup wie f&#252;r den generischen BufferManager
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#39378c" DESTINATION="ID_1211313189" ENDARROW="Default" ENDINCLINATION="20;-72;" ID="Arrow_ID_79089719" STARTARROW="None" STARTINCLINATION="-226;8;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1780150813403" FOLDED="true" ID="ID_1211313189" MODIFIED="1780190914602" TEXT="Aufgabe &#x27f9; konfigurierbar machen">
+<linktarget COLOR="#39378c" DESTINATION="ID_1211313189" ENDARROW="Default" ENDINCLINATION="20;-72;" ID="Arrow_ID_79089719" SOURCE="ID_1425727154" STARTARROW="None" STARTINCLINATION="-226;8;"/>
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1780151547498" ID="ID_884953043" MODIFIED="1780190902292" TEXT="inwiefern?">
+<icon BUILTIN="help"/>
+<node CREATED="1780151553839" ID="ID_997928701" MODIFIED="1780151657988" TEXT="f&#xfc;r Tests wollen wir eine dedizierte BufferMetadata-Instanz und gut is">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Also die &#252;bliche Konfiguration mit direkter Heap-Allokation, so wie das auch f&#252;r das NaiveBufferSetup verwendet wird:
+    </p>
+    <p>
+      <font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>return</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#535773" face="DejaVu Sans Mono" size="9pt">std</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">::</font><font color="#000000" face="DejaVu Sans Mono" size="9pt">make_unique</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&lt;</font><font color="#535773" face="DejaVu Sans Mono" size="9pt">vault</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">::</font><font color="#535773" face="DejaVu Sans Mono" size="9pt">mem</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">::</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>SimpleBufferStateRegistry</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&gt;</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">(</font><font color="#996e62" face="DejaVu Sans Mono" size="9pt"><i>&quot;OutputBufferProxy&quot;</i></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">)</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780151680800" ID="ID_951073767" MODIFIED="1780151744492" TEXT="im produktiven Einsatz dagegen soll die LocalBufferStage zum Einsatz kommen">
+<node CREATED="1780151745703" ID="ID_1012098847" MODIFIED="1780151776312" TEXT="das impliziert auch Zugriff auf EngineBufferMetadata"/>
+<node CREATED="1780151777809" ID="ID_1221701712" MODIFIED="1780151790310" TEXT="sowie das LocalSlice&lt;BufferMetadata&gt;"/>
+<node CREATED="1780151790985" ID="ID_1920240436" MODIFIED="1780151804148" TEXT="d.h. letzteres ist eine im Thread schon vorhandene Instanz"/>
+<node CREATED="1780151812751" ID="ID_44388280" MODIFIED="1780151841016" TEXT="wir verwenden lediglich eine andere Family-ID"/>
+</node>
+<node CREATED="1780151866703" ID="ID_1256214586" MODIFIED="1780151884297" TEXT="&#x27f9; weitere Aufgabe Family-ID generieren...">
+<node CREATED="1780151914880" ID="ID_637880008" MODIFIED="1780151930538" TEXT="nicht klar ob die wirklich disjunkt sein mu&#xdf;"/>
+<node CREATED="1780151948815" ID="ID_1862277956" MODIFIED="1780151964902" TEXT="denn eigentlich steckt im LocalTag die Speicher-Adresse der Connection-Impl"/>
+<node CREATED="1780152111487" ID="ID_1991954161" MODIFIED="1780152165510" TEXT="und diese wird als 64bit-Zahl interpretiert und dann in den chained-Hash eingerechnet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      siehe buffer-local-tag.hpp &#10230; ADL-friend hash_value(LocalTag)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780151931283" ID="ID_354341216" MODIFIED="1780151947457" TEXT="wenn jeder OutputSlot seine eigene Family-ID h&#xe4;tte, w&#xe4;ren wir auf der sicheren Seite"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1780152202274" ID="ID_947760326" MODIFIED="1780152372635" TEXT="allerdings: wir kummulieren auch mehr und mehr BufferTypen hier....">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1780152376643" ID="ID_1343911085" MODIFIED="1780152385542" TEXT="und zwar f&#xfc;r jede Connection per Channel"/>
+<node CREATED="1780152388586" ID="ID_1657389174" MODIFIED="1780152406705" TEXT="die wird in einen Block in der ScopedCollection alloziert"/>
+<node CREATED="1780152447760" ID="ID_373722952" MODIFIED="1780152467946" TEXT="es kann (tats&#xe4;chlich aber nicht) zu Aliasing kommen....">
+<icon BUILTIN="info"/>
+<node CREATED="1780152471606" ID="ID_1839376850" MODIFIED="1780152479409" TEXT="der Lifecycle verhindert das"/>
+<node CREATED="1780152484381" ID="ID_855897238" MODIFIED="1780152529264" TEXT="solange es noch eine DataSink gibt...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...bleibt der AllocState&lt;CON&gt; am Leben, und damit sind die Adressen / Hashes stabil
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780152532519" ID="ID_1359617045" MODIFIED="1780152539985" TEXT="danach sind die Typ-Eintr&#xe4;ge eigentlich obsolet"/>
+<node CREATED="1780156671437" ID="ID_445565765" MODIFIED="1780156758581" TEXT="und Aliasing bliebe folgenlos">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn...
+    </p>
+    <ul>
+      <li>
+        der Hash stimmt nur, wenn die Speicher-Adressse und Buffer-Gr&#246;&#223;e exakt gleich ist
+      </li>
+      <li>
+        der konkrete Connection-Typ allerdings steckt in der Template-Instanz, d.h. im Code-Segment
+      </li>
+      <li>
+        deshalb funktioniert auch ein anderer Connection-Typ damit korrekt, solange die Buffer-Gr&#246;&#223;e pa&#223;t
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780156762817" ID="ID_816514752" MODIFIED="1780157247573" TEXT="ja ... die Ansammlung von Metadaten ist problematisch">
+<linktarget COLOR="#cf0429" DESTINATION="ID_816514752" ENDARROW="Default" ENDINCLINATION="45;-685;" ID="Arrow_ID_1101777071" SOURCE="ID_1092563753" STARTARROW="None" STARTINCLINATION="533;32;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1780157271150" ID="ID_117715815" MODIFIED="1780190717732" TEXT="Fazit: eine feste Family-ID gen&#xfc;gt (und ist besser)">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1780157350708" ID="ID_1257598565" MODIFIED="1780157370191" TEXT="man k&#xf6;nnte das &#xbb;verteilte Setup&#xab; zum Default machen">
+<icon BUILTIN="idea"/>
+<node CREATED="1780157372408" ID="ID_177303366" MODIFIED="1780157389945" TEXT="denn ich erwarte nicht, da&#xdf; man h&#xe4;ufig einen OutputSlot erstellt f&#xfc;r Tests"/>
+<node CREATED="1780157390775" ID="ID_893361688" MODIFIED="1780157401303" TEXT="daf&#xfc;r gibt es den DiagnosticOutputSlot..."/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1780157415754" ID="ID_836082181" MODIFIED="1780190634455" TEXT="Art der Konfiguration">
+<icon BUILTIN="yes"/>
+<node CREATED="1780179973334" ID="ID_1785953051" MODIFIED="1780179977640" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1780179996698" ID="ID_1702570851" MODIFIED="1780180156917" TEXT="AllocState nimmt eine Setup-Policy (es gibt aber eine Spezialisierung f&#xfc;r CON)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das lie&#223;e sich per Concept realisieren: wenn der Template-Parameter eine Connection-Subclass ist, greift die Spezialisierung und generiert eine default-Setup-Policy, andernfalls mu&#223; der Template-Parameter selber die Policy sein, und diese hat dann eine embedded typedef Connection
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780180182368" ID="ID_214620505" MODIFIED="1780182935929" TEXT="AllocState nimmt einen zus&#xe4;tzlichen Template value parameter bool isTest = false">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...diese Variante h&#228;tte den Charme da&#223; am bestehenden Code fast nichts ge&#228;ndert werden mu&#223;, und man den Test-Schalter normalerweise gar nicht sieht
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1780180323038" ID="ID_1427790811" MODIFIED="1780181012615" TEXT="AllocState bekommt ein 3. Konstruktur-Argument bool isTest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...in diesem Fall m&#252;&#223;te auch OutputBufferProxy per Konstruktor-Parameter gesteuert werden (also dynamisch); weiterhin sehe ich als problematisch da&#223; der Konstruktor bereits einen relativ anspruchstvollen 2. Parameter nimmt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780180798189" ID="ID_1572447367" MODIFIED="1780180918491" TEXT="OutputBufferStore::Setup wird per ADL-free-function gesteuert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die default-Implementierung macht nix, aber in speziellen F&#228;llen kann man f&#252;r einen bestimmten Connection-Typ in das ssetup eingreifen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1780158092842" ID="ID_1892035013" MODIFIED="1780185053796" TEXT="Template-Flag erscheint naheliegend"/>
+<node COLOR="#338800" CREATED="1780158114597" ID="ID_1787852906" MODIFIED="1780185343520" TEXT="die zieht sich dann aber nach oben">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1780184998171" ID="ID_1740150679" MODIFIED="1780185165009" TEXT="AllocState bekommt dann ebenfalls so einen template-Parameter"/>
+<node CREATED="1780185015612" ID="ID_1620894240" MODIFIED="1780185244577" TEXT="und dann ist es eigentlich nur f&#xfc;r Subklassen nutzbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil AllocState eine protected-Definition ist (und auch bleiben soll, um klar zu machen, da&#223; das Interna sind)
+    </p>
+    <p>
+      .....alle normalen Verwendungen sollten ja durch OutputSlot::allocate() gehen; dort kann ich aber sinnvollerweise keinen weiteren Template-Parameter mit Default unterbringen (weil der 2.Parameter, die Populator-Funktion, stets inferiert werden soll)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780185056419" ID="ID_1696041175" MODIFIED="1780185122538" TEXT="kein Problem &#x27f6; ist auch nur ein seltener Spezialfall">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aktuell haben wir nur den DiagnosticOutputSlot, sowie den OutputAllocState_test
+    </p>
+    <p>
+      ...und ich erwarte nicht, da&#223; da noch viel dazukommt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1780185348750" ID="ID_179622995" MODIFIED="1780190636425" TEXT="sollte dann auch noch die Populator-Notation vereinfachen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1780185384513" ID="ID_771620595" MODIFIED="1780185414149" TEXT="damit man nicht mehr mit dem ScopedCollection&lt;CON&gt;::ElementHolder hantieren mu&#xdf;"/>
+<node CREATED="1780185369012" ID="ID_233099017" MODIFIED="1780185383776" TEXT="das hatte ich neulich schon generisch for lib::ScopedCollection eingef&#xfc;hrt"/>
+<node CREATED="1780187139035" ID="ID_788155685" MODIFIED="1780187375604" TEXT="ist aber hier &#xfc;berraschend schwierig &#x2014; einfache Notation gew&#xfc;nscht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die vorgefertigten Populator-Builder in lib::ScopedCollection sind nested static functions, da sie implizit Bezug nehmen auf den Payload-Typ und den ElementHolder &#8212; das ist schon normalerweise eine Komplikation, die sich aber i.d.R. umgehen l&#228;&#223;t, indem man vorher im Nutz-Kontext eine Typedef einf&#252;hrt f&#252;r die lib::ScopedCollection&lt;Payload&gt;. Typisches Besipiel:
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// Start a collection of workers....</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>Threads</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>ScopedCollection</b></font><font color="#65533c">&lt;</font><font color="#635e96"><b>DummyWorkerThread</b></font><font color="#65533c">&lt;&gt;&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#8c505c"><b>Threads</b></font><font color="#3a1f18">&#160;</font><font color="#814422">threads</font><font color="#11123a">{</font><font color="#dd1616"><i>MANY_THREADS</i></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#8c505c"><b>Threads</b></font><font color="#65533c">::</font><font color="#61143c"><i>fill</i></font><font color="#11123a">()}</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780187395361" ID="ID_341802735" MODIFIED="1780187778548" TEXT="m&#xf6;gliche L&#xf6;sung: den wichtigsten Fall als Overload der allocate-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der wichtigste Fall ist sicherlich ScopedCollection&lt;CON&gt;::fill(ARGS...)
+    </p>
+    <p>
+      Einen solchen Overload k&#246;nnte man einf&#252;hren, wenn der andere Overload durch ein Concept gesch&#252;tzt w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1780187800224" ID="ID_1450687362" MODIFIED="1780187826948" TEXT="Problem: dann mu&#xdf; ich die Dependency auf ScopedCollection hier explizit machen"/>
+<node CREATED="1780187827880" ID="ID_1215350663" MODIFIED="1780187846167" TEXT="und das will ich nicht &#x2014; es ist ein Implementierungs-Detail"/>
+<node CREATED="1780188273947" ID="ID_740333087" MODIFIED="1780190619991" TEXT="also anders herum &#x27f6; die Definition nach output-slot-connection.hpp verschieben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn <i>dort</i>&#160;kann ich die Populator-Builder direkt verwenden; anstatt auf den &#187;Populator&#171; mit einem std::invocable-Concept abzustellen, k&#246;nnte ich stattdessen den Overload f&#252;r die direkte Konstruktion guarden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1780190641110" ID="ID_321395684" MODIFIED="1780190648726" TEXT="geht durch den Compiler....">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1780190654468" ID="ID_185120086" MODIFIED="1780190703838" TEXT="verifiziert(Debugger): OutputAllocState_test verwendet tats&#xe4;chlich  SimpleBufferStateRegistry">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -146364,7 +146841,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" FOLDED="true" ID="ID_1964767554" MODIFIED="1778792259242" TEXT="Diskussion und Abw&#xe4;gung">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1776817873864" FOLDED="true" ID="ID_1964767554" MODIFIED="1780191122011" TEXT="Diskussion und Abw&#xe4;gung">
 <linktarget COLOR="#651733" DESTINATION="ID_1964767554" ENDARROW="Default" ENDINCLINATION="-51;-1908;" ID="Arrow_ID_1601176637" SOURCE="ID_471365898" STARTARROW="None" STARTINCLINATION="-1556;58;"/>
 <node CREATED="1776817881283" ID="ID_1958629364" MODIFIED="1776817923320" TEXT="tats&#xe4;chlich liegen die Modelle gar nicht so weit auseinander....">
 <richcontent TYPE="NOTE"><html>
@@ -146409,9 +146886,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1776818311073" ID="ID_52317148" MODIFIED="1776993715217" TEXT="Ich halte es f&#xfc;r gerechtfertigt, mein bestehendes Design weiterzuverfolgen">
+<node COLOR="#5b280f" CREATED="1776818311073" FOLDED="true" ID="ID_52317148" MODIFIED="1780191066141" TEXT="Ich will mein bestehendes Design weiterverfolgen (STOP besser nicht!)">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="button_cancel"/>
+<icon BUILTIN="yes"/>
 <node COLOR="#5b280f" CREATED="1776993849979" FOLDED="true" ID="ID_553679429" MODIFIED="1777317428449" TEXT="was mu&#xdf; ich daf&#xfc;r tun....?">
 <icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1776818387320" ID="ID_1007099106" MODIFIED="1777317376634" TEXT="BufferMetadata braucht ein Interface f&#xfc;r das Umh&#xe4;ngen von Typen">
@@ -146869,6 +147347,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1777074521660" ID="ID_1763982951" MODIFIED="1777074532534" TEXT="grunds&#xe4;tzlich: gehe von einer kleinen Anzahl an Eintr&#xe4;gen aus"/>
 </node>
 <node COLOR="#338800" CREATED="1777159795008" FOLDED="true" ID="ID_851031995" MODIFIED="1780099251457" TEXT="Heuristik zum Aufr&#xe4;umen schaffen">
+<linktarget COLOR="#67a5cd" DESTINATION="ID_851031995" ENDARROW="Default" ENDINCLINATION="-325;-25;" ID="Arrow_ID_857205470" SOURCE="ID_9231521" STARTARROW="None" STARTINCLINATION="531;32;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1777160636295" ID="ID_1174478817" MODIFIED="1777160642510" TEXT="gew&#xfc;nschter Effekt">
 <node CREATED="1777160710978" ID="ID_393248452" MODIFIED="1777160729106" TEXT="m&#xf6;glichst wenige und m&#xf6;glichst gut passende Buffer lokal halten"/>
@@ -149129,6 +149608,30 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1779806981481" ID="ID_339298449" MODIFIED="1779807068096" TEXT="Integration und Tests">
 <icon BUILTIN="hourglass"/>
+<node COLOR="#251b70" CREATED="1780191319570" ID="ID_947864507" MODIFIED="1780191578487" TEXT="Zwischenstand">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1780191327746" ID="ID_804866125" MODIFIED="1780260464094" TEXT="Mai 26: habe nun eine &#xbb;production-grade&#xab;-Implementierung gebaut">
+<linktarget COLOR="#666a8e" DESTINATION="ID_804866125" ENDARROW="Default" ENDINCLINATION="-736;0;" ID="Arrow_ID_831131977" SOURCE="ID_803703902" STARTARROW="None" STARTINCLINATION="-288;15;"/>
+</node>
+<node CREATED="1780191344440" ID="ID_243141002" MODIFIED="1780191553069" TEXT="verwende thread-local-Services + Async-Messaging">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1780191368251" ID="ID_1603680240" MODIFIED="1780191546353" TEXT="ziemlich komplexes Ding &#x2014; bin aber sehr zufrieden mit meiner Design-Arbeit">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das war ein massives St&#252;ck Arbeit &#8212; hat auch <i>viel l&#228;nger gebraucht</i>&#160;als unrspr&#252;nglich geplant.
+    </p>
+    <p>
+      Daf&#252;r habe ich nun bereits einen Prototypen f&#252;r das Buffer-Management, das meinem Erfahrungs-Stand bzgl. performant/paralleller Systeme entspricht. Dieser Prototyp ist <i>sicherlich noch nicht ausgereift</i>&#160;und hat erhebliches Optimierungs-Potential. Zudem habe ich das gesamte Thema &#187;Allokation&#171; komplett &#252;bersprungen (und mache einfach Heap-Allokationen im EngineBufferManager)
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+</node>
+</node>
 <node CREATED="1779811803748" ID="ID_1356647567" MODIFIED="1779811814407" TEXT="Tests">
 <node COLOR="#1f5672" CREATED="1779811854629" ID="ID_200114754" MODIFIED="1780099481123" TEXT="BufferProviderLoad_test">
 <arrowlink COLOR="#4587d6" DESTINATION="ID_475125993" ENDARROW="Default" ENDINCLINATION="-174;35;" ID="Arrow_ID_1000436933" STARTARROW="None" STARTINCLINATION="93;10;"/>
@@ -149210,8 +149713,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1778113564544" ID="ID_1131259858" MODIFIED="1778113686162" TEXT="Integration IO-Buffer">
 <linktarget COLOR="#4359d9" DESTINATION="ID_1131259858" ENDARROW="Default" ENDINCLINATION="-1448;-166;" ID="Arrow_ID_863939341" SOURCE="ID_688748631" STARTARROW="None" STARTINCLINATION="-1197;90;"/>
-<node CREATED="1778116471691" ID="ID_1679522795" MODIFIED="1778116528777" TEXT="Struktur der Jobs">
-<linktarget COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="28;-1464;" ID="Arrow_ID_934032093" SOURCE="ID_847440044" STARTARROW="None" STARTINCLINATION="-552;47;"/>
+<node CREATED="1778116471691" ID="ID_1679522795" MODIFIED="1780241775090" TEXT="Struktur der Jobs">
+<linktarget COLOR="#4b5174" DESTINATION="ID_1679522795" ENDARROW="Default" ENDINCLINATION="-100;-627;" ID="Arrow_ID_934032093" SOURCE="ID_847440044" STARTARROW="None" STARTINCLINATION="-552;47;"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1778116557314" ID="ID_1411146534" MODIFIED="1778116580325" TEXT="der IO-Job ist gar nicht mit einer (normalen) Node verbunden...?">
 <icon BUILTIN="help"/>
 <node CREATED="1778116600409" ID="ID_970184894" MODIFIED="1779807245515" TEXT="oder vielleicht doch?">
@@ -149231,7 +149734,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </ul>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#850b20" DESTINATION="ID_1426869397" ENDARROW="Default" ENDINCLINATION="59;906;" ID="Arrow_ID_881098297" STARTARROW="None" STARTINCLINATION="-845;-127;"/>
+<arrowlink COLOR="#850b20" DESTINATION="ID_1426869397" ENDARROW="Default" ENDINCLINATION="6;603;" ID="Arrow_ID_881098297" STARTARROW="None" STARTINCLINATION="-845;-127;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1778116949044" ID="ID_1923307878" MODIFIED="1778117221275" TEXT="der nachgelagerte Render-Job mu&#xdf; irgendwie den Quell-Buffer schon bekommen">
@@ -149814,6 +150317,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#76516c" DESTINATION="ID_1415408255" ENDARROW="Default" ENDINCLINATION="779;39;" ID="Arrow_ID_1408352744" STARTARROW="None" STARTINCLINATION="468;17;"/>
+<node CREATED="1780148019289" HGAP="41" ID="ID_1395244829" MODIFIED="1780190816404" TEXT="modifiziertes Ziel: in das System der Metadaten-Stores integrieren" VSHIFT="9">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      mit dem Aufbau der production-grade-Implementierung des BufferProviders mu&#223;te ich auch das Problem l&#246;sen, wie die einzelnen Threads auf die Metadaten zugreifen: es gibt nun EngineMetadata, sowie in jedem Thread ein LocalSllice&lt;BufferMetadata&gt;.....
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#1e4d87" DESTINATION="ID_509761355" ENDARROW="Default" ENDINCLINATION="-54;837;" ID="Arrow_ID_569900076" STARTARROW="None" STARTINCLINATION="96;-1313;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773704083017" FOLDED="true" ID="ID_446456909" MODIFIED="1774223593951" TEXT="Anordnung und Zugriffe sind problematisch in der bestehenden Architektur">
 <icon BUILTIN="broken-line"/>
@@ -150301,7 +150815,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      Concepts sind ein relativ komplexes Gebilde, und sie haben eine spezielle Notierung, die in der Form nur in C++ gegeben ist. Nur ein Bruchteil der C++ - Entwickler wir mit Konzepten vertraut werden (auf lange Zeit). Zudem hinterl&#228;&#223;t ein Konzept <i>in der Implementierung keine Spuren. </i>Man k&#246;nnte sich da zwar etwas einfallen lassen, aber das w&#228;re dann noch mehr ein Spezial-Konstrukt. Das ist etwas, was sich erst noch herausbilden mu&#223; (auch die Tool-Unterst&#252;tzung ist ein Aspekt).
+      Concepts sind ein relativ komplexes Gebilde, und sie haben eine spezielle Notierung, die in der Form nur in C++ gegeben ist. Nur ein Bruchteil der C++ - Entwickler wird mit Konzepten vertraut werden (auf lange Zeit). Zudem hinterl&#228;&#223;t ein Konzept <i>in der Implementierung keine Spuren. </i>Man k&#246;nnte sich da zwar etwas einfallen lassen, aber das w&#228;re dann noch mehr ein Spezial-Konstrukt. Das ist etwas, was sich erst noch herausbilden mu&#223; (auch die Tool-Unterst&#252;tzung ist ein Aspekt).
     </p>
     <p>
       Demgegen&#252;ber ist ein klassisches OO-Interface ein seit 30 Jahren universell bekanntes und weithin unterst&#252;tztes Schema, das in den allermeisten Sprachen in irgend einer Form eingesetzt wird (selbst wenn die Sprachen sonst nicht OO sind). Wenn ich einem durchschnittlichen Entwickler heute sage: &#8222;Du mu&#223;t das Interface Connection implementieren&#8220;, dann setzt der sich einfach hin und klopft das runter.
@@ -151233,7 +151747,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#ff1125" DESTINATION="ID_1351243761" ENDARROW="Default" ENDINCLINATION="669;80;" ID="Arrow_ID_1409482268" STARTARROW="None" STARTINCLINATION="788;42;"/>
 <arrowlink COLOR="#ff1125" DESTINATION="ID_774940151" ENDARROW="Default" ENDINCLINATION="681;34;" ID="Arrow_ID_1530530196" STARTARROW="None" STARTINCLINATION="1318;69;"/>
 </node>
-<node CREATED="1775917228753" ID="ID_926670050" MODIFIED="1775917392650" TEXT="OutputSlot wurd Fr&#xfc;hjahr26 grundlegend &#xfc;berarbeitet">
+<node CREATED="1775917228753" ID="ID_926670050" MODIFIED="1780147358885" TEXT="OutputSlot wurde Fr&#xfc;hjahr26 grundlegend &#xfc;berarbeitet">
 <arrowlink COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" STARTARROW="None" STARTINCLINATION="688;37;"/>
 </node>
 <node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1773941769804" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
@@ -151244,6 +151758,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <arrowlink COLOR="#2129bf" DESTINATION="ID_1782289710" ENDARROW="Default" ENDINCLINATION="-514;144;" ID="Arrow_ID_1760765205" STARTARROW="None" STARTINCLINATION="470;-797;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_503976809" MODIFIED="1780155133920" TEXT="Gefahr: Output-Connection mu&#xdf; threadsafe sein">
+<linktarget COLOR="#fe512a" DESTINATION="ID_503976809" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_744367367" SOURCE="ID_506159225" STARTARROW="None" STARTINCLINATION="-943;53;"/>
+<icon BUILTIN="clanbomber"/>
 </node>
 </node>
 </node>
@@ -179885,7 +180403,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1749432400380" ID="ID_1422603149" MODIFIED="1749432404143" TEXT="Neuerungen">
-<node CREATED="1749432405584" ID="ID_1749311235" MODIFIED="1751556699132" TEXT="Spaceship und comparisons">
+<node CREATED="1749432405584" FOLDED="true" ID="ID_1749311235" MODIFIED="1751556699132" TEXT="Spaceship und comparisons">
 <node CREATED="1751553920416" ID="ID_1478329508" MODIFIED="1751553933142" TEXT="zwei Basis-Operatoren">
 <node CREATED="1751553934321" ID="ID_1726777708" MODIFIED="1751553952618" TEXT="== : equality"/>
 <node CREATED="1751553936994" ID="ID_1994276563" MODIFIED="1751553948379" TEXT="&lt;=&gt; : three-way-comparison">
@@ -181857,6 +182375,9 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1780257465402" ID="ID_42443800" MODIFIED="1780257477041" TEXT="(sollte 96 dpi sein)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node CREATED="1773531239072" ID="ID_636064275" MODIFIED="1773531254153" TEXT="Padding auf der Seite einbauen"/>
 <node CREATED="1773531255165" ID="ID_1102039599" MODIFIED="1773531266582" TEXT="Seitenhintergrund: Wei&#xdf;es Rechteck dahinter legen"/>

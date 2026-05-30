@@ -1240,10 +1240,10 @@ At this point, a separation is introduced into the //local coordinator// (which 
 There are only limited sanity checks, and they can be expected to be optimised away for production builds.
 The render processing is assumed to proceed along preconfigured processing pipelines, which are instantiated from a »blueprint« -- and the [[Builder]] is responsible to arrange this calculation prototype in such a way, that only valid data accesses are possible. The processing functions and the buffer descriptors are preconfigured to match up.</pre>
 </div>
-<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202605300050" tags="Rendering Player spec draft" changecount="4">
+<div title="BufferManagement" modifier="Ichthyostega" created="201109151420" modified="202605311748" tags="Rendering Player spec draft" changecount="11">
 <pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
 
-Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. The actual implementation backing these operations is a matter of configuration, which will be setup as part of the ''build process'', when the Render Node network is created.
+Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', and finally the ''releasing'' steps. The actual implementation to back these operations is a matter of configuration, and will be setup as part of the ''build process'', when the Render Node network is created.
 
 !usage situations
 ;rendering
@@ -1260,8 +1260,18 @@ Mostly, the //client code,// i.e. code in need of using buffers, can access some
 :whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
 :The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
 :accommodating limited resources and current demand for fresh result buffers.
+;output proxy
+:this is a special flavour, and is tightly integrated into the OutputSlot implementation: the client obtains a {{{DataSink}}} handle for each feed; when initiateing the output of one frame, a BuffHandle is returned -- which however is backed by a special {{{OutputBufferProxy}}} that translates the client interactions into calls to the {{{OutputSlot::Connection}}} interface. The latter abstracts the access to the underlying output technology.
 ;test setup
 :a //naive// implementation is used for unit-tests: each buffer request is simply allocated from the heap and this memory is not released or re-used, which allows to verify memory content after invoking the test subject.
+
+
+!Buffer handling
+The management of buffer memory is a major cross-cutting concern in the RenderEngine.This topic encompasses several aspects, since it is necessary to supply the right kind (size) of buffer, to mark a place in the [[render node graph|LowLevelModel]] to use such a //buffer type//, yet also to satisfy the demand for buffer memory that accrues concurrently, as the [[workers|SchedulerWorker]] process a constant flow of [[render jobs|RenderJob]]. Furthermore, the //state// of each individual buffer must be //tracked// as part of the BufferMetadata, since usage of a buffer proceeds through several //phases// (&amp;rarr; the operations outlined at the BufferProvider interface).
+
+A far reaching trait of the Lumiera architecture is the decision to //pre-arrange all possible computations// in the given situation into a ''network of nodes''. Within this framework, the BuffHandle plays the role of a junction point to separate and connect the [[processing logic|NodeOperationProtocol]] from the backing services and the management of resources. The render computation does not need to know how buffers are organised. Each worker can use the //buffer type descriptor// {{{BuffDescr}}} to claim a buffer for use. Furthermore, at the start of each job, an expected maximum capacity simultaneously required is //announced//, based on static reasoning over the render node graph. The implementation of buffer handling relies on thread-local services to handle such requests within a local scope as far as possible.
+
+Allocations are the sole responsibility of the central {{{EngineBufferManager}}} -- yet demand for buffer space is accrued in the local memory pools for each worker. To the extent possible, demand and actual allocations are exchanged by asynchronous messaging, to avoid contention on shared locks when accessing the central services. After usage, a buffer is retained in the thread-local pool, and marked with a //score// whenever it can be re-used to satisfy another demand. It is certainly preferable to re-use a buffer available locally, even when this buffer is too large; but it will get a lower score as when the buffer is a perfect match. Buffers that do not score as well are returned on a tight schedule through the message queue. Interestingly, the central {{{EngineBufferManager}}} does not operate on its own -- since the overall design of the Render Engine avoids //dedicated »service threads«//. The rationale is that such dedicated threads would have to be squeezed into the distribution of work onto the cores, running danger to decrease the cache locality and overthrow the pre-established schedule. Rather, the necessary management work is accrued in small chunks and directly integrated into the processing of some job, that just happens to hit an immediate unsatisfied demand for memory.
 </pre>
 </div>
 <div title="BufferMetadata" modifier="Ichthyostega" created="201109240004" modified="202602152125" tags="spec Rendering draft" changecount="3">
@@ -5318,7 +5328,7 @@ And this raises another intricate question of design: //shall {{{Connection}}} b
 This would be a very elegant, and modern solution, offering much flexibility for the Implementer of said {{{Connection}}}. The {{{OutputBufferProxy}}} could be templated to that {{{Connection}}} type and thus allow the optimiser to inline and reduce the callback functionality. However -- C++ concepts are a rather new and arcane feature, as they rely on very special syntax and semantics that still requires some time in practical use to catch on and prove its viability. A further objection that can be raised is the fact that compliance to a concept leaves no traces within the implementation -- quite contrary to a classical ~OO-style interface, where the implementation is very obviously marked as such. These considerations bring me to the decision to //reject the use of a concept// here, and to rely on a conventional interface for {{{Connection}}}. Notably it can be expected that new kinds of connection will be added frequently, and so the task for a developer not familiar with all fine points of this design should be reasonably straight forward: „You have to implement the {{{Connection}}} interface“
 </pre>
 </div>
-<div title="OutputSlotImpl" modifier="Ichthyostega" created="201107102343" modified="202603222343" tags="spec operational" changecount="5">
+<div title="OutputSlotImpl" modifier="Ichthyostega" created="201107102343" modified="202605312031" tags="spec operational" changecount="10">
 <pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. 
 
 Each distinct output capability must be registered through an OutputManager. When a client wants to output data, it obtains a suitable OutputSlot through the OutputDirector. This OutputSlot is created and initialised properly for this single use by the {{{OutputManager}}} in charge for that kind of output capability; notably it must be outfitted with an actual implementation of the {{{OutputSlot::Allocation}}} interface, and typically {{{OutputSlot::AllocState&lt;CON&gt;}}} will be used for that purpose.
@@ -5327,7 +5337,7 @@ So actual knowledge regarding the underlying technology is confined to the »dri
 The client code interacts with the output data buffer through a BuffHandle as front-end. This access scheme is similar to what is used by the generic BufferProvider within the Render Engine. To enable this setup, the OutputSlot embeds a //proxy {{{BufferProvider}}}// and uses a preconfigured buffer (type) descriptor for each connection, which also includes information about the size of the buffer. To start work on a new frame, the client invokes the {{{DataSink}}}, which actually is a functor, with a signature {{{BuffHandle(FrameID)}}}. This call delegates through the proxy {{{BufferProvider}}} ends up calling into {{{Connection::claimBufferFor(frameNr)}}}.
 
 !operation steps
-[&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]As mentioned, the OutputSlot defines a nested ''interface {{{Connection}}}'', with standard operations defined as virtual functions. Each connection technology is expected somehow to support a sequence of actual steps in a ''data exchange protocol''.
+As mentioned, the OutputSlot defines a nested ''interface {{{Connection}}}'', with standard operations defined as virtual functions. Each connection technology is expected somehow to support a sequence of actual steps in a ''data exchange protocol''.
 ;claimBufferFor()
 :claims the specified buffer for exclusive use by the client.
 :Client may now generate output data into that buffer.
@@ -5339,7 +5349,7 @@ The client code interacts with the output data buffer through a BuffHandle as fr
 :effectively redundant after the client has invoked {{{emit()}}} -- but the client may choose not to do so (when it is foreseeable that the deadline can not reasonably be met); in such cases, the {{{release()}}} call is the only state indication the {{{Connection}}} implementation gets.
 :Triggered by the client invoking {{{release()}}}
 
-{{red{WARNING 3/2026 this UML drawing above is outdated}}}
+[img[Sequence of output data exchange steps|uml/OutputSlot_sequence.svg]]
 
 !buffer states
 While the BufferProvider, used as front-end for the client, abstracts away the actual access to the output buffers and just hands out a [[buffer handle|BuffHandle]], the server side (which here is the concrete output slot and the backing output technology) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that each output cycle for a single frame originates from a single RenderJob and thus happens from a single thread; moreover, a memory barrier can be assumed prior to invoking the next job. This implies that state transitions regarding the BufferMetadata can be mapped to states as seen from the perspective of the {{{Connection}}} implementation:
@@ -6285,7 +6295,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202603212353" tags="overview impl discuss draft" changecount="51">
+<div title="PlaybackVerticalSlice" creator="Ichthyostega" modifier="Ichthyostega" created="202303272236" modified="202605311616" tags="overview impl discuss draft" changecount="52">
 <pre>//Integration effort to promote the development of rendering, playback and video display in the GUI//
 This IntegrationSlice was started in {{red{2023}}} as [[Ticket #1221|https://issues.lumiera.org/ticket/1221]] to coordinate the completion and integration of various implementation facilities, planned, drafted and built during the last years; this effort marks the return of development focus to the lower layers (after years of focussed UI development) and will implement the asynchronous and time-bound rendering coordinated by the [[Scheduler]] in the [[Vault|Vault-Layer]]
 
@@ -6332,7 +6342,9 @@ __February.25__: built extended verification mechanisms, including some Node met
 
 __January.26__: During the last nine months, unfortunately I was occupied with generic clean-up, upgrade, infrastructure and research work -- and so there was ''no progress'' regarding the PlaybackVerticalSlice. Just before that recess, an important breakthrough was achieved: a complete node graph was built and invoked end to end in a unit test setting. The further integration up to a RenderJob invocation is still blocked by some yet unresolved [[design mismatch (#1395)|https://issues.lumiera.org/ticket/1395]] related to the //»BufferProvider Protocol«// vs the //»OutputSlot Protocol«//; this is where I'll pick up the development work stalled almost a year ago.
 
-__March.26__: Meanwhile I was able to get at the root of the confusion related to BufferProvider and OutputSlot. This insight allows to rectify and realign the architecture, while largely keeping the APIs and both »Protocols« intact. As part of this design revalidation, I did an in-depth re-assessment of buffer metadata handling and got a much better understanding of the requirements for an actual buffer manager implementation -- and it is clear now that at least such a basic implementation is required to achieve a first engine integration. Furthermore, I was indeed able to build a proxy-BufferProvider that can be used as façade within the OutputSlot Protocol, so that both Protocols can be reconciled. The integration of this new proxy implementation necessitates a deeper refactoring within OutputSlot though, leading to a much better and cleaner design overall.
+__March.26__: Meanwhile I was able to get at the root of the confusion related to BufferProvider and OutputSlot. This insight allows to rectify and realign the architecture, while largely keeping the ~APIs and both »Protocols« intact. As part of this design revalidation, I did an in-depth re-assessment of buffer metadata handling and got a much better understanding of the requirements for an actual buffer manager implementation -- and it is clear now that at least such a basic implementation is required to achieve a first engine integration. Furthermore, I was indeed able to build a proxy-BufferProvider that can be used as façade within the OutputSlot Protocol, so that both Protocols can be reconciled. The integration of this new proxy implementation necessitates a deeper refactoring within OutputSlot though, leading to a much better and cleaner design overall.
+
+__May.26__: building upon the insight gained through the preceding design rework, a production-grade buffer memory management scheme could be devised. It features thread-local back-end services for the two »pillars« supporting the implementation of the BufferProvider API. These stateful per-worker services are complemented in both cases by a engine-level central service. Notably, for the {{{BufferStore}}}, which relates to the handling of memory resources, an asynchronous messaging was established to send allocated buffers in response to local demand. The usage of resources in each {{{LocalMemPool}}} is accounted with a score to enable heuristic clean-up of rarely used memory blocks, sending them back to the central {{{EngineBufferManager}}} through a message queue. The reworked OutputSlot has been integrated seamlessly into this framework, and a preliminary load test demonstrates safe operation under pressure.
 
 !Decisions
 ;Scheduler
@@ -7100,7 +7112,7 @@ Prerequisite data for the media calculations can be considered just part of that
 * all it needs to know is the ''effective nominal time'' and an ''invocation instance ID''
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202501040430" tags="Rendering operational rewrite" changecount="9">
+<div title="RenderMechanics" modifier="Ichthyostega" created="200806030230" modified="202605311656" tags="Rendering operational rewrite" changecount="10">
 <pre>At architecure level, the render process is sufficiently characterized by the ''pull principle'', regarding dependencies, processing function and the [[»Render Node operation protocol«|NodeOperationProtocol]]. Yet at the level of actual operations and interactions, several intricate details become relevant, especially //how to manage the buffers// and where to provide additional storage for working data.
 {{red{⚠ In-depth rework underway as of 12/2024...}}}
 ^^┅┅┅┅┅┅the following text is ''superseded''┅┅┅┅┅┅┅┅┅^^
@@ -7118,7 +7130,7 @@ On the other hand, the processing function within the individual node needs to b
 Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
 
 !buffer management
-{{red{NOTE 9/11: the following is partially obsolete and needs to be rewritten}}} &amp;rarr; see the BufferTable for details regarding new buffer management...
+{{red{NOTE 9/11: the following is partially obsolete and needs to be rewritten}}} &amp;rarr; see the BufferProvider for details regarding new buffer management...
 
 ...
 

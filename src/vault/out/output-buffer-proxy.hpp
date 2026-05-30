@@ -16,8 +16,15 @@
  ** This implementation building-block allows to integrate the output buffers
  ** managed by a specific output mechanism with the generic implementation of
  ** OutputSlote, so that only a BuffHandle needs to be exposed to the client.
- ** @see output-proxy-provider-test.cpp
- ** @see output-buffer-proxy.hpp
+ ** The client uses this setup in accordance to the »Output Slot Protocol«.
+ ** @remark this adaptor is generated automatically when some specific
+ **      output technology is exposed through an OutputSlot; at that
+ **      point, a custom OutputSlot::Connection implementation
+ **      is [instantiated](\ref OutputSlot::allocate), causing
+ **      the setup and wiring of OutputSlot::AllocState<CON>.
+ ** @see buffer-proxy-adaptor-test.cpp (a pathfinder for this design)
+ ** @see output-alloc-state-test.cpp
+ ** @see output-slot-connection.hpp
  ** @see output-slot.hpp
  */
 
@@ -27,46 +34,44 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "lib/symbol.hpp"
-#include "lib/meta/util.hpp"
 #include "vault/mem/buffer-provider.hpp"
 #include "vault/mem/buffer-provider-setup.hpp"
-#include "vault/mem/heap-mem-buffer-store.hpp"
 #include "vault/mem/simple-buffer-state-registry.hpp"
+#include "vault/mem/local-buffer-stage.hpp"
 
-#include <functional>
-#include <utility>
-
+#include <type_traits>
 
 namespace vault{
 namespace out  {
   
-  using std::move;
-  using lib::Literal;
   using lib::HashVal;
   using vault::mem::Buff;
   using vault::mem::LocalTag;
   using vault::mem::BuffAlloc;
   using vault::mem::BuffDescr;
-  using vault::mem::BuffHandle;
-  using vault::mem::TypeHandler; ///////////////////////////OOO Rly?
+  using vault::mem::TypeHandler;
   using vault::mem::BufferProviderSetup;
   
   
   
   /**
-   * Adapter to expose controlled access to some memory resource
+   * Adapter to expose controlled access to the \ref OutputSlot::Connection
    * through a [»Buffer Type«](\ref BuffDescr) and a BuffHandle as front-end,
    * in accordance with the BufferProvider protocol.
    * 
-   * This template is an implementation building block and needs to be instantiated
-   * with a policy or configuration to define the flexible parts of the behaviour
-   * - what a Buffer Type means
-   * - is there only one resource or is this setup statefull?
-   * - callback functors for the lifecycle stages related to the client's access
-   * @todo 3/2026 this is prototyping code and was retained for demonstration purposes.
+   * This template is an implementation building block for the OutputSlot and
+   * creates the crucial link between the DataSink handle exposed to the client
+   * and the actual implementation of the connection technology. It needs to be
+   * instantiated with the concrete connection implementation type; this happens
+   * as part of instantiating OutputSlot::AllocState<CON> — and this is the
+   * typical way how a concrete connection is packaged into an OutputSlot.
+   * 
+   * @tparam CON the actual OutputSlot::Connection implementation
+   * @tparam isTest use a naive self-contained metadata hashtable;
+   *                by default, a threadsafe system of local metadata tables
+   *                is used in conjunction with the EngineBufferMetadata service
    */
-  template<class CON>
+  template<class CON, bool isTest=false>
   class OutputBufferProxy
     : public BufferProviderSetup
     {
@@ -113,7 +118,10 @@ namespace out  {
       
       struct Setup
         {
-          auto buildStage() { return std::make_unique<vault::mem::SimpleBufferStateRegistry>("OutputBufferProxy"); }
+          using MetadataRegistry = std::conditional_t<isTest, vault::mem::SimpleBufferStateRegistry
+                                                            , vault::mem::LocalBufferStage>;  //  ◁──────────┨ by default use the production-grade implementation
+          
+          auto buildStage() { return std::make_unique<MetadataRegistry>("OutputBufferProxy"); }
           auto buildStore() { return std::make_unique<OutputBufferStore>(); }
         };
       

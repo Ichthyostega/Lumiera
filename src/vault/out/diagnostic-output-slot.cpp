@@ -333,7 +333,9 @@ namespace out   {
   unique_ptr<OutputSlot::Allocation>
   DiagnosticOutputSlot::setupTrackingConnections (DiagnosticOutputSlot::OutputTracker& outputTracker)
   {
-    using AllocState = OutputSlot::AllocState<DummyConnection>;
+    constexpr bool SIMPLE_METADATA_TABLE_FOR_TEST{true};
+    
+    using AllocState = OutputSlot::AllocState<DummyConnection, SIMPLE_METADATA_TABLE_FOR_TEST>;
     using ConStorage = AllocState::ConnectionStorage;
     
     return make_unique<AllocState> (outputTracker.numDataFeeds
