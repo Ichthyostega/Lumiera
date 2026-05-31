@@ -137,7 +137,7 @@ namespace lib {
     using std::is_volatile_v;
     using std::is_const_v;
     using std::is_same_v;
-    using lib::meta::is_Subclass;
+    using lib::meta::is_Subclass_v;
     
     using several::ArrayBucket;
 
@@ -743,7 +743,7 @@ namespace lib {
           
           typename Policy::Fac& factory(*this);
           
-          if (is_Subclass<TVal,IVal>() and has_virtual_destructor_v<IVal>)
+          if (is_Subclass_v<TVal,IVal> and has_virtual_destructor_v<IVal>)
             {
               __ensureMark<TVal> (VIRTUAL);
               return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<IVal> (bucket); };
@@ -753,7 +753,7 @@ namespace lib {
               __ensureMark<TVal> (TRIVIAL);
               return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<TVal> (bucket); };
             }
-          if (is_same_v<TVal,EVal> and is_Subclass<EVal,IVal>())
+          if (is_same_v<TVal,EVal> and is_Subclass_v<EVal,IVal>)
             {
               __ensureMark<TVal> (ELEMENT);
               return [factory](ArrayBucket<I>* bucket){ unConst(factory).template destroy<EVal> (bucket); };

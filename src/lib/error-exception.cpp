@@ -24,7 +24,7 @@
 
 
 #include "lib/error.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
@@ -154,6 +154,9 @@ namespace lumiera {
   
   namespace error {
     namespace {
+      using vessel::LifecycleHook;
+      using vessel::ON_BASIC_INIT;
+      
       void install_unexpectedException_handler ()
       {
         std::set_terminate (lumiera_unexpectedException);

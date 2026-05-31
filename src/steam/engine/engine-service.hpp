@@ -49,11 +49,11 @@
 #include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
+#include "vault/out/timings.hpp"
 #include "steam/engine/calc-stream.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/play/timings.hpp"
-#include "steam/play/output-slot.hpp"
-//#include "common/instancehandle.hpp"
+#include "vault/out/output-slot.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "lib/polymorphic-value.hpp"
 #include "lib/depend.hpp"
@@ -66,14 +66,14 @@ namespace steam {
 namespace engine{
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
+//    using vessel::Subsys;
+//    using vessel::Display;
+//    using vessel::DummyPlayer;
 //  using std::function;
   using mobject::ModelPort;
-  using steam::play::Timings;
+  using vault::out::Timings;
   
-  using OutputConnection = steam::play::OutputSlot::Allocation;
+  using vault::out::OutputSlot;
   
   
   
@@ -141,7 +141,7 @@ namespace engine{
       CalcStreams
       calculate(ModelPort mPort,
                 Timings nominalTimings,
-                OutputConnection& output,
+                OutputSlot& outputSlot,
                 Quality serviceQuality =QoS_DEFAULT);
       
       CalcStreams
@@ -159,7 +159,7 @@ namespace engine{
       friend class EngineDiagnostics;
       
     private:
-      static CalcStream activateCalculation (play::DataSink, RenderEnvironment&);
+      static CalcStream activateCalculation (vault::out::DataSink, RenderEnvironment&);
     };
   
   

@@ -376,7 +376,7 @@ namespace lib {
           using ResultVal = meta::_Fun<FUN>::Ret;
           using Subclass  = meta::Strip<ResultVal>::TypePlain;
           
-          static_assert (std::is_pointer<ResultVal>::value,
+          static_assert (std::is_pointer_v<ResultVal>,
                          "Function must yield a pointer to a heap allocated instance");
         };
       

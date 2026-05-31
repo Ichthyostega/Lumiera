@@ -18,7 +18,7 @@
  ** 
  ** # configuration and resource search
  ** 
- ** The UI layer retrieves the necessary configuration values from lumiera::Config,
+ ** The UI layer retrieves the necessary configuration values from vessel::spine::Config,
  ** the config facade in the application core. Currently as of 2/2011 these values are
  ** loaded from setup.ini, because the full-blown config system is not yet implemented.
  ** Amongst others, this configuration defines a _search path_ for icons and a
@@ -27,9 +27,9 @@
  ** This allows for a relocatable Lumiera installation bundle.
  ** 
  ** @see gtk-lumiera.cpp the plugin to pull up this GUI
- ** @see lumiera::BasicSetup definition of the acceptable configuration values
- ** @see lumiera::AppState general Lumiera application main
- ** @see lumiera::Config
+ ** @see vessel::BasicSetup definition of the acceptable configuration values
+ ** @see vessel::Voyage general Lumiera application main
+ ** @see vessel::spine::Config
  ** 
  */
 
@@ -38,14 +38,14 @@
 
 
 #include "lib/symbol.hpp"
-#include "include/config-facade.h"
+#include "vessel/spine/config-facade.h"
 
 
 
 namespace stage {
   
   using lib::Literal;
-  using lumiera::Config;
+  using vessel::spine::Config;
   
   extern Literal KEY_TITLE;
   extern Literal KEY_VERSION;

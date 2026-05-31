@@ -30,14 +30,15 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "vault/out/timings.hpp"
 #include "steam/engine/engine-service.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "steam/engine/calc-stream.hpp"
 //#include "steam/mobject/model-port.hpp"
-#include "steam/play/timings.hpp"
-//#include "steam/play/output-slot.hpp"
-//#include "common/instancehandle.hpp"
+//#include "vault/out/timings.hpp"
+//#include "vault/out/output-slot.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //#include "lib/polymorphic-value.hpp"
 //#include "lib/depend.hpp"
@@ -49,10 +50,10 @@ namespace steam  {
 namespace engine{
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
-  using steam::play::Timings;
+//    using vessel::Subsys;
+//    using vessel::Display;
+//    using vessel::DummyPlayer;
+  using vault::out::Timings;
   
   
   
@@ -101,6 +102,5 @@ namespace engine{
   
   
   
-} // namespace engine
-} // namespace steam
+}}// namespace steam::engine
 #endif

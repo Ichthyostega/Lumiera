@@ -395,7 +395,6 @@ namespace session {
         }
       
       
-      using  ElementResolver = function<PlacementMO& (pair<PID,PID> const&)>;
       mutable ElementResolver elementResolver_;
       
       ElementResolver

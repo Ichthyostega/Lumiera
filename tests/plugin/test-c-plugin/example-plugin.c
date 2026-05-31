@@ -21,10 +21,11 @@
 
 #include <stdio.h>
 
-#include "common/interface-descriptor.h"
-#include "common/config-interface.h"
+#include "vessel/interface-descriptor.h"
+#include "vessel/config-interface.h"
 
-#include "interface/say-hello.h"
+// Dummy/demonstration plugin-interface
+#include "vessel/say-hello.h"
 
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;

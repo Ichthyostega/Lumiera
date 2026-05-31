@@ -99,7 +99,8 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/hash-value.h"
-#include "steam/engine/buffhandle.hpp"
+#include "include/limits.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "steam/engine/turnout-system.hpp"
 #include "lib/format-string.hpp"
 #include "lib/several.hpp"
@@ -124,6 +125,7 @@ namespace engine {
   class ProcNode;
   class ProcNodeDiagnostic;
   
+  using vault::mem::BuffHandle;
   using ProcNodeRef = std::reference_wrapper<ProcNode>;
   using OptionalBuff = std::optional<BuffHandle>;
   

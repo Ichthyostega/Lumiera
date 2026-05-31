@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/format-string.hpp"
 #include "test-chain-load.hpp"
 #include "vault/gear/job.h"
@@ -855,6 +855,15 @@ namespace test {
       
       
       /** @test verify calibration of a configurable computational load.
+       * @remark observed speed after calibration on my machine (AMD FX83 8 core):
+       *       - for CPU load: 45.9 cycles/µs
+       *       - for Mem load: 85.8 cycles/µs
+       * @warning with increased memory buffer size, the mem-load method becomes
+       *  increasingly slower for times > 5ms, probably due to cache effects.
+       *  Furthermore, in the actual scheduler load testing, which uses this
+       *  computational load in a more realistic setting (as opposed to a tight
+       *  microbenchmark loop), observed run times are consistently slightly
+       *  longer than calibrated (cache effects, pipeline stalls)
        */
       void
       verify_computation_load()
@@ -892,8 +901,10 @@ namespace test {
           cpuLoad.useAllocation = false;
           micros = cpuLoad.invoke();
           CHECK (micros > 900);
+          CHECK (micros < 1100);
           micros = cpuLoad.invoke(5);
           CHECK (micros > 4600);
+          CHECK (micros < 5400);           // usually quite precise, less than 1% off
           micros = cpuLoad.invoke(10);
           CHECK (micros > 9500);
           micros = cpuLoad.invoke(100);
@@ -903,11 +914,11 @@ namespace test {
           micros = cpuLoad.invoke();
           CHECK (micros > 900);
           micros = cpuLoad.invoke(5);
-          CHECK (micros > 4600);
+          CHECK (micros > 4600);           // can be significantly larger, like 7ms
           micros = cpuLoad.invoke(10);
-          CHECK (micros > 9500);
+          CHECK (micros > 9500);           // can be significantly larger, like 14ms
           micros = cpuLoad.invoke(100);
-          CHECK (micros > 95000);
+          CHECK (micros > 95000);          // can be significantly larger, like 140ms
         }
       
       

@@ -43,7 +43,7 @@
 #include "stage/timeline/track-body.hpp"
 #include "stage/style-scheme.hpp"
 
-#include "common/advice.hpp"
+#include "vessel/advice.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -71,8 +71,8 @@ namespace timeline {
     const int MINIMAL_CONTENT_WIDTH_px = 100;
     
     /** request a pre-defined CSS style context for the track body */
-    lumiera::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
-    lumiera::advice::Request<PStyleContext> trackRulerStyle{"style(trackRuler)"};
+    vessel::advice::Request<PStyleContext> trackBodyStyle{"style(trackBody)"};
+    vessel::advice::Request<PStyleContext> trackRulerStyle{"style(trackRuler)"};
     
     cuString
     slopeClassName(int depth)

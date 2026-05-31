@@ -32,9 +32,9 @@
 
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/typed-counter.hpp"
-#include "lib/test/microbenchmark.hpp"
+#include "test/microbenchmark.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
 
@@ -43,12 +43,12 @@
 #include <array>
 
 
+using test::threadBenchmark;
+using util::isnil;
+using lib::rani;
+
 namespace lib {
 namespace test{
-  
-  using util::isnil;
-  using lib::rani;
-  
   
   namespace { // test parametrisation...
     const uint MAX_INDEX      =    10;  ///< number of distinct types / counters

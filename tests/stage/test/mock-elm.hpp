@@ -53,11 +53,11 @@
 
 #include "lib/error.hpp"
 #include "include/ui-protocol.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/event-log.hpp"
 #include "stage/model/tangible.hpp"
 #include "lib/diff/record.hpp"
 #include "lib/idi/genfunc.hpp"
-#include "test/test-nexus.hpp"
+#include "stage/test/test-nexus.hpp"
 #include "lib/diff/test-mutation-target.hpp"   ///////////TICKET #1009 -- extract the render(DataCap) function?
 #include "lib/format-cout.hpp"
 #include "lib/symbol.hpp"
@@ -69,13 +69,11 @@
 #include <map>
 
 
-namespace stage {
-  using lib::test::EventLog;
-  using lib::test::EventMatch;
+namespace stage{
+namespace test {
   
-namespace test{
-  
-  
+  using ::test::EventLog;
+  using ::test::EventMatch;
   using lib::diff::TreeMutator;
   using util::isnil;
   using lib::Symbol;

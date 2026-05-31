@@ -36,10 +36,10 @@ namespace session {
   
   using std::unique_ptr;
   
-  using lumiera::Goal;
-  using lumiera::Query;
-  using lumiera::Resolution;
-  using lumiera::getResultTypeID;
+  using vessel::Goal;
+  using vessel::Query;
+  using vessel::Resolution;
+  using vessel::getResultTypeID;
   
   
   typedef PlacementIndex::ID PID;
@@ -191,7 +191,7 @@ namespace session {
    * there is a smart-ptr managing this ResultSet.
    */
   class ResultSet
-    : public lumiera::Resolution
+    : public vessel::Resolution
     {
       ContentFilter acceptable_;
       ExplorerBuilder buildExploartion_;

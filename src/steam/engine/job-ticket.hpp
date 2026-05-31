@@ -154,12 +154,12 @@ using lib::LUID;
       auto
       getPrerequisites ()
         {
-          return lib::transformIterator (this->empty()? Prerequisites::iterator()
-                                                      : provision_.prerequisites.begin()
-                                        ,[](Prerequisite& prq) -> JobTicket&
-                                           {
-                                             return prq.prereqTicket;
-                                           });
+          return lib::transformIter (this->empty()? Prerequisites::iterator()
+                                                  : provision_.prerequisites.begin()
+                                    ,[](Prerequisite& prq) -> JobTicket&
+                                       {
+                                         return prq.prereqTicket;
+                                       });
         }
       
       /**

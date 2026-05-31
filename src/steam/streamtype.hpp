@@ -26,8 +26,9 @@
 #define STEAM_STREAMTYPE_H
 
 #include "lib/symbol.hpp"
-//#include "common/query.hpp"
+//#include "vessel/query.hpp"
 #include "lib/idi/entry-id.hpp"
+#include "vault/mem/buffhandle.hpp"
 
 
 
@@ -104,12 +105,11 @@ namespace steam {
       class TypeTag ;
       
       /**
-       * placeholder type for the contents of a data buffer.
-       * The actual buffer will always be provided by a
-       * library implementation; throughout the engine,
-       * it's just hidden behind a DataBuffer pointer.
+       * placeholder marker for the contents of a data buffer.
+       * The actual buffer will always be provided by a library implementation;
+       * Access is coordinated by a BufferProvider.
        */
-      struct DataBuffer { };
+      using DataBuffer = vault::mem::Buff;
       
       
       virtual bool operator== (ImplFacade const& other)  const =0;
@@ -184,10 +184,4 @@ namespace steam {
   
   
 } // namespace steam
-
-
-namespace lumiera {
-  using steam::StreamType;
-}
-
 #endif /*STEAM_STREAMTYPE_H*/

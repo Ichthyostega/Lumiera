@@ -16,13 +16,13 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "stage/interact/ui-coord.hpp"
 #include "stage/interact/view-locator.hpp"
 #include "stage/interact/view-spec-dsl.hpp"
-#include "gen-node-location-query.hpp"
-#include "test/test-element-access.hpp"
+#include "stage/gen-node-location-query.hpp"
+#include "stage/test/test-element-access.hpp"
 #include "lib/depend-inject.hpp"
 #include "lib/format-cout.hpp"   ////////////////TODO only while this test is under development
 //#include "lib/idi/entry-id.hpp"
@@ -41,6 +41,7 @@ using lib::diff::Rec;
 //using util::isSameObject;
 //using util::isnil;
 using util::contains;
+using test::showSizeof;
 
 
 namespace stage {
@@ -62,7 +63,6 @@ namespace interact {
 namespace test {
   
 //  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-  using lib::test::showSizeof;
   using stage::model::ElementAccess;
   using stage::test::TestElementAccess;
   using stage::test::DummyWidget;

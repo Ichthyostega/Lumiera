@@ -72,7 +72,7 @@ namespace output {
       
       DisplayerInput format() override
         {
-          return lumiera::DISPLAY_YUV;
+          return vessel::spine::DISPLAY_YUV;
         }
       
       

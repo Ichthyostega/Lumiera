@@ -115,5 +115,21 @@ namespace meta {
       using Seq  = Types<>;
     };
   
+  
+  
+  
+  /**
+   * Concept to require a generic type sequence `Types<TYPES...>`
+   */
+  template<class TSEQ>
+  concept typeseq = requires (TSEQ seq)
+    {
+      // TSEQ can invoke a function with a Types<TYPES> subclass
+      []<typename...TYPES>(Types<TYPES...>&){/*placeholder*/}(seq);
+    };
+  
+  template<class TSEQ>
+  static constexpr bool is_Typeseq_v = typeseq<TSEQ>;
+  
 }} // namespace lib::meta
 #endif

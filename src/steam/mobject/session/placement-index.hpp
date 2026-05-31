@@ -106,6 +106,7 @@
 #include "lib/util.hpp"
 
 #include <unordered_map>
+#include <functional>
 #include <memory>
 #include <vector>
 
@@ -181,7 +182,9 @@ namespace session {
       using              _PID = PlacementMO::ID;
       using         ScopeIter = std::unordered_multimap<_PID,_PID>::const_iterator;
       using    ScopeRangeIter = lib::RangeIter<ScopeIter>;
-      using _ID_TableIterator = lib::TransformIter<ScopeRangeIter, PlacementMO&>;
+      using  ElementResolver  = std::function<PlacementMO& (std::pair<_PID,_PID> const&)>;
+      using _ID_TableIterator = decltype(lib::transformIter(std::declval<ScopeRangeIter>()
+                                                           ,std::declval<ElementResolver>()));
       
       
       

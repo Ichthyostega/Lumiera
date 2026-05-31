@@ -63,8 +63,8 @@
 
 
 #include "vault/common.hpp"
-#include "lib/test/test-helper.hpp"
-#include "lib/test/event-log.hpp"
+#include "test/test-helper.hpp"
+#include "test/event-log.hpp"
 
 #include "vault/gear/job.h"
 #include "vault/gear/activity.hpp"
@@ -127,12 +127,12 @@ namespace test {
    *         Moreover, it is convertible to `bool` to retrieve the verification result.
    */
   class ActivityMatch
-    : private lib::test::EventMatch
+    : private ::test::EventMatch
     {
-      using _Parent = lib::test::EventMatch;
+      using EventMatch = ::test::EventMatch;
       
-      ActivityMatch (lib::test::EventMatch&& matcher)
-        : _Parent{move (matcher)}
+      ActivityMatch (EventMatch&& matcher)
+        : EventMatch{move (matcher)}
         { }
       
       friend class ActivityDetector;
@@ -144,7 +144,7 @@ namespace test {
        *  usually triggered from the unit test `CHECK()`.
        * @note failure cause is printed to STDERR.
        */
-      operator bool()  const { return _Parent::operator bool(); }
+      operator bool()  const { return EventMatch::operator bool(); }
       
       
       /* query builder(s) to find a match stepping forwards */
@@ -168,7 +168,7 @@ namespace test {
       ActivityMatch&
       seq (uint seqNr)
         {
-          _Parent::attrib (MARK_SEQ, util::toString (seqNr));
+          EventMatch::attrib (MARK_SEQ, util::toString (seqNr));
           return *this;
         }
       
@@ -176,13 +176,13 @@ namespace test {
       ActivityMatch&
       beforeSeqIncrement (uint seqNr)
         {
-          _Parent::beforeEvent(MARK_INC, util::toString(seqNr));
+          EventMatch::beforeEvent(MARK_INC, util::toString(seqNr));
           return  *this;
         }
       ActivityMatch&
       afterSeqIncrement (uint seqNr)
         {
-          _Parent::afterEvent(MARK_INC, util::toString(seqNr));
+          EventMatch::afterEvent(MARK_INC, util::toString(seqNr));
           return  *this;
         }
       
@@ -202,7 +202,7 @@ namespace test {
        *  */
       template<typename...ARGS>
       ActivityMatch&
-      delegate (_Parent& (_Parent::*fun) (ARGS...),  ARGS&& ...args)
+      delegate (EventMatch& (EventMatch::*fun) (ARGS...),  ARGS&& ...args)
         {
           return static_cast<ActivityMatch&> (
                    (this->*fun) (forward<ARGS> (args)...));
@@ -221,7 +221,7 @@ namespace test {
   class ActivityDetector
     : util::NonCopyable
     {
-      using EventLog = lib::test::EventLog;
+      using EventLog = ::test::EventLog;
       
       EventLog eventLog_;
       uint invocationSeq_;
@@ -523,7 +523,7 @@ namespace test {
       
       Job
       buildMockJob (string id =""
-                   ,Time nominal = lib::test::randTime()
+                   ,Time nominal = ::test::randTime()
                    ,size_t extra = rani())
         {
           InvocationInstanceID invoKey;

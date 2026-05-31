@@ -116,7 +116,7 @@ extern "C" {
 #endif /* =========================== CL Interface ===================== */
 
   
-#include "common/interface.h"
+#include "vessel/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_SessionCommand, 0,
                            LUMIERA_INTERFACE_SLOT (const char*, cycle, (const char*, const char*)),

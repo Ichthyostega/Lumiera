@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "steam/asset/meta/time-grid.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timecode.hpp"

@@ -31,7 +31,7 @@
  **       this to the pattern of _type erasure_, where we discard specific
  **       knowledge after construction; for _such_ cases, opaque-holder.hpp
  **       might be a better fit.
- ** @see lib::TransformIter
+ ** @see lib::iter::Transform
  ** @see lib::explore
  **
  */

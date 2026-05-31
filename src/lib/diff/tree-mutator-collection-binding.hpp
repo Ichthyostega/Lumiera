@@ -76,6 +76,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/diff/gen-node.hpp"
 #include "lib/diff/tree-mutator.hpp"
 #include "lib/iter-adapter-stl.hpp"

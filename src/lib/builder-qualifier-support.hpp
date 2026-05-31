@@ -31,7 +31,7 @@
  ** @warning since these qualifiers manipulate by side-effect, it is up to the user to ensure
  **          consistent settings and behaviour (typically within a terminal `build()` function).
  ** @note the `qualify()` function accepts the qualifier functors by-reference; thus it is up
- **          to the user to either pass them by-value, by reverence or even by perfect forwarding.
+ **          to the user to either pass them by-value, by reference or even by perfect forwarding.
  ** 
  ** @see BuilderQualifierSupport_test
  ** @see ElementBoxWidget as usage example

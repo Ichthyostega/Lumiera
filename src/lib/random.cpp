@@ -85,6 +85,27 @@ namespace lib {
     entropyGen.reseed(entropyNucleus);
     defaultGen.reseed(entropyNucleus);
   }
+
+  
+  
+  /**
+   * @remark this is a general-purpose util mostly used in unit-tests
+   *   to generate a short string item that looks readable; probabilities
+   *   of individual letters were chosen non-uniformely to improve readability.
+   */
+  string
+  randStr (size_t len)
+  {
+    static const string alpha{"aaaabbccdddeeeeeffgghiiiiiijjkkllmmnnnoooopqqrrssttuuuuvwwxxxxxxxxxyyyyzz0123456789"};
+    static const size_t MAXCH{alpha.size()};
+    
+    string garbage(len,'\0');
+    size_t p = len;
+    while (p)
+      garbage[--p] = alpha[rani (MAXCH)];
+    return garbage;
+  }
+  
   
   
 } // namespace lib

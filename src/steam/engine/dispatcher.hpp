@@ -30,8 +30,8 @@
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/job-ticket.hpp"
 #include "steam/engine/job-planning.hpp"
-#include "steam/play/timings.hpp"
-#include "steam/play/output-slot.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/timings.hpp"
 #include "lib/iter-explorer.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/nocopy.hpp"
@@ -47,8 +47,8 @@ namespace engine {
   using std::move;
   using std::make_pair;
   using mobject::ModelPort;
-  using play::Timings;
-  using play::DataSink;
+  using vault::out::Timings;
+  using vault::out::DataSink;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
   using lib::time::FrameCnt;
@@ -264,7 +264,7 @@ namespace engine {
        *       wire in the DataSink...)
        */
       auto
-      feedTo (play::DataSink& sink)
+      feedTo (DataSink& sink)
         {
           return terminatePipeline (
                    SRC::transform(

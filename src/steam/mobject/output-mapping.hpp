@@ -47,7 +47,7 @@
 #include "lib/util.hpp"
 #include "lib/hash-value.h"
 #include "steam/asset/pipe.hpp"
-#include "common/query.hpp"
+#include "vessel/query.hpp"
 
 #include <compare>
 #include <map>
@@ -87,7 +87,7 @@ namespace mobject {
   }//(End) type rebinding helper
   
   namespace error = lumiera::error;
-  using lumiera::Query;
+  using vessel::Query;
   using lib::HashVal;
   
   

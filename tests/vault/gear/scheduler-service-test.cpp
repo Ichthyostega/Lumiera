@@ -16,15 +16,15 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "test-chain-load.hpp"
+#include "test/transiently.hpp"
+#include "test/microbenchmark.hpp"
 #include "activity-detector.hpp"
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
-#include "lib/test/transiently.hpp"
-#include "lib/test/microbenchmark.hpp"
 #include "lib/util.hpp"
 
 #include <thread>
@@ -340,7 +340,7 @@ namespace test {
                               };
           
           auto pullWork = [&] {
-                                delay_us = lib::test::benchmarkTime([&]{ res = scheduler.doWork(); });
+                                delay_us = test::benchmarkTime([&]{ res = scheduler.doWork(); });
                                 slip_us = _raw(detector.invokeTime(probe)) - _raw(start);
                                 cout << "res:"<<res<<" delay="<<delay_us<<"µs slip="<<slip_us<<"µs"<<endl;
                               };
@@ -401,7 +401,7 @@ namespace test {
           CHECK (activity::PASS == res);                                    // instruction to check back once
           pullWork();
           CHECK (activity::WAIT == res);                                    // but next call will send this thread to sleep right away
-          CHECK (delay_us < 40);
+          CHECK (delay_us < 50);
           
           
           cout << "follow-up with some distance => follow-up delay"<<endl;

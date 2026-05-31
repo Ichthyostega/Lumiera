@@ -20,7 +20,7 @@
 #include "steam/common.hpp"
 #include "steam/control/stypemanager.hpp"
 #include "steam/control/styperegistry.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 
 
 namespace steam {
@@ -49,7 +49,7 @@ namespace control {
   STypeManager::reset()
   {
     reg_.reset(new Registry);
-    lumiera::LifecycleHook::trigger (ON_STREAMTYPES_RESET);
+    vessel::LifecycleHook::trigger (ON_STREAMTYPES_RESET);
   }
   
   /** \par
@@ -111,12 +111,3 @@ namespace control {
   }
   
 }} // namespace steam::control
-
-
-// ==== C interface for registering setup of basic stream type configuration =======
-
-void
-lumiera_StreamType_registerInitFunction (void setupFun(void))
-{
-  lumiera::LifecycleHook (steam::control::ON_STREAMTYPES_RESET, setupFun);
-}

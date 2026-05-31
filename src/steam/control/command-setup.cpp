@@ -28,7 +28,7 @@
 
 #include "lib/error.hpp"
 #include "include/logging.h"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 #include "steam/control/command.hpp"
 #include "steam/control/command-setup.hpp"
 #include "steam/control/command-instance-manager.hpp"
@@ -45,8 +45,8 @@ using std::get;
 using std::function;
 using std::move;
 using lib::Symbol;
-using lumiera::LifecycleHook;
-using lumiera::ON_GLOBAL_INIT;
+using vessel::LifecycleHook;
+using vessel::ON_GLOBAL_INIT;
 using std::string;
 using util::unConst;
 using util::_Fmt;

@@ -109,7 +109,7 @@ Configuration
 ~~~~~~~~~~~~~
 All the current configuration and the state of the Debian depot index files is tracked
 in the aforementioned ``debian/lumiera'' Git repository, on a separate branch called
-https://git.lumiera.org/?p=debian/lumiera;a=shortlog;h=refs/heads/depot[`depot']
+https://git.lumiera.org/gitweb?p=debian/lumiera;a=shortlog;h=refs/heads/depot[`depot']
 
 TIP: this is a slightly unconventional setup, insofar the `depot' branch carries
      a directory tree that is completely separate from the main Lumiera source tree, which

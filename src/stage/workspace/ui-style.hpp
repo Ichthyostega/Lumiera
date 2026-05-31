@@ -28,7 +28,7 @@
 #define STAGE_WORKSPACE_UI_STYLE_H
 
 #include "stage/gtk-base.hpp"
-#include "common/advice.hpp"
+#include "vessel/advice.hpp"
 #include "lib/symbol.hpp"
 #include "lib/nocopy.hpp"
 
@@ -49,7 +49,7 @@ namespace workspace {
   using lib::Literal;
   using std::string;
   
-  using StyleAdvice = lumiera::advice::Provision<PStyleContext>;
+  using StyleAdvice = vessel::advice::Provision<PStyleContext>;
 
   
   
@@ -99,7 +99,7 @@ namespace workspace {
        * Sets the theme to use for the Lumiera GUI.
        * @param stylesheetName GTK CSS stylesheet to load from the resourceSearchPath_
        * @throw error::Config if this stylesheet can't be resolved on the searchpath
-       * @see lumiera::Config
+       * @see vessel::spine::Config
        */
       void setTheme (string const& stylesheetName);
       

@@ -214,7 +214,7 @@ Interface Definition Language
 -----------------------------
 In his work on the plugin loader, _Cehteh_ created a first draft how to export an interface, and calls for review.
 An example can be found in
-https://git.lumiera.org/?p=LUMIERA;a=blob;f=tests/backend/test-interfaces.c;h=09fa25afa3cb57b79a2717d0bf3a8253afeba000;hb=ebcc5c7fd2d8700f3375e3309b724ac2517a0f40[tests/backend/test-interfaces.c]
+https://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=tests/backend/test-interfaces.c;h=09fa25afa3cb57b79a2717d0bf3a8253afeba000;hb=ebcc5c7fd2d8700f3375e3309b724ac2517a0f40[tests/backend/test-interfaces.c]
 
 An interface is a list of »slots« mapping functions. The interface descriptor is itself realised as interface,
 and thus can be versioned, extended and specialised.

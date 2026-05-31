@@ -110,20 +110,4 @@ namespace proc_interface {
 
 
 } // namespace proc_interface
-
-
-extern "C" { //TODO provide a separate header if some C code or plugin happens to need this...
-  
-  /** any stream type implementation, which needs to be present on the
-   *  pristine default level (without any session specific configuration),
-   *  should register a setup function, which will be called on each
-   *  STypemanager::reset()
-   */
-  void
-  lumiera_StreamType_registerInitFunction (void setupFun(void));
-  
-  // TODO provide a C interface usable from such a setupFun to access the STypeManager registration functions.
-}
-
-
-#endif
+#endif /*STEAM_CONTROL_STYPEMANAGER_H*/

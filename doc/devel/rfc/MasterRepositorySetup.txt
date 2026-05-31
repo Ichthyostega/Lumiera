@@ -16,7 +16,7 @@ This describes how the shared MASTER is set up and syncronized.
 Description
 ~~~~~~~~~~~
 We have now a shared master repository in
-https://git.lumiera.org/?p=LUMIERA;a=summary[/git/LUMIERA].
+https://git.lumiera.org/gitweb?p=LUMIERA;a=summary[/git/LUMIERA].
 
 - The public/anonymous git url is [yellow-background]#`git://git.lumiera.org/LUMIERA`#
 - for people with ssh access it is pushable at [purple]#`UID@git.lumiera.org:/git/LUMIERA`#.
@@ -71,10 +71,10 @@ That being said -- the shared master at [yellow-background]#`git://git.lumiera.o
 still contains the _official_ state of the Lumiera codebase, while
 actual development is published first in a repository per developer
 (so effectively in
-https://git.lumiera.org/?p=lumiera/ichthyo;a=summary[the Ichthyo repository]
+https://git.lumiera.org/gitweb?p=lumiera/ichthyo;a=summary[the Ichthyo repository]
 for the time being);
 development is consolidated intermittently into the
-https://git.lumiera.org/?p=LUMIERA;a=summary[LUMIERA Git].
+https://git.lumiera.org/gitweb?p=LUMIERA;a=summary[LUMIERA Git].
 
 
 ''''

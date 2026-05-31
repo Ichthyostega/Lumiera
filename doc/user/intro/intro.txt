@@ -113,8 +113,11 @@ each have a distinct _type_ which explicitly identifies the possible connections
 modules. Within these constraints, any combination is possible without
 hidden restrictions.
 
-Lumiera is not a set of Lego bricks, nor is it a business application
-driven by finite usage stories.
+However, the application strives for a certain degree of internal coherence. +
+Lumiera is not a set of Lego bricks allowing you to build ``just anything''
+(in a clumsy way) -- nor is it the next universal programming platform or
+application framework driven by pre-canned success stories, where you
+``just push the button'' and magic does the rest.
 
 
 Medium Level Abstraction and Project Specific Conventions
@@ -131,9 +134,8 @@ details such as header format conversion or access to individual channels.
 To complement this approach, Lumiera does _not_ rely on hard-wired, global
 conventions -- rather we allow the building up of project specific conventions and
 rules xref:rules[<-] to fit a given requirement and preferred working style.
-
-Lumiera will be supplied with a conventional template and a default
-configuration to ease the learning curve for new users.
+However, in its default configuration, Lumiera will be supplied with a conventional
+UI template and key bindings to ease the learning curve for new users.
 
 
 [[graphs]]
@@ -218,16 +220,15 @@ Lumiera consists of three major parts:
 In this section, we discuss the user's perspective when working with the GUI.
 
 
-Although Lumiera will initially ship with a standard, default GUI, we do not presume that this GUI will be suitable for all uses.
-We expect there to be multiple, different GUIs, each designed for different
-kinds of tasks.  We expect that some of these will be written by users, and the
-steam-layer is designed to facilitate this easily.
+Although Lumiera ships with a conventional desktop UI by default, we do not presume
+that this GUI will be suitable for all uses. We expect there to be several specialised
+UIs eventually, designed to handle very specific kinds of tasks.
 
 Indeed, Lumiera can even work
 satisfactorily without a GUI, for example, for special purposes
 (e.g. as headless render-node xref:rendernode[<-] or frameserver
-xref:frameserver[<-]).  Scripts will eventually be written
-to facilitate automated processing.
+xref:frameserver[<-]).  A script interface will be added at some
+point to facilitate automated processing.
 
 
 Now it is time to take a look at the preliminary Lumiera GUI:
@@ -505,21 +506,19 @@ A Plug-in is a kind of generalisation of a library.
 All applications use, to varying degrees of intensity, libraries. A programmer
 will not reinvent the wheel each time he sits down to programme an
 application. A programmer will typically borrow and use features and
-functionality from other programmers---or even borrow from himself, stuff
+functionality from other programmers -- or even borrow from himself, stuff
 written long ago in the past. Such features are collected together in
 libraries.
 
-A library is used in an application by _linking_ the library into the
-application. (There are other things to be done, but we'll call these 'details',
-which wont concern us here.) There are different ways to _link_ a library
-into an application: linking statically and linking dynamically.
+A library is used in an application by _linking_ the library into the application.
+However, there are different ways to _link_ a library: linking statically and
+linking dynamically.
 
 _Static Linking_ is done while the application is being built, or
 compiled. It is performed by the linker, which executes as the last step
-of the compilation process. The linker can perform some sanity checks
-(mostly checks regarding formally correct function invocation) and warn the user
-hat some particular feature is being used incorrectly. The user can then correct
-the offending code, and recompile. +
+of the compilation process. The linker can perform some sanity checks and
+some optimisation. In the end, the functionality of the library is ``baked into''
+the resulting executable. +
 There are a number of disadvantages associated with static linking. Features and
 libraries are being constantly improved. If the application wants to use new
 features, it will have to be recompiled with the new library which provides the
@@ -532,15 +531,14 @@ features can be used by the application. The features provided by a dynamic
 library are loaded when the application starts to run.
 
 However both methods exhibit a number of shortcomings. Wouldn't it be better if
-all features could be loaded only when needed? If features could be loaded only
-when needed, then they could also be unloaded when not required, thus saving
-memory and possibly increasing performance. This scheme of making features
-available to an application is known as run-time linking, aka plug-ins.
+all features could be loaded only when needed? This scheme of making features
+available to an application on-demand is known as run-time linking. A component
+intended to be added this way, at run time, by the user, is known as a Plug-in.
 Plug-ins offer other benefits: the application can continue to use both the old
 features and the new features together, side-by-side, by using the version
-number associated with the plug-in. This saves the application from the havoc
-of library incompatibility that is
-associated with other linking methods.
+number associated with the plug-in. Furthermore, Plug-ins can load other Plug-ins
+and thus extend the application in creative ways, beyond anything the original
+developers of the application had planned.
 
 Most modern applications use plug-ins, some are heavily dependent on plug-ins
 and only provide limited functionality without any plug-ins.

@@ -28,7 +28,7 @@
 #define STEAM_INTERFACE_FACADE_H
 
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 
 
 
@@ -51,18 +51,18 @@ namespace steam {
    */
   struct Facade
     {
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for the vessel::Voyage,
        *  wired accordingly to allow `main()` to boot
        *  the support infrastructure for loading of
        *  and working on the editing session. */
-      static lumiera::Subsys& getSessionDescriptor();
+      static vessel::Subsys& getSessionDescriptor();
       
       
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for vessel::Voyage,
        *  wired accordingly to allow `main()` to bring up
        *  the render / playback coordination and
        *  output management subsystem. */
-      static lumiera::Subsys& getPlayOutDescriptor();
+      static vessel::Subsys& getPlayOutDescriptor();
       
       
       //////////////////TODO: define the global access interfaces for the Steam-Layer

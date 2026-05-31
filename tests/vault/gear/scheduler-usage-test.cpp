@@ -16,7 +16,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "vault/gear/scheduler.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/format-cout.hpp"
@@ -87,7 +87,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (SchedulerUsage_test, "unit engine");
+  LAUNCHER (SchedulerUsage_test, "integration engine");
   
   
   

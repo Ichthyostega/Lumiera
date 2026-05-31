@@ -7,17 +7,22 @@ return: 0
 END
 
 
-TEST "Test support: dummy buffer provider" TrackingHeapBlockProvider_test <<END
+TEST "Test support: buffer provider" DiagnosticBufferProvider_test <<END
 return: 0
 END
 
 
-TEST "Buffer provider diagnostics" BufferProviderProtocol_test <<END
+TEST "Buffer provider protocol" BufferProviderProtocol_test <<END
 return: 0
 END
 
 
-TEST "Bbuffer metadata type keys" BufferMetadataKey_test <<END
+TEST "Buffer provider integration" BufferProviderLoad_test <<END
+return: 0
+END
+
+
+TEST "Buffer metadata type keys" BufferMetadataKey_test <<END
 return: 0
 END
 
@@ -27,8 +32,17 @@ return: 0
 END
 
 
-PLANNED "Proxy Buffer-provider" BufferProxyProvider_test <<END
+TEST "Proxy Buffer-provider" BufferProxyAdaptor_test <<END
 return: 0
+END
+
+
+TEST "BufferStore interface" BufferStore_test <<END
+return: 0
+END
+
+
+TEST "Engine Buffer-Manager interface" EngineBufferManager_test <<END
 END
 
 
@@ -63,6 +77,21 @@ END
 
 
 TEST "Render job planning pipeline setup" JobPlanningPipeline_test <<END
+return: 0
+END
+
+
+TEST "Local buffer state management" LocalBufferStage_test <<END
+return: 0
+END
+
+
+TEST "Local buffer memory handling" LocalBufferStore_test <<END
+return: 0
+END
+
+
+TEST "Local pool for buffer memory" LocalMemPool_test <<END
 return: 0
 END
 

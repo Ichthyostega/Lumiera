@@ -90,15 +90,18 @@ namespace iter_stl {
   
   
   /**
-   * helper baseclass to simplify
-   * defining customised wrapped STL iterators
+   * @internal helper baseclass to simplify defining customised wrapped STL iterators.
+   * @remark this is meant to be compliant to a STL input-iterator;
+   *    it's _not_ a »Lumiera Forward Iterator« (lacks the bool check for iteration end)
+   * @warning minimal definition, since it is only intended to be wrapped into lib::RangeIter
    */
   template<typename DEF>
   struct WrappedStlIter : DEF
     {
-      using Iter      = DEF::Iter;
-      using reference = DEF::reference;
-      using pointer   = DEF::pointer;
+      using Iter       = DEF::Iter;
+      using value_type = DEF::value_type;
+      using reference  = DEF::reference;
+      using pointer    = DEF::pointer;
       
       
       WrappedStlIter()              : i_()  { }
@@ -111,6 +114,10 @@ namespace iter_stl {
       
       friend bool operator== (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ == i2.i_; }
       friend bool operator!= (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ != i2.i_; }
+      
+      /** @note the following dummy definitions are required to fulfil the concept std::input_iterator */ 
+      WrappedStlIter& operator++(int) { NOTREACHED("never used as STL iterator"); return *this; }
+      using difference_type = ptrdiff_t;
       
     private:
       mutable Iter i_;
@@ -424,11 +431,14 @@ namespace iter_stl {
       /** create empty snapshot */
       IterSnapshot() { }
       
+      // standard copy operations acceptable
+      
+      
       /** take snapshot by discharging the given Lumiera Forward iterator
        *  @warning depending on the implementation backing the source iterator,
        *           this might or might not yield side-effects.
        */
-      template<class IT>
+      template<class IT,       typename =meta::disable_if_self<IterSnapshot, IT>>
       IterSnapshot (IT&& src)
         {
           for ( ; src; ++src)
@@ -439,7 +449,7 @@ namespace iter_stl {
        *  @warning depending on the implementation backing the source iterator,
        *           this might or might not yield side-effects.
        */
-      template<class IT>
+      template<class IT,       typename =meta::disable_if_self<IterSnapshot, IT>>
       IterSnapshot (IT const& src)
         {
           for (IT copy{src}; copy; ++copy)
@@ -461,11 +471,6 @@ namespace iter_stl {
           for (IT pos{begin}; pos!=end; ++pos)
             buffer_.emplace_back (*pos);
         }
-      
-      IterSnapshot(IterSnapshot &&)                 = default;
-      IterSnapshot(IterSnapshot const&)             = default;
-      IterSnapshot& operator= (IterSnapshot const&) = default;
-      IterSnapshot& operator= (IterSnapshot &&)     = default;
       
       explicit
       operator bool() const

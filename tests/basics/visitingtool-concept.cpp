@@ -43,7 +43,7 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
 #include "lib/depend.hpp"
@@ -54,7 +54,7 @@ using util::_Fmt;
 using std::string;
 
 
-namespace lumiera {
+namespace lib {
   namespace visitor_concept_draft {
     
     // ================================================================== Library ====
@@ -443,4 +443,4 @@ namespace lumiera {
       
       
       
-}}} // namespace lumiera::visitor_concept_draft::test
+}}} // namespace lib::visitor_concept_draft::test

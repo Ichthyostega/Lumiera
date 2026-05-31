@@ -1,27 +1,36 @@
 Technical Documentation: Steam-Layer
 ====================================
 
-Eventually, this section will hold technical documentation for the Steam-Layer.
+As implementation progresses, this section will gradually compile
+the technical documentation for the Steam layer.
 
 Development Scrapbook TiddlyWiki
 --------------------------------
-Hermann Voßeler, core developer of the Steam-Layer uses an separate embedded wiki
-for his day-to-day design sketches, notes and also for the more persistent planning.
-This *TiddlyWiki* is a nifty JavaScript wiki embedded in a single HTML page; as such
-it lives right within the source tree, where it can be worked on alongside with the
-code. Besides the actual planning and descriptions, this wiki also links to the
-UML diagrams created with *BOUML* during the ongoing planning and design.
+It is sometimes difficult to write complete documentation while a system is still under construction.
+For taking work notes and formulating new ideas while working, _Ichthyostega_ frequently uses the
+https://classic.tiddlywiki.com/[TiddlyWiki] -- which is a nifty JavaScript wiki embedded within a
+single HTML page; as such it lives right within the source tree, where it can be worked on alongside
+with the code. Notes and sketches for the planning often evolve into detailed descriptions, complete
+with test data and UML diagrams to document the structure. Material drafted in the TiddlyWiki
+will be moved gradually into this documentation section, as time permits.
 
-This setup started as a temporary solution -- but as uWiki is not expected to come
-to life soon, the current website can't serve as replacement for a real wiki, an
-we'll stick to that situation for the time being. As the content in the TiddlyWiki
-becomes more mature and stable, it will be moved over into this section here.
+This arrangement started as a temporary solution at a time where we did not have a suitable website
+for permanent documentation -- and it was kept ever since, as the TiddlyWiki is very convenient
+to work with, once you are accustomed to its quirks.footnote:[
+  It is quite fluid and inspiring to work with indeed. The content is an unordered collection
+  of small notepad pages, called ``Tiddlers'', which can be opened and closed conveniently.
+  Any "CamelCaseWord" becomes a new Tiddler, recent changes appear in a timeline, and Tiddlers
+  can be organised with tags. The only point to be careful is that you need to _save_
+  your work, which can be achieved with the `save' action in the menu to overwrite
+  the old version in the Git tree. Sometimes this might produce Git conflicts,
+  which are easy to resolve, since the content is plain text.
+]
+Additions to the TiddlyWiki are usually made during coding, and are deliberately committed always
+together with the corresponding code. As such, these additions will propagate to Lumiera/Master eventually;
+yet to make the newest development notes easier to access, we have put up a `rsync`ed version of the
+TiddlyWiki online for direct access over the internet (which then is of course read-only).
 
-While additions to the TiddlyWiki generally propagate to Lumiera/Master through
-the normal merges, we've put up a rsynced version of the TiddlyWiki online for
-direct access (of course read-only).
-
--> access the Proy-Layer link:/wiki/renderengine.html[TiddlyWiki online here]
+-> access the link:/wiki/renderengine.html[TiddlyWiki online here]
 
 
 

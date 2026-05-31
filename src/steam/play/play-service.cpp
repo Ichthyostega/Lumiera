@@ -21,7 +21,8 @@
 
 
 #include "lib/error.hpp"
-#include "include/play-facade.hpp"
+#include "lib/sync.hpp"
+#include "vessel/spine/play-facade.hpp"
 #include "steam/play/play-service.hpp"
 #include "steam/play/play-process.hpp"
 #include "steam/play/render-configurator.hpp"
@@ -35,8 +36,13 @@
 #include <memory>
 
 
-
 namespace lumiera {
+  namespace error {
+    LUMIERA_ERROR_DEFINE (CANT_PLAY, "unable to build playback or render process for this configuration");
+} }
+
+namespace vessel {
+namespace spine {
   
   
   Play::~Play() { } // emit VTables here...
@@ -44,18 +50,14 @@ namespace lumiera {
   /** static storage for the facade access front-end */
   lib::Depend<Play> Play::facade;
   
-  
-  namespace error {
-    LUMIERA_ERROR_DEFINE (CANT_PLAY, "unable to build playback or render process for this configuration");
-  }
-}//(End) namespace lumiera
+}}//(End) namespace vessel::spine
 
 
 namespace steam {
 namespace play {
 
 //using std::string;
-//using lumiera::Subsys;
+//using vessel::Subsys;
 //using std::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
@@ -77,7 +79,7 @@ namespace play {
     
   } // (End) hidden service impl details
   
-  using lumiera::Play;
+  using vessel::spine::Play;
   
   typedef POutputManager Output;
   
@@ -155,7 +157,7 @@ namespace play {
    *  This service allows to create individual PlayProcess instances
    *  to \em perform a timeline or similar model object, creating
    *  rendered data for output. Client code is assumed to access
-   *  this service through the lumiera::Play facade.
+   *  this service through the vessel::spine::Play facade.
    */
   PlayService::PlayService()
     : pTable_(new ProcessTable)
@@ -196,7 +198,8 @@ namespace play {
 }} // namespace steam::play
 
 
-namespace lumiera {
+namespace vessel {
+namespace spine {
   
   /* ==== convenience shortcuts for creating a PlayProcess ==== */
   
@@ -265,4 +268,4 @@ namespace lumiera {
   }
   
   
-}
+}}// namespace vessel::spine

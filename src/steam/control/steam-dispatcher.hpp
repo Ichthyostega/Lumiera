@@ -45,7 +45,7 @@
 #ifndef STEAM_CONTROL_PROC_DISPATCHER_H
 #define STEAM_CONTROL_PROC_DISPATCHER_H
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 #include "lib/depend.hpp"
 #include "lib/sync.hpp"
 
@@ -57,7 +57,7 @@ namespace steam {
 namespace control {
   
   using std::unique_ptr;
-  using lumiera::Subsys;
+  using vessel::Subsys;
   
   
   class DispatcherLoop;

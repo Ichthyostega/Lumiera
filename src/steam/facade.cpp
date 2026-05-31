@@ -20,12 +20,12 @@
  ** - The »play out subsystem« is able to _perform_ such a render nodes network
  **   for video playback and rendering.
  ** 
- ** lumiera::Subsys and lumiera::SubsystemRunner together define a protocol for some
+ ** vessel::Subsys and vessel::SubsystemRunner together define a protocol for some
  ** large scale building blocks of the whole application to be started and terminated.
  ** Typically this entails to create a dedicated thread to manage the top level concerns
  ** for the given subsystem, and to create registration and services for public access:
  ** - to operate on the session, use the steam::control::SessionCommand facade
- ** - playback and render operations can be operated by the lumiera::Play facade
+ ** - playback and render operations can be operated by the vessel::spine::Play facade
  ** 
  ** @see SteamDispatcher
  ** @see OutputDirector
@@ -47,8 +47,8 @@ namespace steam {
   
   using std::string;
   using std::unique_ptr;
-  using lumiera::Subsys;
-  using lumiera::Option;
+  using vessel::Subsys;
+  using vessel::Option;
   using steam::control::SteamDispatcher;
   
   

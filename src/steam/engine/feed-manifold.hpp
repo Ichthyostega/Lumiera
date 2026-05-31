@@ -75,7 +75,7 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
@@ -83,7 +83,7 @@
 #include "lib/meta/variadic-helper.hpp"
 #include "lib/meta/tuple-helper.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 
 
 namespace steam {
@@ -296,11 +296,12 @@ namespace engine {
     
   }//(End)Introspection helpers.
   
+  using vault::mem::BuffHandle;
+  
   
   
   template<class FUN, class PAM =_Disabled>
   class FeedPrototype;
-  
   
   /**
    * Configuration context for a FeedManifold.

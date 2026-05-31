@@ -13,13 +13,13 @@
 */
 
 /** @file iter-explorer.hpp
- ** Building tree expanding and backtracking evaluations within hierarchical scopes.
+ ** Build tree expanding and backtracking evaluations within hierarchical scopes.
  ** Based on the *Lumiera Forward Iterator* concept and using the basic IterAdapter templates,
  ** these components allow to implement typical evaluation strategies, like conditional expanding
  ** or depth-first exploration of a hierarchical structure. Since the access to this structure is
  ** abstracted through the underlying iterator, what we effectively get is a functional datastructure.
- ** The implementation is based on the idea of a "state core", which is wrapped right into the iterator
- ** itself (value semantics) -- similar to the IterStateWrapper, which is one of the basic helper templates
+ ** The implementation is based on the idea of a **State Core**, which is wrapped right into the iterator
+ ** itself (value semantics) — similar to the IterStateWrapper, which is one of the basic helper templates
  ** provided by iter-adapter.hpp.
  ** 
  ** @remark historically, this template, as well as the initial IterExplorer (draft from 2012) can be
@@ -36,7 +36,7 @@
  ** calculations with exception handling but also simple data structures like lists or trees). The key point with any
  ** monad is the ability to _bind a function_ into the monad; this function will work on the _contained base values_
  ** and produce a modified new monad instance. In the simple case of a list, "binding" a function basically means
- ** to _map the function onto_ the elements in the list. (strictly speaking, it means the `flatMap` operation)
+ ** to _map the function onto_ the elements in the list. (more precisely, this indicates a `flatMap` operation)
  ** 
  ** # A Pipeline builder
  ** Based on such concepts, structures and evaluation patterns, the IterExplorer serves the purpose to provide
@@ -49,8 +49,9 @@
  **   on each element, rather it is triggered by issuing a dedicated `expandChildren()` call on the processing
  **   pipeline. Thus, binding the expansion functor has augmented the data source with the ability to explore
  **   some part in more detail _when required_.
- ** - the *transform operation* installs a function to be mapped onto each element retrieved from the underlying source
- ** - in a similar vein, the *filter operation* binds a predicate to decide about using or discarding data
+ ** - the **transform** operation installs a function to be mapped onto each element retrieved from the underlying source
+ ** - in a similar vein, the **filter** operation binds a predicate to decide about using or discarding iterator results
+ ** - the **flatten** operation allows to combine a sequence of nested _iterables_ into a single seamless iterator
  ** - in concert, expand- and transform operation allow to build hierarchy evaluation algorithms without exposing
  **   any knowledge regarding the concrete hierarchy used and explored as data source.
  ** - further special convenience adaptors and _terminal functions_ are provided.
@@ -101,6 +102,7 @@
 #include "lib/error.hpp"
 #include "lib/uninitialised-storage.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/meta/common-result.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/item-wrapper.hpp"
@@ -217,6 +219,14 @@ namespace lib {
           }
       };
     
+    
+    // (forward declarations to allow defining all traits together)
+    template<class SRC, typename RES>
+    class RedressAdapter;
+    
+    template<class SRC, typename WRA>
+    class WrapperAdapter;
+    
   }//(End) namespace iter_explorer : basic iterator wrappers
   
   
@@ -237,9 +247,10 @@ namespace lib {
     using std::common_type_t;
     using std::conditional_t;
     using std::is_convertible;
+    using std::is_lvalue_reference;
     using std::remove_reference_t;
     using meta::is_StateCore;
-    using meta::can_IterForEach;
+    using meta::can_LumieraIter;
     using meta::can_STL_ForEach;
     using meta::ValueTypeBinding;
     using meta::has_TypeResult;
@@ -248,14 +259,21 @@ namespace lib {
     template<class SRC>
     struct shall_wrap_STL_Iter
       : __and_<can_STL_ForEach<SRC>
-              ,__not_<can_IterForEach<SRC>>
+              ,__not_<can_LumieraIter<SRC>>
               >
       { };
     
     template<class SRC>
     struct shall_use_Lumiera_Iter
-      : __and_<can_IterForEach<SRC>
+      : __and_<can_LumieraIter<SRC>
               ,__not_<is_StateCore<SRC>>
+              >
+      { };
+    
+    template<class SRC>
+    struct shall_use_StateCore
+      : __and_<__not_<can_LumieraIter<SRC>>
+              ,is_StateCore<SRC>
               >
       { };
     
@@ -273,8 +291,8 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<is_StateCore<SRC>>>
       {
-        using SrcRaw  = lib::meta::Strip<SRC>::Type;
-        using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::Value;
+        using SrcRaw  = lib::meta::Strip<SRC>::TypeReferred;
+        using SrcVal  = meta::RefTraits<iter::CoreYield<SrcRaw>>::value_type;
         using SrcIter = lib::IterableDecorator<lib::CheckedCore<SrcRaw>>;
       };
     
@@ -288,7 +306,7 @@ namespace lib {
     template<class SRC>
     struct _DecoratorTraits<SRC,   enable_if<shall_wrap_STL_Iter<SRC>>>
       {
-        static_assert (not std::is_rvalue_reference<SRC>::value,
+        static_assert (not std::is_rvalue_reference_v<SRC>,
                        "container needs to exist elsewhere during the lifetime of the iteration");
         using SrcIter = iter_explorer::StlRange<SRC>;
         using SrcVal  = SrcIter::value_type;
@@ -312,6 +330,78 @@ namespace lib {
       { };
     
     
+    /**
+     * @internal Type-selector to adapt a recursive iterable for flattening...
+     * @tparam SRC the underlying source iterator (which yields a nested iterable as result)
+     * @tparam RES result type of the source iterator (this is the nested iterable itself)
+     * @remark to explain the general scheme employed here...
+     *       - we want to add a processing layer with a iter_explorer::Flattener
+     *       - this requires a source-iterator that yields a nested iterable of sorts
+     *       - the source-iterator as such has already been adapted by the [generic mechanism](\ref _DecoratorTraits)
+     *       - however there remains the twist that the _nested result_ (which is some kind of iterable)
+     *         also needs to be adapted, so that it can be handled as Lumiera Forward Iterator...
+     *       - this can be achieved by interspersing an adapter layer _below_ the Flattener,
+     *         so that the result of the underlying iterator will be adapted / casted / wrapped
+     *       - furthermore, we have to distinguish the cases where the underlying iterator produces a value result
+     *       - overall this trait template is instantiated with the type \a SRC of the underlying iterator
+     *       - with the help of the second parameter's default, the \a RES result type of this iterator is determined
+     *       - the specialisation matcher then classifies this result type and determines an adaptation strategy
+     *       - finally, the Flattener is parametrised with this `SrcAdapter` type, but we pass `move(*this) to
+     *         its constructor; since `*this` inherits from \a SRC, the Adapter will pick up and wrap \a SRC
+     *     There are two basic adaptation strategies. First, if the source iterator yields an iterator by reference,
+     *     and we can adapt this iterator on-the-fly (without requiring additional storage), we can just cast the result.
+     *     In all other cases, a setup similar to a Transformer is required: for each source-result (which is in itself
+     *     iterable), a wrapper is constructed into an _inline storage space_ (implemented as \ref lib::ItemWrapper),
+     *     and this wrapper is exposed by-ref as "result value", so that the Flattener can iterate it until exhausted.
+     */
+    template<class SRC, typename RES=iter::Yield<SRC>, typename SEL=void>
+    struct _FlatteningTraits
+      {
+        static_assert (!sizeof(SRC), "Can not build Flattener: Unable to figure out how to iterate the nested iterable.");
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  can_LumieraIter<RES> >>>
+      {
+        using SrcAdapter = meta::RefTraits<SRC>::value_type;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, can_LumieraIter<RES> >>>
+      {
+        using NestedIter = meta::RefTraits<RES>::value_type;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  shall_use_StateCore<RES> >>>
+      {
+        using CoreRaw    = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<CoreRaw>;
+        using SrcAdapter = iter_explorer::RedressAdapter<SRC,NestedIter>;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, shall_use_StateCore<RES> >>>
+      {
+        using CoreRaw    = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<CoreRaw>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<       is_lvalue_reference<RES>,  shall_wrap_STL_Iter<RES> >>>
+      {
+        using NestedIter = iter_explorer::StlRange<RES>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    template<class SRC, typename RES>
+    struct _FlatteningTraits<SRC,RES,     enable_if<__and_<__not_<is_lvalue_reference<RES>>, is_subscriptable<RES> >>>
+      {
+        using StoreRaw   = lib::meta::Strip<RES>::TypeReferred;
+        using NestedIter = IterableDecorator<IdxStoreCore<StoreRaw>>;
+        using SrcAdapter = iter_explorer::WrapperAdapter<SRC,NestedIter>;
+      };
+    
+    
     
     /**
      * helper to derive a suitable common type when expanding children
@@ -327,19 +417,15 @@ namespace lib {
         using ResIter = _DecoratorTraits<RES>::SrcIter;
         using SrcYield = iter::Yield<SRC>;
         using ResYield = iter::Yield<ResIter>;
-        using _CommonT = meta::CommonResultYield<SrcYield,ResYield>;
+        using _CommonT = meta::CommonResult<SrcYield,ResYield>;
         static constexpr bool can_reconcile = _CommonT::value;
-        static constexpr bool isRefResult = _CommonT::isRef;
         
         static_assert (can_reconcile,
                        "source iterator and result from the expansion must yield compatible values");
         static_assert (is_const_v<SrcYield> == is_const_v<ResYield>,
                        "source and expanded types differ in const-ness");
         
-        using YieldRes   = _CommonT::ResType;
-        using value_type = _CommonT::value_type;
-        using reference  = _CommonT::reference;
-        using pointer    = _CommonT::pointer;
+        using YieldRes   = _CommonT::Type;
       };
     
   }//(End) IterExplorer traits
@@ -478,12 +564,14 @@ namespace lib {
     struct _ReduceTraits
       {
         using Result = iter_explorer::_FunTraits<FUN,SRC>::Res;
-        using ResVal = lib::meta::RefTraits<Result>::Value;
+        using ResVal = lib::meta::RefTraits<Result>::value_type;
       };
     
     
     
     
+    
+    /* ========= IterExplorer pipeline building blocks ========= */
     
     /**
      * @internal Base of pipe processing decorator chain.
@@ -517,44 +605,80 @@ namespace lib {
     
     
     /**
+     * @internal Iterator adapter to _virtually project_ an arbitrary type \a RES
+     * onto the result of the underlying Lumiera Iterator, by means of a force-cast.
+     */
+    template<class SRC, typename RES>
+    class RedressAdapter
+      : public SRC
+      {
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source.");
+        
+        using SrcRes = iter::Yield<SRC>;
+        static_assert(meta::isLRef_v<SrcRes>, "Source iterator must yield its result by-ref.");
+        
+      public:
+        using value_type = meta::RefTraits<RES>::value_type;
+        using reference  = meta::RefTraits<RES>::reference;
+        using pointer    = meta::RefTraits<RES>::pointer;
+        
+        reference
+        operator*() const
+          {
+            return reinterpret_cast<reference> (SRC::operator*());
+          }
+        
+        pointer
+        operator->() const
+          {
+            return & operator*();
+          }
+        
+        using SRC::SRC;
+      };
+    
+    
+    /**
      * @internal Decorator for IterExplorer adding the ability to "expand children".
-     * The expandChildren() operation is the key element of a depth-first evaluation: it consumes
-     * one element and performs a preconfigured _expansion functor_ on that element to yield
-     * its "children". These are given in the form of another iterator, which needs to be
-     * compatible to the source iterator ("compatibility" boils down to both iterators
-     * yielding a compatible value type). Now, this _sequence of children_ effectively
-     * replaces the expanded source element in the overall resulting sequence; which
-     * means, the nested sequence was _flattened_ into the results. Since this expand()
-     * operation can again be invoked on the results, the implementation of such an evaluation
-     * requires a stack datastructure, so the nested iterator from each expand() invocation
-     * can be pushed to become the new active source for iteration. Thus the primary purpose
-     * of this Expander (decorator) is to integrate those "nested child iterators" seamlessly
-     * into the overall iteration process; once a child iterator is exhausted, it will be
-     * popped and iteration continues with the previous child iterator or finally with
-     * the source iterator wrapped by this decorator. The source pipeline is only pulled
-     * once the expanded children are exhausted.
+     * The expandChildren() operation is the key element of a _depth-first evaluation:_
+     * it consumes one element and performs a preconfigured _expansion functor_ on that element
+     * to yield its "children". These are given in the form of another iterator, which needs to be
+     * compatible to the source iterator (within this context, "compatibility" boils down to both
+     * iterators yielding a compatible value type). Now, this _sequence of children_ effectively
+     * replaces the expanded source element in the overall resulting sequence; which means that
+     * the nested sequence was _flattened_ into the results. Since this expand() operation can
+     * again be invoked on the results, the implementation of such an evaluation requires a
+     * **stack datastructure**, so the nested iterator from each expand() invocation can be
+     * _pushed on top_ in order to become the new active source for iteration. Thus the prime
+     * purpose of this Expander (decorator) is to integrate those "nested child iterators"
+     * seamlessly into the overall iteration process; once a child iterator is exhausted,
+     * it will be _popped_ and iteration continues with the previous child iterator, or,
+     * finally, with the source iterator wrapped by this decorator. Overall, the given
+     * source pipeline is only pulled, whenever the expanded children are exhausted.
      * @remark since we allow a lot of leeway regarding the actual form and definition of the
-     *         _expansion functor_, there is a lot of minute technical details, mostly confined
-     *         within the _FunTraits traits. For the same reason, we need to prepare two different
-     *         bindings of the passed raw functor, one to work on the source sequence, and the other
-     *         one to work on the result sequence of a recursive child expansions; these two sequences
-     *         need not be implemented in the same way, which simplifies the definition of algorithms.
-     * @tparam SRC the wrapped source iterator, typically a IterExplorer or nested decorator.
-     * @tparam FUN the concrete type of the functor passed. Will be dissected to find the signature
+     *         _expansion functor_, various technical details must be observed, and these minutiae
+     *         are largely maintained within the _FunTraits traits. For the same reason, we need to
+     *         prepare two different bindings of the passed raw functor, where one of them is used
+     *         to work on the source sequence, while the other one handles the result sequence of
+     *         _recursive child expansions;_ these two sequences need not be implemented precisely
+     *         in the same way — what matters here is compatible behaviour — and this flexible
+     *         setup helps to simplify the definition of search- and evaluation algorithms.
+     * @tparam SRC the wrapped source iterator, typically an iterator adaptor or nested decorator.
+     * @tparam FUN actual type of the functor passed. Will be type-matched to detect its signature.
      * @note the _return type_ of #yield depends _both_ on the return type produced from the original
      *         sequence and the return type of the sequence established through the expand functor.
      *         An attempt is made to _reconcile these_ and this attempt may fail (at compile time).
-     *         The reason is, any further processing downstream can not tell if data was produced
-     *         by the original sequence of the expansion sequence. Notably, if one of these two
-     *         delivers results by-value, then the Expander will _always_ deliver all results
-     *         by-value, because it would not be possible to expose a reference to some value
+     *         The rationale is that any further processing downstream can not tell if a data result
+     *         was produced by the original sequence of the expansion sequence. Notably, if one of
+     *         these two delivers results by-value, then the Expander will _always_ choose to deliver
+     *         all its results by-value, since it is impossible to expose a reference to some value
      *         that was just delivered temporarily from a source iterator.
      */
     template<class SRC, class RES>
     class Expander
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using _Trait = _ExpanderTraits<SRC,RES>;
         using ResIter = _Trait::ResIter;
@@ -622,9 +746,9 @@ namespace lib {
         
         /** @note result type bindings based on a common type of source and expanded result */
         using YieldRes   = _Trait::YieldRes;
-        using value_type = _Trait::value_type;
-        using reference  = _Trait::reference;
-        using pointer    = _Trait::pointer;
+        using value_type = meta::RefTraits<YieldRes>::value_type;
+        using reference  = meta::RefTraits<YieldRes>::reference;
+        using pointer    = meta::RefTraits<YieldRes>::pointer;
         
         
         bool
@@ -699,7 +823,7 @@ namespace lib {
     
     /**
      * @internal extension to the Expander decorator to perform expansion automatically on each iteration step.
-     * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication, that there might
+     * @todo as of 12/2017, this is more like a proof-of concept and can be seen as indication that there might
      *       be several flavours of child expansion. Unfortunately, most of these conceivable extensions would
      *       require a flexibilisation of Expander's internals and thus increase the complexity of the code.
      *       Thus, if we ever encounter the need of anything beyond the basic expansion pattern, we should
@@ -726,7 +850,7 @@ namespace lib {
     
     
     /**
-     * @internal extension to the Expander decorator to perform expansion delayed on next iteration.
+     * @internal extension to the Expander decorator to perform a delayed expansion on next iteration.
      */
     template<class SRC>
     class ScheduledExpander
@@ -761,14 +885,94 @@ namespace lib {
       };
     
     
+    /**
+     * @internal Decorator for IterExplorer to expand one level of nested iterables.
+     * This mechanism requires that the _result value_ yielded by the underlying iterator
+     * is itself iterable. Applying this decorator thus has the effect to »flatten« exactly
+     * one level of nesting.
+     * @note The result produced by underlying \a SRC _must be a Lumiera iterator_.
+     *       Other kinds of nested iterables can be handled only when adapted accordingly.
+     */
+    template<class SRC>
+    class Flattener
+      : public SRC
+      {
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
+
+        using NestedIT = iter::Yield<SRC>;
+        static_assert(can_LumieraIter<NestedIT>::value, "flatten() operation expects nested iterator");
+
+      public:
+        using value_type = meta::ValueTypeBinding<NestedIT>::value_type;
+        using reference  = meta::ValueTypeBinding<NestedIT>::reference;
+        using pointer    = meta::ValueTypeBinding<NestedIT>::pointer;
+
+        Flattener() =default;
+        // inherited default copy operations
+        
+        Flattener (SRC&& dataSrc)
+          : SRC{move (dataSrc)}
+          {
+            pullNested();
+          }
+        
+        
+        /** refresh state when other layers manipulate the source sequence.
+         * @note possibly pulls pipeline to re-establish the invariant */
+        void
+        expandChildren()
+          {
+            SRC::expandChildren();
+            pullNested();
+          }
+        
+      public: /* === Iteration control API for IterableDecorator === */
+        
+        bool
+        checkPoint()  const
+          {
+            ENSURE (not srcIter() or * srcIter());
+            return bool(srcIter());
+          }
+        
+        reference
+        yield()  const
+          {
+            return **srcIter();
+          }
+        
+        void
+        iterNext()
+          {
+            ++ *srcIter();
+            pullNested();
+          }
+        
+      protected:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        /** @note Invariant: positioned at next nested source element, if any */
+        void
+        pullNested()
+          {
+            while (srcIter() and not * srcIter())
+              ++srcIter();
+          }
+      };
+    
+    
     
     /**
-     * @internal Decorator for IterExplorer to map a transformation function on all results.
+     * @internal Decorator for IterExplorer to map a transformation function onto all results.
      * The transformation function is invoked on demand, and only once per item to be treated,
      * storing the treated result into an universal value holder buffer. The given functor
      * is adapted in a similar way as the "expand functor", so to detect and convert the
      * expected input on invocation.
-     * @note the result-type of the #yield() function _must be_ `reference`, even when
+     * @note the result-type of the #yield() function _must be_ a `reference`, even when
      *       the TransformFunctor produces a value; otherwise we can not provide a safe
      *       `operator->` on any iterator downstream. This is also the reason why the
      *       ItemWrapper is necessary, precisely _because we want to support_ functions
@@ -782,7 +986,7 @@ namespace lib {
     class Transformer
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using TransformFunctor = function<RES(SRC&)>;
         using TransformedItem = wrapper::ItemWrapper<RES>;
@@ -790,10 +994,10 @@ namespace lib {
         TransformFunctor trafo_;
         TransformedItem treated_;
         
-      public:
-        using value_type = meta::ValueTypeBinding<RES>::value_type;
-        using reference  = meta::ValueTypeBinding<RES>::reference;
-        using pointer    = meta::ValueTypeBinding<RES>::pointer;
+      public:            // Note: result might be a nested iterator -- not using ValueTypeBinding here!
+        using value_type = meta::RefTraits<RES>::value_type;
+        using reference  = meta::RefTraits<RES>::reference;
+        using pointer    = meta::RefTraits<RES>::pointer;
         
         
         template<typename FUN>
@@ -826,6 +1030,7 @@ namespace lib {
             t1.treated_.reset();
             t2.treated_.reset();
             swap (t1.trafo_, t2.trafo_);
+            swap (t1.srcIter(), t2.srcIter());
           }
         
         
@@ -881,6 +1086,125 @@ namespace lib {
     
     
     /**
+     * Iterator adapter to package each iterator result into a **wrapper object** of type \a WRA.
+     * Built as a simplified variant of the Transformer, it can not invoke an arbitrary function,
+     * yet will destroy the previous wrapper and construct a new wrapper into the embedded storage
+     * buffer on each iteration.
+     * @note similar as the Transformer, WrapperAdapter will _re-engage_ after copy, move and swap.
+     *    This implies to discard a wrapped object residing in the ItermWrapper's storage; the next
+     *    result-pull will then cause it to be regenerated from source, since the absolute storage
+     *    locations both of the ItemWrapper storage, and the underlying source iterator has changed.
+     *    Notably this protects against insidious data corruption in cases where some part of the
+     *    implementation (typically indirectly) happens to take a reference into the source.
+     * @warning this mechanism might have surprising ramifications, especially when the underlying
+     *    iterator has generated a collection by-value; this data will be discarded whenever the
+     *    iterator pipeline is moved, which might happen automatically when adding further layers.
+     *    Notably there is an interference with possible iterator decorators _added downstream_,
+     *    that need to pull ahead for grouping and filtering.
+     * @remark Users of WrapperAdapter, and of IterExplorer are responsible in general to ensure
+     *    that any embodied structure preferably relies on value copy of iterator results rather,
+     *    and otherwise only employs references into stable memory locations.
+     */
+    template<class SRC, typename WRA>
+    class WrapperAdapter
+      : public SRC
+      {
+        using WrappedItem = wrapper::ItemWrapper<WRA>;
+        
+        WrappedItem wrapped_{/*created empty*/};
+        
+      public:            // Note: result might be a nested iterator -- not using ValueTypeBinding here!
+        using value_type = meta::RefTraits<WRA>::value_type;
+        using reference  = meta::RefTraits<WRA>::reference;
+        using pointer    = meta::RefTraits<WRA>::pointer;
+        
+        WrapperAdapter (SRC&& dataSrc)
+          : SRC{move (dataSrc)}
+          { }
+        
+        WrapperAdapter() =default;
+        WrapperAdapter (WrapperAdapter const& o)
+          : SRC{o}
+          , wrapped_{/* deliberately empty: force re-engage */}
+          { }
+        WrapperAdapter (WrapperAdapter && o)
+          : SRC{move (o)}
+          , wrapped_{/* deliberately empty: force re-engage */}
+          { }
+        WrapperAdapter&
+        operator= (WrapperAdapter changed)
+          {
+            swap (*this,changed);
+            return *this;
+          }
+        friend void
+        swap (WrapperAdapter& t1, WrapperAdapter& t2)
+          {
+            using std::swap;
+            t1.wrapped_.reset();
+            t2.wrapped_.reset();
+            swap (t1.srcIter(), t2.srcIter());
+          }
+        
+        
+        /* === decorated Lumiera Forward Iterator === */
+        
+        reference
+        operator*() const
+          {
+            return unConst(this)->reWrapIt();
+          }
+        
+        pointer
+        operator->() const
+          {
+            return & operator*();
+          }
+        
+        WrapperAdapter&
+        operator++()
+          {
+            wrapped_.reset(); // discard current wrapper
+            ++ srcIter();
+            return *this;
+          }
+        
+        /** refresh state when other layers manipulate the source sequence */
+        void
+        expandChildren()
+          {
+            wrapped_.reset();
+            SRC::expandChildren();
+          }
+        
+        
+        ENABLE_USE_IN_STD_RANGE_FOR_LOOPS (WrapperAdapter);
+        
+        friend bool
+        operator== (WrapperAdapter const& w1, WrapperAdapter const& w2)
+        {
+          return w1.srcIter() == w2.srcIter();
+        }
+        
+      private:
+        SRC&
+        srcIter()  const
+          {
+            return unConst(*this);
+          }
+        
+        reference
+        reWrapIt ()
+          {
+            if (not wrapped_)  // build a wrapper instance once per src item
+              wrapped_ = * srcIter();
+            return *wrapped_;
+          }
+      };
+    
+    
+    
+    /**
      * @internal Decorator for IterExplorer to group consecutive elements into fixed sized chunks.
      * One group of elements is always prepared eagerly, and then the next one on iteration.
      * The group is packaged into a std::array, returning a _reference_ into the internal buffer.
@@ -892,7 +1216,7 @@ namespace lib {
     class Grouping
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using Group = std::array<RES, grp>;
@@ -1002,14 +1326,15 @@ namespace lib {
     
     /**
      * @internal Decorator for IterExplorer to group consecutive elements controlled by some
-     * grouping value \a GRP and compute an aggregate value \a AGG for each such group as
+     * **grouping value** \a GRP and compute an aggregate value \a AGG for each such group as
      * iterator yield. The first group is consumed eagerly, each further group on iteration;
      * thus when the aggregate for the last group appears as result, the source iterator has
-     * already been exhausted. The aggregate is default-initialised at start of each group
-     * and then the computation functor \a FAGG is invoked for each consecutive element marked
-     * with the same _grouping value_ — and this grouping value itself is obtained by invoking
-     * the functor \a FGRP on each source value. All computation are performed on-the-fly. No
-     * capturing or reordering of the source elements takes place, rather groups are formed
+     * already been exhausted. The aggregate is default-initialised at start of each group,
+     * followed by invoking the [computation functor](\ref #Aggregator) for each consecutive
+     * element that has been marked with the same _grouping value_ — and this grouping value
+     * itself is obtained by invoking the [grouping functor](\ref #Grouping) on each value
+     * produced by the underlying source iterator. All computation is performed on-the-fly.
+     * No capturing or reordering of the source elements takes place, rather groups are formed
      * based on the changes of the grouping value over the source iterator's result sequence.
      * @tparam AGG data type to collect the aggregate; must be default constructible and assignable
      * @tparam GRP value type to indicate a group
@@ -1018,14 +1343,14 @@ namespace lib {
      *       This limitation was deemed acceptable (adapting a function with several arguments would
      *       require quite some nasty technicalities). The first argument of this `aggFun` refers
      *       to the accumulator by value, and thereby also implicitly defines the aggregate result type.
-     * @warning the Aggregator \a AGG *must not capture references* to upstream internal state, because
+     * @warning the #Aggregator *must not capture references* to upstream internal state, because
      *       the overall pipeline will be moved into final location _after the initial ctor call._
      */
     template<class SRC, typename AGG, class GRP>
     class GroupAggregator
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using SrcValue   = meta::ValueTypeBinding<SRC>::value_type;
@@ -1038,9 +1363,9 @@ namespace lib {
         Aggregator aggregate_;
         
       public:
-        using value_type = meta::RefTraits<AGG>::Value;
-        using reference  = meta::RefTraits<AGG>::Reference;
-        using pointer    = meta::RefTraits<AGG>::Pointer;
+        using value_type = meta::RefTraits<AGG>::value_type;
+        using reference  = meta::RefTraits<AGG>::reference;
+        using pointer    = meta::RefTraits<AGG>::pointer;
 
         GroupAggregator() =default;
         // inherited default copy operations
@@ -1108,13 +1433,13 @@ namespace lib {
      * Similar to the Transformer, the given functor is adapted as appropriate. However,
      * we require the functor's result type to be convertible to bool, to serve as approval test.
      * The filter predicate and thus the source iterator is evaluated _eagerly_, to establish the
-     * *invariant* of this class: _if a "current element" exists, it has already been approved._
+     * **invariant** of this class: _if a "current element" exists, it has already been approved._
      */
     template<class SRC>
     class Filter
       : public SRC
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       protected:
         using FilterPredicate = function<bool(SRC&)>;
@@ -1201,7 +1526,7 @@ namespace lib {
      * capturing it _by value._ After building, this remoulded version can be assigned to the
      * original filter functor, under the assumption that both are roughly compatible. Moreover,
      * since we wrap the actual lambda into an adapter, allowing for generic lambdas to be used
-     * as filter predicates, this setup allows for a lot of leeway regarding the concrete predicates.
+     * as filter predicates, this setup provides a lot of wiggle room for defining predicates.
      * @note whenever the filter is remoulded, the invariant is immediately
      *       [re-established](\ref Filter::pullFilter() ), possibly forwarding the sequence
      *       to the next element approved by the new version of the filter.
@@ -1215,7 +1540,7 @@ namespace lib {
       : public Filter<SRC>
       {
         using _Filter = Filter<SRC>;
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
       public:
         MutableFilter() =default;
@@ -1365,6 +1690,7 @@ namespace lib {
     
     
     
+    
     /**
      * @internal Decorator for IterExplorer to cut iteration once a predicate ceases to be true.
      * Similar to Filter, the given functor is adapted as appropriate, yet is required to yield
@@ -1379,7 +1705,7 @@ namespace lib {
     class StopTrigger
       : public IterStateCore<SRC>
       {
-        static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+        static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
         
         using Core = IterStateCore<SRC>;
         using Cond = function<bool(SRC&)>;
@@ -1579,7 +1905,7 @@ namespace lib {
   class IterExplorer
     : public SRC
     {
-      static_assert(can_IterForEach<SRC>::value, "Lumiera Iterator required as source");
+      static_assert(can_LumieraIter<SRC>::value, "Lumiera Iterator required as source");
       
       
     public:
@@ -1698,6 +2024,25 @@ namespace lib {
         }
       
       
+      /** adapt this IterExploer to flatten _one level of nested Lumiera Iterators_.
+       * Obviously this processing can only be applied when the underlying pipeline yields a result
+       * that can be handled as being iterable; the resulting pipeline will seamlessly produce all
+       * results from all non-empty nested iterators, in sequence.
+       * @remark when chained behind a suitable [transformer(fun)](\ref transform()), the processing
+       *         pattern is similar to the `flatMap(fun)` or `M >= fun` operation known from Monad theory.
+       * @return processing pipeline with attached [flattening](\ref iter_explorer::Flattener) decorator
+       */
+      auto
+      flatten()
+        {
+          using Adapted = _FlatteningTraits<SRC>::SrcAdapter;
+          using ResCore = iter_explorer::Flattener<Adapted>;
+          using ResIter = _DecoratorTraits<ResCore>::SrcIter;
+          
+          return IterExplorer<ResIter> (ResCore{Adapted{move(*this)}});
+        }
+      
+      
       /** adapt this IterExplorer to pipe each result value through a transformation function.
        * Several "layers" of mapping can be piled on top of each other, possibly mixed with the
        * other types of adaptation, like the child-expanding operation, or a filter. Obviously,
@@ -1760,7 +2105,7 @@ namespace lib {
           
           static_assert (meta::is_BinaryFun<FAGG>());
           using ArgType1  = _Fun<FAGG>::Args::List::Head;
-          using Aggregate = meta::RefTraits<ArgType1>::Value;
+          using Aggregate = meta::RefTraits<ArgType1>::value_type;
           
           using ResCore = iter_explorer::GroupAggregator<SRC, Aggregate, GroupVal>;
           using ResIter = _DecoratorTraits<ResCore>::SrcIter;
@@ -1905,7 +2250,7 @@ namespace lib {
       asPtr()
         {
           using Val = meta::ValueTypeBinding<SRC>::value_type;
-          static_assert (not std::is_pointer_v<Val>);
+          static_assert (not is_pointer_v<Val>);
           return IterExplorer::transform ([](Val& ref){ return &ref; });
         }
       

@@ -38,7 +38,10 @@
 #define CONTROL_COMMAND_SIMPLE_CLOSURE_H
 
 #include "lib/typed-allocation-manager.hpp"
+#include "steam/control/command-closure.hpp"
+#include "steam/control/argument-erasure.hpp"
 #include "steam/control/command-op-closure.hpp"
+#include "lib/meta/tuple-record-init.hpp"
 #include "lib/opaque-holder.hpp"
 
 #include <string>
@@ -50,6 +53,7 @@ namespace control {
   namespace err = lumiera::error;
   
   using lib::InPlaceBuffer;
+  using lib::meta::buildTuple;
   using std::string;
   
   

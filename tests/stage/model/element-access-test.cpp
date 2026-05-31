@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 //#include "stage/interact/view-spec-dsl.hpp"
-#include "test/test-element-access.hpp"
+#include "stage/test/test-element-access.hpp"
 #include "stage/interact/ui-coord.hpp"
 //#include "gen-node-location-query.hpp"
 #include "lib/depend-inject.hpp"
@@ -45,8 +45,6 @@ namespace stage  {
 namespace model{
 namespace test {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-//  using lib::test::showSizeof;
   using interact::UICoord;
   using stage::test::TestElementAccess;
   using stage::test::DummyWidget;

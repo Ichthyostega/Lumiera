@@ -16,15 +16,24 @@
  ** Notably the services to provide access to working buffers are linked directly into the
  ** render node connectivity, where they are used for each invocation of a render job.
  ** 
- ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), so that
- ** tests can use suitably adapted variants for verifications. The default instantiation
- ** provides a naive self-contained implementation suitable for demonstration and test.
+ ** The EngineCtx itself is meant to be [dependency injected](\ref lib::Depend), and acts
+ ** as a front-end for the support facilities of the render engine — which are likewise
+ ** dependency-injected, so that tests can use suitably adapted variants for verification.
+ ** The default instantiation provides a naive self-contained implementation suitable for
+ ** demonstration and test.
+ ** 
+ ** For productive use within the Lumiera Render Engine, a much more elaborate setup
+ ** is necessary, including setup of a frame cache, and of timing strategies; these
+ ** are configured as part of starting the steam::engine::RenderEnvironment.
  ** @todo who is responsible for setup of the services for the actual render engine?
  **       Might be closely related to brining up façade interfaces.
- ** @todo WIP-WIP 2/2025 provide actual service implementation and find a way
- **       how to populate the Facilities with these actual services...
+ ** @todo WIP-WIP 1/2026
+ **     - ✔ provide a default implementation for test
+ **     - 🔁 find a way to populate the Facilities with the
+ **       production variant of the services...
  ** 
- ** @see engine-ctx-facilities.hpp implementation
+ ** @see engine-ctx-test.cpp
+ ** @see engine-ctx.cpp base implementation
  ** @see buffer-provider.hpp
  ** @see buffhandle.hpp
  */
@@ -34,40 +43,30 @@
 
 
 #include "lib/depend.hpp"
-#include "steam/engine/buffhandle.hpp"
+#include "vault/mem/buffhandle.hpp"
 #include "lib/nocopy.hpp"
-
-//#include <utility>
-#include <memory>
 
 
 namespace steam {
 namespace engine {
   
-//  using lib::Literal;
-//  using std::unique_ptr;
-//  using std::forward;
+  using vault::mem::BufferProvider;
+  
   
   class EngineCtx
     : util::NonCopyable
     {
-      class Facilities;
-      std::unique_ptr<Facilities> services_;
       
     public:
       BufferProvider& mem;
-      BufferProvider& cache;
-//      BufferProvider& output;  /////////////////////////OOO presumably no longer necessary
+      BufferProvider& cache;    /////////////////////////////////////////////////////////////////////////////TICKET #1223 : very likely a super interface for the CacheService
       
       static lib::Depend<EngineCtx> access;
       
     private:
-     ~EngineCtx();
       EngineCtx();
-      
       friend class lib::DependencyFactory<EngineCtx>;
     };
-  
   
   
 }} // namespace steam::engine

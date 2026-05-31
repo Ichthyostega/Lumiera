@@ -14,7 +14,7 @@
 
 /** @file lifecycleregistry.hpp
  ** Helper for registering lifecycle event callbacks, which are
- ** provided as a global service by lumiera::AppState. This service
+ ** provided as an application service within the »vessel«. This service
  ** allows to enrol functions under a given label and then to call
  ** all those registered functions.
  ** @note this is in fact an event mechanism, and if we start using
@@ -22,12 +22,12 @@
  ** boost::signals. (which has the downside of being an binary
  ** dependency).
  **
- ** @see appstate.hpp
+ ** @see voyage.hpp
  */
 
 
-#ifndef LUMIERA_LIFECYCLEREGISTRY_H
-#define LUMIERA_LIFECYCLEREGISTRY_H
+#ifndef VESSEL_LIFECYCLE_REGISTRY_H
+#define VESSEL_LIFECYCLE_REGISTRY_H
 
 
 #include "lib/util.hpp"
@@ -39,7 +39,7 @@
 #include <map>
 
 
-namespace lumiera {
+namespace vessel {
   
   using util::contains;
   using std::function;
@@ -50,7 +50,7 @@ namespace lumiera {
   /**
    * Registry of callback functions accessible by a label (ID)
    * provided at registration. Registered functions will be added
-   * to a list, which can be triggered via label. Used by AppState
+   * to a list, which can be triggered via label. Used by vessel::Voyage
    * to implement the lumiera lifecycle (init, shutdown) hooks.
    */
   class LifecycleRegistry
@@ -98,5 +98,5 @@ namespace lumiera {
 
 
 
-} // namespace lumiera
-#endif
+} // namespace vessel
+#endif /*VESSEL_LIFECYCLE_REGISTRY_H*/

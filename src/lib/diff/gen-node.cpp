@@ -44,7 +44,7 @@
 using util::join;
 using boost::lexical_cast;
 using lib::time::TimeValue;
-using lib::transformIterator;
+using lib::transformIter;
 using util::almostEqual;
 using lib::hash::LuidH;
 
@@ -297,9 +297,9 @@ namespace diff{
     
     return (Rec::TYPE_NIL==rec.getType()? "" : rec.getType())
          + "{"
-         +  join (transformIterator (rec.attribs(), renderAttrib))
+         +  join (transformIter (rec.attribs(), renderAttrib))
          + (isnil(rec.scope())?   "" : "|")
-         +  join (transformIterator (rec.scope()  , renderChild))
+         +  join (transformIter (rec.scope()  , renderChild))
          + "}"
          ;
   }

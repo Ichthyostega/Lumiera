@@ -367,6 +367,12 @@ namespace util {
     return const_cast<OBJ&> (ro);
   }
   
+  /** similar shortcut to repurpose a const accessor
+   *  for implementing a similar non-const variant
+   * @warning beware! you might be subverting the contract
+   */
+  #define UN_CONST(_CALL_) util::unConst (std::as_const(*this).  _CALL_ )
+  
   
   
   /*  ======== address and identity =========  */

@@ -46,7 +46,7 @@
 
 namespace util {
   
-  using lib::meta::can_IterForEach;
+  using lib::meta::lum_iter;
   using std::string;
   using std::forward;
   using std::move;
@@ -135,13 +135,13 @@ namespace util {
   {
     using Val = lib::meta::ValueTypeBinding<IT>::value_type;
     
-    return lib::transformIterator(forward<IT>(src), util::toString<Val>);
+    return lib::transformIter (forward<IT>(src), util::toString<Val>);
   }
   
   
   
   namespace { // helper to build range iterator on demand
-    template<class CON, typename TOGGLE = void>
+    template<class CON>
     struct _RangeIter
       {
         using StlIter = CON::const_iterator;
@@ -153,8 +153,8 @@ namespace util {
           { }
       };
     
-    template<class IT>
-    struct _RangeIter<IT,   lib::meta::enable_if< can_IterForEach<IT>> >
+    template<lum_iter IT>
+    struct _RangeIter<IT>
       {
         IT iter;
         

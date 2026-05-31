@@ -52,7 +52,7 @@ namespace workspace {
    * either from the default theme of via the given Lumiera icon search paths,
    * typically from `setup.ini`.
    * 
-   * @see lumiera::Config
+   * @see vessel::spine::Config
    */
   UiStyle::UiStyle()
     : Gtk::UIManager()

@@ -75,6 +75,10 @@ namespace node {
     
   } // (End) implementation details
   
+  using vessel::spine::DisplayerInput;
+  using vessel::spine::DISPLAY_NONE;
+  using vessel::spine::DISPLAY_YUV;
+  using vessel::spine::DISPLAY_RGB;
   
   
   
@@ -86,14 +90,14 @@ namespace node {
   { }
   
   void
-  DummyImageGenerator::configure (lumiera::DisplayerInput displayFormat)
+  DummyImageGenerator::configure (DisplayerInput displayFormat)
     {
       INFO (steam, "ImageGen: use format %d", displayFormat);
-      REQUIRE (  displayFormat == lumiera::DISPLAY_NONE
-              or displayFormat == lumiera::DISPLAY_YUV
-              or displayFormat == lumiera::DISPLAY_RGB);
+      REQUIRE (  displayFormat == DISPLAY_NONE
+              or displayFormat == DISPLAY_YUV
+              or displayFormat == DISPLAY_RGB);
       
-      useRGB_ = (displayFormat == lumiera::DISPLAY_RGB);
+      useRGB_ = (displayFormat == DISPLAY_RGB);
     }
   
   void

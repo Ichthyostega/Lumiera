@@ -231,8 +231,8 @@ namespace lib {
       friend auto begin (Several const& svl) { return svl.begin();}
       friend auto end   (Several const& svl) { return svl.end();  }
       
-      using value_type = meta::RefTraits<I>::Value;
-      using reference  = meta::RefTraits<I>::Reference;
+      using value_type = meta::RefTraits<I>::value_type;
+      using reference  = meta::RefTraits<I>::reference;
       using const_reference = value_type const&;
       
       

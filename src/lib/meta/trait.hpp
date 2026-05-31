@@ -57,9 +57,6 @@
 
 
 //Forward declarations for the Unwrap helper....
-namespace boost{
-  template<class X> class reference_wrapper;
-}
 namespace std {
   template<class X> class reference_wrapper;
   template<class X> class shared_ptr;
@@ -90,9 +87,7 @@ namespace meta {
   using std::remove_pointer_t;
   using std::remove_reference_t;
   using std::conditional_t;
-  using std::is_reference_v;
-  using std::is_lvalue_reference_v;
-  using std::is_rvalue_reference_v;
+  using std::is_pointer_v;
   using std::is_pointer;
   using std::is_base_of;
   using std::is_convertible;
@@ -108,13 +103,22 @@ namespace meta {
   using std::__or_;
   
   template<typename T>
-  static constexpr bool isConst_v = std::is_const_v<remove_reference_t<T>>;
+  using isConst = std::is_const<remove_reference_t<T>>;
   template<typename T>
-  static constexpr bool isLRef_v = std::is_lvalue_reference_v<T>;
+  using isLRef = std::is_lvalue_reference<T>;
   template<typename T>
-  static constexpr bool isRRef_v = std::is_rvalue_reference_v<T>;
+  using isRRef = std::is_rvalue_reference<T>;
   template<typename T>
-  static constexpr bool isRef_v = std::is_reference_v<T>;
+  using isRef = std::is_reference<T>;
+  
+  template<typename T>
+  static constexpr bool isConst_v = isConst<T>::value;
+  template<typename T>
+  static constexpr bool isLRef_v = isLRef<T>::value;
+  template<typename T>
+  static constexpr bool isRRef_v = isRRef<T>::value;
+  template<typename T>
+  static constexpr bool isRef_v = isRef<T>::value;
   
   
   /**
@@ -156,19 +160,6 @@ namespace meta {
         {
           ASSERT (ptr);
           return const_cast<Type&> (*ptr);
-        }
-    };
-  
-  template<typename X>
-  struct Unwrap<boost::reference_wrapper<X>>
-    : std::true_type
-    {
-      using Type = X;
-      
-      static X&
-      extract (boost::reference_wrapper<X> wrapped)
-        {
-          return wrapped;
         }
     };
   
@@ -249,8 +240,8 @@ namespace meta {
   template<typename X>
   struct Strip
     {
-      using TypeUnconst  = conditional_t<is_reference_v<X>
-                                        ,  conditional_t<is_rvalue_reference_v<X>
+      using TypeUnconst  = conditional_t<isRef_v<X>
+                                        ,  conditional_t<isRRef_v<X>
                                                         ,  remove_cv_t<remove_reference_t<X>> &&
                                                         ,  remove_cv_t<remove_reference_t<X>> & >
                                         ,  remove_cv_t<X>>;
@@ -274,33 +265,33 @@ namespace meta {
   template<typename TY>
   struct RefTraits
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY *>
     {
-      typedef TY*  Value;
-      typedef TY** Pointer;
-      typedef TY*& Reference;
+      typedef TY*  value_type;
+      typedef TY*& reference;
+      typedef TY** pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY &>
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   template<typename TY>
   struct RefTraits<TY &&>
     {
-      typedef TY  Value;
-      typedef TY* Pointer;
-      typedef TY& Reference;
+      typedef TY  value_type;
+      typedef TY& reference;
+      typedef TY* pointer;
     };
   
   
@@ -328,7 +319,11 @@ namespace meta {
            , is_same<I,S>
            >
     { };
-    
+  
+  template<typename S, typename I>
+  inline constexpr bool is_Subclass_v = is_Subclass<S,I>();
+  
+  
   /** compare for unadorned base type, disregarding const and references */
   template<typename S, typename I>
   struct is_basically
@@ -339,8 +334,8 @@ namespace meta {
   /** verify the first (special) type can stand-in for the second */
   template<typename S, typename G>
   struct can_StandIn
-    : std::is_convertible<typename RefTraits<S>::Reference
-                         ,typename RefTraits<G>::Reference
+    : std::is_convertible<typename RefTraits<S>::reference
+                         ,typename RefTraits<G>::reference
                          >
     { };
   
@@ -505,23 +500,35 @@ namespace meta {
    *  This is just a heuristic, based on some common properties
    *  of such iterators; it is enough to distinguish it from an
    *  STL container, but can certainly be refined.
+   * @note deliberately a Lumiera iterator does _not fulfil_
+   *  the concept std::input_iterator. And vice versa:
+   *  a STL iterator lacks the `bool` check for iteration end.
+   * @see IterableClassification_test
    */
   template<typename T>
-  class can_IterForEach
+  class can_LumieraIter
     {
-      using  Type = Strip<T>::Type;
+      using  Type = Strip<T>::TypeReferred;
        
       META_DETECT_NESTED(value_type);
+      META_DETECT_NESTED(reference);
       META_DETECT_OPERATOR_DEREF();
       META_DETECT_OPERATOR_INC();
       
     public:
       enum{ value = std::is_constructible<bool, Type>::value
                 and HasNested_value_type<Type>::value
+                and HasNested_reference<Type>::value
                 and HasOperator_deref<Type>::value
                 and HasOperator_inc<Type>::value
           };
     };
+  
+  template<class IT>
+  constexpr bool is_LumieraIter_v = meta::can_LumieraIter<IT>::value;
+  
+  template<class IT>
+  concept lum_iter = is_LumieraIter_v<IT>;
   
   
   
@@ -530,10 +537,10 @@ namespace meta {
    *  with the help of lib::IterStateWrapper or lib::IterableDecorator.
    *  This check is heuristic, based on the presence of function names.
    */
-  template<typename T>
+  template<typename COR>
   class is_StateCore
     {
-      using  Type = Strip<T>::Type;
+      using  Type = Strip<COR>::TypeReferred;
      
       META_DETECT_FUNCTION_ARGLESS(checkPoint);
       META_DETECT_FUNCTION_ARGLESS(iterNext);
@@ -546,15 +553,24 @@ namespace meta {
           };
     };
   
+  template<class COR>
+  constexpr bool is_StateCore_v = is_StateCore<COR>::value;
+  
+  template<class COR>
+  concept state_core = is_StateCore_v<COR>;
+  
   
   
   /** Trait template to detect a type usable with the STL for-each loop.
    *  Basically we're looking for the functions to get the begin/end iterator
+   * @remark many Lumiera Iterators define those additional functions any
+   *         can thus be used in a for-each loop, since a default-constructed
+   *         Lumiera Iterator can act as an "end" sentinel.
    */
   template<typename T>
   class can_STL_ForEach
     {
-      using Type = Strip<T>::Type;
+      using Type = Strip<T>::TypeReferred;
       
       struct is_iterable
         {
@@ -618,7 +634,7 @@ namespace meta {
   template<typename T>
   class can_STL_backIteration
     {
-      using Type = Strip<T>::Type;
+      using Type = Strip<T>::TypeReferred;
       
       struct is_backIterable
         {

@@ -31,9 +31,9 @@
 #define STEAM_ENGINE_RENDER_DRIVE_H
 
 #include "steam/common.hpp"
+#include "steam/engine/render-environment.hpp"
 #include "steam/mobject/model-port.hpp"
-#include "steam/engine/dispatcher.hpp"
-#include "steam/play/timings.hpp"
+#include "vault/out/timings.hpp"
 #include "vault/gear/job.h"
 //#include "lib/nocopy.hpp"
 
@@ -42,9 +42,10 @@ namespace steam {
 namespace engine {
   
 //  using std::function;
+  using mobject::ModelPort;
   using vault::gear::JobParameter;
   using vault::gear::JobClosure;
-  using mobject::ModelPort;
+  using vault::out::Timings; 
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
 //  using lib::time::Time;
@@ -52,23 +53,6 @@ namespace engine {
   using lib::HashVal;
   
   
-  /**
-   * Abstract definition of the environment
-   * hosting a given render activity (CalcStream).
-   * Exposes all the operations necessary to adjust the
-   * runtime behaviour of the render activity, like e.g.
-   * re-scheduling with modified playback speed. Since the
-   * CalcStream is an conceptual representation of "the rendering",
-   * the actual engine implementation is kept opaque this way.
-   */
-  class RenderEnvironment
-    {
-    public:
-      virtual ~RenderEnvironment() { }   ///< this is an interface
-      
-      virtual play::Timings& effectiveTimings()   =0;
-      virtual Dispatcher&    getDispatcher()      =0;
-    };
   
   
   /**
@@ -115,7 +99,7 @@ namespace engine {
         { }
       
       
-      play::Timings const&
+      Timings const&
       getTimings()  const
         {
           return engine_.effectiveTimings();

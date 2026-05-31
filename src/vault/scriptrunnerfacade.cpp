@@ -30,7 +30,8 @@
 namespace vault {
   
   using std::string;
-  using lumiera::Subsys;
+  using vessel::Subsys;
+  using vessel::Option;
   
   class ScriptRunnerSubsysDescriptor
     : public Subsys
@@ -38,14 +39,14 @@ namespace vault {
       operator string ()  const { return "Script runner"; }
       
       bool 
-      shouldStart (lumiera::Option&)  override
+      shouldStart (Option&)  override
         {
           TODO ("determine, if a script should be executed");
           return false;
         }
       
       bool
-      start (lumiera::Option&, SigTerm termination)  override
+      start (Option&, SigTerm termination)  override
         {
           UNIMPLEMENTED ("start the script as defined by the options and register script abort/exit hook");
           return false;

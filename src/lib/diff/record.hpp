@@ -308,18 +308,16 @@ namespace diff{
       
       using iterator  = IterAdapter<ElmIter, const Record*>;
       using scopeIter = iter_stl::_SeqT<const Storage>::Range;
-      using keyIter   = TransformIter<scopeIter, string>;
-      using valIter   = TransformIter<scopeIter, Access>;
       
       /** default iteration exposes all data within this "object", starting with the attributes */
       iterator  begin ()  const { return iterator(this, attribs_.empty()? children_.begin() : attribs_.begin()); }
       iterator  end ()    const { return iterator(); }
       
-      scopeIter attribs() const { return iter_stl::eachElm(attribs_); }
-      scopeIter scope()   const { return iter_stl::eachElm(children_); }
+      scopeIter attribs() const { return iter_stl::eachElm (attribs_); }
+      scopeIter scope()   const { return iter_stl::eachElm (children_); }
       
-      keyIter   keys()    const { return transformIterator(attribs(), extractKey); }
-      valIter   vals()    const { return transformIterator(attribs(), extractVal); }
+      auto      keys()    const { return transformIter (attribs(), extractKey); }
+      auto      vals()    const { return transformIter (attribs(), extractVal); }
       
     protected: /* ==== API for the IterAdapter ==== */
       
@@ -792,11 +790,11 @@ namespace diff{
   Record<VAL>::operator std::string()  const
   {
     using util::join;
-    using lib::transformIterator;
+    using lib::transformIter;
     
     return "Rec("
          + (TYPE_NIL==type_? "" : type_)
-         + (isnil(this->attribs())? "" : "| "+join (transformIterator (this->attribs(), renderAttribute))+" ")
+         + (isnil(this->attribs())? "" : "| "+join (transformIter (this->attribs(), renderAttribute))+" ")
          + (isnil(this->scope())?   "" : "|{"+join (this->scope())+"}")
          + ")"
          ;

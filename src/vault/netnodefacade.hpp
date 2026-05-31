@@ -24,7 +24,7 @@
 #define VAULT_INTERFACE_NETNODEFACADE_H
 
 
-#include "common/subsys.hpp"
+#include "vessel/subsys.hpp"
 
 
 
@@ -43,10 +43,10 @@ namespace vault {
    */
   struct NetNodeFacade
     {
-      /** provide a descriptor for lumiera::AppState,
+      /** provide a descriptor for the vessel::Voyage,
        *  wired accordingly to allow main to start and stop
        *  a node server accepting render / file jobs via network. */
-      static lumiera::Subsys& getDescriptor();
+      static vessel::Subsys& getDescriptor();
       
       
       //////////////////TODO: define the global access interface for a renderfarm node server

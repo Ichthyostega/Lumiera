@@ -108,13 +108,15 @@
  *  and check the static bool value field.
  * @warning none of these checks can detect private members
  */
-#define META_DETECT_NESTED(_TYPE_)                            \
-    template<typename TY>                                      \
-    class HasNested_##_TYPE_                                    \
-      {                                                          \
-                                                                  \
-        template<class X>                                          \
-        static Yes_t check(X::_TYPE_ *);                            \
+#define META_DETECT_NESTED(_TYPE_)                          \
+    template<typename TY>                                    \
+    class HasNested_##_TYPE_                                  \
+      {                                                        \
+                                                                \
+        template<class X                                         \
+                ,typename = std::void_t<typename X::_TYPE_>       \
+                >                                                  \
+        static Yes_t check(int);                                    \
         template<class>                                              \
         static No_t  check(...);                                      \
                                                                        \

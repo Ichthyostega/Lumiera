@@ -8,30 +8,32 @@ NOTE: This page holds content copied from the old "main" TiddlyWiki +
       It needs to be reworked, formatted and generally brought into line
 
 ********************************************
-.Lumiera relies on *test-driven development*
+.Lumiera employs test-driven development
 This page discusses the overall organisation
 of test code, and the tools used for
 running test cases
 ********************************************
 
-Tests are the only form of documentation, known to provides some resilience against
-becoming outdated. Tests help to focus on the usage, instead of engaging in spurious
+Tests are the only known form of documentation that offers some resilience against
+getting outdated. Tests help to focus on the usage, instead of engaging in spurious
 implementation details. Developers are highly encouraged to write the tests _before_
 the actual implementation, or at least alongside and interleaved with expanding the
 feature set of the actual code.
+
 There may be exceptions to this rule. Not every single bit needs to be covered by tests.
 Some features are highly cross-cutting and exceptionally difficult to cover with tests.
-And sometimes, just an abstract specification is a better choice.
+Test code must not duplicate the logic of implementation code, it should represent an
+abstracted, outside, logical view of the matter at hand. And sometimes it is the better
+choice to simply write an abstract specification in understandable language.
 
 As a rule of thumb, consider to write test code which is easy to read and understand,
 _like a narration_ to show off the relevant properties of the test subject.
 
+
 Test Structure
 --------------
-- a *test case* is an executable, expected to run without failure, and optionally producing
-  some verifiable output
-- simple test cases may be written as stand-alone application, while the more tightly
-  integrated test cases can be written as classes within the Lumiera application framework.
+- a *test case* is an executable, expected to run without failure; test code not only invokes
+  a _subject under test_ -- the important part is to _verify_ its behaviour.
 - test cases should use the +CHECK+ macro of NoBug to verify test results, since the normal
   assertions may be de-configured for optimised release builds.
 - our test runner script 'test.sh' provides mechanisms to check for expected output
@@ -41,15 +43,13 @@ several functions within the same test fixture. This allows to create a ``narrat
 in the code: first do this, than do that, and now that, and now this should happen...
 Generally speaking, it is up to the individual test to take care or isolate himself
 from any _dependencies_. Test code and application code uses the same mechanisms
-for accessing other components within the application. Up to now (2014), there
-was no need for any kind of _dependency injection_, nor did we face any
-difficulties with tainted state.
+for accessing other components within the application.
 
 Test classes are organised into a tree closely mirroring the main application source
 code tree. Large sections of this test tree are linked together into *test libraries*.
 Some of these are linked against a specific (sub)scope of the application, like e.g.
 only against the support library, the application framework or the vault. Since we
-use _strict dependencies_, this linking step will spot code not being placed at the
+use _strict dependencies_, this linking step will also spot code not placed at the
 correct scope within the whole system. As a final step, the build system creates a
 *test runner* application (`target/test-suite`), which links dynamically against _all_
 the test libraries and thus against all application dependencies.
@@ -81,9 +81,9 @@ to help with automating the build and test execution, test code should adhere to
 - test classes should be placed into a sub namespace +...::test+
 - specific definitions for a single test case may rely on global variables,
   but these should live within an anonymous namespace
-- all test executables should be named according to the pattern +test-*+
+- free standing test executables should be named according to the pattern `test-*`
 - all test source code is within the 'tests' subtree
-- immediately within the 'tests/' directory are the test collection definitions +*.tests+,
+- immediately within the 'tests/' directory are the test collection definitions `*.tests`,
   ordered by number prefixes
 - below are the directories with test cases, to be grouped into the aforementioned test-executables.
 - we distinguish two ways to write and link tests: _standalone_ and _suite_
@@ -107,7 +107,7 @@ See the following
 .hello-world-test example
 [source,C]
 ----------------------------------------------------------------
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include <iostream>
 
 using std::cout;

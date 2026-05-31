@@ -38,16 +38,19 @@
 
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/symbol.hpp"
 #include "stage/ctrl/bus-term.hpp"
 #include "stage/model/tangible.hpp"
 #include "stage/ctrl/state-manager.hpp"
-#include "test/placeholder-command.hpp"
-#include "lib/test/event-log.hpp"
+#include "stage/test/placeholder-command.hpp"
 #include "lib/diff/gen-node.hpp"
+#include "test/event-log.hpp"
 
 #include <functional>
 #include <string>
 
+
+using lib::Symbol;
 
 namespace stage {
 namespace test{
@@ -75,8 +78,8 @@ namespace test{
       /** kill the given [BusTerm] and implant a dead terminal in place */
       static void zombificate(ctrl::BusTerm&);
       
-      static lib::test::EventLog const& getLog();
-      static lib::test::EventLog const& startNewLog();
+      static ::test::EventLog const& getLog();
+      static ::test::EventLog const& startNewLog();
       
       static size_t size();
       

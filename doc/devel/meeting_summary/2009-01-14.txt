@@ -95,7 +95,7 @@ For now the focus is on getting a single frame into the gui and there will be ti
 
 The devs agreed to meet up on Saturday to get the latest version up and running.
 
-NOTE: Demonstration in https://git.lumiera.org/?p=LUMIERA;a=blob;f=src/common/guifacade.cpp;h=60a16d0f67bd95b43e44662daa9c0525235e14f5;hb=5f10e65852de2c51364c2e2a5a1cf29cae81c6b2#l64[guifacade.cpp]
+NOTE: Demonstration in https://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=src/common/guifacade.cpp;h=60a16d0f67bd95b43e44662daa9c0525235e14f5;hb=5f10e65852de2c51364c2e2a5a1cf29cae81c6b2#l64[guifacade.cpp]
 
 (The thread shall be forked from within the GUI code not from the facade)
 This was discussed and ichthyo has already pushed a new cleaned up state and resolved most of the dependency problems with the liblumiera. It raised the question: do we prefer a UI facade to a GUI facade or do we want an extra script facade someday?

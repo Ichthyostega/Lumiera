@@ -111,13 +111,13 @@
 
 
 #include "vault/common.hpp"
-#include "lib/test/transiently.hpp"
+#include "test/transiently.hpp"
+#include "test/microbenchmark.hpp"
 
 #include "vault/gear/job.h"
 #include "vault/gear/scheduler.hpp"
 #include "vault/gear/special-job-fun.hpp"
 #include "lib/uninitialised-storage.hpp"
-#include "lib/test/microbenchmark.hpp"
 #include "lib/incidence-count.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/quantiser.hpp"
@@ -156,10 +156,10 @@ namespace test {
   using lib::time::TimeValue;
   using lib::time::FrameRate;
   using lib::time::Duration;
-  using lib::test::benchmarkTime;
-  using lib::test::microBenchmark;
-  using lib::test::Transiently;
   using lib::meta::_FunRet;
+  using ::test::benchmarkTime;
+  using ::test::microBenchmark;
+  using ::test::Transiently;
 
   using std::string;
   using std::function;
@@ -1306,6 +1306,9 @@ namespace test {
    *   speed in a microbenchmark with `LOAD_BENCHMARK_RUNS`
    *   repetitions; the result is stored in a static
    *   variable and can thus be reused.
+   * @see TestChainLoad_test::verify_computation_load
+   * @warning for longer times, especially the memory load performs
+   *   increasingly slower than calibrated. See the details in the test.
    */
   class ComputationalLoad
     : util::MoveAssign
@@ -1324,6 +1327,7 @@ namespace test {
       microseconds timeBase = LOAD_DEFAULT_TIME;
       size_t       sizeBase = LOAD_DEFAULT_MEM_SIZE;
       bool useAllocation = false;
+      size_t* externalBuff{nullptr};
       
       /** cause a delay by computational load */
       double
@@ -1366,23 +1370,27 @@ namespace test {
           return computationSpeed(false) != LOAD_SPEED_BASELINE;
         }
       
+      size_t
+      requiredBuffSiz (uint scaleStep)  const    ///< @return required size for external buffer in bytes.
+        {
+          return sizeof(size_t)
+               * (useAllocation? allocNeeded(scaleStep).first : 0);
+        }
+      
     private:
       uint64_t
-      roundsNeeded (uint scaleStep)
+      roundsNeeded (uint scaleStep)  const
         {
           auto desiredMicros = scaleStep*timeBase.count();
           return uint64_t(desiredMicros*computationSpeed(useAllocation));
         }
       
-      auto
-      allocNeeded (uint scaleStep)
+      std::pair<size_t,size_t>
+      allocNeeded (uint scaleStep)  const
         {
           auto cnt = roundsNeeded(scaleStep);
-          auto siz = max (scaleStep * sizeBase, 1u);
-          auto rep = max (cnt/siz, 1u);
-          // increase size to fit
-          siz = cnt / rep;
-          return make_pair (siz,rep);
+          auto siz = max (scaleStep * sizeBase, 2u);
+          return make_pair (siz,cnt);
         }
       
       void
@@ -1400,14 +1408,18 @@ namespace test {
       void
       causeMemProcessLoad (uint scaleStep)
         {
-          auto [siz,round] = allocNeeded (scaleStep);
-          lib::UninitialisedDynBlock<size_t> memBlock{siz};
+          auto [siz,cnt] = allocNeeded (scaleStep);
+          lib::UninitialisedDynBlock<size_t> memBlock;
+          size_t* mem = externalBuff? externalBuff
+                                    : memBlock.allocate (siz);
           Sink sink;
-          *memBlock.front() = sink+1;
-          for ( ; 0 < round; --round)
-            for (size_t i=0; i<memBlock.size()-1; ++i)
-              memBlock[i+1] += memBlock[i];
-          sink = *memBlock.back();
+          *mem = sink+1;
+          for (uint c=0; c < cnt; ++c)
+            {
+              size_t i = c % (siz-1);
+              mem[i+1] += mem[i];
+            }
+          sink = mem[1 + (cnt-1) % (siz-1)];
           sink = sink + 1;
         }
       

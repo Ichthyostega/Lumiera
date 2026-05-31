@@ -34,7 +34,7 @@ namespace steam {
 namespace play {
   
 //    using std::string;
-//    using lumiera::Subsys;
+//    using vessel::Subsys;
 //    using std::bind;
   
   

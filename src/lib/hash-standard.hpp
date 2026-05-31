@@ -44,9 +44,11 @@
  **       Please ensure it is always included _before_ the latter. Failing to do so will result
  **       in mysterious failures.
  ** 
- ** @todo 4/2014 doesn't work as expected. My suspicion is that in the actual use case (PlacementIndex),
- **       the type providing the hasher is mixed in through inheritance, and the template specialisation
- **       for this base type is not considered on lookup.  ///////TICKET #722
+ ** @todo 4/2026 this shady trickery works without problems since many years now,
+ **       while it is not clear if we actually need to do these horrible things any more.
+ **       Even while we may retain that automatic bridge to boost-functional hash, doing so
+ **       should be possible with the current STDLIB without having to patch and rewire
+ **       the library implementation.  //////////////////////////////////////////////////////////////////////TICKET #1422 : re-assess the situation !
  ** 
  ** @see HashIndexed
  ** @see LUID
@@ -106,10 +108,6 @@ namespace std {
     {
       static_assert (sizeof(TY) < 0, "No hash implementation found. "
                                      "Either specialise std::hash or provide a boost-style hash_value via ADL.");
-      
-      // the default provides *no* hash implementation
-      // and adds a marker type for metaprogramming
-      typedef int NotHashable;
     };
   
   /**
@@ -129,8 +127,8 @@ namespace std {
   
   /**
    * Primary class template for std::hash.
-   * We provide no default implementation, but a marker type
-   * to allow detection of custom implementation through metaprogramming
+   * We provide no default implementation, but bridge automatically
+   * when a boost-style hash function can be picked up via ADL.
    * 
    * @note this definition has been \em hijacked by Lumiera
    *       to add an automatic bridge to use boost::hash functions
@@ -140,12 +138,14 @@ namespace std {
     : public _HashImplementationSelector<TY>
     { };
   
-}
+}// namespace std
 
 
 
 
-/* ==== Evil Evil ==== */
+
+
+/* ==== Evil Evil ==== */                    ////////////////////////////////////////////////////////////////TICKET #1422 : very likely we do not need this manipulation any more !!!
 
 #define hash hash_HIDDEN
 #define _Hash_impl _Hash_impl_HIDDEN
@@ -204,6 +204,12 @@ namespace std {
   STD_HASH_IMPL (long double)
   
 #undef STD_HASH_IMPL
-}
+  
+  /** rewire the partial specialisation for pointer types */
+  template<typename TY>
+  struct hash<TY*> : public hash_HIDDEN<TY*> { };
+  
+  
+}// namespace std
 
 #endif /*LIB_HASH_STANDARD_H*/

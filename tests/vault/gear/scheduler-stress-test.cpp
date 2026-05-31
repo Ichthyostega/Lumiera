@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "test-chain-load.hpp"
 #include "stress-test-rig.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "vault/gear/scheduler.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/format-string.hpp"

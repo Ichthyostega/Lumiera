@@ -100,7 +100,7 @@ namespace diff{
   using std::__and_;
   using std::__not_;
   using lib::meta::enable_if;
-  using lib::meta::can_IterForEach;
+  using lib::meta::can_LumieraIter;
   using lib::meta::can_STL_ForEach;
   
   using DiffStep = TreeDiffLanguage::DiffStep;
@@ -168,7 +168,7 @@ namespace diff{
        * @note source iterator is copied into a heap allocated IterSource
        */
       template<class IT>
-      MutationMessage(IT&& ii,                        enable_if< can_IterForEach<IT>, void*> =nullptr)
+      MutationMessage(IT&& ii,                        enable_if< can_LumieraIter<IT>, void*> =nullptr)
         : _FrontEnd{iter_source::wrapIter (std::forward<IT>(ii))}
         { }
       
@@ -179,7 +179,7 @@ namespace diff{
        */
       template<class CON>
       MutationMessage(CON& container,                 enable_if< __and_< can_STL_ForEach<CON>
-                                                                       ,__not_<can_IterForEach<CON>>>, void*> =nullptr)
+                                                                       ,__not_<can_LumieraIter<CON>>>, void*> =nullptr)
         : _FrontEnd{iter_source::eachEntry(container)}
         { }
       

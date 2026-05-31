@@ -16,13 +16,13 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/util.hpp"
 
 #include "steam/control/stypemanager.hpp"
 #include "steam/mobject/session.hpp"
 //#include "teststreamtypes.hpp"
-#include "include/lifecycle.h"
+#include "include/lifecycle.hpp"
 
 
 
@@ -33,7 +33,7 @@ namespace test_format {
   using mobject::Session;
   using control::STypeManager;
   using control::ON_STREAMTYPES_RESET;
-  using lumiera::LifecycleHook;
+  using vessel::LifecycleHook;
   
   
   //////////TODO define a dummy-type-info here

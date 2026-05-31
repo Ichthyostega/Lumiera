@@ -1,0 +1,113 @@
+/*
+  BasicSetup  -  elementary self-configuration of the application
+
+   Copyright (C)
+     2011,            Hermann Vosseler <Ichthyostega@web.de>
+
+  **Lumiera** is free software; you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by the
+  Free Software Foundation; either version 2 of the License, or (at your
+  option) any later version. See the file COPYING for further details.
+
+* *****************************************************************/
+
+
+/** @file basic-setup.cpp
+ ** Implementation of self-configuration and bootstrap functionality.
+ ** This allows the application to "find its parts" at startup.
+ ** @note as of 2016, BasicSetup::BasicSetup(string) also reads
+ **       and evaluates a simple `*.ini` file to provide a
+ **       preliminary mechanism for application configuration.
+ **       This implementation is based on Boost program options
+ ** 
+ ** @see searchpath.hpp
+ */
+
+
+#include "vessel/basic-setup.hpp"
+#include "lib/searchpath.hpp"
+#include "lib/error.hpp"
+#include "lib/file.hpp"
+#include "lib/util.hpp"
+
+#include <fstream>
+
+
+namespace vessel {
+  
+  using std::string;
+  using std::ifstream;
+  
+  namespace opt = boost::program_options;
+  
+  namespace { // details of the bootstrap process...
+    
+    
+    // Helper to locate a module using a search path spec
+    using lib::resolveModulePath;
+    
+    /** use the general mechanism for resolving a search path
+     *  to get the absolute path of the \c setup.ini */
+    string
+    resolve (fs::path iniSpec)
+    {
+      string searchpath = iniSpec.parent_path().generic_string();
+      return resolveModulePath (iniSpec.filename(), searchpath);
+    }
+    
+  }//(End) implementation details
+  
+  
+  
+  /**
+   * Creating the BasicSetup object performs the
+   * initial self-configuration of the Lumiera Application.
+   * For this, the `setup.ini` file is located relative to the
+   * current application executable, read in and parsed into a
+   * map of setup variables.
+   */
+  BasicSetup::BasicSetup (string bootstrapIni)
+    : syntax("Lumiera installation and platform configuration")
+    , settings()
+    {
+      syntax.add_options()
+        ("Lumiera.gui",        opt::value<string>(),
+                               "name of the Lumiera GUI plugin to load")
+        ("Lumiera.modulepath", opt::value<string>(),
+                               "search path for loadable modules. "
+                               "May use $ORIGIN to refer to the EXE location")
+        ("Lumiera.configpath", opt::value<string>(),
+                               "search path for extended configuration. "
+                               "Extended Config system not yet implemented "
+                               "Ignored as of 2/2011")
+        ("Lumiera.title",      opt::value<string>(),
+                               "title of the Lumiera Application, e.g. for windows")
+        ("Lumiera.version",    opt::value<string>(),
+                               "Application version string")
+        ("Lumiera.website",    opt::value<string>(),
+                               "URL of the Lumiera website")
+        ("Lumiera.authors",    opt::value<string>(),
+                               "names of Lumiera authors, for 'about' dialog. Separated by '|'")
+        ("Lumiera.copyright",  opt::value<string>(),
+                               "year(s) for the author's copyright claim")
+
+        ("Gui.stylesheet",     opt::value<string>(),
+                               "name of the GTK stylesheet to use. Will be searched in resource path")
+        ("Gui.iconpath",       opt::value<string>(),
+                               "search path for icons")
+        ("Gui.resourcepath",   opt::value<string>(),
+                               "general search path for UI resources")
+        ;
+      
+      ifstream configIn (resolve(bootstrapIni).c_str());
+      
+      
+      opt::parsed_options parsed = opt::parse_config_file (configIn, syntax);
+      
+      opt::store (parsed, settings);
+      opt::notify(settings);
+    }
+
+  
+  
+} // namespace vessel

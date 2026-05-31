@@ -35,9 +35,9 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/idi/genfunc.hpp"
-#include "lib/test/event-log.hpp"
 #include "steam/control/command-def.hpp"
 #include "lib/format-util.hpp"
+#include "test/event-log.hpp"
 
 #include <vector>
 #include <string>
@@ -67,7 +67,7 @@ namespace test{
   template<typename...ARGS>
   class PlaceholderCommand
     {
-      static lib::test::EventLog log_;
+      static ::test::EventLog log_;
       
       /** @internal unique ID-string specific for the instance `ARGS` */
       static string
@@ -105,7 +105,7 @@ namespace test{
       
     public:
       static steam::control::Command
-      fabricateNewInstance (lib::test::EventLog const& invocationLog)
+      fabricateNewInstance (::test::EventLog const& invocationLog)
         {
           log_ = invocationLog;
           return steam::control::CommandDef{Symbol{uniqueTypeInstance()}}
@@ -118,7 +118,7 @@ namespace test{
   
   
   template<typename...ARGS>
-  lib::test::EventLog  PlaceholderCommand<ARGS...>::log_{"test-dummy-"+fullTypeID()};
+  ::test::EventLog  PlaceholderCommand<ARGS...>::log_{"test-dummy-"+fullTypeID()};
 
   
   

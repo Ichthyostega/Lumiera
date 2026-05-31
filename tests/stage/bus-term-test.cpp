@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "lib/thread.hpp"
 #include "lib/sync.hpp"
 #include "lib/sync-classlock.hpp"
@@ -50,6 +50,7 @@ using lib::iter_stl::dischargeToSnapshot;
 using lib::IterQueue;
 using lib::IterStack;
 using std::function;
+using test::EventLog;
 using util::contains;
 using util::isnil;
 using util::_Fmt;
@@ -76,7 +77,6 @@ namespace test {
   using lib::time::Time;
   using lib::time::TimeSpan;
   using lib::hash::LuidH;
-  using lib::test::EventLog;
   using lib::CallQueue;
   
   using LERR_(UNBOUND_ARGUMENTS);
@@ -225,8 +225,8 @@ namespace test {
           MockElm mock("uiElm");
           
           // random command arguments...
-          string text {lib::test::randStr(12)};
-          TimeSpan clip (Time(1,2,3), lib::test::randTime());
+          string text {::test::randStr(12)};
+          TimeSpan clip (Time(1,2,3), ::test::randTime());
           LuidH luid;
           
           // we cannot invoke commands without binding required arguments

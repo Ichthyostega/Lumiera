@@ -30,7 +30,8 @@
  ** - very similar is IterableDecorator, but this time directly as
  **   decorator to inherit from the »state core«, and without checks.
  ** - the RangeIter allows just to expose a range of elements defined
- **   by a STL-like pair of "start" and "end" iterators
+ **   by a STL-like pair of "start" and "end" iterators; thus it
+ **   serves a bridge between STL iterators and Lumiera iterators.
  ** 
  ** Some more specific use cases are provided in the extension header
  ** iter-adapter-ptr-deref.hpp
@@ -62,14 +63,14 @@
  ** Similar to the STL, instead of using a common "Iterator" base class,
  ** we rather define a common set of functions and behaviour which can be
  ** expected from any such iterator. These rules are similar to STL's
- ** "forward iterator", with the addition of an bool check to detect
- ** iteration end. The latter is inspired by the \c hasNext() function
+ ** "input iterator", with the addition of an bool check to detect
+ ** iteration end. The latter is inspired by the `hasNext()` function
  ** found in many current languages supporting iterators. However, by
- ** inspiration from functional programming, we deliberately do not
- ** support the various extended iterator concepts from STL and boost
+ ** drawing from insights promoted in functional programming, deliberately
+ ** we do not support the various extended iterator concepts from the STL
  ** (random access iterators, output iterators, arithmetics, difference
- ** between iterators and the like). According to this concept,
- ** _an iterator is a promise for pulling values once,_
+ ** between iterators and the like). According to this concept proposed
+ ** here, _an iterator is a promise for pulling values once,_
  ** and nothing beyond that.
  ** 
  ** Notably,
@@ -87,10 +88,48 @@
  ** Conceptually, a Lumiera Iterator represents a lazy stream of calculations
  ** rather than a target value considered to be »within« a container. And while
  ** the result is in may cases deliberately _exposed as a reference,_ in order
- ** to keep the door open for special-case manipulations, for the typical usage
- ** it is _discouraged_ to assume anything about the source, beyond the limited
- ** access to some transient state as exposed during active iteration. Together,
- ** these rules enable a _loose coupling_ to the source of data.
+ ** to allow for tightly coupled implementation in special cases -- for the
+ ** typical usage it is _discouraged_ to assume anything about the source,
+ ** beyond the limited access to some transient state as exposed during
+ ** active iteration. Together, these rules enable a _loose coupling_
+ ** to the source of data.
+ ** 
+ ** ## Usage
+ ** 
+ ** All the building blocks defined her provide the bridge definitions to allow
+ ** using a »Lumiera Forward Iterator« in common language constructs: It can be
+ ** used directly in for-each loops (notably this implies that a Lumiera iterator
+ ** is used in the same position where usually the container would be referred).
+ ** Yet, beyond that, Lumiera iterators can also be used in normal `for` loops
+ ** and even in while loops, due to the bool-check to detect iteration end.
+ ** A default constructed Lumiera iterator is always in _invalid state_
+ ** and can be used as _sentinel value_ like the `end()` iterator.
+ ** Yet, while Lumiera iterators can be copied and assigned, the effect of
+ ** these operations is implementation defined; in some cases, taking a copy
+ ** may allow to create a snapshot, while in other cases (especially when the
+ ** Lumiera iterator uses an reference to tap into some remote service) all
+ ** copies will refer to the same shared state. The rationale for this design
+ ** was to simplify both building and using Lumiera Iterators; they are meant
+ ** as an implementation tool, and not for creating external interfaces.
+ ** 
+ ** However, there is a special provision for the latter use case, in the form
+ ** of the lib::IterSource interface and framework; an `IterSource` embeds a
+ ** classic OO interface with virtual methods, and thus allows to abstract the
+ ** backing implementation entirely away.
+ ** 
+ ** ## Concepts and Traits
+ ** 
+ ** The »Lumiera Forward Iterators« do not map directly to any specification from
+ ** the C++ standard. The concept std::input_iterator comes close, but a Lumiera
+ ** iterator can not fulfil this concept, since it lacks the postfix increment.
+ ** In the opposite direction, there is also no subsumption possible, since a
+ ** STL iterator does not offer a bool-check to detect iteration end.
+ ** 
+ ** Notably the header `lib/meta/trait.hpp` defines some detector traits, allowing
+ ** to recognise if something is an iterable STL container, or a Lumiera iterator.
+ ** Furthermore, lib::iter::Trait defines a transparent mechanism to extract the
+ ** basic type definitions (`reference` ≙ what the iterator yields and
+ ** `value_type` ≙ what to use to store results from an iterator)
  ** 
  ** @see iter-adapter-test.cpp
  ** @see itertools.hpp
@@ -105,6 +144,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/nocopy.hpp"
 #include "lib/meta/value-type-binding.hpp"
 
 #include <iterator>
@@ -120,6 +160,9 @@ namespace util {   // see lib/util.hpp
 
 namespace lib {
   
+  using std::is_pointer_v;
+  using std::remove_pointer_t;
+  using std::remove_reference_t;
   
   namespace { // internal helpers
     inline void
@@ -149,7 +192,14 @@ namespace lib {
   
   
   namespace iter {
-    /** type binding helper: an iterato's actual result type */
+    using meta::is_StateCore;
+    using meta::can_LumieraIter;
+    using meta::can_STL_ForEach;
+    using meta::ValueTypeBinding;
+    using meta::RefTraits;
+    
+    
+    /** type binding helper: an iterator's actual result type */
     template<class IT>
     using Yield = decltype(std::declval<IT>().operator*());
     
@@ -157,6 +207,35 @@ namespace lib {
     template<class COR>
     using CoreYield = decltype(std::declval<COR>().yield());
     
+    
+    /** some legacy STL type iterators do not strictly fulfil all requirements,
+     *  yet were marked by a specialisation of `std::iterator_traits` */
+    template<class IT>
+    concept legacy_traits_marked = requires
+      {
+        typename std::iterator_traits<IT>::iterator_category;
+      };
+    
+    
+    /** Iterator-Traits: definitions to level the difference between
+     *  Lumiera-Iterators and the STL usage of ranges / iterators.
+     */
+    template<class IT>
+    struct Trait
+      {
+        static constexpr bool is_LumieraIter = meta::is_LumieraIter_v<IT>;
+        static constexpr bool is_STLIter = std::input_iterator<IT>;
+        static constexpr bool is_Legacy  = legacy_traits_marked<IT>;
+        
+        static_assert(is_LumieraIter or is_STLIter or is_Legacy
+                     ,"source type must be an iterator (either Lumiera or STL");
+        
+        using _ValTrait = std::conditional_t<is_LumieraIter, ValueTypeBinding<IT>
+                                                           , RefTraits<std::iter_reference_t<IT>>>;
+        using value_type = _ValTrait::value_type;
+        using reference = _ValTrait::reference;
+        using pointer = _ValTrait::pointer;
+      };
   }
   
   
@@ -302,7 +381,7 @@ namespace lib {
       
       
     protected:
-      using ConRef = meta::RefTraits<CON>::Reference;
+      using ConRef = meta::RefTraits<CON>::reference;
       
       /** allow derived classes to access backing container */
       ConRef       source()       { return                source_; }
@@ -370,15 +449,15 @@ namespace lib {
    * @see iter-explorer-test.hpp
    * @see iter-adaptor-test.cpp
    */
-  template<class ST, typename T =iter::CoreYield<ST>>
+  template<class ST, typename RES =iter::CoreYield<ST>>
   class IterStateWrapper
     {
       ST core_;
       
     public:
-      using value_type = meta::RefTraits<T>::Value;
-      using reference  = meta::RefTraits<T>::Reference;
-      using pointer    = meta::RefTraits<T>::Pointer;
+      using value_type = meta::RefTraits<RES>::value_type;
+      using reference  = meta::RefTraits<RES>::reference;
+      using pointer    = meta::RefTraits<RES>::pointer;
       
       IterStateWrapper (ST&& initialState)
         : core_(std::forward<ST>(initialState))
@@ -399,9 +478,9 @@ namespace lib {
         }
       
       
-      /* === lumiera forward iterator concept === */
+      /* === Lumiera Forward Iterator concept === */
       
-      T
+      RES
       operator*() const
         {
           __throw_if_empty();
@@ -411,13 +490,13 @@ namespace lib {
       pointer
       operator->() const
         {
-          if constexpr (meta::isLRef_v<T>)
+          if constexpr (meta::isLRef_v<RES>)
             {
               __throw_if_empty();
               return & core_.yield();    // core interface: yield
             }
           else
-            static_assert (!sizeof(T),
+            static_assert (!sizeof(RES),
                "can not provide operator-> "
                "since iterator pipeline generates a value");
         }
@@ -500,7 +579,7 @@ namespace lib {
   class IterStateCore
     : public IT
     {
-      static_assert (lib::meta::can_IterForEach<IT>::value
+      static_assert (iter::can_LumieraIter<IT>::value
                     ,"Lumiera Iterator required as source");
     protected:
       IT&
@@ -545,7 +624,7 @@ namespace lib {
   class CheckedCore
     : public COR
     {
-      static_assert (lib::meta::is_StateCore<COR>::value
+      static_assert (iter::is_StateCore<COR>::value
                     ,"Adapted type must expose a »state core« API");
     protected:
       COR&
@@ -608,6 +687,7 @@ namespace lib {
    * @warning be sure to understand the implications of this setup
    *  - when initialised by reference, the container's contents will be copied
    *  - when move-initialised, the container will be destroyed with this iterator
+   *  - when moved / swapped during iteration, the iterator is invalidated (-> data corruption)
    *  - the container API remains visible (baseclass), which could confuse trait detection
    */
   template<class CON>
@@ -647,6 +727,67 @@ namespace lib {
         }
     };
   
+  
+  
+  template<class CON>
+  concept subscriptable = requires (CON& con, size_t idx)
+    {
+      typename CON::reference;
+      { con[idx]   } -> std::convertible_to<typename CON::reference>;
+      { con.size() } -> std::convertible_to<size_t>;
+    };
+  
+  template<class CON>
+  using is_subscriptable = std::bool_constant<subscriptable<remove_reference_t<CON>>>;
+  
+    /**
+     * Adapter to package some container store inline and access it bey sequenced subscript.
+     * This setup works similar to the ContainerCore, yet has the benefit of being movable.
+     * @warning using any kind of inline storage in the context of IterExplorer is dangerous.
+     *   Anything beyond the actual iteration state and especially an extended data storage
+     *   might lead to surprising and harmful behaviour, due to the contradiction to the
+     *   common mental image associated with an iterator. These dangers are amplified
+     *   when such embedded data is transformed, filtered or modified by reference.
+     */
+    template<subscriptable CON>
+    class IdxStoreCore
+      : public CON
+      {
+        size_t i_;
+        
+      public:
+        IdxStoreCore (CON&& container)
+          : CON(std::forward<CON> (container))
+          , i_{0}
+          { }
+        
+        IdxStoreCore()
+          : CON{}
+          , i_{CON::size()}
+          { }    // explicitly ensure that iterator is empty
+        
+        // copy and assignment acceptable (warning!)
+        
+        
+        /* === »state core« protocol API === */
+        bool
+        checkPoint()  const
+          {
+            return i_ < CON::size();
+          }
+        
+        decltype(auto)
+        yield()  const
+          {
+            return util::unConst(*this).operator[] (i_);
+          }     // rationale: const iterator ≠ const_iterator
+        
+        void
+        iterNext()
+          {
+            ++i_;
+          }
+      };
   
   
   
@@ -694,9 +835,9 @@ namespace lib {
       
     public:
       using YieldRes   = iter::CoreYield<COR>;
-      using value_type = meta::RefTraits<YieldRes>::Value;
-      using reference  = meta::RefTraits<YieldRes>::Reference;
-      using pointer    = meta::RefTraits<YieldRes>::Pointer;
+      using value_type = meta::RefTraits<YieldRes>::value_type;
+      using reference  = meta::RefTraits<YieldRes>::reference;
+      using pointer    = meta::RefTraits<YieldRes>::pointer;
       
       
       /** by default, pass anything down for initialisation of the core.
@@ -782,17 +923,23 @@ namespace lib {
   
   
   /**
-   * Accessing a STL element range through a Lumiera forward iterator,
+   * Access a STL element range through a »Lumiera Forward Iterator«.
    * An instance of this iterator adapter is completely self-contained
-   * and allows to iterate once over the range of elements, until
+   * and allows to iterate _once_ over the range of elements, until
    * `pos==end`. Thus, a custom container may expose a range of
    * elements of an embedded STL container, without controlling
-   * the details of the iteration (as is possible using the
+   * the details of the iteration (as would be possible using the
    * more generic IterAdapter).
    * @note
-   *  - when IT is just a pointer, we use the pointee as value type
-   *  - but when IT is a class, we expect the usual STL style nested typedefs
-   *    `value_type`, `reference` and `pointer`
+   *  - when IT is a STL iterator, we rely on the iterator concepts and
+   *    especially on `std::iter_reference_t` to find the `reference_type`
+   *  - but when IT is a »Lumiera Forward Iterator«, we need to evaluate
+   *    nested typedefs `value_type`, `reference` and `pointer`
+   * @remark the reason for this tricky distinction is a _clash of concepts:_
+   *    In Lumiera, »Iterator« has a special meaning and can used on itself,
+   *    while in the STL, an »Iterator« is a pointer in disguise and is
+   *    only meaningful when the backing container is known. This adaptor,
+   *    RangeIter, acts as a bridge and levels those usage styles.
    */
   template<class IT>
   class RangeIter
@@ -800,14 +947,10 @@ namespace lib {
       IT p_;
       IT e_;
       
-      using _ValTrait = meta::ValueTypeBinding<meta::remove_pointer_t<IT>>;
-      
     public:
-      using pointer    = _ValTrait::pointer;
-      using reference  = _ValTrait::reference;
-      
-      /// @note special twist, since a STL const_iterator would yield a non-const `value_type`
-      using value_type = std::remove_reference<reference>::type;
+      using pointer    = iter::Trait<IT>::pointer;
+      using reference  = iter::Trait<IT>::reference;
+      using value_type = iter::Trait<IT>::value_type;
       
       
       RangeIter (IT const& start, IT const& end)
@@ -1027,13 +1170,13 @@ namespace lib {
   
   /**
    * Helper for type rewritings:
-   * get the element type for an iterator like entity
+   * build a similar iterator with another value type
    */
   template<class TY>
-  struct IterType;
+  struct IterRebind;
   
   template<template<class,class> class Iter, class TY, class CON>
-  struct IterType<Iter<TY,CON>>
+  struct IterRebind<Iter<TY,CON>>
     {
       using Container = CON;
       using ElemType  = TY ;
@@ -1046,13 +1189,13 @@ namespace lib {
     };
   
   template<class IT>
-  struct IterType<RangeIter<IT>>
-    : IterType<IT>
+  struct IterRebind<RangeIter<IT>>
+    : IterRebind<IT>
     {
       template<class T2>
       struct SimilarIter  ///< rebind to rewritten Iterator wrapped into RangeIter
         {
-          using WrappedIter = IterType<IT>::template SimilarIter<T2>::Type;
+          using WrappedIter = IterRebind<IT>::template SimilarIter<T2>::Type;
           using        Type = RangeIter<WrappedIter>;
         };
     };

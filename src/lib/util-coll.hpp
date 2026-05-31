@@ -57,14 +57,14 @@ namespace util {
         typedef lib::meta::Unwrap<T>::Type TaT;
         
         enum{ value = lib::meta::can_STL_ForEach<TaT>::value
-                   &&!lib::meta::can_IterForEach<T>::value
+                   &&!lib::meta::can_LumieraIter<T>::value
             };
       };
     
     template<typename T>
     struct treat_as_LumieraIterator
       {
-        enum{ value = lib::meta::can_IterForEach<T>::value
+        enum{ value = lib::meta::can_LumieraIter<T>::value
             };
       };
     

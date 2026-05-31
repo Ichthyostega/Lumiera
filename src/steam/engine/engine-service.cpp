@@ -19,24 +19,23 @@
 
 
 #include "steam/engine/engine-service.hpp"
+#include "steam/engine/render-environment.hpp"
 #include "lib/itertools.hpp"
 
-//#include <string>
-//#include <memory>
 #include <functional>
 
 
+using std::ref;
+using std::bind;
+using std::function;
+using std::placeholders::_1;
+using lib::iter_source::transform;
+using lib::append_all;
+using vault::out::DataSink;
 
 namespace steam  {
 namespace engine{
   
-//    using std::string;
-//    using lumiera::Subsys;
-  using std::function;
-  using std::bind;
-  using std::ref;
-  using lib::iter_source::transform;
-  using lib::append_all;
 
   
   namespace { // hidden local details of the service implementation....
@@ -70,22 +69,22 @@ namespace engine{
   CalcStreams
   EngineService::calculate(ModelPort mPort,
                            Timings nominalTimings,
-                           OutputConnection& output,
+                           OutputSlot& outputSlot,
                            Quality serviceQuality)
   {                                        //////////////////////////////////////////////////TICKET #1301 : prepare proper Dispatcher here, including translation ModelPort -> portIDX
     RenderEnvironment& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
-    function<CalcStream(play::DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
+    function<CalcStream(DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
     CalcStreams runningCalculations;
-    append_all (transform (output.getOpenedSinks()
+    append_all (transform (outputSlot.getOpenedSinks()
                           ,triggerRenderStart
                           )
                ,runningCalculations);
     return runningCalculations;
-/////////////////////////////////////////////////////////////////////////////////////////////TICKET #874 : use a pipeline builder to write it as follows:
-//                      treat_all(output.getOpenedSinks())
-//                        .apply (activateCalculation, _1, renderConfig)
-//                        .buildVector();
+/////////////////////////////////////////////////////////////////////////////////////////////TICKET #874 : use our pipeline builder (lib::IterSource) to write it as follows:
+//                      lib::explore(output.getOpenedSinks())
+//                        .transform ([this,&renderConfig](DataSink sink){ return activateCalculation(sink, renderConfig); })
+//                        .effuse();
   }
   
   
@@ -107,7 +106,7 @@ namespace engine{
    * to be re-configured and adjusted while running.
    */
   CalcStream
-  EngineService::activateCalculation (play::DataSink sink, RenderEnvironment& engineCallback)
+  EngineService::activateCalculation (DataSink sink, RenderEnvironment& engineCallback)
   {
     CalcStream calcStream(engineCallback);
     calcStream.sendToOutput (sink);      ////////////////////////////////////////////////////TICKET #1297 : need to re-think the association ModelPort ⟷ output sink

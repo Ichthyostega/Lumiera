@@ -16,8 +16,8 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
 #include "activity-detector.hpp"
 #include "vault/gear/activity-lang.hpp"
 #include "vault/real-clock.hpp"
@@ -134,7 +134,7 @@ namespace test {
           ActivityDetector detector;
           
           uint64_t x1=rani(), x2=rani();
-          Time nomTime = lib::test::randTime();
+          Time nomTime = ::test::randTime();
           Activity feed{x1,x2};
           Activity feed2{x1+1,x1+2};
           feed.next = &feed2;

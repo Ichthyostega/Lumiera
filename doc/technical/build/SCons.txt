@@ -352,6 +352,6 @@ shared object (dynamic library), which is then again a SCons target
 and can be passed to other executable builders as library dependency
 for compilation and linking. Look into 'src/SConscript' or 'test/SConscript'
 to see examples of that technique -- which we also use to define that
-global compound target variables like `core`, `app_lib`, `core_lib`,
+global compound target variables like `core`, `vessel_lib`, `core_lib`,
 `vault_lib`, and `support_lib`. These in turn are essential for
 building the layered dependency hierarchy in our code.

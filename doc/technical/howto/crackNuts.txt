@@ -88,6 +88,33 @@ test with random numbers::
   several threads; each thread should use its own generator then (yet this can be handled sloppy if
   the _quality_ of the random number actually does not matter!)
 
+special test setup::
+  It can be very helpful to use _policy based design_ for some complex evaluation or algorithm,
+  even in cases where it is clear that the actual usage will only ever involve one specific data type
+  and configuration. Not only does such a structured approach help with clarifying the design itself,
+  since the core of the evaluation logic can be abstracted from data representation, but only the
+  testing and verification of correctness is simplified, as the test can be written to use simple,
+  human-readable data (strings, symbols), and, furthermore, many kinds of instrumentation can be
+  included into the test data to gain detailed insight what is happening in the test subject.
+
+verify behaviour sequence::
+  Use the `lib::EventLog`:
++
+- within the test, notable points are marked into the log, possibly with arguments
+- after the test, the Event Log can be verified with a search-sequence
+- this way it is possible to ensure that some events did happen, and happened
+  in a very specific order, or that some event did _not_ happen after another event
+- the `test::Tracker` defined in 'src/test/tracking-dummy.hpp' will mark all constructor,
+  destructor and copy events into an embedded Event Log instance. By inheriting or mix-in
+  from that type, the allocation and instance behaviour of some service can be scrutinised.
+
+verify incidences and concurrency::
+  Aside from using some generic tracing utility, sometimes it is much easier to setup
+  a _specifically tailored instrumentation_. This can be achieved with 'incidence-count.hpp'
++
+- for instrumentation, the `markEnter()` and `markLeave()` functions need to be invoked
+- after the test run, various statistics can be computed and evaluated, including
+  cumulated time and concurrency for the "cases" marked with enter / leave.
 
 
 Common Tasks
@@ -109,6 +136,12 @@ structured data::
 - also useful as output format, both for debugging and because it can be matched against
   an expected structure, which is generated with the DSL notation.
 - [yellow-background]#(planned)# will be able to map this from/to JSON easily.
+scoped collection::
+  unique-ownership collection that holds a sequence of objects in a preallocated fixed
+  storage block. Notably even non-copyable objects can be managed (which is not possible
+  with a `std::vector`), and type-erased instances of subclasses can be mixed. Furthermore
+  there is a constructor variant that allows to populate a `ScopedCollection` in RAII-style.
+  This can e.g. be used to fire-off a set of Threads or open a set of wrapped connections.
 
 Iterating
 ~~~~~~~~~
@@ -134,6 +167,26 @@ IterSource::
   even the production-state can be hooked up into the IterSource instance (with a smart-ptr).
   This allows e.g. to send a Diff to the UI through the UI-Bus, while the actual generation
   and application both happen demand-driven or _lazy..._
+State Core::
+  When some algorithm involves a statefull evaluation, it might be helpful to package that into
+  a _State Core_ container. This is a class that is expected to expose three operations, which
+  allow to build an iteration on top. The header 'iter-adapter.hpp' provides several adapters
+  and wrappers, notable `lib::IterStateWrapper` wraps any _state core_ and provides a
+  Lumiera Iterator interface; likewise, `IterExplorer` heavily relies on that concept and
+  is able to accept and iterate any state core in a pipeline.
+special iterators::
+  Some additional adaptors are provided as building block so that specific evaluations
+  can be made to conform with the »Lumiera Iterator« concept
++
+- several given iterators can be combined into a iteration over tuples with 'lib/iter-zip.hpp'
+- there is also a variation 'lib::izip' that adds a running index into the _zipping operation_
+- IterExplorer provides a `flatten()` operation, that can be used to join an iterator-of-iterators
+  into a single seamless iteration lazily.
+- when a STL container also supports _backwards iteration_, then a lumiera iterator can be
+  created that can _switch direction_ dynamically, with the help of 'iter-cursor.hpp'
+- a STL »deque« container can be used both as a stack and a queue; the header 'iter-stack.hpp'
+  provides an iteration adapter for both usage schemes, so that either the stack or the queue
+  can be _"discharged"_ as a Lumiera Iterator (possibly with an IterExplorer pipeline)
 
 
 Formatting
@@ -153,6 +206,25 @@ Formatting
   draw data o from a `lib::GenNode` tree, or even from a custom defined `DataSource` template.
   Supports placeholders, conditionals and simple loops (and that's it --
   because there are way more capable solutions _out there_ ☺)
+
+
+Setup and wiring
+~~~~~~~~~~~~~~~~
+Generally speaking, we prefer _constructor wiring_ whenever possible, to avoid creating
+unnecessary statefulness (as would be the case when connecting dependencies through setters).
+This design also favours decomposition into self-contained components with a single purpose,
+and simplifies error handling with the help of the RAII pattern.
+
+However, sometimes a piece of code depends on some remote and even global service; in these
+cases, the `lib::Depend` framework can be used to access that service via type name. The
+actual service can either be created on-demand as a singleton, or it can be installed
+explicitly as a service instance. Furthermore, it is possible to "push aside" the
+current service instance temporarily and replace it by a _test mock_.
+
+One point to note is that `lib::Depend` is a _monostate_, and not a _singleton_.
+The actual service should be written as a free-standing class, that can be instantiated
+directly for the purpose of testing.
+
 
 
 Language constructs
@@ -235,4 +307,14 @@ unpack iterator into tuple::
 - see tuple-record-init-test.cpp
 - used in 'command-simple-closure.hpp' to receive parameter values sent via UI-Bus and package them
   into a tuple for invocation of a Steam-Layer command.
++
+index and iterate over tuple elements::
+  This is another example of bridging the compile-time / runtime barrier, using a trampoline.
+  Obviously such a solution requires that it is somehow possible to define a generic functor / λ that
+  can accept any of the tuple elements. And, in order to build a runtime index access, we additionally
+  need to convert each of the tuple elements into a _common reconciled type_.
++
+- If such a type exists, can be figured out with the help of the `meta::CommonReturn` _metafunction_
+- `lib::meta::TupleIdxAdaptor` provides the necessary machinery to define a subscript `operator[]`
+- see `TupleIdxAdaptor_test` for some usage examples, including a runtime iteration...
 

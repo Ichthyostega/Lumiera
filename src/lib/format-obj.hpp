@@ -100,6 +100,119 @@ namespace util {
   
   
   
+  
+  namespace { // helper for printing type diagnostics
+    
+    template<typename X>
+    struct TypeDiagnostics
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = "";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = "";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = "&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X&&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " const&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X const&&>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " &&";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " *";
+      };
+    template<typename X>
+    struct TypeDiagnostics<const X * const>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "const ";
+        static constexpr auto postfix = " * const";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " * const";
+      };
+    template<typename X>
+    struct TypeDiagnostics<X * const *>
+      {
+        using Type = X;
+        static constexpr auto prefix  = "";
+        static constexpr auto postfix = " * const *";
+      };
+  }//(End)decoration helper
+  
+  /** diagnostic type output, including const and similar adornments
+   * @warning operates after-the-fact and relies on mangled type names
+   *          plus several heuristics. Output might thus not be entirely correct,
+   *          especially when several levels of const, pointer and references are involved.
+   *          If in doubt, place the test::TypeDebugger<T> to reveal the type as the compiler sees it.
+   * @remarks the function lib::meta::typeStr was deliberately written such as to remove type adornments
+   *          and does not work on all kinds of reference. This helper complements this and
+   *          attempts to preserve const-ness, pointer and reference decoration.
+   */
+  template<typename X>
+  inline std::string
+  showType()
+  {
+    using Case = TypeDiagnostics<X>;
+    using Type = Case::Type;
+    
+    return Case::prefix
+         + lib::meta::humanReadableTypeID (typeid(Type).name())
+         + Case::postfix;
+  }
+  
+  template<typename...TS>
+  inline std::string
+  showTypes()
+  {
+    return "<| " + ((showType<TS>()+", ") + ... + "|>");
+  }
+  
+  
+  
+  
   namespace {
     /** toggle to prefer specialisation with direct lexical conversion */
     template<typename X>

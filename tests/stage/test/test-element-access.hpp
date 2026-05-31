@@ -37,7 +37,7 @@
 #include "lib/error.hpp"
 #include "stage/model/element-access.hpp"
 #include "stage/interact/ui-coord.hpp"
-#include "test/mock-elm.hpp"
+#include "stage/test/mock-elm.hpp"
 #include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 

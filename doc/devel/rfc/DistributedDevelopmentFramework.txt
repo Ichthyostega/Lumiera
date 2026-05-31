@@ -68,9 +68,9 @@ rather -- a task no one was willing to take on.
 
 Yet the Lumiera project succeeded in building a web presence based on
 https://asciidoc-py.github.io/[Asciidoc] sources
-https://git.lumiera.org/?p=website;a=summary[checked into Git],
+https://git.lumiera.org/gitweb?p=website;a=summary[checked into Git],
 with a lightweight
-https://git.lumiera.org/?p=website;a=blob;f=build_website.sh;h=60b90e18d5732d66566baf2c20a217212a5dcece;hb=aefc91e13a95a3c742dc8143c374ec982e0aa56b[commit-hook script]
+https://git.lumiera.org/gitweb?p=website;a=blob;f=build_website.sh;h=60b90e18d5732d66566baf2c20a217212a5dcece;hb=aefc91e13a95a3c742dc8143c374ec982e0aa56b[commit-hook script]
 to automatically publish any changes on git-push -- a scheme
 which comes close to the gist of this RfC.
 

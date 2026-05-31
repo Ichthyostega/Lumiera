@@ -16,9 +16,14 @@
  ** Metaprogramming with type sequences based on variadic template parameters.
  ** The type rebinding- and helper templates in this header allow to perform
  ** simple sequence manipulations on sequences of template parameters extracted
- ** from variadic parameter packs. The goal is to (pre)process flexible argument
- ** lists _at compile time,_ driven by template instantiation, allowing to specialise
- ** and react specifically on some concrete pattern of argument types.
+ ** from variadic parameter packs. Among other things, this allows the sequence
+ ** of function arguments to be flexibly reshaped and remoulded at compile-time.
+ ** Driven by template instantiation, this enables adaptation in response to
+ ** specific argument types for each actual instance. Such metaprogramming
+ ** capabilities can be amplified significantly through the use of generic-λ.
+ ** @note with C++23, this framework could be expanded to cover also any
+ **       »tuple-like« product type, drawing from our non-standard extension
+ **       with the `concept tuple_like`, as defined in \ref tuple-concept.hpp.
  ** 
  ** @remark in Lumiera, over time three different approaches were developed for
  **         handling sequences of types in metaprogramming; some of these techniques
@@ -26,8 +31,10 @@
  **         - templates with variadic arguments (e.g. std::tuple) can be manipulated directly
  **         - a type-sequence `Types<T...>` can be primed / rebound from other variadic templates
  **         - Loki-style type-lists are created from type-sequences and enable elaborate manipulations
+ ** 
  ** @see feed-manifold.hpp advanced usage example in the Render Engine
- ** @see TupleHelper_test
+ ** @see VariadicHelper_test
+ ** @see tuple-concept.hpp
  ** @see typelist.hpp
  ** @see function.hpp
  ** @see generator.hpp
@@ -42,7 +49,7 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/variadic-rebind.hpp"
-#include "lib/meta/util.hpp"
+#include "lib/meta/trait.hpp"
 
 namespace lib {
 namespace meta {
@@ -160,7 +167,7 @@ namespace meta {
    * - the nested template #Apply wraps each type into another template
    * - #Rebind likewise instantiates another template with the element types
    * - #AndAll applies a predicate and combines the result with _logical and_
-   * - #OrAll similarly evaluates _logical or_ on the application results
+   * - #OrAny similarly evaluates _logical or_ on the application results
    */
   template<class X,  typename =void>
   struct ElmTypes
@@ -177,7 +184,7 @@ namespace meta {
       template<template<class> class PRED>
       using AndAll = std::__and_<PRED<X>>;
       template<template<class> class PRED>
-      using OrAll  = std::__or_<PRED<X>>;
+      using OrAny  = std::__or_<PRED<X>>;
     };
   
   /** Partial specialisation to handle type sequences */
@@ -199,10 +206,23 @@ namespace meta {
       using AndAll = ElmTypes<Apply<PRED>>::template Rebind<std::__and_>;
       
       template<template<class> class PRED>
-      using OrAll  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
+      using OrAny  = ElmTypes<Apply<PRED>>::template Rebind<std::__or_>;
     };
   
-  // Note: a further specialisation for any »tuple-like« is defined in tuple-helper.hpp
+  // Note: a further specialisation for any »tuple-like« is defined in tuple-concept.hpp
+  
+  
+  
+  template<class SEQ>
+  using Any_Const = ElmTypes<SEQ>::template OrAny<isConst>;
+  template<class SEQ>
+  using All_LRef = ElmTypes<SEQ>::template AndAll<isLRef>;
+  
+  template<class SEQ>
+  static constexpr bool Any_Const_v = Any_Const<SEQ>::value;
+  template<class SEQ>
+  static constexpr bool All_LRef_v = All_LRef<SEQ>::value;
+  
   
   
   

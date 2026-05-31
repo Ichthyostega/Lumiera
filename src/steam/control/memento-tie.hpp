@@ -31,7 +31,6 @@
 #ifndef CONTROL_MEMENTO_TIE_H
 #define CONTROL_MEMENTO_TIE_H
 
-#include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "steam/control/command-signature.hpp"
 #include "lib/item-wrapper.hpp"
@@ -48,7 +47,6 @@ namespace control {
   
   using lib::meta::func::bindLast;
   using lib::meta::func::chained;
-  using lib::meta::equals_safeInvoke;
   using lib::wrapper::ItemWrapper;
   
   

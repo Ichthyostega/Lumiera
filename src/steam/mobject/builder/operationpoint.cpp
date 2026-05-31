@@ -26,7 +26,7 @@
 #include "steam/asset/proc.hpp"
 #include "steam/engine/node-factory.hpp"
 #include "steam/streamtype.hpp"
-//#include "common/util.hpp"
+//#include "vessel/util.hpp"
 
 //#include <boost/ptr_container/ptr_vector.hpp>
 

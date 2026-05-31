@@ -17,7 +17,7 @@
  ** Only used in stypemanager.cpp and accompanying unit tests.
  ** 
  ** @see control::STypeManager
- ** @see lumiera::StreamType
+ ** @see steam::StreamType
  **
  */
 
@@ -30,7 +30,7 @@
 
 #include "steam/control/stypemanager.hpp"
 #include "lib/nocopy.hpp"
-//#include "common/query.hpp"
+//#include "vessel/query.hpp"
 //#include "lib/util.hpp"
 //#include "lib/p.hpp"
 

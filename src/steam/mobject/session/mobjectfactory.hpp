@@ -28,7 +28,7 @@
 #include "lib/symbol.hpp"
 
 
-namespace lumiera {
+namespace vessel{
 namespace query {
   class DefsManager;
 }}
@@ -66,7 +66,7 @@ namespace session {
       
     public:
       
-      Placement<Root>   operator() (lumiera::query::DefsManager&);
+      Placement<Root>   operator() (vessel::query::DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
       Placement<Fork>   operator() (lib::idi::EntryID<Fork> const&);

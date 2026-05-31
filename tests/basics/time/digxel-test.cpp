@@ -16,10 +16,10 @@
  */
 
 
-#include "lib/test/run.hpp"
+#include "test/run.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/format-string.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/time/digxel.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"

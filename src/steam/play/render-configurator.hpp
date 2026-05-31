@@ -31,13 +31,14 @@
 #include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/play/play-process.hpp"
 #include "steam/engine/calc-stream.hpp"
-#include "steam/play/output-slot.hpp"
 #include "steam/play/output-manager.hpp"
+#include "vault/out/output-slot.hpp"
+#include "vault/out/timings.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
 
@@ -50,11 +51,10 @@ namespace steam {
 namespace play {
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
 //  using util::isnil;
   using std::function;
+  using vault::out::Timings;
+  using vault::out::OutputSlot;
   using steam::mobject::ModelPort;
   
 //  typedef steam::play::POutputManager POutputManager;

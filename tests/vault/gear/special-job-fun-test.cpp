@@ -16,14 +16,14 @@
  */
 
 
-#include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
+#include "test/run.hpp"
+#include "test/test-helper.hpp"
+#include "test/tracking-dummy.hpp"
 //#include "vault/real-clock.hpp"
 //#include "lib/time/timevalue.hpp"
 #include "vault/gear/special-job-fun.hpp"
 #include "lib/format-cout.hpp" ////////////////////////////////////TODO Moo-oh
-#include "lib/test/diagnostic-output.hpp"//////////////////////////TODO TOD-oh
-#include "lib/test/tracking-dummy.hpp"
+#include "test/diagnostic-output.hpp"//////////////////////////////TODO TOD-oh
 //#include "lib/util.hpp"
 
 //#include <array>
@@ -36,7 +36,7 @@
 //using util::isSameObject;
 //using lib::test::randStr;
 //using lib::test::randTime;
-using lib::test::Dummy;
+using test::Dummy;
 //using std::array;
 
 
@@ -99,7 +99,7 @@ namespace test {
        *      - verify the front-end can be copied without impact on the JobFunctor
        *      - verify the heap allocated functor keeps itself alive
        *        even when the front-end handle is already gone.
-       *      - verify the functor de-allocates itself after latst invocation
+       *      - verify the functor de-allocates itself after last invocation
        * @todo WIP 12/23 ✔ define ⟶ ✔ implement
        */
       void
@@ -111,7 +111,7 @@ namespace test {
                                    (JobParameter param) mutable
                                     {
                                       int mark = param.invoKey.part.a;
-                                      tracker.setVal (mark);
+                                      tracker.setID (mark);
                                     }};    // △△△ invocation should alter checksum
             
             // one Dummy instance was implanted
@@ -134,7 +134,7 @@ namespace test {
                                    (JobParameter param) mutable
                                     {
                                       int mark = param.invoKey.part.a;
-                                      tracker.setVal (mark);
+                                      tracker.setID (mark);
                                     };
             CHECK (23 == Dummy::checksum());
             

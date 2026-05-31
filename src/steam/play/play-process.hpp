@@ -33,7 +33,6 @@
  ** the playback or rendering state and goals, which then causes the PlayProcess
  ** to reconfigure the ongoing or planned calculations.
  ** 
- ** @see lumiera::DummyPlayer
  ** @see stage::PlaybackController usage example 
  */
 
@@ -46,7 +45,7 @@
 #include "lib/nocopy.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
-//#include "common/instancehandle.hpp"
+//#include "vessel/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "steam/mobject/model-port.hpp"
 #include "steam/engine/calc-stream.hpp"
@@ -62,9 +61,9 @@ namespace steam {
 namespace play {
 
 //    using std::string;
-//    using lumiera::Subsys;
-//    using lumiera::Display;
-//    using lumiera::DummyPlayer;
+//    using vessel::Subsys;
+//    using vessel::Display;
+//    using vessel::DummyPlayer;
   using util::isnil;
   using steam::mobject::ModelPort;
   using std::function;
@@ -114,7 +113,7 @@ namespace play {
    * 
    * @note PlayProcess entities are never directly visible.
    *       Client code handles and controls these processes
-   *       through a lumiera::Play::Controller returned
+   *       through a vessel::spine::Play::Controller returned
    *       from the PlayService.
    */
   class PlayProcess

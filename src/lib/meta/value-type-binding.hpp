@@ -27,9 +27,9 @@
  ** Within the STL, there is a convention to provide nested typedefs to indicate
  ** type variations in relation to the basic payload type of the container. We
  ** follow this convention and support especially the
- ** - `value_type` (what is conceived to be "in" the container or iterator)
- ** - a simple (LValue) reference to the payload
- ** - a pointer at the payload.
+ ** - `value_type` : how to store what is conceived to be "in" the container or iterator)
+ ** - a simple (LValue) reference to the payload: how you access some content
+ ** - a to form pointer at the payload, which is relevant for `operator->`
  ** 
  ** A custom container should likewise provide such type definitions, and the
  ** type rebinding helper template defined in this header makes it easy to
@@ -37,6 +37,12 @@
  ** creates an *Extension Point*: when some payload type requires special
  ** treatment, an explicit specialisation to this rebinding trait may be
  ** injected alongside with the definition of the payload type.
+ ** @warning A special twist may happen when processing a function in an iterator (pipeline).
+ **          In this special case, `ValueTypeBinding` should _not_ be used, since the function
+ **          might yield again a nested iterator; yet we want to treat that iterator as a value
+ **          in that special case, and not look into the iterator or retrieve results from it.
+ **          Notably this situation applies to any kind of transforming iterator.
+ **          lib::meta::RefTraits should be used in such cases.
  ** 
  ** The CommonResultYield type rebinding helper allows to reconcile several
  ** essentially compatible result types; it is used in iterator pipelines,
@@ -53,7 +59,6 @@
 #define LIB_META_VALUE_TYPE_BINDING_H
 
 
-#include "lib/error.hpp"
 #include "lib/meta/trait.hpp"
 
 
@@ -107,64 +112,22 @@ namespace meta {
   template<typename TY, typename SEL =void>
   struct ValueTypeBinding
     {
-      using value_type = RefTraits<TY>::Value;
-      using reference  = RefTraits<TY>::Reference;
-      using pointer    = RefTraits<TY>::Pointer;
+      using value_type = RefTraits<TY>::value_type;
+      using reference  = RefTraits<TY>::reference;
+      using pointer    = RefTraits<TY>::pointer;
     };
   
   /** specialisation for classes providing STL style type binding definitions */
   template<typename TY>
   struct ValueTypeBinding<TY,      enable_if<use_ValueTypebindings<TY>> >
     {
-      using _SrcType   = RefTraits<TY>::Value;
+      using _SrcType   = RefTraits<TY>::value_type;
       
       using value_type = _SrcType::value_type;
       using reference  = _SrcType::reference;
       using pointer    = _SrcType::pointer;
     };
   
-  
-  
-  
-  /**
-   * Decision helper to select between returning results by value or reference.
-   * - when both types can not be reconciled, _no type result_ is provided;
-   *   this case can be detected by a compile-time bool-check
-   * - when one of both types is `const`, the `ResType` will be const
-   * - when both types are LValue-references, then the result will be a reference,
-   *   otherwise the result will be a value type
-   * @see IterExplorer::expand()
-   */
-  template<typename T1, typename T2,  bool = has_TypeResult<std::common_type<T1,T2>>()>
-  struct CommonResultYield
-    : std::false_type
-    { };
-  
-  template<typename T1, typename T2>
-  struct CommonResultYield<T1, T2, true >
-    : std::true_type
-    {
-      using _Common = std::common_type_t<T1,T2>;
-      // NOTE: unfortunately std::common_type decays (strips cv and reference)
-      static constexpr bool isConst = isConst_v<T1> or isConst_v<T2>;
-      static constexpr bool isRef   = isLRef_v<T1> and isLRef_v<T2>;
-      
-      using _ConstT = std::conditional_t<isConst
-                                        , const _Common
-                                        ,       _Common
-                                        >;
-      using _ValRef = std::conditional_t<isRef
-                                        , std::add_lvalue_reference_t<_ConstT>
-                                        , std::remove_reference_t<_ConstT>
-                                        >;
-      
-      using ResType    = _ValRef;
-      using value_type = RefTraits<ResType>::Value;
-      using reference  = RefTraits<ResType>::Reference;
-      using pointer    = RefTraits<ResType>::Pointer;
-    };
-  
-  
-  
+    
 }} // namespace lib::meta
 #endif /*LIB_META_VALUE_TYPE_BINDING_H*/

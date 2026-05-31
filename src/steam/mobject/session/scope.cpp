@@ -35,7 +35,7 @@
 #include "steam/mobject/session/session-service-explore-scope.hpp"
 #include "steam/mobject/mobject.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : only using the IterSource wrapIter adapter here
-#include "common/query/query-resolver.hpp"
+#include "vessel/query/query-resolver.hpp"
 
 #include <vector>
 
@@ -115,7 +115,7 @@ namespace session {
    *  of contents discovery queries to the PlacementIndex
    *  managed within the session
    */
-  lumiera::QueryResolver const&
+  vessel::QueryResolver const&
   ScopeLocator::theResolver()
   {
     return SessionServiceExploreScope::getResolver();
