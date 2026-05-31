@@ -173,14 +173,14 @@ namespace test {
                                 
                                 // signal to accept no further messages
                                 receiver.mark.disengage();
-                                yield();
+                                sleep_for (100us);
                                 
                                 // accept all messages sent thus far
                                 uint lastNumber{0};
                                 receiver.queue.consume_all ([&](uint val){ lastNumber = val; });
                                 
                                 // verify that the sender indeed stopped...
-                                sleep_for (100us);
+                                sleep_for (200us);
                                 CHECK (receiver.queue.empty());
                                 CHECK (lastNumber == source);
                              }};

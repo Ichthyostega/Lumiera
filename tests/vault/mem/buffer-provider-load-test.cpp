@@ -54,10 +54,11 @@ namespace test  {
   
   namespace { // ========== Test Setup ==========
     
-    const size_t MANY_THREADS  = 100;     ///< press concurrently
     const size_t FULL_LOAD_CORES = 4;     ///< workers to use for a _full load run_
     const size_t MAX_SCALE = 5;           ///< maximum scale step for randomised buffer types
     
+    size_t MANY_THREADS     = 100;        ///< press concurrently with an overload of threads
+    const size_t NOT_SO_MANY = 16;        ///< a _light variant_ for use in the standard test suite
     
     /** seed a per-thread random generator */
     inline Random
@@ -302,13 +303,15 @@ namespace test  {
    *     - the prime goal is to demonstrate correctness, balancing memory demand
    *       mostly through lock-free queues, without loosing any allocation.
    */
-  class BufferProviderLoad_test : public Test
+      class BufferProviderLoad_test : public Test
     {
       
       virtual void
-      run (Arg)
+      run (Arg arg)
         {
           seedRand();
+           if ("quick" == firstTok (arg))
+             MANY_THREADS = NOT_SO_MANY;
           
           demonstrate_EngineSetup();
           verify_massiveOverload();

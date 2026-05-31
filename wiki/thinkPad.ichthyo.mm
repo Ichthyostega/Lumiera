@@ -1,6 +1,6 @@
 <map version="1.0.1">
 <!-- To view this file, download free mind mapping software FreeMind from http://freemind.sourceforge.net -->
-<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1764717453015" STYLE="fork" TEXT="Lumi">
+<node BACKGROUND_COLOR="#6666ff" CREATED="1434127882200" ID="ID_1452170048" MODIFIED="1780275169368" STYLE="fork" TEXT="Lumi">
 <font NAME="SansSerif" SIZE="25"/>
 <node CREATED="1434128046296" FOLDED="true" ID="ID_1900827283" MODIFIED="1679363052358" POSITION="right" TEXT="GUI">
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
@@ -84243,6 +84243,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1681832844221" ID="ID_826966768" MODIFIED="1684878140956" TEXT="Aufbau">
+<linktarget COLOR="#01b435" DESTINATION="ID_826966768" ENDARROW="Default" ENDINCLINATION="-137;1577;" ID="Arrow_ID_33822744" SOURCE="ID_277082895" STARTARROW="None" STARTINCLINATION="773;29;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1681832851795" ID="ID_1453467501" MODIFIED="1684877396857" TEXT="vom MockJobTicket aus beginnen...">
 <icon BUILTIN="yes"/>
@@ -87497,6 +87498,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#6a537a" DESTINATION="ID_847118977" ENDARROW="Default" ENDINCLINATION="321;-1184;" ID="Arrow_ID_832091116" STARTARROW="None" STARTINCLINATION="-1507;952;"/>
+<arrowlink COLOR="#6a537a" DESTINATION="ID_1304564115" ENDARROW="Default" ENDINCLINATION="321;-1184;" ID="Arrow_ID_547708096" STARTARROW="None" STARTINCLINATION="-1507;952;"/>
 <linktarget COLOR="#58b681" DESTINATION="ID_161203143" ENDARROW="Default" ENDINCLINATION="79;-62;" ID="Arrow_ID_502535652" SOURCE="ID_201099858" STARTARROW="None" STARTINCLINATION="90;6;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1685676072753" ID="ID_29155074" MODIFIED="1685676082592" TEXT="dort gibt es schon zwei fake-ModelPorts">
@@ -90356,7 +90359,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1693238755343" HGAP="29" ID="ID_1858134894" MODIFIED="1693239064719" TEXT="Deadline-Service f&#xfc;r &#xbb;free wheeling&#xab; und background rendering" VSHIFT="10">
-<arrowlink COLOR="#683034" DESTINATION="ID_917322834" ENDARROW="Default" ENDINCLINATION="445;-22;" ID="Arrow_ID_57467075" STARTARROW="None" STARTINCLINATION="494;26;"/>
+<arrowlink COLOR="#683034" DESTINATION="ID_917322834" ENDARROW="Default" ENDINCLINATION="445;-22;" ID="Arrow_ID_57467075" STARTARROW="None" STARTINCLINATION="595;27;"/>
 <linktarget COLOR="#b84d5d" DESTINATION="ID_1858134894" ENDARROW="Default" ENDINCLINATION="348;-10;" ID="Arrow_ID_1937059043" SOURCE="ID_1162137081" STARTARROW="None" STARTINCLINATION="10;223;"/>
 <linktarget COLOR="#743f58" DESTINATION="ID_1858134894" ENDARROW="Default" ENDINCLINATION="-547;24;" ID="Arrow_ID_313746889" SOURCE="ID_1276102583" STARTARROW="None" STARTINCLINATION="-1607;-121;"/>
 <icon BUILTIN="flag-yellow"/>
@@ -90365,6 +90368,219 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#fe3e84" DESTINATION="ID_623622318" ENDARROW="Default" ENDINCLINATION="-812;50;" ID="Arrow_ID_1026891728" STARTARROW="None" STARTINCLINATION="437;29;"/>
 <icon BUILTIN="hourglass"/>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1780272747601" ID="ID_167032660" MODIFIED="1780272765305" TEXT="Schrittweise Integration">
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#d1a6bb" COLOR="#690f14" CREATED="1780272782580" ID="ID_1378877153" MODIFIED="1780273377685">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      zeigt <b>schmerzhaft</b>&#160;den Stand des Lumiera-Projekts an
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In den ersten Jahren war ich so verloren, da&#223; ich es nicht einmal geschafft habe, Komponenten-&#252;bergreifende Tests aufzubauen. <i>Zumindest in der Hinsicht</i>&#160;bin ich inzwischen weiter gekommen...
+    </p>
+    <p>
+      Sobald es aber in Richtung Integration geht, stehe ich immer noch vor einer &#252;bergro&#223;en Aufgabe: <b>es fehlt an allen Enden</b>. Die Problematik zeigt sich besonders scharf in den high-level-Services, f&#252;r die ich top-down vorgehen mu&#223;: mir fehlt der induktive Gegenpart, und ich scheitere regelm&#228;&#223;ig daran, geeignete Fakes / Mocks f&#252;r Teilkomponenten bereitzustellen. Entweder die Fakes sind nicht brauchbar, oder ich stecke unendlich viel Zeit rein und sie sind danch trotzdem nicht brauchbar. Und dieses Muster wiederholt sich &#252;ber verschiedenste Ans&#228;tze seit Jahren so. Ich vergesse oft sogar meine eigenen Integrations-Schemata. Nicht einmal in der Mindmap finde ich da eine klare Integrations-Route; nur St&#252;ckwerk, das ich irgendwann beiseite legen mu&#223;, und dann komplett vergesse.
+    </p>
+    <p>
+      Was mich bisher gerettet hat, war meine <font color="#7c0053">sagenhafte Sturheit</font>. Ich versuch's immer wieder, und wenigstens ein St&#252;ckwerk bleibt jeweils in irgend einer Ecke h&#228;ngen....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+<node CREATED="1780273427247" ID="ID_873048752" MODIFIED="1780273436955" TEXT="Trittsteine">
+<icon BUILTIN="edit"/>
+<node CREATED="1780273901878" ID="ID_1011830647" LINK="https://git.lumiera.org/gitweb?p=lumiera/ichthyo;a=commit;h=393a4478615d0e378a79c9b9d2d550b95e8a196f" MODIFIED="1780274679789" TEXT="2012 : Versuche das Player-Subsystem abzustecken">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Den Rahmen habe ich seinerzeit durch Deduktion gewonnen, aus dem bis dahin entwickelten Verst&#228;ndnis des High-Level-Models. Dieser Rahmen scheint auch 10+ Jahre sp&#228;ter immer noch valide zu sein (&#187;Playback Vertical Slice&#171;).
+    </p>
+    <p>
+      Doch ich konnte keine Tests schreiben, um meine neuen Service-Komponenten wenigstens mal zu konstruieren &#8212; denn selbst die einfachsten inhaltlichen Zusammenh&#228;nge mu&#223;te ich mir &#8222;aus den Fingern saugen&#8220;. Daf&#252;r habe ich wieder auf das (grunds&#228;tzlich bew&#228;hrte) Muster mit einem Fake-Kontext zur&#252;ckgegriffen. In diesem Fall war das die <font face="Monospaced"><b>DummyPlayConnection</b></font>, welche alle <i>fingierten Platzhalter</i>&#160;bereitstellen sollte, damit man irgendwas zum Verschalten und Aktivieren hat. Damals habe ich, im weiteren Verlauf, auch einen <font face="Monospaced"><b>SimulatedBuilderContext</b></font>&#160;erfunden, um einen plausiblen Hintergrund bereitzustellen, gegen den ein geFAKEter Build-Vorgang aufgebaut werden k&#246;nnte (letzteres ist dann aber nie passiert)...
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#7a7f84" DESTINATION="ID_1715981304" ENDARROW="Default" ENDINCLINATION="-16;-60;" ID="Arrow_ID_431459197" STARTARROW="None" STARTINCLINATION="79;4;"/>
+</node>
+<node CREATED="1780275253794" ID="ID_897337917" LINK="https://git.lumiera.org/gitweb?p=lumiera/ichthyo;a=commit;h=0b9705692bd4969a13cb68d577a1118453f8f14a" MODIFIED="1780276447104" TEXT="2023 : Aufbau eines MockDispatchers">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Fr&#252;hjahr 2023 waren bereits die Ziele f&#252;r das &#187;Playback Vertical Slice&#171; absehbar. Jedoch wollte ich zun&#228;chst einige Altlasten aufr&#228;umen. Das waren damals meine letzten Monate bei der Baaderbank, denn ich hatte beschlossen, mich nun ganz dem Lumiera-Projekt zu widmen (und von Erspartem zu leben)....
+    </p>
+    <p>
+      Besonders problematisch hatte ich das Monaden-Framework empfunden, das ich nebenbei in fr&#252;heren Jahren hochgezogen hatte (fehlgeleitet vom allgemeinen Hype um funktionale Sprachen): Problematisch deshalb, weil der einzige Use-Case die Job-Planung war, welche im Rahmen dieses Frameworks gewisserma&#223;en &#187;freischwebend&#171; aufgeh&#228;ngt war. Ich hatte Sorge, da&#223; sich diese Struktur festsetzt. Daher habe ich den Ansatz gew&#228;hlt, meinen sp&#228;ter entwickelten Pipeline-Builder (dann umbenannt in <font face="Monospaced" color="#2b20d7">IterExplorer</font>) als neues R&#252;ckgrad zu verwenden, um die &#8222;eigentlich schon fertig entwickelte&#8220; Job-Planung (was auch immer das hei&#223;en mag, denn es war freischwebend) auf dieser Basis zu re-implementieren. Und aus dem nun schon abgesteckten Horizont f&#252;r das &#187;Playback Vertical Slice&#171; ergaben sich nun <i>wesentlich konkretere Ankerpunkte,</i>&#160;im Besonderen das <font face="Monospaced" color="#6a3f3f">JobTicket</font>.
+    </p>
+    <p>
+      Und um diese Strukturen aufbauen zu k&#246;nnen, habe ich sukzessive eine Hierarchie von Mock-Implementierungen mit aufgebaut, welche jeweils (im Vorgriff auf das &#187;Playback Vertical Slice&#171;) die noch fehlenden Elemente der Segmentation, das Node-Network, und die Job-Invocation als Mocks mit Fake-Logik bereitstellen. Das bedeutet, diese Objekte lassen sich jeweils einfach direkt im Test-Scope konstruieren (enthalten also viel stillschweigende Magie), bieten dann die echten Interfaces, mit einem Fake-Verhalten, und au&#223;erdem zus&#228;tzliche Instrumentierung, um nach dem Test die Aufrufe zumindest gundlegend zu verifizieren.
+    </p>
+    <p>
+      Dieses Framework konnte <b><font color="#029330">komplett abgeschlossen</font></b>&#160;werden (das war wohl der erste solche Erfolg, und gab Hoffnung...); es st&#252;tzt sich aber auf die Kontext-Hilfsmittel der <font face="Monospaced" color="#6f141c">DummyPlayConnection</font>&#160;ab, und ist insofern doch immer noch etwas fragil.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#38255a" DESTINATION="ID_277082895" ENDARROW="Default" ENDINCLINATION="-46;-1;" ID="Arrow_ID_1543281840" STARTARROW="None" STARTINCLINATION="57;4;"/>
+</node>
+</node>
+<node CREATED="1780273773232" ID="ID_1037346130" MODIFIED="1780273779746" TEXT="Integrations-Hilfsmittel">
+<node CREATED="1780273795645" ID="ID_847118977" MODIFIED="1780273890297">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Test-Fake</u>: <font face="Monospaced"><b>DummyPlayConnection</b></font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#6a537a" DESTINATION="ID_847118977" ENDARROW="Default" ENDINCLINATION="321;-1184;" ID="Arrow_ID_832091116" SOURCE="ID_161203143" STARTARROW="None" STARTINCLINATION="-1507;952;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1780274608833" ID="ID_1715981304" MODIFIED="1780274673429" TEXT="2012 erfunden f&#xfc;r die Entw&#xfc;rfe zum Play-Subsystem">
+<linktarget COLOR="#7a7f84" DESTINATION="ID_1715981304" ENDARROW="Default" ENDINCLINATION="-16;-60;" ID="Arrow_ID_431459197" SOURCE="ID_1011830647" STARTARROW="None" STARTINCLINATION="79;4;"/>
+</node>
+</node>
+<node CREATED="1780273795645" ID="ID_1304564115" MODIFIED="1780275486795">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Test-Framework</u>: <font face="Monospaced"><b>MockDispatcher</b></font>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#6a537a" DESTINATION="ID_1304564115" ENDARROW="Default" ENDINCLINATION="321;-1184;" ID="Arrow_ID_547708096" SOURCE="ID_161203143" STARTARROW="None" STARTINCLINATION="-1507;952;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1780275497394" ID="ID_277082895" MODIFIED="1780276504985" TEXT="2023 schrittweise aufgebaut &#x2014; zusammen mit der neuen Job-Planning-Pipeline">
+<arrowlink COLOR="#01b435" DESTINATION="ID_826966768" ENDARROW="Default" ENDINCLINATION="-137;1577;" ID="Arrow_ID_33822744" STARTARROW="None" STARTINCLINATION="773;29;"/>
+<linktarget COLOR="#38255a" DESTINATION="ID_277082895" ENDARROW="Default" ENDINCLINATION="-46;-1;" ID="Arrow_ID_1543281840" SOURCE="ID_897337917" STARTARROW="None" STARTINCLINATION="57;4;"/>
+</node>
+<node CREATED="1780276507675" ID="ID_1966220260" MODIFIED="1780276509375" TEXT="Bausteine">
+<node COLOR="#1c4056" CREATED="1780276530064" ID="ID_1225520904" LINK="#ID_594113874" MODIFIED="1780276621658" TEXT="MockJob"/>
+<node COLOR="#1c4056" CREATED="1780276549685" ID="ID_1372879723" LINK="#ID_1681918468" MODIFIED="1780276621658" TEXT="MockJobTicket"/>
+<node COLOR="#1c4056" CREATED="1780276573226" ID="ID_1684725921" LINK="#ID_792021380" MODIFIED="1780276621659" TEXT="MockSegmentation"/>
+<node COLOR="#1c4056" CREATED="1780276585833" ID="ID_1735415479" LINK="#ID_1375353236" MODIFIED="1780276621659" TEXT="MockDispatcher"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1780276650570" ID="ID_253525578" MODIFIED="1780276657475" TEXT="Offene Punkte">
+<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780276676618" ID="ID_1524671619" MODIFIED="1780276733176" TEXT="das Thema Output-Connection und Model-Ports">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1780276776005" ID="ID_1292371573" MODIFIED="1780276807498" TEXT="DummyBuilderContext gebrochen durch Aufr&#xe4;umen OutputSlot (2026)">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1780276831800" ID="ID_1449407577" MODIFIED="1780276835516" TEXT="scheiternde Tests">
+<node CREATED="1780276858756" MODIFIED="1780276858756" TEXT="MockSupport_test"/>
+<node CREATED="1780276879289" MODIFIED="1780276879289" TEXT="JobPlanning_test"/>
+<node CREATED="1780276885951" MODIFIED="1780276885951" TEXT="JobPlanningPipeline_test"/>
+<node CREATED="1780276893446" MODIFIED="1780276893446" TEXT="DispatcherInterface_test"/>
+</node>
+<node CREATED="1780276917531" ID="ID_1041892610" MODIFIED="1780277400361" TEXT="Ursache: R&#xfc;ckbau der alten Instrumentierung in OutputSlot">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Instrumentierung war heillos verknotet mit dem DiagnosticBufferSlot
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#8e1e3f" DESTINATION="ID_446738731" ENDARROW="Default" ENDINCLINATION="610;-950;" ID="Arrow_ID_1921584561" STARTARROW="None" STARTINCLINATION="1210;57;"/>
+<node CREATED="1780277408343" ID="ID_1801726353" MODIFIED="1780277421933" TEXT="diese war seinerzeit &#xbb;Implementierungs-getrieben&#xab;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1780277425337" HGAP="37" ID="ID_1128732621" MODIFIED="1780277471600" TEXT="konnte nun den alten Aufbau im DummyBuilderContext nicht mehr 1:1 erhalten" VSHIFT="-13">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1780277481321" ID="ID_1531081425" MODIFIED="1780277493084" TEXT="Reparatur soweit m&#xf6;glich/notwendig">
+<node CREATED="1780277504726" ID="ID_1385084981" MODIFIED="1780277513057" TEXT="unmittelbar brechender Call-Pfad">
+<node CREATED="1780277528379" ID="ID_524751048" MODIFIED="1780277532934" TEXT="ctor MockDispatcher()">
+<node CREATED="1780277556503" ID="ID_1099540739" MODIFIED="1780277561608">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>using</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#8c505c" face="DejaVu Sans Mono" size="9pt"><b>DummyPlaybackSetup</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">=</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#535773" face="DejaVu Sans Mono" size="9pt">play</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">::</font><font color="#535773" face="DejaVu Sans Mono" size="9pt">test</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">::</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>DummyPlayConnection</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&lt;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>PlayTestFrames_Strategy</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&gt;;</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1780277588123" ID="ID_1500694026" MODIFIED="1780277599029" TEXT="default-init DummyPlayConnection"/>
+<node CREATED="1780277608536" ID="ID_904459851" MODIFIED="1780277649985" TEXT="ctor SimulatedBuilderContext()">
+<arrowlink COLOR="#ad0a38" DESTINATION="ID_545493208" ENDARROW="Default" ENDINCLINATION="49;3;" ID="Arrow_ID_1027397352" STARTARROW="None" STARTINCLINATION="46;3;"/>
+</node>
+<node CREATED="1780277627315" ID="ID_545493208" MODIFIED="1780277644561" TEXT="ruft direkt performMockBuild()">
+<linktarget COLOR="#ad0a38" DESTINATION="ID_545493208" ENDARROW="Default" ENDINCLINATION="49;3;" ID="Arrow_ID_1027397352" SOURCE="ID_904459851" STARTARROW="None" STARTINCLINATION="46;3;"/>
+<node CREATED="1780277675837" HGAP="41" ID="ID_1390234105" MODIFIED="1780277705704" VSHIFT="11">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      hier wurde ein&#160;<font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>vector</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&lt;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>DataSink</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&gt;</font> aufgebaut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1780277829195" ID="ID_1867682665" MODIFIED="1780277836491" TEXT="naiver Reparaturversuch">
+<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1780277839513" ID="ID_1689090671" MODIFIED="1780278740914" TEXT="die neue Builder-Syntax verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dann w&#228;re es ja doch noch gut gewesen, da&#223; ich die gestern &#252;berarbeitet habe...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#435e98" CREATED="1780278700623" ID="ID_1633388240" MODIFIED="1780278740913" TEXT="verwende einen FakeSlot">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      einfach kopiert vom OutputAllocState_test
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1780278644183" ID="ID_1810698282" MODIFIED="1780278669646" TEXT="dann IterExplorer &#x27f6; effuse(dataSinks_)">
+<node CREATED="1780278674241" ID="ID_359589383" MODIFIED="1780278683469" TEXT="da diese nun ref-counting sind"/>
+<node CREATED="1780278684408" ID="ID_1997033587" MODIFIED="1780278698836" TEXT="...wird dadurch auch der FakeSlot am Leben gehalten"/>
+</node>
+<node CREATED="1780278746441" ID="ID_428838522" MODIFIED="1780278792576">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Ha: wir kommen vorw&#228;rts....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="#8c505c" face="DejaVu Sans Mono" size="9pt"><b>size_t</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#632d2d" face="DejaVu Sans Mono" size="9pt"><b>getBufferSize</b></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">()</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>const</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>override</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">{</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#95271a" face="DejaVu Sans Mono" size="9pt">UNIMPLEMENTED</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">(</font><font color="#996e62" face="DejaVu Sans Mono" size="9pt"><i>&quot;getBufferSize()&quot;</i></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">)</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">}</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -119820,10 +120036,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#d80612" CREATED="1771533236307" ID="ID_446738731" MODIFIED="1775872104384" TEXT="DiagnosticOutputSlot irreparabel defekt">
 <arrowlink COLOR="#158dff" DESTINATION="ID_638158996" ENDARROW="Default" ENDINCLINATION="-1375;-44;" ID="Arrow_ID_288442844" STARTARROW="None" STARTINCLINATION="-182;266;"/>
+<linktarget COLOR="#8e1e3f" DESTINATION="ID_446738731" ENDARROW="Default" ENDINCLINATION="610;-950;" ID="Arrow_ID_1921584561" SOURCE="ID_1041892610" STARTARROW="None" STARTINCLINATION="1210;57;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1771533351445" ID="ID_1191713131" MODIFIED="1771533363392" TEXT="Kritik-API"/>
 <node CREATED="1771533365404" ID="ID_1617547990" MODIFIED="1771533395920" TEXT="Implementierung verloren">
-<node CREATED="1771533440973" MODIFIED="1771533440973" TEXT="frame_was_allocated"/>
+<node CREATED="1771533440973" ID="ID_1630899088" MODIFIED="1771533440973" TEXT="frame_was_allocated"/>
 <node CREATED="1771533451213" MODIFIED="1771533451213" TEXT="output_was_emitted"/>
 <node CREATED="1771533457562" MODIFIED="1771533457562" TEXT="output_was_closed"/>
 </node>
@@ -152015,7 +152232,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1693238542895" ID="ID_917322834" MODIFIED="1693238802819" TEXT="Deadlines for &#xbb;free wheeling&#xab; and background rendering">
 <arrowlink COLOR="#e7367a" DESTINATION="ID_1212740184" ENDARROW="Default" ENDINCLINATION="12;-24;" ID="Arrow_ID_1622880291" STARTARROW="None" STARTINCLINATION="104;5;"/>
-<linktarget COLOR="#683034" DESTINATION="ID_917322834" ENDARROW="Default" ENDINCLINATION="445;-22;" ID="Arrow_ID_57467075" SOURCE="ID_1858134894" STARTARROW="None" STARTINCLINATION="494;26;"/>
+<linktarget COLOR="#683034" DESTINATION="ID_917322834" ENDARROW="Default" ENDINCLINATION="445;-22;" ID="Arrow_ID_57467075" SOURCE="ID_1858134894" STARTARROW="None" STARTINCLINATION="595;27;"/>
 <linktarget COLOR="#fe6147" DESTINATION="ID_917322834" ENDARROW="Default" ENDINCLINATION="631;-14;" ID="Arrow_ID_1361409427" SOURCE="ID_1655832509" STARTARROW="None" STARTINCLINATION="953;54;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>

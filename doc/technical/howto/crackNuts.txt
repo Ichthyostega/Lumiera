@@ -92,7 +92,7 @@ special test setup::
   It can be very helpful to use _policy based design_ for some complex evaluation or algorithm,
   even in cases where it is clear that the actual usage will only ever involve one specific data type
   and configuration. Not only does such a structured approach help with clarifying the design itself,
-  since the core of the evaluation logic can be abstracted from data representation, but only the
+  since the core of the evaluation logic can be abstracted from data representation -- yet also the
   testing and verification of correctness is simplified, as the test can be written to use simple,
   human-readable data (strings, symbols), and, furthermore, many kinds of instrumentation can be
   included into the test data to gain detailed insight what is happening in the test subject.

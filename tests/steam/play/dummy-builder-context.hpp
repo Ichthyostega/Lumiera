@@ -55,6 +55,7 @@
 #include "steam/asset/pipe.hpp"
 #include "vessel/query.hpp"
 
+#include "lib/iter-explorer.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/util.hpp"
@@ -91,6 +92,24 @@ namespace test {
       UnimplementedConnection()  = default;
     };
   
+  
+  /**
+   * A placeholder/dummy OutputSlot
+   * @todo 5/2026 it can barely be created right now;
+   *       should reconsider what is actually needed here!
+   */
+  struct FakeSlot
+    : OutputSlot
+    {
+      static constexpr uint NUM_CONNECTIONS = 2;
+      static constexpr bool SINGLE_THREADED_TEST = true;
+      using Connections = lib::ScopedCollection<UnimplementedConnection>;
+      using MockConnectState = OutputSlot::AllocState<UnimplementedConnection, SINGLE_THREADED_TEST>;
+      
+      FakeSlot()
+        : OutputSlot{std::make_unique<MockConnectState> (NUM_CONNECTIONS, Connections::fill())}
+        { }
+    };
   
   using asset::Pipe;
   using asset::PPipe;
@@ -175,11 +194,11 @@ namespace test {
           modelPorts_.push_back (ModelPort(pipeB));
           
           // prepare corresponding placeholder DataSink (a fake active output connection)
-          UNIMPLEMENTED ("need mock/fake OutputSlot");
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to disentangle BufferProvider implementation
-          dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
-          dataSinks_.emplace_back().activate (std::make_shared<UnimplementedConnection>());
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
+          FakeSlot fakeSlot;
+          dataSinks_.clear();
+          lib::explore(fakeSlot.getOpenedSinks())
+              .effuse (dataSinks_);
+                   //  Note: keeps FakeSlot alive (due to embedded ref-count)...
         }
       
       
