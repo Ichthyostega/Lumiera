@@ -38,7 +38,7 @@ namespace test {
     
   } // (End) hidden service impl details
   
-  UnimplementedConnection::~UnimplementedConnection() { } ///< emit VTable here...
+  FakeOutput::DummyOutputConnection::~DummyOutputConnection() { } ///< emit VTable here...
   
   
   
