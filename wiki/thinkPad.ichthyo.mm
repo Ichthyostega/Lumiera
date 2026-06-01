@@ -90478,7 +90478,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780276676618" ID="ID_1524671619" MODIFIED="1780276733176" TEXT="das Thema Output-Connection und Model-Ports">
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1780276776005" ID="ID_1292371573" MODIFIED="1780276807498" TEXT="DummyBuilderContext gebrochen durch Aufr&#xe4;umen OutputSlot (2026)">
+<node COLOR="#435e98" CREATED="1780276776005" FOLDED="true" ID="ID_1292371573" MODIFIED="1780344406013" TEXT="DummyBuilderContext gebrochen durch Aufr&#xe4;umen OutputSlot (2026)">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1780276831800" ID="ID_1449407577" MODIFIED="1780276835516" TEXT="scheiternde Tests">
 <node CREATED="1780276858756" MODIFIED="1780276858756" TEXT="MockSupport_test"/>
@@ -90497,11 +90497,12 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <arrowlink COLOR="#8e1e3f" DESTINATION="ID_446738731" ENDARROW="Default" ENDINCLINATION="610;-950;" ID="Arrow_ID_1921584561" STARTARROW="None" STARTINCLINATION="1210;57;"/>
 <node CREATED="1780277408343" ID="ID_1801726353" MODIFIED="1780277421933" TEXT="diese war seinerzeit &#xbb;Implementierungs-getrieben&#xab;"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1780277425337" HGAP="37" ID="ID_1128732621" MODIFIED="1780277471600" TEXT="konnte nun den alten Aufbau im DummyBuilderContext nicht mehr 1:1 erhalten" VSHIFT="-13">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780277425337" HGAP="37" ID="ID_1128732621" MODIFIED="1780344340856" TEXT="konnte nun den alten Aufbau im DummyBuilderContext nicht mehr 1:1 erhalten" VSHIFT="-13">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1780277481321" ID="ID_1531081425" MODIFIED="1780277493084" TEXT="Reparatur soweit m&#xf6;glich/notwendig">
+<node COLOR="#1c4a50" CREATED="1780277481321" FOLDED="true" ID="ID_1531081425" MODIFIED="1780344399889" TEXT="Reparatur soweit m&#xf6;glich/notwendig">
+<icon BUILTIN="yes"/>
 <node CREATED="1780277504726" ID="ID_1385084981" MODIFIED="1780277513057" TEXT="unmittelbar brechender Call-Pfad">
 <node CREATED="1780277528379" ID="ID_524751048" MODIFIED="1780277532934" TEXT="ctor MockDispatcher()">
 <node CREATED="1780277556503" ID="ID_1099540739" MODIFIED="1780277561608">
@@ -90533,8 +90534,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1780277829195" ID="ID_1867682665" MODIFIED="1780277836491" TEXT="naiver Reparaturversuch">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1780277829195" ID="ID_1867682665" MODIFIED="1780344230123" TEXT="naiver Reparaturversuch">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1780277839513" ID="ID_1689090671" MODIFIED="1780278740914" TEXT="die neue Builder-Syntax verwenden">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -90561,24 +90562,123 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1780278674241" ID="ID_359589383" MODIFIED="1780278683469" TEXT="da diese nun ref-counting sind"/>
 <node CREATED="1780278684408" ID="ID_1997033587" MODIFIED="1780278698836" TEXT="...wird dadurch auch der FakeSlot am Leben gehalten"/>
 </node>
-<node CREATED="1780278746441" ID="ID_428838522" MODIFIED="1780278792576">
+<node CREATED="1780278746441" ID="ID_428838522" MODIFIED="1780328595795">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      Ha: wir kommen vorw&#228;rts....
+      <font size="4">Ha!</font>&#160;wir kommen vorw&#228;rts....
     </p>
     <p>
       
     </p>
     <p>
-      <font color="#8c505c" face="DejaVu Sans Mono" size="9pt"><b>size_t</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#632d2d" face="DejaVu Sans Mono" size="9pt"><b>getBufferSize</b></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">()</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>const</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>override</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">{</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#95271a" face="DejaVu Sans Mono" size="9pt">UNIMPLEMENTED</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">(</font><font color="#996e62" face="DejaVu Sans Mono" size="9pt"><i>&quot;getBufferSize()&quot;</i></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">)</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">}</font>
+      <font color="#8c505c" face="DejaVu Sans Mono"><b>size_t</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#632d2d" face="DejaVu Sans Mono"><b>getBufferSize</b></font><font color="#11123a" face="DejaVu Sans Mono">()</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#4a1a65" face="DejaVu Sans Mono"><b>const</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160; </font><font color="#4a1a65" face="DejaVu Sans Mono"><b>override</b></font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#11123a" face="DejaVu Sans Mono">{</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#95271a" face="DejaVu Sans Mono">UNIMPLEMENTED</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160;</font><font color="#11123a" face="DejaVu Sans Mono">(</font><font color="#996e62" face="DejaVu Sans Mono"><i>&quot;getBufferSize()&quot;</i></font><font color="#11123a" face="DejaVu Sans Mono">)</font><font color="#65533c" face="DejaVu Sans Mono">;</font><font color="#3a1f18" face="DejaVu Sans Mono">&#160; </font><font color="#11123a" face="DejaVu Sans Mono">}</font>
     </p>
   </body>
 </html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
+<node COLOR="#435e98" CREATED="1780328610123" ID="ID_1459186322" MODIFIED="1780334297706" TEXT="also: dem Unsinn einen Sinn geben...">
+<icon BUILTIN="yes"/>
+<node CREATED="1780328737610" ID="ID_1226419472" MODIFIED="1780329109051" TEXT="wenigstens inkrementell...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich hab n&#228;mlich nicht wirklich einen &#220;berblick, wof&#252;r das schon verwendet wird, geschweige denn, wof&#252;r es sinnvollerweise noch verwendet werden k&#246;nnte; im ersten Schritt erscheint es sinnvoll, die output-Sinks wenigstens mal <i>irgendwie verwenden</i>&#160;zu k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
 </node>
+<node CREATED="1780329111957" ID="ID_1830940135" MODIFIED="1780329140065" TEXT="also stelle ich f&#xfc;r jeden Kanal eine Deque mit leerem Speicher bereit"/>
+<node CREATED="1780334232850" ID="ID_1358066726" MODIFIED="1780334246928" TEXT="erst mal ganz dreist direkt in den FakeOutput(Slot) integriert"/>
+<node CREATED="1780334251527" ID="ID_1543953272" MODIFIED="1780334291860" TEXT="und baue auch mal einen Accessor dazu">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zumindest damit man versteht, wie die Datenstruktur gedacht war &#8212; wei&#223; immer noch nicht, ob sowas jemals gebraucht wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780344362493" ID="ID_239661320" MODIFIED="1780344392240">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <font color="#b6020c">Achtung</font>: komplett <b>ungetestet</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1780334307048" ID="ID_1670950239" MODIFIED="1780344224887" TEXT="n&#xe4;chste H&#xfc;rde: DummyPlayConnection::isSupported (ModelPort, DataSink)">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1780334346302" ID="ID_12996728" MODIFIED="1780334350894" TEXT="hatte ich auskommentiert"/>
+<node CREATED="1780334351690" ID="ID_1537963663" MODIFIED="1780334467589" TEXT="denn es pr&#xfc;ft auch einen Match auf die DataSink">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aber DataSink ist jetzt ein opaque-funktor und nicht mehr vergleichbar...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1780334471722" ID="ID_109063604" MODIFIED="1780335515355" TEXT="was soll ich jetzt machen &#x2014; das f&#xfc;hlt sich alles so falsch an???">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das sind alles Zusammenh&#228;nge, die ich wohl mal bedacht habe, aber dann in die Zukunft verschoben &#8212; denn aktuell m&#252;&#223;te ich w&#252;rfeln, und w&#252;rde dabei mit hoher Wahrscheinlichkeit was falsches festlegen. In der Tat hat eine DataSink eine Identit&#228;t (sie hat ja Referenz-Semantik) und in der Tat verbirgt sich auch ein sehr spezieller StreamType dahinter. Aber haben wir nicht auch deshalb unseren Builder, damit das alles einmal gecheckt wird, und dann pa&#223;t es?? Produktiver Code sollte doch ganz explizit keine Entscheidungslogik mehr haben. <i>Wobei mir nat&#252;rlich klar ist,</i>&#160;da&#223; es hier um ein Test-Setup geht, und ich aus purer Verzweiflung eine isValid()-Funktion erfunden habe, damit der Test nicht eine v&#246;llig sinfreie Veranstaltung ist, die nichts tats&#228;chlich verifizieren kann. Das ist n&#228;mlich der &#187;Haken&#171; an diesem Design mit dem Builder: man mu&#223; sich darauf verlassen, da&#223; sein Output korrekt ist &#8212; aber die Datenstrukturen, die er erzeugt, m&#252;ssen auch irgendwo mal f&#252;r sich konstruiert und verifiziert werden, wiewohl eine &#220;berpr&#252;fung an diesen Daten gar nicht vorgesehen ist. &#220;berpr&#252;fen lie&#223;e sich nur eine Ende-zu-Ende-Kette (ganz abstrakt gesagt, denn ich hab keine Ahnung, wie eine solche Kette funktionieren soll, geschweige denn, wie man sie zweifelsfrei pr&#252;ft). Bei einem Language-Compiler kommt wenigstens Assembly raus, die man f&#252;r sich verifizieren kann, weil sie f&#252;r sich alleine auch klar spezifiziert ist. Aber bei unserem Design hier, bezieht sich das alles zirkul&#228;r auf sich selbst....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-angry"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_1498279820" MODIFIED="1780335764770" STYLE="bubble" TEXT="Konsistenz der vom Builder generierten Datenstrukturen" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1735085700" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1365000324" STARTARROW="None" STARTINCLINATION="-952;45;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1780335689366" ID="ID_1523405682" MODIFIED="1780336102824" STYLE="fork" TEXT="es fehlt Redundanz zum Gegen-Check">
+<edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1721239003353" ID="ID_361305917" MODIFIED="1780335655151" STYLE="fork" TEXT="wie kann man die Grundelemente des low-Level-Model verifizieren?">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a9161f" CREATED="1780336050518" ID="ID_1838532460" LINK="https://issues.lumiera.org/ticket/1377" MODIFIED="1780336116534" STYLE="fork" TEXT="Ticket #1377 verweist auf die gleiche Problemlage">
+<edge COLOR="#ff5d00" STYLE="sharp_linear" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node CREATED="1780336177561" ID="ID_1227912197" MODIFIED="1780343576969" TEXT="da das Problem wohl tiefer geht &#x27f9; mache erst mal eine Identit&#xe4;t zug&#xe4;nglich">
+<node CREATED="1780338849294" ID="ID_1800901776" MODIFIED="1780343669174" TEXT="DataSink hat durchaus eine Identit&#xe4;t">
+<arrowlink COLOR="#a54967" DESTINATION="ID_1707600369" ENDARROW="Default" ENDINCLINATION="-1147;-49;" ID="Arrow_ID_722257031" STARTARROW="None" STARTINCLINATION="1330;100;"/>
+</node>
+<node CREATED="1780343579194" ID="ID_1666270487" MODIFIED="1780343637412" TEXT="kann direkt eine Equality definieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar auf Basis der dahinter stehenden Laufzeit-Konfiguration (ge&#246;ffnete Connections).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1780343639444" ID="ID_574753366" MODIFIED="1780343662205" TEXT="DataSink kann &#xbb;klonbar&#xab; gemacht werden">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1780344243372" HGAP="0" ID="ID_852740785" MODIFIED="1780344293814" STYLE="bubble" TEXT="Testsuite gr&#xfc;&#xfc;&#xfc;&#xfc;&#xfc;n" VSHIFT="7">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<font NAME="SansSerif" SIZE="14"/>
 </node>
 </node>
 </node>
@@ -91375,9 +91475,6 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node CREATED="1713742101141" ID="ID_716691378" MODIFIED="1713742108608" TEXT="BuffHandle">
 <node CREATED="1713742564543" ID="ID_900021322" MODIFIED="1713742570490" TEXT="geh&#xf6;rt direkt zum Buffer-Provider"/>
-<node CREATED="1713742790928" ID="ID_1107336740" LINK="#ID_1354248617" MODIFIED="1713742849975" TEXT="Vorsicht: Handles haben einen ref-Count (Problem ist bekannt)">
-<icon BUILTIN="messagebox_warning"/>
-</node>
 <node CREATED="1713742571198" ID="ID_92255782" MODIFIED="1713742678699" TEXT="die Idee mit der Meta/Descriptor-ID ist gut &#x2014; bedarf aber weiterer Kl&#xe4;rung"/>
 </node>
 <node CREATED="1713742921783" ID="ID_8372846" MODIFIED="1713742922923" TEXT="BufferMetadata">
@@ -91386,6 +91483,12 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1713742957434" ID="ID_1517298653" MODIFIED="1713742971608" TEXT="hab den Eindruck, ich habe hier ein offenes, symbolisches Schema vorgesehen"/>
 <node CREATED="1713742972326" ID="ID_1592129443" MODIFIED="1713742985662" TEXT="dann w&#xfc;rde sich das sp&#xe4;ter durch den eigentlichen Nutzen noch kl&#xe4;ren"/>
 <node CREATED="1713742986571" ID="ID_1098578366" MODIFIED="1713743004178" TEXT="anscheinend ist ein solcher Nutzen bereits durch den OutputManager vorgegeben"/>
+</node>
+<node CREATED="1780345053073" ID="ID_481303135" MODIFIED="1780345057748" TEXT="DataSink">
+<node CREATED="1713742790928" ID="ID_1107336740" LINK="#ID_1354248617" MODIFIED="1713742849975" TEXT="Vorsicht: Handles haben einen ref-Count (Problem ist bekannt)">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1780345068259" ID="ID_947575107" MODIFIED="1780345086679" TEXT="(2026) komplett &#xfc;berarbeitet &#x2014; aber konzeptionell gleich geblieben"/>
 </node>
 </node>
 </node>
@@ -91538,8 +91641,17 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1713793648079" ID="ID_907714892" MODIFIED="1730829794903" TEXT="vorhandener Code kann auf elementarer Ebene mitverwendet werden">
+<node BACKGROUND_COLOR="#e3d0d0" COLOR="#b80232" CREATED="1713793648079" ID="ID_907714892" MODIFIED="1780345224824" TEXT="vorhandener Code kann auf elementarer Ebene mitverwendet werden">
 <icon BUILTIN="idea"/>
+<node COLOR="#5b280f" CREATED="1780345134313" ID="ID_1687457614" MODIFIED="1780345196545" TEXT="das war freundlich gesagt....">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#5b280f" CREATED="1780345196545" ID="ID_223410898" MODIFIED="1780345196545" TEXT="tats&#xe4;chlich konnte ich alle Strukturen im Prinzip erhalten">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node COLOR="#5b280f" CREATED="1780345196545" ID="ID_264382885" MODIFIED="1780345196545" TEXT="aber der Implementierungs-Code wurde 100% &#xfc;berarbeitet (2026)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1713795084878" ID="ID_900623108" MODIFIED="1734654127744" TEXT="das Buffer-Protocol gilt als gesetzt">
 <arrowlink COLOR="#263bd0" DESTINATION="ID_1121467988" ENDARROW="Default" ENDINCLINATION="555;-1157;" ID="Arrow_ID_1021571849" STARTARROW="None" STARTINCLINATION="16;273;"/>
@@ -91726,9 +91838,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1718931702946" ID="ID_1034026390" MODIFIED="1718931836347" TEXT="Wiring und Wiring-Situation(Builder) entflechten">
 <arrowlink COLOR="#a05d70" DESTINATION="ID_1237866779" ENDARROW="Default" ENDINCLINATION="-821;-34;" ID="Arrow_ID_1472508814" STARTARROW="None" STARTINCLINATION="1345;85;"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1715526750604" ID="ID_208674861" MODIFIED="1718884602859" TEXT="RefArray modernisieren">
+<node COLOR="#338800" CREATED="1715526750604" FOLDED="true" ID="ID_208674861" MODIFIED="1780345265415" TEXT="RefArray modernisieren">
 <linktarget COLOR="#4a83b7" DESTINATION="ID_208674861" ENDARROW="Default" ENDINCLINATION="-781;83;" ID="Arrow_ID_1861027884" SOURCE="ID_561930764" STARTARROW="None" STARTINCLINATION="-1002;-113;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1715526756800" ID="ID_364406773" MODIFIED="1715526765735" TEXT="sollte sich Richtung Concept bewegen"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1715526766314" ID="ID_1523408221" MODIFIED="1715526784381" TEXT="Vorsicht: eine Neben-Verwendung in der Session (ElementTracker)">
 <icon BUILTIN="messagebox_warning"/>
@@ -91737,13 +91849,13 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#fbfed6" DESTINATION="ID_576332674" ENDARROW="Default" ENDINCLINATION="-670;-163;" ID="Arrow_ID_18042992" STARTARROW="None" STARTINCLINATION="525;35;"/>
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1744755490793" ID="ID_1135941103" MODIFIED="1744756657146" TEXT="2025-4 : kann jetzt &#xfc;berall weg">
+<node COLOR="#435e98" CREATED="1744755490793" ID="ID_1135941103" MODIFIED="1780345247927" TEXT="2025-4 : kann jetzt &#xfc;berall weg">
 <linktarget COLOR="#265efd" DESTINATION="ID_1135941103" ENDARROW="Default" ENDINCLINATION="-1048;89;" ID="Arrow_ID_1050531240" SOURCE="ID_831819953" STARTARROW="None" STARTINCLINATION="-1120;-23;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1744755518679" ID="ID_1083442460" MODIFIED="1744755532011" TEXT="lib::Several hat sich gut etabliert">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744755533738" ID="ID_584942928" MODIFIED="1744756510905" TEXT="auch ScopedHolder jetzt endlich mal wegr&#xe4;umen">
+<node COLOR="#435e98" CREATED="1744755533738" ID="ID_584942928" MODIFIED="1780345257344" TEXT="auch ScopedHolder jetzt endlich mal wegr&#xe4;umen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -91754,11 +91866,11 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756217156" ID="ID_1812508757" LINK="https://issues.lumiera.org/ticket/958" MODIFIED="1744756256421" TEXT="# 958 replace ScopedHolder">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1744756217156" ID="ID_1812508757" LINK="https://issues.lumiera.org/ticket/958" MODIFIED="1780345255939" TEXT="# 958 replace ScopedHolder">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1744756270441" ID="ID_326401228" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1744756293052" TEXT="#473 sort out RefArray">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1744756270441" ID="ID_326401228" LINK="https://issues.lumiera.org/ticket/473" MODIFIED="1780345255940" TEXT="#473 sort out RefArray">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -92131,7 +92243,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1719610212651" ID="ID_1146415020" MODIFIED="1719610222111" TEXT="hier wird&apos;s schwierig">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719611885638" ID="ID_1918379255" MODIFIED="1719611906459" TEXT="was ist &#xfc;ber BufferProvider bekannt?">
+<node COLOR="#435e98" CREATED="1719611885638" ID="ID_1918379255" MODIFIED="1780346519905" TEXT="was ist &#xfc;ber BufferProvider bekannt?">
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#c8c0b6" CREATED="1322262595850" ID="ID_1560472992" MODIFIED="1719611921052" TEXT="Implementierungs-Skizze von Nov.2011">
 <arrowlink COLOR="#797a8d" DESTINATION="ID_530710667" ENDARROW="Default" ENDINCLINATION="359;68;" ID="Arrow_ID_385887777" STARTARROW="None" STARTINCLINATION="551;-43;"/>
@@ -92143,7 +92255,11 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
-<node CREATED="1719613516196" ID="ID_626988531" MODIFIED="1719613533558" TEXT="l&#xe4;&#xdf;t nur wenige Zusatz-Kan&#xe4;le f&#xfc;r Metadaten offen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772400835618" ID="ID_531178706" MODIFIED="1780346550387" TEXT="durch grundlegende Kritik und &#xdc;berarbeitung (2026) im Kern best&#xe4;tigt">
+<arrowlink COLOR="#2f8cca" DESTINATION="ID_1729025521" ENDARROW="Default" ENDINCLINATION="-706;-85;" ID="Arrow_ID_1547676782" STARTARROW="None" STARTINCLINATION="-3208;129;"/>
+</node>
+<node CREATED="1719613516196" FOLDED="true" ID="ID_626988531" MODIFIED="1780346556559" TEXT="l&#xe4;&#xdf;t nur wenige Zusatz-Kan&#xe4;le f&#xfc;r Metadaten offen">
+<icon BUILTIN="forward"/>
 <node CREATED="1719613552183" ID="ID_1654830476" MODIFIED="1719613569652" TEXT="Buffer wird f&#xfc;r einen BufferDescriptor announced/locked">
 <icon BUILTIN="idea"/>
 <node CREATED="1719615852227" ID="ID_947471000" MODIFIED="1719615875444">
@@ -98698,13 +98814,14 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <font NAME="SansSerif" SIZE="17"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1735004660507" ID="ID_1088386150" MODIFIED="1735005563022" TEXT="#1387 Memory handling scheme for render buffers">
-<arrowlink COLOR="#ff2921" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="-965;-57;" ID="Arrow_ID_1750574936" STARTARROW="None" STARTINCLINATION="1192;64;"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1735004660507" ID="ID_1088386150" MODIFIED="1780347257938" TEXT="#1387 Memory handling scheme for render buffers">
+<arrowlink COLOR="#216fff" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="-965;-57;" ID="Arrow_ID_1750574936" STARTARROW="None" STARTINCLINATION="1192;64;"/>
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1718845263947" ID="ID_1063052148" MODIFIED="1742172669058" TEXT="Ziel: einfachen RenderJob im NodeOpera_test">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1718845263947" ID="ID_1063052148" MODIFIED="1780347272242" TEXT="Ziel: einfachen RenderJob im NodeOpera_test">
 <arrowlink COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="yes"/>
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1736104360185" ID="ID_1974639046" LINK="https://issues.lumiera.org/ticket/1389" MODIFIED="1736104653706" TEXT="Fortsetzung: #1389 Prototyping processing builder">
@@ -99636,7 +99753,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="idea"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1718843482825" ID="ID_312625997" MODIFIED="1738781709536" TEXT="Nodes konstruieren und bauen">
 <icon BUILTIN="full-1"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1718884503837" ID="ID_561930764" MODIFIED="1718884602859" TEXT="RefArray steht dem im Weg">
+<node COLOR="#435e98" CREATED="1718884503837" ID="ID_561930764" MODIFIED="1780347099243" TEXT="RefArray steht dem im Weg">
 <arrowlink COLOR="#4a83b7" DESTINATION="ID_208674861" ENDARROW="Default" ENDINCLINATION="-781;83;" ID="Arrow_ID_1861027884" STARTARROW="None" STARTINCLINATION="-1002;-113;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -111004,11 +111121,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#963260" DESTINATION="ID_159987338" ENDARROW="Default" ENDINCLINATION="-152;10;" ID="Arrow_ID_371475437" SOURCE="ID_1573345464" STARTARROW="None" STARTINCLINATION="236;-15;"/>
 <linktarget COLOR="#cc6e7f" DESTINATION="ID_159987338" ENDARROW="Default" ENDINCLINATION="1184;730;" ID="Arrow_ID_544228779" SOURCE="ID_1155618733" STARTARROW="Default" STARTINCLINATION="128;-1039;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1735004660507" ID="ID_1747509213" LINK="https://issues.lumiera.org/ticket/1387" MODIFIED="1736092774165" TEXT="#1387 Buffer Memory Handling konsolidieren">
-<linktarget COLOR="#ff2921" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="-965;-57;" ID="Arrow_ID_1750574936" SOURCE="ID_1088386150" STARTARROW="None" STARTINCLINATION="1192;64;"/>
+<node COLOR="#338800" CREATED="1735004660507" ID="ID_1747509213" LINK="https://issues.lumiera.org/ticket/1387" MODIFIED="1780347249285" TEXT="#1387 Buffer Memory Handling konsolidieren">
+<linktarget COLOR="#216fff" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="-965;-57;" ID="Arrow_ID_1750574936" SOURCE="ID_1088386150" STARTARROW="None" STARTINCLINATION="1192;64;"/>
 <linktarget COLOR="#a65655" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="44;-64;" ID="Arrow_ID_301544135" SOURCE="ID_1338134836" STARTARROW="None" STARTINCLINATION="-229;9;"/>
 <linktarget COLOR="#fde0ca" DESTINATION="ID_1747509213" ENDARROW="Default" ENDINCLINATION="-965;-57;" ID="Arrow_ID_1729225053" SOURCE="ID_1832590841" STARTARROW="None" STARTINCLINATION="-1804;99;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1735005083801" ID="ID_1501030777" MODIFIED="1735007155303" TEXT="Weaving Pattern kann nicht mit Output-Buffern umgehen">
 <arrowlink COLOR="#cc0a6d" DESTINATION="ID_1580601333" ENDARROW="Default" ENDINCLINATION="-290;14;" ID="Arrow_ID_972000949" STARTARROW="None" STARTINCLINATION="579;-32;"/>
@@ -111024,6 +111141,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#783a50" DESTINATION="ID_480339842" ENDARROW="Default" ENDINCLINATION="341;-17;" ID="Arrow_ID_1543965957" STARTARROW="None" STARTINCLINATION="-621;37;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1772400835618" ID="ID_157657667" MODIFIED="1780346990740" TEXT="2026: Buffer-Provider &#xfc;berarbeitet und production-grade Implementierung angelegt">
+<arrowlink COLOR="#2f50ca" DESTINATION="ID_1729025521" ENDARROW="Default" ENDINCLINATION="-706;-85;" ID="Arrow_ID_292687156" STARTARROW="None" STARTINCLINATION="-3494;121;"/>
 </node>
 </node>
 </node>
@@ -112868,7 +112988,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#2c80c0" DESTINATION="ID_596205632" ENDARROW="Default" ENDINCLINATION="1567;83;" ID="Arrow_ID_1998396288" STARTARROW="None" STARTINCLINATION="-765;-533;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1739227357843" ID="ID_1733197389" MODIFIED="1740002204741" TEXT="komplexere Situation hier">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1739227357843" FOLDED="true" ID="ID_1733197389" MODIFIED="1740002204741" TEXT="komplexere Situation hier">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1739227373529" ID="ID_1597993872" MODIFIED="1739227383031" TEXT="es sollen mehrere Str&#xe4;nge gebaut werden"/>
 <node CREATED="1739227384419" ID="ID_1635488686" MODIFIED="1739227406112" TEXT="partielle Closure an den Src-Nodes">
@@ -113612,7 +113732,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1739988488649" ID="ID_1937491223" MODIFIED="1739988507621" TEXT="per copy-n-paste aus den vorhergehenden Testf&#xe4;llen">
 <icon BUILTIN="ksmiletris"/>
 </node>
-<node COLOR="#338800" CREATED="1739988510201" ID="ID_658104724" MODIFIED="1739998319207" TEXT="brauche Param-Node">
+<node COLOR="#338800" CREATED="1739988510201" FOLDED="true" ID="ID_658104724" MODIFIED="1739998319207" TEXT="brauche Param-Node">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1739988517197" ID="ID_68703644" MODIFIED="1739998325901" TEXT="definiere eine Param-Spec mit (nur) einem Slot"/>
 <node COLOR="#435e98" CREATED="1739988529403" ID="ID_11348533" MODIFIED="1739998325902" TEXT="dieser Slot macht die Time &#x27fc; Frame-Quantisierung"/>
@@ -115398,7 +115518,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1736454444496" ID="ID_1712779274" MODIFIED="1738719771532" TEXT="Korrektheit">
-<arrowlink COLOR="#3682c0" DESTINATION="ID_1160836625" ENDARROW="Default" ENDINCLINATION="75;-69;" ID="Arrow_ID_298743045" STARTARROW="None" STARTINCLINATION="-76;15;"/>
+<arrowlink COLOR="#3682c0" DESTINATION="ID_1160836625" ENDARROW="Default" ENDINCLINATION="64;-112;" ID="Arrow_ID_298743045" STARTARROW="None" STARTINCLINATION="-76;15;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1736454504668" ID="ID_1002392068" MODIFIED="1738644857327">
@@ -115467,7 +115587,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1736454082544" ID="ID_1160836625" MODIFIED="1738719760951" TEXT="Test f&#xfc;r Metadaten-Verwaltung">
 <arrowlink COLOR="#5387dc" DESTINATION="ID_15277358" ENDARROW="Default" ENDINCLINATION="-1314;184;" ID="Arrow_ID_1843979731" STARTARROW="None" STARTINCLINATION="-1286;110;"/>
-<linktarget COLOR="#3682c0" DESTINATION="ID_1160836625" ENDARROW="Default" ENDINCLINATION="75;-69;" ID="Arrow_ID_298743045" SOURCE="ID_1712779274" STARTARROW="None" STARTINCLINATION="-76;15;"/>
+<linktarget COLOR="#3682c0" DESTINATION="ID_1160836625" ENDARROW="Default" ENDINCLINATION="64;-112;" ID="Arrow_ID_298743045" SOURCE="ID_1712779274" STARTARROW="None" STARTINCLINATION="-76;15;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1736610754727" ID="ID_575487435" LINK="#ID_25381362" MODIFIED="1738518268810" TEXT="Grobstruktur zerlegen">
 <icon BUILTIN="button_ok"/>
@@ -116334,6 +116454,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#fe512a" DESTINATION="ID_742422075" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1922286656" SOURCE="ID_560462629" STARTARROW="None" STARTINCLINATION="-862;48;"/>
 <icon BUILTIN="bell"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1735085700" MODIFIED="1780335764770" TEXT="Schwierigkeit: Builder-Produkt verifizieren">
+<linktarget COLOR="#fe512a" DESTINATION="ID_1735085700" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1365000324" SOURCE="ID_1498279820" STARTARROW="None" STARTINCLINATION="-952;45;"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e2caa2" COLOR="#990000" CREATED="1729956600896" ID="ID_1648467568" MODIFIED="1729956915005" STYLE="fork" TEXT="Ergebnis">
 <edge COLOR="#b14253" STYLE="sharp_linear"/>
@@ -116473,7 +116597,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1733527343357" ID="ID_1948224513" MODIFIED="1733527590656" TEXT="NodeOpera_test">
 <icon BUILTIN="hourglass"/>
-<node CREATED="1733527358995" ID="ID_1763413562" MODIFIED="1733532620352" TEXT="Integrationstest &#x2014; im Test-Setup">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1733527358995" ID="ID_1763413562" MODIFIED="1780347303541" TEXT="Integrationstest &#x2014; im Test-Setup">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -116482,12 +116606,22 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="pencil"/>
+<node CREATED="1780347591878" ID="ID_1354237185" MODIFIED="1780347598551" TEXT="High-level-Services verwenden">
+<node CREATED="1780347612435" ID="ID_1677986306" MODIFIED="1780347616157" TEXT="BufferProvider"/>
+<node CREATED="1780347617296" ID="ID_1297498308" MODIFIED="1780347628941" TEXT="Ausgabe per OutputSlot"/>
+<node CREATED="1780347660957" ID="ID_664296230" MODIFIED="1780347671228" TEXT="Nodes vorher per NodeBuilder aufbauen"/>
+</node>
+<node CREATED="1780347599733" ID="ID_1443629697" MODIFIED="1780347610216" TEXT="aber grunds&#xe4;tzlich noch die Test-Variante"/>
 </node>
 <node CREATED="1733527376977" ID="ID_506164017" MODIFIED="1733527393014" TEXT="typische Kollaborations-Schemata">
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742172669058" ID="ID_1246173489" MODIFIED="1742172669058" TEXT="Job ruft 2-Node-Chain auf (incl Buffer-Management)">
 <linktarget COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" SOURCE="ID_1063052148" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="idea"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1780347433017" ID="ID_713293660" MODIFIED="1780347450273" TEXT="Ziel: eine vollst&#xe4;ndige RenderInvocation">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1713821728361" ID="ID_1456365802" MODIFIED="1733527178159" TEXT="NodeStorage_test">
@@ -116801,11 +116935,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1769124792851" TEXT="Buffer-Manager">
+<node COLOR="#338800" CREATED="1711548381477" ID="ID_664146362" MODIFIED="1780346123697" TEXT="Buffer-Manager">
 <linktarget COLOR="#5a4f77" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-493;1406;" ID="Arrow_ID_297212964" SOURCE="ID_1433806835" STARTARROW="None" STARTINCLINATION="-1768;-2925;"/>
 <linktarget COLOR="#fec499" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1409;197;" ID="Arrow_ID_616778881" SOURCE="ID_722733788" STARTARROW="None" STARTINCLINATION="-781;71;"/>
-<linktarget COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" SOURCE="ID_1831513195" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
-<icon BUILTIN="flag-yellow"/>
+<linktarget COLOR="#0063ff" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" SOURCE="ID_1831513195" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1719249646221" ID="ID_403017464" MODIFIED="1719249923835" TEXT="Begriffe klarstellen">
 <arrowlink COLOR="#4b5a6c" DESTINATION="ID_1263834914" ENDARROW="Default" ENDINCLINATION="-668;-90;" ID="Arrow_ID_767640863" STARTARROW="None" STARTINCLINATION="-873;115;"/>
 <icon BUILTIN="messagebox_warning"/>
@@ -116824,7 +116958,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1711548682493" ID="ID_813784397" MODIFIED="1711548689688" TEXT="koordiniert ein Buffer-Protocol"/>
 <node CREATED="1711548704842" ID="ID_1204653170" MODIFIED="1711548708318" TEXT="Aufr&#xe4;um-Arbeiten"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1711548732719" ID="ID_1723099061" MODIFIED="1715438041053" TEXT="erster Entwurf von 2011">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1711548732719" ID="ID_1723099061" MODIFIED="1780346127265" TEXT="erster Entwurf von 2011">
 <icon BUILTIN="help"/>
 <node BACKGROUND_COLOR="#c59b8e" COLOR="#690f14" CREATED="1734652908335" FOLDED="true" HGAP="112" ID="ID_1155618733" MODIFIED="1776188028095" TEXT="wie ist hier eigentlich der Stand??" VSHIFT="52">
 <arrowlink COLOR="#9b696f" DESTINATION="ID_1210803090" ENDARROW="Default" ENDINCLINATION="-1935;134;" ID="Arrow_ID_965284194" STARTARROW="None" STARTINCLINATION="-1174;81;"/>
@@ -117596,7 +117730,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1765477795772" ID="ID_1729025521" MODIFIED="1765477801600" TEXT="L&#xf6;sungsweg finden">
+<node BACKGROUND_COLOR="#185454" COLOR="#dbf99e" CREATED="1765477795772" ID="ID_1729025521" MODIFIED="1780346985869" STYLE="fork" TEXT="L&#xf6;sungsweg finden">
+<linktarget COLOR="#2f8cca" DESTINATION="ID_1729025521" ENDARROW="Default" ENDINCLINATION="-706;-85;" ID="Arrow_ID_1547676782" SOURCE="ID_531178706" STARTARROW="None" STARTINCLINATION="-3208;129;"/>
+<linktarget COLOR="#2f50ca" DESTINATION="ID_1729025521" ENDARROW="Default" ENDINCLINATION="-706;-85;" ID="Arrow_ID_292687156" SOURCE="ID_157657667" STARTARROW="None" STARTINCLINATION="-3494;121;"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#bf0297" CREATED="1765477803087" FOLDED="true" ID="ID_588438295" MODIFIED="1770828460086" TEXT="Oh weh ... kann mich schon wieder an fast gar nix mehr erinnern">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -117606,7 +117743,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#ae0f58" DESTINATION="ID_98767082" ENDARROW="Default" ENDINCLINATION="-622;-143;" ID="Arrow_ID_747040279" STARTARROW="None" STARTINCLINATION="-301;114;"/>
+<arrowlink COLOR="#350fae" DESTINATION="ID_98767082" ENDARROW="Default" ENDINCLINATION="-502;-43;" ID="Arrow_ID_747040279" STARTARROW="None" STARTINCLINATION="-367;74;"/>
 <linktarget COLOR="#2c65ce" DESTINATION="ID_588438295" ENDARROW="Default" ENDINCLINATION="-1824;71;" ID="Arrow_ID_1583870066" SOURCE="ID_310075674" STARTARROW="None" STARTINCLINATION="-1484;-73;"/>
 <icon BUILTIN="smily_bad"/>
 <node COLOR="#6b2f01" CREATED="1765477893150" ID="ID_1841000105" MODIFIED="1765477957923" TEXT="das sieht nach einem &#xbb;Knoten&#xab; aus...">
@@ -117644,7 +117781,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1765478638604" ID="ID_489487719" MODIFIED="1765478676002" TEXT="Ansatz: Situation schwer zu verstehen &#x27f9; die Protokolle sind fraglich">
+<node COLOR="#435e98" CREATED="1765478638604" FOLDED="true" ID="ID_489487719" MODIFIED="1770827828949" TEXT="Ansatz: Situation schwer zu verstehen &#x27f9; die Protokolle sind fraglich">
+<icon BUILTIN="idea"/>
 <node CREATED="1765478685540" ID="ID_114610105" MODIFIED="1770827828949">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -117656,7 +117794,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1765478711863" ID="ID_1338671558" MODIFIED="1765478761809" TEXT="demnach mu&#xdf; &#xbb;ihre Darstellung&#xab; klarer werden">
+<node CREATED="1765478711863" ID="ID_1338671558" MODIFIED="1780345422545" TEXT="demnach mu&#xdf; &#xbb;ihre Darstellung&#xab; klarer werden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -117679,34 +117817,34 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769135365556" ID="ID_1910921801" MODIFIED="1769303490534" TEXT=" #1387 Memory handling scheme for render buffers ">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1769135365556" FOLDED="true" ID="ID_1910921801" MODIFIED="1780346073102" TEXT=" #1387 Memory handling scheme for render buffers ">
 <icon BUILTIN="flag-yellow"/>
 <node CREATED="1769304281305" ID="ID_273146716" MODIFIED="1769304289668" TEXT="mu&#xdf; hier erst mal das Konzept formulieren"/>
-<node CREATED="1769304291655" ID="ID_825339932" MODIFIED="1769304307953" TEXT="dann ein vorl&#xe4;ufiger Entwurf f&#xfc;r die Implementierung"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1769304308686" ID="ID_220755582" MODIFIED="1769304323354" TEXT="diese mu&#xdf; aber zukunftsf&#xe4;hig sein!">
+<node CREATED="1769304291655" ID="ID_825339932" MODIFIED="1780345422548" TEXT="dann ein vorl&#xe4;ufiger Entwurf f&#xfc;r die Implementierung"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1769304308686" ID="ID_220755582" MODIFIED="1780345422548" TEXT="diese mu&#xdf; aber zukunftsf&#xe4;hig sein!">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769304337817" ID="ID_355803017" MODIFIED="1769304360937" TEXT="&#x27f9; erst daraus ergeben sich notwendige Justierungen der Protokolle">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769304337817" ID="ID_355803017" MODIFIED="1780345422548" TEXT="&#x27f9; erst daraus ergeben sich notwendige Justierungen der Protokolle">
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1769134503678" ID="ID_1525655107" LINK="https://issues.lumiera.org/ticket/1395" MODIFIED="1776106146309" TEXT=" #1395 resolve integration of BufferProvider with DataSink ">
+<node COLOR="#338800" CREATED="1769134503678" ID="ID_1525655107" LINK="https://issues.lumiera.org/ticket/1395" MODIFIED="1780345422548" TEXT=" #1395 resolve integration of BufferProvider with DataSink ">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1770674862520" ID="ID_242088122" LINK="https://issues.lumiera.org/ticket/1410" MODIFIED="1776111247150" TEXT="#1410 clean-up BufferProvider base implementation ">
+<node COLOR="#338800" CREATED="1770674862520" ID="ID_242088122" LINK="https://issues.lumiera.org/ticket/1410" MODIFIED="1780345422548" TEXT="#1410 clean-up BufferProvider base implementation ">
 <arrowlink COLOR="#8e2e41" DESTINATION="ID_372794836" ENDARROW="Default" ENDINCLINATION="-632;0;" ID="Arrow_ID_1159201552" STARTARROW="None" STARTINCLINATION="693;38;"/>
 <linktarget COLOR="#005bb9" DESTINATION="ID_242088122" ENDARROW="Default" ENDINCLINATION="929;17;" ID="Arrow_ID_1904693647" SOURCE="ID_666177174" STARTARROW="Default" STARTINCLINATION="-1427;92;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node CREATED="1769310540214" ID="ID_1005260492" MODIFIED="1769310544850" TEXT="Allokations-Schema">
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1769310548133" ID="ID_98767082" MODIFIED="1776112747756" TEXT="Ansatzpunkt: Requirements">
-<linktarget COLOR="#ae0f58" DESTINATION="ID_98767082" ENDARROW="Default" ENDINCLINATION="-622;-143;" ID="Arrow_ID_747040279" SOURCE="ID_588438295" STARTARROW="None" STARTINCLINATION="-301;114;"/>
+<node COLOR="#435e98" CREATED="1769310540214" ID="ID_1005260492" MODIFIED="1780346016008" TEXT="Allokations-Schema">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1769310548133" ID="ID_98767082" MODIFIED="1780345513848" TEXT="Ansatzpunkt: Requirements">
+<linktarget COLOR="#350fae" DESTINATION="ID_98767082" ENDARROW="Default" ENDINCLINATION="-502;-43;" ID="Arrow_ID_747040279" SOURCE="ID_588438295" STARTARROW="None" STARTINCLINATION="-367;74;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
-<node COLOR="#435e98" CREATED="1769310572218" FOLDED="true" ID="ID_320895633" MODIFIED="1776112673793" TEXT="mu&#xdf; per DI eingebracht werden">
-<icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1769310586327" ID="ID_1386377456" MODIFIED="1776106991760" TEXT="EngineCtx : M&#xf6;glichkeit f&#xfc;r eine Service-Instanz schaffen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#080e7a" CREATED="1769310572218" ID="ID_320895633" MODIFIED="1780345629206" TEXT="mu&#xdf; sauber als Service aufgebaut werden">
+<icon BUILTIN="forward"/>
+<node COLOR="#338800" CREATED="1769310586327" FOLDED="true" ID="ID_1386377456" MODIFIED="1776106991760" TEXT="EngineCtx : M&#xf6;glichkeit f&#xfc;r eine Service-Instanz schaffen">
 <linktarget COLOR="#7f2472" DESTINATION="ID_1386377456" ENDARROW="Default" ENDINCLINATION="174;-1962;" ID="Arrow_ID_246209401" SOURCE="ID_1653845059" STARTARROW="None" STARTINCLINATION="-1022;78;"/>
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1769310605533" ID="ID_1532935661" MODIFIED="1769310614222" TEXT="brauche erst mal einen Unit-Test">
@@ -118078,7 +118216,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#a1cfe1" COLOR="#032f8d" CREATED="1770579895252" ID="ID_1446919050" MODIFIED="1776112656314" TEXT="Neben-Anforderung: Test-Instrumentierung">
+<node BACKGROUND_COLOR="#a1cfe1" COLOR="#032f8d" CREATED="1770579895252" FOLDED="true" ID="ID_1446919050" MODIFIED="1776112656314" TEXT="Neben-Anforderung: Test-Instrumentierung">
 <linktarget COLOR="#980115" DESTINATION="ID_1446919050" ENDARROW="Default" ENDINCLINATION="-101;-904;" ID="Arrow_ID_1820448517" SOURCE="ID_1895645138" STARTARROW="None" STARTINCLINATION="-1192;48;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1770579908226" ID="ID_903075201" MODIFIED="1770580671407" TEXT="der aktuelle Zustand erscheint verwirrend">
@@ -123875,15 +124013,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310628330" ID="ID_842629477" MODIFIED="1769310692535" TEXT="mu&#xdf; mit einem custom-Allocator hinterlegt werden">
+<node COLOR="#435e98" CREATED="1769310628330" ID="ID_842629477" MODIFIED="1780345490343" TEXT="mu&#xdf; mit einem custom-Allocator hinterlegt werden">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1769310640271" ID="ID_718178819" MODIFIED="1770413532585" TEXT="mu&#xdf; in massively-concurrent-Environment funktionieren">
+<node COLOR="#435e98" CREATED="1769310640271" ID="ID_718178819" MODIFIED="1780345494333" TEXT="mu&#xdf; in massively-concurrent-Environment funktionieren">
 <arrowlink COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" STARTARROW="None" STARTINCLINATION="-76;4;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770412906590" ID="ID_764817619" MODIFIED="1770413532585" STYLE="fork" TEXT="Ansatzpunkt: Implementierungs-Schwierigkeiten">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1770412906590" ID="ID_764817619" MODIFIED="1780346007641" STYLE="fork" TEXT="Ansatzpunkt: Implementierungs-Schwierigkeiten">
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <linktarget COLOR="#3619c3" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1253;-970;" ID="Arrow_ID_702150784" SOURCE="ID_1947911633" STARTARROW="None" STARTINCLINATION="1019;65;"/>
 <linktarget COLOR="#4562b1" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1;-13;" ID="Arrow_ID_1089281127" SOURCE="ID_718178819" STARTARROW="None" STARTINCLINATION="-76;4;"/>
@@ -123938,7 +124076,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1770413475793" ID="ID_1422513265" MODIFIED="1770413487548" TEXT="dahinter steht das ungel&#xf6;ste Problem mit den Typ-Deskriptoren">
+<node CREATED="1770413475793" FOLDED="true" ID="ID_1422513265" MODIFIED="1780346001471" TEXT="dahinter steht das ungel&#xf6;ste Problem mit den Typ-Deskriptoren">
 <node CREATED="1770413540811" ID="ID_188277969" MODIFIED="1770413885000" TEXT="an der Stelle ist das alte Design in einen &#xbb;Kn&#xe4;uel&#xab; gelaufen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -123963,7 +124101,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1770414244449" ID="ID_432061684" MODIFIED="1770414268086" TEXT="die Type-Registry sollte eigenst&#xe4;ndig werden &#x2014; mit definiertem Protokoll">
+<node COLOR="#14426b" CREATED="1770414244449" FOLDED="true" ID="ID_432061684" MODIFIED="1780345914227" TEXT="die Type-Registry sollte eigenst&#xe4;ndig werden &#x2014; mit definiertem Protokoll">
 <linktarget COLOR="#4e13ed" DESTINATION="ID_432061684" ENDARROW="Default" ENDINCLINATION="23;-191;" ID="Arrow_ID_148621556" SOURCE="ID_1067363374" STARTARROW="None" STARTINCLINATION="-377;24;"/>
 <node CREATED="1770414295774" ID="ID_1087577796" MODIFIED="1770414313168" TEXT="...das spiegelt zun&#xe4;chst das PufferProvider-Protokoll"/>
 <node CREATED="1770414676298" ID="ID_1431726465" MODIFIED="1770414701056">
@@ -124002,7 +124140,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1770414314373" ID="ID_864311296" MODIFIED="1770414338896" TEXT="aber es stellt sich die Frage: wo wird das asynchrone Messaging eingeschleift?">
+<node COLOR="#435e98" CREATED="1770414314373" ID="ID_864311296" MODIFIED="1780345719334" TEXT="aber es stellt sich die Frage: wo wird das asynchrone Messaging eingeschleift?">
 <icon BUILTIN="help"/>
 <node CREATED="1770414343810" ID="ID_1425459555" MODIFIED="1770414356044" TEXT="f&#xfc;r Tests des Protokolls brauchen wir das nicht"/>
 <node CREATED="1770414356945" ID="ID_345073886" MODIFIED="1770414372248" TEXT="es sollte sich auch nicht wirklich in der logischen Sicht niederchlagen"/>
@@ -124023,6 +124161,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#a8cde2" COLOR="#435e98" CREATED="1780345650929" ID="ID_50001200" MODIFIED="1780345806649" TEXT="Prototyp: ganz unten in der BufferProvider-Implementierung">
+<arrowlink COLOR="#3b64cc" DESTINATION="ID_243141002" ENDARROW="Default" ENDINCLINATION="-856;-47;" ID="Arrow_ID_1821170788" STARTARROW="None" STARTINCLINATION="-1271;60;"/>
+<icon BUILTIN="forward"/>
 </node>
 </node>
 <node CREATED="1771430377359" ID="ID_1030710505" MODIFIED="1771430406015" TEXT="Vor&#xfc;berlegung: der Metadaten-Record wird auch vom Speichermanagement mitverwendet">
@@ -124078,9 +124220,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1770828324568" ID="ID_1432290830" MODIFIED="1770828388601" TEXT="eine massiv parallele Implementierung m&#xf6;glich machen...">
-<arrowlink COLOR="#5e34c1" DESTINATION="ID_1154484414" ENDARROW="Default" ENDINCLINATION="101;-95;" ID="Arrow_ID_1475255011" STARTARROW="None" STARTINCLINATION="-185;9;"/>
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#b2d2e8" COLOR="#27155c" CREATED="1770828324568" FOLDED="true" ID="ID_1432290830" MODIFIED="1780346053129" TEXT="eine massiv parallele Implementierung m&#xf6;glich machen...">
+<arrowlink COLOR="#343cc1" DESTINATION="ID_1154484414" ENDARROW="Default" ENDINCLINATION="101;-95;" ID="Arrow_ID_1475255011" STARTARROW="None" STARTINCLINATION="-185;9;"/>
+<icon BUILTIN="yes"/>
 <node CREATED="1771429539679" ID="ID_567714224" MODIFIED="1771429550678" TEXT="es zeichnet sich bereits das Aufrufmuster ab">
 <node CREATED="1771429557905" ID="ID_1006520101" MODIFIED="1771429572704" TEXT="die Deskriptoren werden vom Builder angelegt"/>
 <node CREATED="1771429923834" ID="ID_593032016" MODIFIED="1771429961826" TEXT="die Render-Steuerung k&#xf6;nnte eine Kapazit&#xe4;tsplanung beitragen"/>
@@ -124101,20 +124243,27 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#6a587a" DESTINATION="ID_1364138768" ENDARROW="Default" ENDINCLINATION="591;0;" ID="Arrow_ID_559168401" STARTARROW="None" STARTINCLINATION="956;46;"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#a8cde2" COLOR="#435e98" CREATED="1780345650929" ID="ID_52055412" MODIFIED="1780345947510" TEXT="Prototyp: Asynchrones Messaging im Implementierungs-Backend">
+<arrowlink COLOR="#3b64cc" DESTINATION="ID_243141002" ENDARROW="Default" ENDINCLINATION="-856;-47;" ID="Arrow_ID_1578435025" STARTARROW="None" STARTINCLINATION="-1289;57;"/>
+<icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
-<node CREATED="1771532610321" ID="ID_463184828" MODIFIED="1771532623570" TEXT="Koordination der Schnittstellen">
-<node CREATED="1771532633501" ID="ID_1704365570" MODIFIED="1771532654798" TEXT="BufferProvider">
-<node CREATED="1775871527978" ID="ID_130684756" MODIFIED="1775871551269" TEXT="mu&#xdf; hier die Buffer-Metadaten etwas mehr nach au&#xdf;en bringen"/>
-<node CREATED="1775871553160" ID="ID_118444511" MODIFIED="1775874249600" TEXT="das &#xbb;LocalTag&#xab; ist ein Kommunikations-System f&#xfc;r das BufferStore-Backend">
+</node>
+<node COLOR="#338800" CREATED="1771532610321" ID="ID_463184828" MODIFIED="1780346040027" TEXT="Koordination der Schnittstellen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1771532633501" ID="ID_1704365570" MODIFIED="1780346044917" TEXT="BufferProvider">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1775871527978" ID="ID_130684756" MODIFIED="1780345422550" TEXT="mu&#xdf; hier die Buffer-Metadaten etwas mehr nach au&#xdf;en bringen"/>
+<node CREATED="1775871553160" ID="ID_118444511" MODIFIED="1780345422550" TEXT="das &#xbb;LocalTag&#xab; ist ein Kommunikations-System f&#xfc;r das BufferStore-Backend">
 <linktarget COLOR="#40477c" DESTINATION="ID_118444511" ENDARROW="Default" ENDINCLINATION="886;35;" ID="Arrow_ID_672245073" SOURCE="ID_1800347495" STARTARROW="Default" STARTINCLINATION="-1402;54;"/>
 </node>
 </node>
-<node CREATED="1771532655924" ID="ID_1197925974" MODIFIED="1771532662283" TEXT="OutputSlot">
-<node COLOR="#338800" CREATED="1771532667033" ID="ID_1615837421" MODIFIED="1775871471196" TEXT="zun&#xe4;chst ist das Protokoll zu korrigieren">
+<node CREATED="1771532655924" ID="ID_1197925974" MODIFIED="1780346044917" TEXT="OutputSlot">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node COLOR="#338800" CREATED="1771532667033" FOLDED="true" ID="ID_1615837421" MODIFIED="1775871471196" TEXT="zun&#xe4;chst ist das Protokoll zu korrigieren">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1771532702299" FOLDED="true" ID="ID_1332714293" MODIFIED="1775868517318" TEXT="dokumentiert durch OutputSlotProtocol_test">
+<node COLOR="#435e98" CREATED="1771532702299" FOLDED="true" ID="ID_1332714293" MODIFIED="1780345422551" TEXT="dokumentiert durch OutputSlotProtocol_test">
 <icon BUILTIN="idea"/>
 <node CREATED="1771532730104" ID="ID_874519449" MODIFIED="1771532748289" TEXT="im bestehenden Code lief der Test (mit einer Dummy-Implementierung)"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1771532716678" ID="ID_459952316" MODIFIED="1775868197177" TEXT="dieser Test ist nun gebrochen">
@@ -124147,10 +124296,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1771536364035" ID="ID_83895308" MODIFIED="1775873239188" TEXT="formal ist mir die n&#xf6;tige Anpassung klar">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1771536378293" ID="ID_247458257" MODIFIED="1771536407185" TEXT="die Lebenszyklus-Methoden auf der DataSink fallen weg"/>
-<node COLOR="#5b280f" CREATED="1771536412047" ID="ID_1065532915" MODIFIED="1774371161828" TEXT="hier kommt ggfs. nur eine Methode dazu f&#xfc;r einen Fehlerfall">
+<node CREATED="1771536378293" ID="ID_247458257" MODIFIED="1780345422551" TEXT="die Lebenszyklus-Methoden auf der DataSink fallen weg"/>
+<node COLOR="#5b280f" CREATED="1771536412047" ID="ID_1065532915" MODIFIED="1780345422551" TEXT="hier kommt ggfs. nur eine Methode dazu f&#xfc;r einen Fehlerfall">
 <icon BUILTIN="button_cancel"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774371164371" HGAP="52" ID="ID_1019309029" MODIFIED="1774371561854" TEXT="davon hab ich abgesehen..." VSHIFT="3">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1774371164371" HGAP="52" ID="ID_1019309029" MODIFIED="1780345422551" TEXT="davon hab ich abgesehen..." VSHIFT="3">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -124173,11 +124322,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
-<node CREATED="1771536432658" ID="ID_28988078" MODIFIED="1771536458970" TEXT="daf&#xfc;r soll der Client nun alles auf dem BuffHandle machen"/>
-<node COLOR="#30297a" CREATED="1771536466794" ID="ID_48507847" MODIFIED="1775873226545" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
+<node CREATED="1771536432658" ID="ID_28988078" MODIFIED="1780345422551" TEXT="daf&#xfc;r soll der Client nun alles auf dem BuffHandle machen"/>
+<node COLOR="#30297a" CREATED="1771536466794" ID="ID_48507847" MODIFIED="1780345422552" TEXT="mu&#xdf; eine Proxy-Implementierung des BufferProvider bereitstellen">
 <arrowlink COLOR="#4300b1" DESTINATION="ID_580664253" ENDARROW="Default" ENDINCLINATION="-769;59;" ID="Arrow_ID_1374111018" STARTARROW="None" STARTINCLINATION="368;16;"/>
 <icon BUILTIN="yes"/>
-<node COLOR="#338800" CREATED="1775868534688" HGAP="43" ID="ID_809493894" MODIFIED="1775869570097" TEXT="das ist nun gelungen" VSHIFT="12">
+<node COLOR="#338800" CREATED="1775868534688" HGAP="43" ID="ID_809493894" MODIFIED="1780345422552" TEXT="das ist nun gelungen" VSHIFT="12">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -124192,15 +124341,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773077339408" ID="ID_9353167" MODIFIED="1773077409753" TEXT="Protokoll final">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1773077339408" ID="ID_9353167" MODIFIED="1780345422552" TEXT="Protokoll final">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773077433700" HGAP="106" ID="ID_1896993671" MODIFIED="1773077470074" TEXT="der &#xbb;Vertical Slice&#xab; soll das Protokoll validieren" VSHIFT="-9">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1773077433700" HGAP="106" ID="ID_1896993671" MODIFIED="1780345422552" TEXT="der &#xbb;Vertical Slice&#xab; soll das Protokoll validieren" VSHIFT="-9">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1773076719646" ID="ID_884669133" MODIFIED="1775871474052" TEXT="mu&#xdf; zus&#xe4;tzlich eine Dummy-Implementierung bauen">
+<node COLOR="#338800" CREATED="1773076719646" FOLDED="true" ID="ID_884669133" MODIFIED="1775871474052" TEXT="mu&#xdf; zus&#xe4;tzlich eine Dummy-Implementierung bauen">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1773076745969" ID="ID_1722330743" MODIFIED="1775868209439" TEXT="Test mu&#xdf; laufen">
 <arrowlink COLOR="#2c56be" DESTINATION="ID_459952316" ENDARROW="Default" ENDINCLINATION="-137;3;" ID="Arrow_ID_168875434" STARTARROW="Default" STARTINCLINATION="-9;-63;"/>
@@ -124251,7 +124400,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1773077306179" ID="ID_791772240" MODIFIED="1775871480184" TEXT="Analyse mu&#xdf; dieses Mal bottom-up vorgehen">
 <arrowlink COLOR="#df165b" DESTINATION="ID_597179173" ENDARROW="Default" ENDINCLINATION="-647;-29;" ID="Arrow_ID_694305976" STARTARROW="None" STARTINCLINATION="-136;1688;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1773077507482" ID="ID_1084930435" MODIFIED="1773078209970" TEXT="das ist die Konsequenz aus diesem &#xbb;Mismatch&#xab;">
+<node CREATED="1773077507482" ID="ID_1084930435" MODIFIED="1780345422553" TEXT="das ist die Konsequenz aus diesem &#xbb;Mismatch&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -124261,7 +124410,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1773077521860" ID="ID_1181588301" MODIFIED="1773078399225" TEXT="kommt letztlich nicht &#xfc;berraschend...">
+<node CREATED="1773077521860" ID="ID_1181588301" MODIFIED="1780345422553" TEXT="kommt letztlich nicht &#xfc;berraschend...">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -124277,15 +124426,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775871488385" ID="ID_1717235847" MODIFIED="1775871500964" TEXT="(und war der richtige Ansatz)"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775871488385" ID="ID_1717235847" MODIFIED="1780345422554" TEXT="(und war der richtige Ansatz)"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node CREATED="1770828173398" ID="ID_1154484414" MODIFIED="1770828493361" TEXT="Konzeption f&#xfc;r eine endg&#xfc;ltige Implementierung beginnen">
-<arrowlink COLOR="#f50221" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
-<linktarget COLOR="#5e34c1" DESTINATION="ID_1154484414" ENDARROW="Default" ENDINCLINATION="101;-95;" ID="Arrow_ID_1475255011" SOURCE="ID_1432290830" STARTARROW="None" STARTINCLINATION="-185;9;"/>
+<node COLOR="#435e98" CREATED="1770828173398" ID="ID_1154484414" MODIFIED="1780346100834" TEXT="Konzeption f&#xfc;r eine endg&#xfc;ltige Implementierung beginnen">
+<arrowlink COLOR="#5502f5" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
+<linktarget COLOR="#343cc1" DESTINATION="ID_1154484414" ENDARROW="Default" ENDINCLINATION="101;-95;" ID="Arrow_ID_1475255011" SOURCE="ID_1432290830" STARTARROW="None" STARTINCLINATION="-185;9;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1770828236428" ID="ID_669207960" MODIFIED="1770828249582" TEXT="thematisch geh&#xf6;rt das in den Bereich &#xbb;Engine&#xab;"/>
 <node CREATED="1770828250858" ID="ID_177391368" MODIFIED="1770828268013" TEXT="es mu&#xdf; aber im &#xbb;Low-Level-Model&#xab; verankert sein"/>
@@ -124339,7 +124488,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1711549131677" ID="ID_754465017" MODIFIED="1711549140633" TEXT="vorl&#xe4;ufig nutzbare Strukturen bereitstellen ">
 <icon BUILTIN="flag-pink"/>
-<node COLOR="#338800" CREATED="1682612056884" ID="ID_1219678116" MODIFIED="1716848678808" TEXT="Basis: AllocationCluster/Mem-Manager">
+<node COLOR="#338800" CREATED="1682612056884" FOLDED="true" ID="ID_1219678116" MODIFIED="1716848678808" TEXT="Basis: AllocationCluster/Mem-Manager">
 <arrowlink COLOR="#4b5074" DESTINATION="ID_688601712" ENDARROW="Default" ENDINCLINATION="95;-321;" ID="Arrow_ID_1440452458" STARTARROW="None" STARTINCLINATION="-523;36;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1715725466248" ID="ID_1843463730" LINK="https://issues.lumiera.org/ticket/1365" MODIFIED="1716849042712" TEXT="#1365 establish allocation scheme for render nodes">
@@ -144008,6 +144157,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#666a8e" DESTINATION="ID_804866125" ENDARROW="Default" ENDINCLINATION="-736;0;" ID="Arrow_ID_831131977" STARTARROW="None" STARTINCLINATION="-288;15;"/>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1780344734649" ID="ID_888744379" MODIFIED="1780344823820" TEXT="OutputSlot jetzt auch nahtlos integriert">
+<arrowlink COLOR="#458cd4" DESTINATION="ID_88229206" ENDARROW="Default" ENDINCLINATION="-2194;-531;" ID="Arrow_ID_1814036330" STARTARROW="None" STARTINCLINATION="-2992;208;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1769303576693" ID="ID_399072135" MODIFIED="1770828085997" TEXT="die Implementierung ist nicht ausreichend auf Zustands&#xfc;berg&#xe4;nge zentriert">
 <icon BUILTIN="messagebox_warning"/>
@@ -144034,7 +144187,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1770828113207" ID="ID_1891198177" MODIFIED="1770828493362" TEXT="Konzeption der Fundemente">
-<linktarget COLOR="#f50221" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" SOURCE="ID_1154484414" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
+<linktarget COLOR="#5502f5" DESTINATION="ID_1891198177" ENDARROW="Default" ENDINCLINATION="-700;-67;" ID="Arrow_ID_1175301159" SOURCE="ID_1154484414" STARTARROW="None" STARTINCLINATION="-1164;56;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1771431677354" ID="ID_315128547" MODIFIED="1771431687124" TEXT="Anforderungen und Nutzungsmuster">
 <node CREATED="1771431689328" ID="ID_723040917" MODIFIED="1771431694993" TEXT="Zielkonflikt">
@@ -149831,7 +149984,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1780191327746" ID="ID_804866125" MODIFIED="1780260464094" TEXT="Mai 26: habe nun eine &#xbb;production-grade&#xab;-Implementierung gebaut">
 <linktarget COLOR="#666a8e" DESTINATION="ID_804866125" ENDARROW="Default" ENDINCLINATION="-736;0;" ID="Arrow_ID_831131977" SOURCE="ID_803703902" STARTARROW="None" STARTINCLINATION="-288;15;"/>
 </node>
-<node CREATED="1780191344440" ID="ID_243141002" MODIFIED="1780191553069" TEXT="verwende thread-local-Services + Async-Messaging">
+<node CREATED="1780191344440" ID="ID_243141002" MODIFIED="1780345947510" TEXT="verwende thread-local-Services + Async-Messaging">
+<linktarget COLOR="#3b64cc" DESTINATION="ID_243141002" ENDARROW="Default" ENDINCLINATION="-856;-47;" ID="Arrow_ID_1821170788" SOURCE="ID_50001200" STARTARROW="None" STARTINCLINATION="-1271;60;"/>
+<linktarget COLOR="#3b64cc" DESTINATION="ID_243141002" ENDARROW="Default" ENDINCLINATION="-856;-47;" ID="Arrow_ID_1578435025" SOURCE="ID_52055412" STARTARROW="None" STARTINCLINATION="-1289;57;"/>
 <icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1780191368251" ID="ID_1603680240" MODIFIED="1780191546353" TEXT="ziemlich komplexes Ding &#x2014; bin aber sehr zufrieden mit meiner Design-Arbeit">
@@ -150786,6 +150941,28 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#d2fd54" DESTINATION="ID_602198707" ENDARROW="Default" ENDINCLINATION="555;-30;" ID="Arrow_ID_1933104143" STARTARROW="None" STARTINCLINATION="546;25;"/>
 <icon BUILTIN="smiley-oh"/>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#560f69" CREATED="1780338749597" ID="ID_1707600369" MODIFIED="1780343669174" TEXT="Revert: DataSink doch wieder explizit ausformuliert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es erschien elegant, das als Funktor zu definieren &#8212; ist aber in der Verwendung nicht so klar und erzwingt eine unn&#246;tige weitere Indirektion. Konkret aber st&#246;rt die komplett opaque Definition, weil man damit an die (sehr wohl vorhandene) Identit&#228;t nicht mehr rankommt
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#a54967" DESTINATION="ID_1707600369" ENDARROW="Default" ENDINCLINATION="-1147;-49;" ID="Arrow_ID_722257031" SOURCE="ID_1800901776" STARTARROW="None" STARTINCLINATION="1330;100;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1780339024758" ID="ID_908609696" MODIFIED="1780339038947" TEXT="die zwei eingebetteten Elemente sind nicht wirklich &#xbb;geheim&#xab;"/>
+<node CREATED="1780339041231" ID="ID_1008126452" MODIFIED="1780339058376" TEXT="und der Buffer-Descriptor selber stellt auch nochmal eine Abstraktion dar"/>
+<node CREATED="1780339080961" ID="ID_321198132" MODIFIED="1780339088524" TEXT="obendrein kann man nun....">
+<node CREATED="1780339089392" ID="ID_1158085247" MODIFIED="1780339100875" TEXT="sp&#xe4;ter leicht eine Typ-Identitfikation dazubauen"/>
+<node CREATED="1780339101599" ID="ID_220589390" MODIFIED="1780339114481" TEXT="und das copy / Instanz-Verhalten explizit steuern"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1780339119281" ID="ID_374527519" MODIFIED="1780339122340" TEXT="besser so">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
@@ -151911,7 +152088,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775867842306" ID="ID_88229206" MODIFIED="1775867977038" TEXT="Fazit">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1775867842306" ID="ID_88229206" MODIFIED="1780344823821" TEXT="Fazit">
+<linktarget COLOR="#458cd4" DESTINATION="ID_88229206" ENDARROW="Default" ENDINCLINATION="-2194;-531;" ID="Arrow_ID_1814036330" SOURCE="ID_888744379" STARTARROW="None" STARTINCLINATION="-2992;208;"/>
 <font BOLD="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1775867853221" ID="ID_863536395" MODIFIED="1775867858116" TEXT="Design geht auf"/>
@@ -171879,7 +172057,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1712879196455" ID="ID_1128294894" MODIFIED="1712879210685" TEXT="best&#xe4;gitt &#xfc;ber einen weiten Parameter-Bereich"/>
+<node CREATED="1712879196455" ID="ID_1128294894" MODIFIED="1712879210685" TEXT="best&#xe4;tigt &#xfc;ber einen weiten Parameter-Bereich"/>
 <node CREATED="1712879211454" ID="ID_686196534" MODIFIED="1712879234055" TEXT="f&#xfc;r gr&#xf6;&#xdf;ere Test-L&#xe4;ngen: sehr hohe Korrelationen"/>
 <node CREATED="1712879236775" ID="ID_787579644" MODIFIED="1712879295485">
 <richcontent TYPE="NODE"><html>
@@ -171930,7 +172108,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   <head/>
   <body>
     <p>
-      <u>Einschr&#228;nkung</u>: ausgepr&#228;fte Tendenz zum <b>down-Scaling</b>
+      <u>Einschr&#228;nkung</u>: ausgepr&#228;gte Tendenz zum <b>down-Scaling</b>
     </p>
   </body>
 </html></richcontent>
@@ -172988,13 +173166,13 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1736106228770" ID="ID_1894654146" MODIFIED="1736106288131" TEXT="FeedManifold">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node CREATED="1713825281234" ID="ID_220738428" MODIFIED="1770670549359" TEXT="BufferProvider">
+<node COLOR="#435e98" CREATED="1713825281234" ID="ID_220738428" MODIFIED="1780344504226" TEXT="BufferProvider">
 <linktarget COLOR="#75283b" DESTINATION="ID_220738428" ENDARROW="Default" ENDINCLINATION="-949;172;" ID="Arrow_ID_587705265" SOURCE="ID_1094074561" STARTARROW="None" STARTINCLINATION="-1143;102;"/>
 </node>
-<node CREATED="1713825295268" ID="ID_1163491513" MODIFIED="1713825296320" TEXT="BuffHandle"/>
-<node CREATED="1713825314633" ID="ID_896282050" MODIFIED="1713825315510" TEXT="BufferMetadata"/>
+<node COLOR="#435e98" CREATED="1713825295268" ID="ID_1163491513" MODIFIED="1780344504227" TEXT="BuffHandle"/>
+<node COLOR="#435e98" CREATED="1713825314633" ID="ID_896282050" MODIFIED="1780344504226" TEXT="BufferMetadata"/>
 <node CREATED="1713825372517" ID="ID_483066313" MODIFIED="1713825375024" TEXT="OutputManager"/>
-<node CREATED="1713825375559" ID="ID_1937537099" MODIFIED="1773589824387" TEXT="OutputSlot">
+<node COLOR="#435e98" CREATED="1713825375559" ID="ID_1937537099" MODIFIED="1780344484620" TEXT="OutputSlot">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -205459,8 +205637,8 @@ runner.run(test_suite())</font></code></pre>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292259390" ID="ID_1766933889" MODIFIED="1769124809285" TEXT="Integration treiben">
 <linktarget COLOR="#2483a1" DESTINATION="ID_1766933889" ENDARROW="Default" ENDINCLINATION="-3;-17;" ID="Arrow_ID_393233251" SOURCE="ID_1733978041" STARTARROW="None" STARTINCLINATION="29;7;"/>
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292268581" ID="ID_1831513195" MODIFIED="1760292477862" TEXT="Buffer-Manager zustande bringen">
-<arrowlink COLOR="#ff4400" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1760292268581" ID="ID_1831513195" MODIFIED="1780346140181" TEXT="Buffer-Manager zustande bringen">
+<arrowlink COLOR="#0063ff" DESTINATION="ID_664146362" ENDARROW="Default" ENDINCLINATION="-1857;303;" ID="Arrow_ID_1038535963" STARTARROW="None" STARTINCLINATION="-1363;105;"/>
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1760292288690" ID="ID_1889884763" MODIFIED="1760292296083" TEXT="Play-Connection"/>

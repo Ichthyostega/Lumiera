@@ -53,8 +53,6 @@
 
 
 #include "lib/error.hpp"
-//#include "lib/hash-value.h"
-#include "include/logging.h"
 #include "vault/mem/buffer-metadata.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/sync.hpp"
@@ -64,7 +62,6 @@
 
 namespace vault{
 namespace mem {
-//  namespace err = lumiera::error;
   
   using std::move;
   using util::unConst;

@@ -389,21 +389,10 @@ namespace test  {
             auto [port0,sink0] = dispatcher.getDummyConnection(0);
             auto [port1,sink1] = dispatcher.getDummyConnection(1);
             CHECK (port0 != port1);
-            UNIMPLEMENTED ("Identity of a DataSink");
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to allow refactoring of OutputSlot
             CHECK (sink0 != sink1);
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
             CHECK (port0.isValid());
             CHECK (port1.isValid());
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to allow refactoring of OutputSlot
-                         /////////////////////////OOO seemingly this is no longer possible (and unnecessary), since DataSink participates in the ref-count now
-            CHECK (sink0.isValid());
-            CHECK (sink1.isValid());
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
             CHECK (not ModelPort().isValid());
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to allow refactoring of OutputSlot
-            CHECK (not DataSink().isValid());
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
             
             CHECK (0 == dispatcher.resolveModelPort(port0));
             CHECK (1 == dispatcher.resolveModelPort(port1));

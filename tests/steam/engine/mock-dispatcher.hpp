@@ -79,10 +79,11 @@ namespace test   {
   using util::isnil;
   using util::isSameObject;
   using fixture::Segmentation;
-  using vault::out::DataSink;
   using vault::RealClock;
   using vault::gear::Job;
   using vault::gear::JobClosure;
+  
+  using DataSink = vault::out::OutputSlot::DataSink;
   
   
   
@@ -405,7 +406,7 @@ namespace test   {
       /**
        * Test support: verify the given Job is consistent with this Dispatcher.
        */
-      bool verify(Job const& job, ModelPort const& port, vault::out::DataSink const& sink)
+      bool verify(Job const& job, ModelPort const& port, DataSink const& sink)
         {
           if (not dummySetup_.isSupported (port, sink)) return false;
           

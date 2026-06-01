@@ -149,7 +149,7 @@ namespace vault::out::test {
               CHECK (not sinks);
               
               log.event("lock buffer");
-              BuffHandle han = sink(FRA_NO);
+              BuffHandle han = sink.lockFrame (FRA_NO);
               CHECK (han);
               CHECK (han.size() == sizeof(DUMMY_BUFF));
               CHECK (isSameAdr (han.rawStorage(), &DUMMY_BUFF));

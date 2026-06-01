@@ -112,6 +112,7 @@ namespace mem   {
       size_t buffSize() const;
       
       operator HashVal()  const { return subClassification_; }
+      friend bool operator== (BuffDescr const&, BuffDescr const&) =default;
       
       /** callback to engage buffer handling cycle */
       uint announce (uint count);

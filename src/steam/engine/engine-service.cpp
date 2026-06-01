@@ -31,9 +31,10 @@ using std::function;
 using std::placeholders::_1;
 using lib::iter_source::transform;
 using lib::append_all;
-using vault::out::DataSink;
+  
+using DataSink = vault::out::OutputSlot::DataSink;
 
-namespace steam  {
+namespace steam {
 namespace engine{
   
 
@@ -73,7 +74,7 @@ namespace engine{
                            Quality serviceQuality)
   {                                        //////////////////////////////////////////////////TICKET #1301 : prepare proper Dispatcher here, including translation ModelPort -> portIDX
     RenderEnvironment& renderConfig = configureCalculation (mPort,nominalTimings,serviceQuality);
-    function<CalcStream(DataSink)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
+    function<CalcStream(DataSink&)> triggerRenderStart = bind (activateCalculation, _1, ref(renderConfig));
 
     CalcStreams runningCalculations;
     append_all (transform (outputSlot.getOpenedSinks()
@@ -106,7 +107,7 @@ namespace engine{
    * to be re-configured and adjusted while running.
    */
   CalcStream
-  EngineService::activateCalculation (DataSink sink, RenderEnvironment& engineCallback)
+  EngineService::activateCalculation (DataSink& sink, RenderEnvironment& engineCallback)
   {
     CalcStream calcStream(engineCallback);
     calcStream.sendToOutput (sink);      ////////////////////////////////////////////////////TICKET #1297 : need to re-think the association ModelPort ⟷ output sink

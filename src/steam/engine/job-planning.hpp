@@ -77,9 +77,10 @@ namespace engine {
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::Duration;
-  using vault::out::DataSink;
   using vault::out::Timings;
   using vault::gear::Job;
+  
+  using DataSink = vault::out::OutputSlot::DataSink;
   
   
   
