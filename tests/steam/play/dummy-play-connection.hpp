@@ -88,8 +88,8 @@ namespace steam{
 namespace play {
 namespace test {
 
-//    using std::string;
   using lib::time::Duration;
+  using DataSink = vault::out::OutputSlot::DataSink;
   
   
   
@@ -143,11 +143,8 @@ namespace test {
             if (port == *it)
               {
                 auto [refPort, refSink] = getModelPort(i);
-                UNIMPLEMENTED ("need a fake OutputSlot and need to place some Stream-ID into the data sink");
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : disabled code to allow refactoring of the OutputSlot default implementation
                 if (refSink == sink)
                   return true;
-#endif  /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1410 : (end) disabled code
               }
           return false;
         }

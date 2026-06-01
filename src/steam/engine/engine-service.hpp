@@ -159,7 +159,7 @@ namespace engine{
       friend class EngineDiagnostics;
       
     private:
-      static CalcStream activateCalculation (vault::out::DataSink, RenderEnvironment&);
+      static CalcStream activateCalculation (vault::out::OutputSlot::DataSink&, RenderEnvironment&);
     };
   
   

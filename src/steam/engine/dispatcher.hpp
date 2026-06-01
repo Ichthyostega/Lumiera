@@ -48,12 +48,13 @@ namespace engine {
   using std::make_pair;
   using mobject::ModelPort;
   using vault::out::Timings;
-  using vault::out::DataSink;
   using lib::time::TimeValue;
   using lib::time::TimeSpan;
   using lib::time::FrameCnt;
   using lib::time::FSecs;
   using lib::time::Time;
+  
+  using DataSink = vault::out::OutputSlot::DataSink;
   
   
   /**

@@ -34,6 +34,8 @@ namespace vault{
 namespace out  {
 namespace test {
   
+  using DataSink = vault::out::OutputSlot::DataSink;
+  
   
   
   /***************************************************************//**
@@ -80,15 +82,15 @@ namespace test {
           // within the frame-calculation "loop"
           // we perform a data exchange cycle
           auto MARK_0 = markTime();
-          BuffHandle buff00 = sink0(START);
-          BuffHandle buff10 = sink1(START);
+          BuffHandle buff00 = sink0.lockFrame (START);
+          BuffHandle buff10 = sink1.lockFrame (START);
           
           // rendering process calculates content....
           buff00.emplace<TestFrame> (testData(0,0));
           
           // while further frames might be processed in parallel
           auto MARK_1 = markTime();
-          BuffHandle buff11 = sink1(START+1);
+          BuffHandle buff11 = sink1.lockFrame (START+1);
           buff11.emplace<TestFrame> (testData(1,1));
           buff10.emplace<TestFrame> (testData(1,0));
           

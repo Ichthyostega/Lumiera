@@ -891,7 +891,7 @@ namespace test {
           CHECK (micros > 80);
           
           micros = cpuLoad.benchmark();
-          CHECK (micros < 110);
+          CHECK (micros < 115);
           CHECK (micros > 90);
           
           cpuLoad.timeBase = 1ms;

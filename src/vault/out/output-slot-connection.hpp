@@ -199,7 +199,7 @@ namespace out   {
        * where each element is a DataSink functor that uses this connection
        * to start an output cycle by locking a buffer by invoking Connection::claimBufferFor(FrameID)
        * @param lifecycleManager the ref-counting shared_ptr which controls the lifecycle of this Allocation
-       * @note two statefull objects are embedded into the DataSink functor
+       * @note two statefull objects are embedded into the DataSink handle
        *     - a BuffDescr preconfigured to point into this connection, using the proper buffer size
        *     - the \a lifecycleManager, so that the DataSink participates in the ref-count
        */
@@ -207,14 +207,8 @@ namespace out   {
       connect (PAlloc& lifecycleManager)  override
         {
           auto buildDataSink = [&](CON& connection)
-                                  {               // setup functor to lock a buffer using this output connection
-                                    return DataSink{[bufferDescriptor = bufferProxy_.getDescriptorFor (connection)
-                                                    ,lifecycleManager
-                                                    ]
-                                                    (FrameID frame) mutable -> BuffHandle
-                                                      {
-                                                        return bufferDescriptor.lockBuffer (frame);
-                                                      }};
+                                  {  // attach to ref-count preconfigure output connection to address
+                                    return DataSink{lifecycleManager, bufferProxy_.getDescriptorFor (connection)};
                                   };
           
           return lib::explore (connections_)
@@ -261,7 +255,7 @@ namespace out   {
     }
 
   /**
-   * @remark in moste cases this variant is preferable,
+   * @remark for most cases this variant is preferable,
    *   since it creates all connection objects from the same set of constructor arguments
    * @note args will be copied into a _populator functor_ that is then applied for each connection to create
    */

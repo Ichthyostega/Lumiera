@@ -47,8 +47,19 @@ namespace mem   {
   
   /**
    * Framework for configuring the actual BufferPovider backend implementation.
+   * The functionality is provided by the »two pillars«: BufferState (metadata)
+   * and BufferStore (storage provider). The actual functionality exposed through
+   * this API can be adapted in a wide range by using suitable back-ends
+   * - the NaiveBufferSetup ignores aspects of performance and concurrency,
+   *   but allows to investigate each requested buffer after the fact
+   * - a _production-grade implementation_ uses thread-local services
+   *   in concert with the EngineBufferMetadata and EngineBufferManager.
+   *   Allocations are exchanged via asynchronous messaging.
    * 
-   * @todo WIP-WIP-WIP as of 2/2026 -- reworking BufferProvider implementation   ////////////////////////////TICKET #1410
+   * Generally speaking, this template controls the actual setup by delegating
+   * to the CONF policy passed as template argument. Furthermore, proxying
+   * of already instantiated back-ends is [supported](\ref #decorate)
+   * for subclasses (notably the DiagnosticBufferProvider)
    */
   class BufferProviderSetup
     : public BufferProvider

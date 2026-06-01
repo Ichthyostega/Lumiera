@@ -97,7 +97,7 @@ namespace engine{
       
      
       void
-      sendToOutput (vault::out::DataSink)
+      sendToOutput (vault::out::OutputSlot::DataSink&)
         {
           UNIMPLEMENTED ("set up dispatcher to start calculating and feeding to the given output sink");
         }

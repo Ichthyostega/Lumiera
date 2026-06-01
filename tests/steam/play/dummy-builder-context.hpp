@@ -79,10 +79,11 @@ namespace test {
   using fixture::ModelPortRegistry;
   using vault::mem::Buff;
   using vault::mem::BuffHandle;
-  using vault::out::DataSink;
   using vault::out::FrameID;
   using lib::time::TimeValue;
   using util::_Fmt;
+  
+  using DataSink = vault::out::OutputSlot::DataSink;
   
   
   

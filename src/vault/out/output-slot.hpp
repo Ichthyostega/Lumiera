@@ -82,43 +82,13 @@
 namespace vault {
 namespace out  {
   
+  using vault::mem::BuffDescr;
   using vault::mem::BuffHandle;
   using lib::time::FrameCnt;
   using std::unique_ptr;
   
   
   using FrameID = FrameCnt;
-  
-  
-  /**
-   * Handle to represent an opened connection ready to receive media data for output.
-   * Each DataSink (handle) corresponds to an OutputSlot::Connection entry. Data is
-   * published frame wise in a two-phase protocol: in the first stage, the client
-   * gets exclusive access to an output buffer. Once the data is ready for output,
-   * the client signals `emit()` and the buffer enters the second stage, where the
-   * intern output mechanism of that specific connection gets exclusive access.
-   * 
-   * The DataSink handle is a _functor_ and can be invoked with a frame number,
-   * to start such a two-phase transaction for _this specific frame._ The result
-   * is a BuffHandle, to be used in the usual way as with a BufferProvider:
-   * - the client can access the buffer memory, either raw or with a forced cast
-   * - the client invokes BuffHandle::emit() to indicate that data is ready for output
-   * - once the client is done with that handle, it **must** invoke BuffHandle::release()
-   * Each output mechanism defines specific constraints regarding the time window when
-   * to get such a BuffHandle and when `emit()` must have been called. These constraints
-   * are indicated by the vault::out::Timings, that can be retrieved from the OutputSlot.
-   * 
-   * @note DataSink embeds a ref-counting handle to detect automatically when some
-   *       connection can be released; the _allocation of an OutputSlot_ is released
-   *       once all connections were discarded.
-   */
-  class DataSink
-    : public std::function<BuffHandle(FrameID)>
-    {
-    public:
-                                                                /////////////////////////////////////////////TICKET #1377 : presumably we want some stream-type hash ID here -- to allow building a processing-ID for each Render Node invocation
-    };
-  
   
   
   /****************************************************************************//**
@@ -143,6 +113,7 @@ namespace out  {
     {
       
     public:
+      class DataSink;
       using OpenedSinks = lib::IterSource<DataSink>::iterator;
       
       OpenedSinks getOpenedSinks();
@@ -217,6 +188,63 @@ namespace out  {
       
       template<class CON, class FUN>
       static OutputSlot allocate (size_t cnt, FUN&& populator);
+      
+      
+      
+      /* ========== Data Sink handles ========== */
+      
+      /**
+       * Handle to represent an opened connection ready to receive media data for output.
+       * Each DataSink (handle) corresponds to an OutputSlot::Connection entry. Data is
+       * published frame wise in a two-phase protocol: in the first stage, the client
+       * gets exclusive access to an output buffer. Once the data is ready for output,
+       * the client signals `emit()` and the buffer enters the second stage, where the
+       * intern output mechanism of that specific connection gets exclusive access.
+       * 
+       * The DataSink handle is essentially a _functor_ and can be invoked with some
+       * frame number, to start such a two-phase transaction for _this specific frame._
+       * The result is a BuffHandle, to be used in the usual way as with a BufferProvider:
+       * - the client can access the buffer memory, either raw or with a forced cast
+       * - the client invokes BuffHandle::emit() to indicate that data is ready for output
+       * - once the client is done with that handle, it **must** invoke BuffHandle::release()
+       * Each output mechanism defines specific constraints regarding the time window when
+       * to get such a BuffHandle and when `emit()` must have been called. These constraints
+       * are indicated by the vault::out::Timings, that can be retrieved from the OutputSlot.
+       * @remark DataSink has reference semantics and thus an implied identity, that is
+       *       tied to the backing active output configuration and the data feed number.
+       * @note DataSink embeds a ref-counting handle to detect automatically when some
+       *       connection can be released; the _allocation of an OutputSlot_ is released
+       *       once all connections were discarded.
+       */
+      class DataSink
+        : util::NonAssign
+        {
+          PAlloc lifeCount_;
+          BuffDescr outputBufferType_;
+          
+          template<class CON, bool isTest>
+          friend class AllocState; // created with back-link
+          
+          DataSink (PAlloc const& instance, BuffDescr type)
+            : lifeCount_{instance}
+            , outputBufferType_{type}
+            { }
+          
+        public:
+          BuffHandle
+          lockFrame (FrameID frame)
+            {
+              return outputBufferType_.lockBuffer (frame);
+            }
+          
+                                                                    /////////////////////////////////////////////TICKET #1377 : presumably we want some stream-type hash ID here -- to allow building a processing-ID for each Render Node invocation
+          friend bool
+          operator== (DataSink const& s1, DataSink const& s2)
+          {
+            return s1.lifeCount_        == s2.lifeCount_
+               and s1.outputBufferType_ == s2.outputBufferType_;
+          }
+        };
     };
   
   
