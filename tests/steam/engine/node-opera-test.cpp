@@ -32,10 +32,18 @@ namespace test  {
   
   /***************************************************************//**
    * @test check render node operation modes and collaboration.
+   * @todo 6/2026 this test shell demonstrate all relevant operation modes
+   *       of render nodes, at the level of an component-integration-test.
+   *       It is not clear yet what further operation modes this entails,
+   *       beyond (obviously) invoking a render job...       ////////////////////////////////////////////////TICKET #1367 : build a node invocation
+   * @remark the purpose of this test is to accomplish component integration
+   *       regarding relevant usages of the render node network, seen from the
+   *       perspective of an (exit) render node that is used / invoked / pulled.
    */
   class NodeOpera_test : public Test
     {
-      virtual void run(Arg)
+      virtual void
+      run (Arg)
         {
           UNIMPLEMENTED ("operate some render nodes as linked together");
         }

@@ -50,6 +50,12 @@ namespace fixture {
    *          must remain fixed in memory as long as any derived render jobs are alive.
    * 
    * @todo WIP-WIP as of 4/2023 -- starting with a fake implementation                  /////////////////////TICKET #1306 : create an actual link to the low-level Model
+   * @deprecated 2025 now it looks like this entity was just a step stone towards the actual design;
+   *          during the first prototypical implementation it became clear that the concept of an
+   *          »ExitNode« needs to be repurposed (and shifted by one level in the architecture).
+   *          However -- it is not clear yet in which way to address/designate the actual node
+   *          that shall be pulled from a given render job; there might be some mapping based
+   *          on a _feed ID_ (or a process-ID).
    */
   class NodeGraphAttachment
     {

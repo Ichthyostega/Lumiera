@@ -90933,13 +90933,16 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1714329868242" ID="ID_184056317" MODIFIED="1714329884644" TEXT="diese werden an geeigneter Stelle in eine Liste zusammengef&#xfc;hrt"/>
 <node CREATED="1714329885352" ID="ID_933373531" MODIFIED="1714329909292" TEXT="der Build-Proze&#xdf; dagegen liefert explizit ausformulierte ModelPorts"/>
 <node CREATED="1714329911460" ID="ID_1543278624" MODIFIED="1714329928581" TEXT="jeder von diesen ist konkret renderbar und es gibt daf&#xfc;r eine ExitNode (in jedem Segment)"/>
+<node CREATED="1782260197214" ID="ID_331896710" MODIFIED="1782260229701" TEXT="der einzelne Job verweist direkt auf eine ExitNode (die dann pro Segment zugeordnet wird)"/>
 </node>
 <node CREATED="1714329941216" ID="ID_495533677" MODIFIED="1714329948398" TEXT="L&#xf6;sung-3 : ExitNode">
 <node CREATED="1714329992920" ID="ID_821922749" MODIFIED="1714330011208" TEXT="bereits im ModelPort werden Auspr&#xe4;gungen / Gruppierungen gebildet"/>
-<node CREATED="1714329951759" ID="ID_817187343" MODIFIED="1714347338681" TEXT="die konkrete ExitNode kennt N Zug&#xe4;nge"/>
-<node CREATED="1714330041980" ID="ID_1122150847" MODIFIED="1714330053999" TEXT="diese sind w&#xe4;hlbar auf Basis der Auspr&#xe4;gungen"/>
+<node CREATED="1782259992120" ID="ID_1643904200" MODIFIED="1782260020866" TEXT="der ModelPort selber bleibt dabei generisch"/>
+<node CREATED="1782260021765" ID="ID_279050403" MODIFIED="1782260045838" TEXT="f&#xfc;r jeden ModelPort gibt es eine ExitNode"/>
+<node CREATED="1714329951759" ID="ID_817187343" MODIFIED="1782260048957" TEXT="diese konkrete ExitNode kennt N Zug&#xe4;nge"/>
+<node CREATED="1714330041980" ID="ID_1122150847" MODIFIED="1782260061932" TEXT="welche w&#xe4;hlbar sind auf Basis der Auspr&#xe4;gungen"/>
 <node CREATED="1714330060448" ID="ID_1552204339" MODIFIED="1714330076586" TEXT="nur valide Auspr&#xe4;gnungen sind w&#xe4;hlbar"/>
-<node CREATED="1714330079916" ID="ID_434179872" MODIFIED="1714330098760" TEXT="der einzelne Job bekommt noch eine weitere Steuer-ID mit"/>
+<node CREATED="1714330079916" ID="ID_434179872" MODIFIED="1782260111670" TEXT="der einzelne Job bekommt noch eine weitere Steuer-ID (Auspr&#xe4;gung)"/>
 </node>
 <node CREATED="1714330100891" ID="ID_1388128478" MODIFIED="1714330110678" TEXT="L&#xf6;sung-4 : Segment-ExitNode">
 <node CREATED="1714330111954" ID="ID_1798184156" MODIFIED="1714330124276" TEXT="jedes Segment hat eine einzige &#xfc;bergreifende ExitNode"/>
@@ -90978,7 +90981,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node CREATED="1714580592801" ID="ID_1478713442" MODIFIED="1715524362164" TEXT="Freiheitsgrade...">
 <arrowlink COLOR="#3e5caa" DESTINATION="ID_206055852" ENDARROW="Default" ENDINCLINATION="-901;1952;" ID="Arrow_ID_1954815494" STARTARROW="None" STARTINCLINATION="-330;-93;"/>
-<linktarget COLOR="#618cdf" DESTINATION="ID_1478713442" ENDARROW="Default" ENDINCLINATION="-1489;181;" ID="Arrow_ID_812438746" SOURCE="ID_865895790" STARTARROW="None" STARTINCLINATION="1582;-114;"/>
+<linktarget COLOR="#618cdf" DESTINATION="ID_1478713442" ENDARROW="Default" ENDINCLINATION="-1489;181;" ID="Arrow_ID_812438746" SOURCE="ID_865895790" STARTARROW="None" STARTINCLINATION="1648;-224;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1714580615114" ID="ID_1400673889" MODIFIED="1714580620205" TEXT="nominelle Zeit">
 <node CREATED="1714580868121" HGAP="31" ID="ID_1305751151" MODIFIED="1714580906874" TEXT="die einzige pro Frame bewegliche Gr&#xf6;&#xdf;e" VSHIFT="3">
@@ -91020,11 +91023,29 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="807;-31;" ID="Arrow_ID_1643361924" STARTARROW="None" STARTINCLINATION="861;0;"/>
+<arrowlink COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1489;-64;" ID="Arrow_ID_1643361924" STARTARROW="None" STARTINCLINATION="1123;62;"/>
 </node>
 <node CREATED="1714581651294" ID="ID_1318663500" MODIFIED="1714581669752" TEXT="&#x27f9; es ist sogar noch etwas &#xbb;Luft&#xab;">
-<node CREATED="1714581688960" ID="ID_554965848" MODIFIED="1714581707552" TEXT="oder man kommt mit einem Feed-Token (statt mit zwei) aus"/>
-<node CREATED="1714581716021" ID="ID_11143774" MODIFIED="1714581727069" TEXT="demnach w&#xe4;re doch sogar L&#xf6;sung-4 denkbar"/>
+<node CREATED="1714581688960" ID="ID_554965848" MODIFIED="1782261556091" TEXT="oder man kommt mit einem Feed-Token (statt mit zwei) aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...insofern es m&#246;glich ist, mit geschicktem Setup das Mapping zwischen CalcStream und DataSink implizit zu machen; <i>innerhalb</i>&#160;der Invocation wird ohnehin immer nur eine gewisse Auspr&#228;gung dieser Information gebraucht; stellenweise ist es die DataSink (in die man Daten ausgibt), an anderer Stelle ist es nur eine Art Proze&#223;-ID, an die man Mappings binden kann. Je nach Kontext ist diese Information abstrakter (eine Identit&#228;t), oder eben etwas konkrtetes (ein Output-Kanal) &#8212; aber es ist <i>nur ein Freiheitsgrad</i>, nicht mehrere
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1714581716021" ID="ID_11143774" MODIFIED="1782261674360" TEXT="demnach w&#xe4;re doch sogar L&#xf6;sung-4 (oder 3) denkbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      insofern dann Platz w&#228;re f&#252;r eine weitere Auspr&#228;gungs-ID &#8212; oder man diese verschiedenen Arten von &#187;Auspr&#228;gung&#171; allesamt per Mapping aus einer Proze&#223;-ID gewinnen kann, zum Zeitpunkt der Invocation.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1714581727658" ID="ID_250863682" MODIFIED="1714581742377" TEXT="kombiniert mit L&#xf6;sung-1 und L&#xf6;sung-2">
 <icon BUILTIN="ksmiletris"/>
 </node>
@@ -91035,12 +91056,12 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1714779372950" ID="ID_272094837" MODIFIED="1714779454073" TEXT="Relation zwischen Auspr&#xe4;gungen des &#xbb;konzeptionell gleichen&#xab; Ausgabekanals"/>
 </node>
 <node CREATED="1714779721668" ID="ID_1336128105" MODIFIED="1714779733276" TEXT="f&#xfc;r L&#xf6;sung-4 sprechen praktische Gr&#xfc;nde">
-<node CREATED="1714779735813" ID="ID_13794811" MODIFIED="1714779811899" TEXT="Polymorphismus nicht notwendig (da Aufgaben disjunkt)">
+<node CREATED="1714779735813" ID="ID_13794811" MODIFIED="1782261805094" TEXT="Polymorphismus nicht notwendig (da Aufgaben disjunkt)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...will sagen, eine &#187;ExitNode&#171; mu&#223; nicht eine besondere Art von Node sein, denn der Zwek von Nodes und der/den ExitNodes &#252;berschneidet sich &#252;berhaupt nicht
+      ...will sagen, eine &#187;ExitNode&#171; mu&#223; nicht eine besondere Art von Node sein, denn der Zweck von Nodes und der/den ExitNodes &#252;berschneidet sich &#252;berhaupt nicht
     </p>
   </body>
 </html></richcontent>
@@ -91049,7 +91070,16 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1714779832600" ID="ID_619705135" MODIFIED="1714779852506" TEXT="f&#xfc;r mehrere ExitNodes br&#xe4;uchte man dann wieder einen Index oder Zugangs-Deskriptor"/>
 <node CREATED="1714779867911" ID="ID_531634281" MODIFIED="1714779887525" TEXT="daher kann ExitNode genau dieser Zugangs-Deskriptor sein"/>
 <node CREATED="1714779888401" ID="ID_193604067" MODIFIED="1714779897595" TEXT="und ist mithin direkt am Segment angebunden"/>
-<node CREATED="1714779971374" ID="ID_881165967" MODIFIED="1714779986055" TEXT="die Liste der ModelPorts wandert dann in die ExitNode"/>
+<node CREATED="1714779971374" ID="ID_881165967" MODIFIED="1782262020978" TEXT="die Liste der ModelPorts wandert dann in die ExitNode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und k&#246;nnte tats&#228;chlich sogar als mehrstufige Mapping-Tabelle realisiert sein; die erste Stufe w&#228;re dann sogar pro Timeline (und w&#228;re lediglich eine Zuordnung eines bestimmten Datenstrom-Typs, wie z.B. Sound, Video, zu einem Strom-Key); die zweite Stufe w&#228;re dann das eigentliche Mapping pro Segment, welches einem Strom-Key jeweils eine konkrete ProcNode als Einstiegspunkt zuordnet.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node CREATED="1718840198722" ID="ID_821758494" MODIFIED="1736101710239" TEXT="Fazit (1:N)">
@@ -97040,7 +97070,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1715524107426" ID="ID_1048111807" MODIFIED="1715524113447" TEXT="Job">
 <node CREATED="1715524116854" ID="ID_701533734" MODIFIED="1715524124821" TEXT="Aufruf / Funktor"/>
 <node CREATED="1715524163676" ID="ID_865895790" MODIFIED="1715524362164" TEXT="Job-Parameter">
-<arrowlink COLOR="#618cdf" DESTINATION="ID_1478713442" ENDARROW="Default" ENDINCLINATION="-1489;181;" ID="Arrow_ID_812438746" STARTARROW="None" STARTINCLINATION="1582;-114;"/>
+<arrowlink COLOR="#618cdf" DESTINATION="ID_1478713442" ENDARROW="Default" ENDINCLINATION="-1489;181;" ID="Arrow_ID_812438746" STARTARROW="None" STARTINCLINATION="1648;-224;"/>
 </node>
 </node>
 <node CREATED="1715524428545" ID="ID_560958356" MODIFIED="1733427020906" TEXT="Render-Node">
@@ -98822,6 +98852,25 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="yes"/>
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782263478965" ID="ID_1056330303" MODIFIED="1782263485659" TEXT="bottom-up vorgehen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1782263414097" ID="ID_1299682104" MODIFIED="1782263441910" TEXT="mu&#xdf; definieren was eine RenderInvocation ist">
+<node CREATED="1782263547036" ID="ID_1316815705" MODIFIED="1782263604474" TEXT="das ist wieder so ein &#xbb;Keystone&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also ein (f&#252;r sich selber genommen einfaches) Konzept, das aber mehrere darunterliegende &#187;S&#228;ulen&#171; zusammenf&#252;hrt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782263611891" ID="ID_714205556" LINK="#ID_462733128" MODIFIED="1782263644973" TEXT="werde wohl daf&#xfc;r einen Unit-Test zum Aufbau brauchen"/>
+</node>
+<node CREATED="1782263447684" ID="ID_271895917" MODIFIED="1782263470602" TEXT="mu&#xdf; durch Prototyping herausfinden was der &#xbb;darunterliegende Code&#xab; braucht"/>
+<node CREATED="1782263496601" ID="ID_304797502" MODIFIED="1782263511901" TEXT="mu&#xdf; diese Bestandteile im Test-Setup zum Laufen bekommen"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1736104360185" ID="ID_1974639046" LINK="https://issues.lumiera.org/ticket/1389" MODIFIED="1736104653706" TEXT="Fortsetzung: #1389 Prototyping processing builder">
@@ -116395,7 +116444,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_284736049" MODIFIED="1770858774664" TEXT="Schwierigkeit: BufferProvider schwer zu erweitern">
 <linktarget COLOR="#fe512a" DESTINATION="ID_284736049" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_749038566" SOURCE="ID_1160117239" STARTARROW="None" STARTINCLINATION="-865;41;"/>
 <icon BUILTIN="bell"/>
-<node CREATED="1770859331591" HGAP="338" ID="ID_1947911633" MODIFIED="1770859445011" TEXT="das Thema wurde im Detail aufgerollt (2/2026)" VSHIFT="2">
+<node CREATED="1770859331591" HGAP="338" ID="ID_1947911633" MODIFIED="1782264308621" TEXT="das Thema wurde im Detail aufgerollt (2/2026)" VSHIFT="2">
 <arrowlink COLOR="#3619c3" DESTINATION="ID_764817619" ENDARROW="Default" ENDINCLINATION="-1253;-970;" ID="Arrow_ID_702150784" STARTARROW="None" STARTINCLINATION="1019;65;"/>
 </node>
 </node>
@@ -116619,9 +116668,50 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" SOURCE="ID_1063052148" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="idea"/>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782263948069" ID="ID_1944543405" MODIFIED="1782264541446" TEXT="Methode: &#xbb;Prototyp-Integration&#xab;">
+<icon BUILTIN="yes"/>
+<node COLOR="#338800" CREATED="1782263969797" ID="ID_1061860304" MODIFIED="1782263998735" TEXT="Prototyping des Node-Pull (&#xd83e;&#xdc32; NodeLink_test)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782264001438" ID="ID_803942955" MODIFIED="1782264027626" TEXT="diesen Test mit einem tats&#xe4;chlichen Buffer-Manager betreiben">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1782264029058" ID="ID_1859274644" MODIFIED="1782264212337" TEXT="Vorbild: BufferProviderLoad_test">
+<linktarget COLOR="#6d7983" DESTINATION="ID_1859274644" ENDARROW="Default" ENDINCLINATION="1027;88;" ID="Arrow_ID_1323120640" SOURCE="ID_200114754" STARTARROW="None" STARTINCLINATION="1041;-37;"/>
+</node>
+<node CREATED="1782264230355" ID="ID_599492347" MODIFIED="1782264244009" TEXT="definiert Setup mit Worker-Thread im Test"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782264256180" ID="ID_901821600" MODIFIED="1782264427850" TEXT="daraus dann die Bestandteile der NodeInvocation extrahieren">
+<arrowlink COLOR="#535988" DESTINATION="ID_462733128" ENDARROW="Default" ENDINCLINATION="-21;-42;" ID="Arrow_ID_161274584" STARTARROW="None" STARTINCLINATION="-46;2;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1780347433017" ID="ID_713293660" MODIFIED="1780347450273" TEXT="Ziel: eine vollst&#xe4;ndige RenderInvocation">
 <icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#e0c4aa" COLOR="#8b0209" CREATED="1782264597999" ID="ID_301452078" LINK="#ID_1963448958" MODIFIED="1782264691468" TEXT="getrieben von #1367 (build node invocation)">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782263637408" ID="ID_462733128" MODIFIED="1782264427850" TEXT="Vorrausetzung: RenderInvocation_test">
+<linktarget COLOR="#535988" DESTINATION="ID_462733128" ENDARROW="Default" ENDINCLINATION="-21;-42;" ID="Arrow_ID_161274584" SOURCE="ID_901821600" STARTARROW="None" STARTINCLINATION="-46;2;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1782263732675" ID="ID_1294901812" MODIFIED="1782263746452" TEXT="dieser Unit-Test soll nur die formalen Bestandteile abstecken"/>
+<node CREATED="1782263747385" ID="ID_1293910333" MODIFIED="1782263766815" TEXT="was ben&#xf6;tigt man, um eine RenderInvocation auf dem Stack zu bauen"/>
+<node CREATED="1782263769889" ID="ID_649997065" MODIFIED="1782263794239" TEXT="Gru&#xdf; von Henne an Ei">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782263808024" ID="ID_95101090" MODIFIED="1782263817235" TEXT="wahrscheinlich wird das ein Dokumentations-Test"/>
+<node CREATED="1782263818159" ID="ID_1396217866" MODIFIED="1782263832209" TEXT="m&#xf6;glich erst wenn ich die Integration aufbauen kann"/>
+<node CREATED="1782263867425" ID="ID_1228529734" MODIFIED="1782263909011" TEXT="also &#xbb;brutestrap&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      inkrementell mit dem Kopf gegen die Wand
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1713821728361" ID="ID_1456365802" MODIFIED="1733527178159" TEXT="NodeStorage_test">
@@ -116675,7 +116765,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#da0f33" DESTINATION="ID_155032865" ENDARROW="Default" ENDINCLINATION="611;-37;" ID="Arrow_ID_1499307333" SOURCE="ID_261792042" STARTARROW="None" STARTINCLINATION="-1389;70;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1719880227490" ID="ID_625069360" MODIFIED="1719880233976" TEXT="Performance-Abw&#xe4;gungen">
+<node CREATED="1719880227490" HGAP="31" ID="ID_625069360" MODIFIED="1719880233976" TEXT="Performance-Abw&#xe4;gungen">
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1719880241556" ID="ID_1870750496" MODIFIED="1719880260321" TEXT="wie relevant sind Optimierungen im Render-Graphen?">
 <icon BUILTIN="help"/>
 <node CREATED="1719880332935" ID="ID_1646361555" MODIFIED="1719880336371" TEXT="Hinsichten">
@@ -150005,8 +150095,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1779811803748" ID="ID_1356647567" MODIFIED="1779811814407" TEXT="Tests">
-<node COLOR="#1f5672" CREATED="1779811854629" ID="ID_200114754" MODIFIED="1780099481123" TEXT="BufferProviderLoad_test">
+<node COLOR="#1f5672" CREATED="1779811854629" ID="ID_200114754" MODIFIED="1782264212337" TEXT="BufferProviderLoad_test">
 <arrowlink COLOR="#4587d6" DESTINATION="ID_475125993" ENDARROW="Default" ENDINCLINATION="-174;35;" ID="Arrow_ID_1000436933" STARTARROW="None" STARTINCLINATION="93;10;"/>
+<arrowlink COLOR="#6d7983" DESTINATION="ID_1859274644" ENDARROW="Default" ENDINCLINATION="1027;88;" ID="Arrow_ID_1323120640" STARTARROW="None" STARTINCLINATION="1041;-37;"/>
 <linktarget COLOR="#6b414a" DESTINATION="ID_200114754" ENDARROW="Default" ENDINCLINATION="74;-150;" ID="Arrow_ID_961812501" SOURCE="ID_48160877" STARTARROW="Default" STARTINCLINATION="-330;-11;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1780098989758" HGAP="47" ID="ID_767803243" MODIFIED="1780099004035" TEXT="Zwischenergebnisse..." VSHIFT="11">
@@ -152145,8 +152236,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1775917228753" ID="ID_926670050" MODIFIED="1780147358885" TEXT="OutputSlot wurde Fr&#xfc;hjahr26 grundlegend &#xfc;berarbeitet">
 <arrowlink COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" STARTARROW="None" STARTINCLINATION="688;37;"/>
 </node>
-<node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1773941769804" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
-<linktarget COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="807;-31;" ID="Arrow_ID_1643361924" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="861;0;"/>
+<node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1782260312524" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
+<linktarget COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1489;-64;" ID="Arrow_ID_1643361924" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="1123;62;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774224466595" ID="ID_580276809" MODIFIED="1774224564250" STYLE="fork" TEXT="dadurch ist eine sehr sch&#xf6;ne Typ/Sichtbarkeits-Hierarchie entstanden">
@@ -173276,7 +173367,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <arrowlink COLOR="#6b5acb" DESTINATION="ID_530710667" ENDARROW="Default" ENDINCLINATION="1768;327;" ID="Arrow_ID_24508834" STARTARROW="None" STARTINCLINATION="1079;-122;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1770668733663" ID="ID_1103988699" MODIFIED="1770668743216" TEXT="Prototyp-Entw&#xfc;rfe von 2011/12"/>
-<node CREATED="1770668749427" ID="ID_1147423103" MODIFIED="1770668959236" TEXT="Konsolidiert zur Integration des &#xbb;Playback Slice&#xab; (2026)">
+<node CREATED="1770668749427" ID="ID_1147423103" MODIFIED="1782263249473" TEXT="Konsolidiert zur Integration des &#xbb;Playback Slice&#xab; (2026)">
 <arrowlink COLOR="#2f4c6e" DESTINATION="ID_1155618733" ENDARROW="Default" ENDINCLINATION="-364;1821;" ID="Arrow_ID_783725506" STARTARROW="None" STARTINCLINATION="451;23;"/>
 </node>
 </node>
