@@ -303,7 +303,7 @@ namespace test  {
    *     - the prime goal is to demonstrate correctness, balancing memory demand
    *       mostly through lock-free queues, without loosing any allocation.
    */
-      class BufferProviderLoad_test : public Test
+  class BufferProviderLoad_test : public Test
     {
       
       virtual void

@@ -63,9 +63,7 @@ namespace engine {
       
       static lib::Depend<EngineCtx> access;
       
-    private:
       EngineCtx();
-      friend class lib::DependencyFactory<EngineCtx>;
     };
   
   

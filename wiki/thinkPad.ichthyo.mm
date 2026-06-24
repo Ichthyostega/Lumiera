@@ -89082,7 +89082,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 <node CREATED="1685050895873" ID="ID_1305413793" MODIFIED="1686789885547" TEXT="JobTicket &#xd83e;&#xdc32; JobFunctor"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685050903817" ID="ID_1951219397" MODIFIED="1714778577842">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685050903817" ID="ID_1951219397" MODIFIED="1782318913646">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -89095,6 +89095,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 <linktarget COLOR="#3e6184" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-729;116;" ID="Arrow_ID_1252149896" SOURCE="ID_1316148159" STARTARROW="None" STARTINCLINATION="427;24;"/>
+<linktarget COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="530;22;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714777535544" ID="ID_1292334278" MODIFIED="1714777603974" TEXT="nominell-zeitliche Koordinate">
 <icon BUILTIN="flag-yellow"/>
@@ -91082,9 +91083,10 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 </node>
-<node CREATED="1718840198722" ID="ID_821758494" MODIFIED="1736101710239" TEXT="Fazit (1:N)">
+<node CREATED="1718840198722" ID="ID_821758494" MODIFIED="1782318901343" TEXT="Fazit (1:N)">
 <linktarget COLOR="#77274c" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-254;66;" ID="Arrow_ID_474260214" SOURCE="ID_811413379" STARTARROW="None" STARTINCLINATION="811;-49;"/>
 <linktarget COLOR="#6c5499" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-305;510;" ID="Arrow_ID_1100764489" SOURCE="ID_290743732" STARTARROW="None" STARTINCLINATION="891;35;"/>
+<linktarget COLOR="#462f81" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-497;447;" ID="Arrow_ID_1332141638" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="827;34;"/>
 <node CREATED="1718840201860" ID="ID_589597825" MODIFIED="1718840211116" TEXT="die ExitNode bekommt eine neue Rolle"/>
 <node CREATED="1718840212128" ID="ID_815017645" MODIFIED="1718840220877" TEXT="...n&#xe4;mlich genau dieses Mapping zu leisten">
 <node CREATED="1718840222671" ID="ID_965571589" MODIFIED="1718840253430" TEXT="high-Level ggfs strukturierte Model-Ports"/>
@@ -98868,6 +98870,21 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 </node>
 <node CREATED="1782263611891" ID="ID_714205556" LINK="#ID_462733128" MODIFIED="1782263644973" TEXT="werde wohl daf&#xfc;r einen Unit-Test zum Aufbau brauchen"/>
+<node CREATED="1782318712259" ID="ID_426502930" MODIFIED="1782319131757" TEXT="f&#xfc;r die Job-Invocation notwendige Parameter / Freiheitsgrade beachten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Hier besteht ein &#187;bottleneck&#171; &#8212; insofern wir sparsam mit dem Speicher in den Segmenten und der Job-Activity-Language umgehen m&#252;ssen; m&#246;glicherweise lassen sich gewisse (theoretische) Freiheitsgrade zusammenfalten in eine Processing-ID, an die ein Mapping gebunden wird (&#10230; Stream-Types, Ausf&#252;hrungs-Zustand, Switchboard). Letztlich wird das aber &#252;ber mehrere Stufen heruntergebrochen, so da&#223; beim Einstieg in den jeweiligen Node-Pull eigentlich alle Freiheitsgrade und Parameter disjunkt vorliegen sollten...
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" STARTARROW="None" STARTINCLINATION="530;22;"/>
+<arrowlink COLOR="#462f81" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-497;447;" ID="Arrow_ID_1332141638" STARTARROW="None" STARTINCLINATION="827;34;"/>
+</node>
 </node>
 <node CREATED="1782263447684" ID="ID_271895917" MODIFIED="1782263470602" TEXT="mu&#xdf; durch Prototyping herausfinden was der &#xbb;darunterliegende Code&#xab; braucht"/>
 <node CREATED="1782263496601" ID="ID_304797502" MODIFIED="1782263511901" TEXT="mu&#xdf; diese Bestandteile im Test-Setup zum Laufen bekommen"/>
@@ -116661,9 +116678,52 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1780347617296" ID="ID_1297498308" MODIFIED="1780347628941" TEXT="Ausgabe per OutputSlot"/>
 <node CREATED="1780347660957" ID="ID_664296230" MODIFIED="1780347671228" TEXT="Nodes vorher per NodeBuilder aufbauen"/>
 </node>
-<node CREATED="1780347599733" ID="ID_1443629697" MODIFIED="1780347610216" TEXT="aber grunds&#xe4;tzlich noch die Test-Variante"/>
+<node CREATED="1780347599733" ID="ID_1443629697" MODIFIED="1782339989101" TEXT="aber Services direkt instantiieren (nicht die &#xbb;echte Engine&#xab;)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das m&#246;chte ich so halten zur Dokumentation der Zusammenh&#228;nge; hier geht es um Komponenten-Integration &#8212; nicht um einen Systemtest. Teils werden jedoch bereits die gleichen Komponenten verwendet, wie in der &#187;echten Engine&#171;, vor allem der BufferProvider mit lokalen Pools. Andererseits werden die RenderNodes noch direkt erzeugt.
+    </p>
+  </body>
+</html>
+</richcontent>
+<node COLOR="#2a7b8f" CREATED="1782348968435" ID="ID_1373429853" MODIFIED="1782349068032" TEXT="Trick: verwende spezielle EngineFacilities">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      diese Subklasse ist zugleich ein BufferProviderSetup, und etabliert damit auch das Schema mit den local-mem-pools
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782349073329" ID="ID_1059252137" MODIFIED="1782349264675" TEXT="mu&#xdf; daf&#xfc;r aber den EngineCtx als Mock instantiieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich wollte diese direkten Referenz-Felder, um im produktiven Einsatz mir jeweils eine Indirektion einzusparen &#10233; das hat die Konsequenz, da&#223; ich auch eine neue Instanz des EngineCtx (als front-End) erzeugen mu&#223;, um eine spezielle lokale Instanz des BufferProviderSetup injizieren zu k&#246;nnen. Deshalb mu&#223; EngineCtx dann doch public konstruierbar sein (und nicht private mit fried f&#252;r die DependencyFactory). Schade, aber letztlich irrelevant.
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
 </node>
 <node CREATED="1733527376977" ID="ID_506164017" MODIFIED="1733527393014" TEXT="typische Kollaborations-Schemata">
+<node COLOR="#338800" CREATED="1782348916436" ID="ID_1779017226" MODIFIED="1782348932939" TEXT="erst mal eine einfache source-Node aufrufen">
+<icon BUILTIN="button_ok"/>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742172669058" ID="ID_1246173489" MODIFIED="1742172669058" TEXT="Job ruft 2-Node-Chain auf (incl Buffer-Management)">
 <linktarget COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" SOURCE="ID_1063052148" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="idea"/>
@@ -116673,12 +116733,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1782263969797" ID="ID_1061860304" MODIFIED="1782263998735" TEXT="Prototyping des Node-Pull (&#xd83e;&#xdc32; NodeLink_test)">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782264001438" ID="ID_803942955" MODIFIED="1782264027626" TEXT="diesen Test mit einem tats&#xe4;chlichen Buffer-Manager betreiben">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1782264001438" ID="ID_803942955" MODIFIED="1782348836995" TEXT="diesen Test mit einem tats&#xe4;chlichen Buffer-Manager betreiben">
+<icon BUILTIN="yes"/>
 <node CREATED="1782264029058" ID="ID_1859274644" MODIFIED="1782264212337" TEXT="Vorbild: BufferProviderLoad_test">
 <linktarget COLOR="#6d7983" DESTINATION="ID_1859274644" ENDARROW="Default" ENDINCLINATION="1027;88;" ID="Arrow_ID_1323120640" SOURCE="ID_200114754" STARTARROW="None" STARTINCLINATION="1041;-37;"/>
 </node>
 <node CREATED="1782264230355" ID="ID_599492347" MODIFIED="1782264244009" TEXT="definiert Setup mit Worker-Thread im Test"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782348878612" ID="ID_639195897" MODIFIED="1782348912089" TEXT="dann einen Node-Tree aufrufen &#x2014; mit DiagnosticOutputSlot">
+<icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782264256180" ID="ID_901821600" MODIFIED="1782264427850" TEXT="daraus dann die Bestandteile der NodeInvocation extrahieren">
 <arrowlink COLOR="#535988" DESTINATION="ID_462733128" ENDARROW="Default" ENDINCLINATION="-21;-42;" ID="Arrow_ID_161274584" STARTARROW="None" STARTINCLINATION="-46;2;"/>

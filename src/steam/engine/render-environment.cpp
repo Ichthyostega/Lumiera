@@ -68,7 +68,7 @@ namespace engine{
   BufferProvider&
   EngineFacilities::setupCacheProvider()     ////////////////////////////////////////////////////////////////TICKET #1223 : in what ways does client code need to interact with the Frame Cache / Management?
   {
-    return getNaiveBufferManager();
+    return setupBufferProvider();
   }
   
   
