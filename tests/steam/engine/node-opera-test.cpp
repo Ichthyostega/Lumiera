@@ -206,26 +206,25 @@ namespace test  {
           
           Thread testWorker{[&] /* === perform a render invocation === */
                               {
-                                BuffHandle buff = EngineCtx::access().mem.lockBufferFor<TestFrame>();
-                                Time nomTime{Time::ZERO};
+                                Time nomTime{rani(60'000),0};  // drive test with a random »nominal Time« <60s with ms granularity
                                 ProcessKey key{0};
                                 uint port{0};
                                 
+                                BuffHandle buff = EngineCtx::access().mem.lockBufferFor<TestFrame>();
                                 TestFrame& result = buff.accessAs<TestFrame>();
                                 CHECK (result.isPristine());
-SHOW_EXPR(result.getChecksum())
                                 
                                 // Trigger Node invocation...
                                 buff = pipeline.exitNode.pull (port, buff, nomTime, key);
                                 
-                                CHECK (not result.isPristine());
                                 CHECK (result.isValid());
-SHOW_EXPR(result.getChecksum())
+                                CHECK (not result.isPristine());
+                                CHECK (result.getChecksum() == pipeline.expectedChecksum (nomTime));
                                 buff.release();
                               }};
           
           while (testWorker)
-            yield();     // wait for worker to finish
+            yield();      // wait for worker to finish
           sleep_for (500us);
           
           mockEngine.globalPool->processPendingRequests();
@@ -244,28 +243,37 @@ SHOW_EXPR(result.getChecksum())
        *       and the embedded AllocationCluster unwinds automatically.
        * @see \ref NodeLink_test for a detailed breakdown of a similar topology
        */
-      struct RenderPipeline
+      class RenderPipeline
         : util::NonCopyable
         {
           static constexpr ont::Flavr SRC_A = 10;         ///< »chain-A« arbitrary source frame marker
           static constexpr ont::Flavr SRC_B = 20;         ///< similar for »chain-B«
-
+          
+          PGrid secondsGrid_{TimeGrid::build (FrameRate{1})};
+          FrameCnt quantSecs (Time time) { return secondsGrid_->gridPoint (time); };
+           
+          /** custom allocator for this node tree */
+          lib::AllocationCluster alloc_;
+          
+        public:
           ProcNode& exitNode{buildTree()};
           
           HashVal
           expectedChecksum (Time nomTime)
             {
-              UNIMPLEMENTED ("recompute");
+              ont::FraNo fraNo = quantSecs(nomTime);
+              ont::Param param = stepFilter(fraNo);
+              ont::Factr mix   = stepMixer (fraNo);
+              
+              TestFrame f1{uint(fraNo),SRC_A};
+              TestFrame f2{uint(fraNo),SRC_B};
+              
+              ont::manipulateFrame (&f1, &f1, param);
+              ont::combineFrames (&f1, &f1, &f2, mix);
+              return f1.getChecksum();
             }
           
         private:
-          /** custom allocator for this node tree */
-          lib::AllocationCluster alloc_;
-          
-          PGrid secondsGrid_{TimeGrid::build (FrameRate{1})};
-          
-          FrameCnt   quantSecs (Time time)   { return secondsGrid_->gridPoint (time); };
-          
           ont::Param stepFilter(FrameCnt id) { return util::limited (10, -10 + id, 50);        };
           ont::Factr stepMixer (FrameCnt id) { return util::limited (0,      + id, 50) / 50.0; };
           
