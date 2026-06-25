@@ -39,7 +39,7 @@ using lib::Symbol;
 using util::isnil;
 using util::isSameObject;
 using test::TestFrame;
-using test::testRand; 
+using test::testRand;
 namespace ont = test::ont;
 
 namespace steam {
@@ -362,7 +362,7 @@ namespace test  {
 
           
           // Prepare a precomputed parameter for the complete tree
-          auto selectFrameNo = [&](TurnoutSystem& tuSys){ return quantSecs(tuSys.getNomTime()); };
+          auto selectFrameNo = [&](TurnoutSystem& turSys){ return quantSecs(turSys.getNomTime()); };
           auto paramSpec = buildParamSpec()
                             .addSlot (selectFrameNo);
           
@@ -373,8 +373,8 @@ namespace test  {
           auto stepMixer  = [] (FrameCnt id)-> ont::Factr { return util::limited (0,      + id, 50) / 50.0; };
           
           // note: binds the accessor for the precomputed FrameNo-parameter
-          auto autoFilter = [=](TurnoutSystem& tuSys){ return stepFilter (tuSys.get (accFrameNo)); };
-          auto autoMixer  = [=](TurnoutSystem& tuSys){ return stepMixer  (tuSys.get (accFrameNo)); };
+          auto autoFilter = [=](TurnoutSystem& turSys){ return stepFilter (turSys.get (accFrameNo)); };
+          auto autoMixer  = [=](TurnoutSystem& turSys){ return stepMixer  (turSys.get (accFrameNo)); };
           
           
           // A Node with two (source) ports

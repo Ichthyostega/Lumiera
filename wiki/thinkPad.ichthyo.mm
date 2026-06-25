@@ -116727,6 +116727,25 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742172669058" ID="ID_1246173489" MODIFIED="1742172669058" TEXT="Job ruft 2-Node-Chain auf (incl Buffer-Management)">
 <linktarget COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" SOURCE="ID_1063052148" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="idea"/>
+<node CREATED="1782408860168" ID="ID_1200447326" MODIFIED="1782408872611" TEXT="Bau des Node-Tree in eine Hilfsklasse auslagern">
+<node CREATED="1782408874426" ID="ID_1194116935" MODIFIED="1782408890796" TEXT="das ist weitgehend redundant mit NodeLink_test"/>
+<node CREATED="1782408892650" ID="ID_59723084" MODIFIED="1782408910377" TEXT="Erzeugen der Nodes sollte in einem Scope erfolgen"/>
+<node CREATED="1782408911567" ID="ID_1141231248" MODIFIED="1782408930823" TEXT="brauche schlie&#xdf;lich aber nur eine Referenz auf die Exit-Node"/>
+<node CREATED="1782408938470" ID="ID_1128249575" MODIFIED="1782408948801" TEXT="&#x27f9; Allocation-Cluster verwenden (RAII)"/>
+<node CREATED="1782408961611" ID="ID_223879187" MODIFIED="1782409005657" TEXT="Hilfsfunktion: Verifikation">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      sollte exakt die gleiche Kalkulation direkt wiederholen (genauso wie in NodeLink_test) und die Checksumme berechnen...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782263948069" ID="ID_1944543405" MODIFIED="1782264541446" TEXT="Methode: &#xbb;Prototyp-Integration&#xab;">
 <icon BUILTIN="yes"/>
