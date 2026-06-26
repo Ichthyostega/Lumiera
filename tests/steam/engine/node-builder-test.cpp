@@ -20,6 +20,7 @@
 #include "steam/engine/engine-ctx.hpp"
 #include "steam/engine/node-builder.hpp"
 #include "steam/asset/meta/time-grid.hpp"
+#include "lib/allocation-cluster.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/iter-explorer.hpp"
@@ -66,11 +67,12 @@ namespace test  {
           build_Node_closedParam();
           build_connectedNodes();
           build_ParamNode();
+          
+          useAllocationCluster();
         }
       
       
       /** @test build a simple output-only Render Node
-       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_simpleNode()
@@ -97,11 +99,10 @@ namespace test  {
        *  - expect the buffer to hold a single `uint` value after invocation
        */
       uint
-      invokeRenderNode (ProcNode& theNode, Time nomTime =Time::ZERO)
+      invokeRenderNode (ProcNode& theNode, Time nomTime =Time::ZERO, uint port =0)
         {
           BuffHandle buff = EngineCtx::access().mem.lockBufferFor<long> (-55);
           ProcessKey key{0};
-          uint port{0};
           
           CHECK (-55 == buff.accessAs<long>());
           
@@ -115,7 +116,6 @@ namespace test  {
       
       
       /** @test build a Node with a fixed invocation parameter
-       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_fixedParam()
@@ -139,7 +139,6 @@ namespace test  {
        *        the time into an implicitly defined grid
        *      - install both into a render node
        *      - set a random _nominal time_ for invocation
-       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_dynamicParam()
@@ -171,7 +170,6 @@ namespace test  {
        *      - again use a processing function which takes a parameter
        *      - but then _decorate_ this functor, so that it takes different arguments
        *      - attach parameter handling to supply these adapted arguments
-       * @todo 2/25 ✔ define ⟶ ✔ implement
        */
       void
       build_Node_adaptedParam()
@@ -239,7 +237,6 @@ namespace test  {
        *      - use the »simplified 1:1 wiring«, which connects consecutively
        *        each input slot to the next given node on the same port number;
        *        here we only use port#0 on all three nodes.
-       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_connectedNodes()
@@ -287,7 +284,6 @@ namespace test  {
        *      - perform effectively the same computation as the preceding test
        *      - but use two new custom parameters in the Param Agent Node
        *      - pick them up from the nested source nodes by accessor-functors
-       * @todo 12/24 ✔ define ⟶ ✔ implement
        */
       void
       build_ParamNode()
@@ -342,6 +338,49 @@ namespace test  {
           uint res = invokeRenderNode(n4);
           CHECK (res == peek+1 + LIFE_AND_UNIVERSE_4EVER+1 );
           CHECK (peek != -1);
+        }
+      
+      
+      
+      /** @test demonstrate use of a custom allocator
+       *      - use local AllocationCluster instance for this test
+       *      - place and manage the resulting ProcNode in this cluster
+       *      - furthermore, allocate administrative internals also there
+       *      - build a Node with two ports, each with a parameter and output buffer
+       *      - demonstrate the created Node works as expected
+       *      - verify that allocations happened
+       */
+      void
+      useAllocationCluster()
+        {
+          auto procFun =  [](ushort param, uint* buff){ *buff = param; };
+          
+          lib::AllocationCluster alloc;
+          CHECK (0 == alloc.numBytes());
+          
+          auto& node = alloc.create<ProcNode>(       //  ◁───────────────────────────────────┨ place resulting ProcNode into the cluster
+                        prepareNode("Test")
+                          .withAllocator(alloc)      //  ◁───────────────────────────────────┨ policy to use this cluster for internal allocations
+                          .preparePort()
+                            .invoke ("funA()", procFun)
+                            .setParam (LIFE_AND_UNIVERSE_4EVER)
+                            .completePort()
+                          .preparePort()
+                            .invoke ("funB()", procFun)
+                            .setParam (LIFE_AND_UNIVERSE_4EVER + 13)
+                            .completePort()
+                          .build()
+                        );
+          
+          CHECK (LIFE_AND_UNIVERSE_4EVER    == invokeRenderNode (node, Time::ZERO, 0));
+          CHECK (LIFE_AND_UNIVERSE_4EVER+13 == invokeRenderNode (node, Time::ZERO, 1));
+          
+          // minimum bounds of memory allocations...
+          const auto MIN_EXPECT = sizeof(ProcNode)
+                                + 2 * (sizeof(Port) + sizeof(BuffDescr)                      // defined two ports, each with an output type...
+                                       + 2*(sizeof(void*) + sizeof(std::function<void()>))); // and parameter + buffer + proc-fun and param-fun
+          
+          CHECK (MIN_EXPECT < alloc.numBytes());
         }
     };
   

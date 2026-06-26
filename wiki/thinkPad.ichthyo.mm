@@ -116724,15 +116724,255 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#338800" CREATED="1782348916436" ID="ID_1779017226" MODIFIED="1782348932939" TEXT="erst mal eine einfache source-Node aufrufen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1742172669058" ID="ID_1246173489" MODIFIED="1742172669058" TEXT="Job ruft 2-Node-Chain auf (incl Buffer-Management)">
+<node COLOR="#338800" CREATED="1742172669058" ID="ID_1246173489" MODIFIED="1782494451195" TEXT="Job ruft 2-Node-Chain auf (incl Buffer-Management)">
 <linktarget COLOR="#01c3fe" DESTINATION="ID_1246173489" ENDARROW="Default" ENDINCLINATION="-1287;-72;" ID="Arrow_ID_1281025448" SOURCE="ID_1063052148" STARTARROW="None" STARTINCLINATION="-777;45;"/>
 <icon BUILTIN="idea"/>
-<node CREATED="1782408860168" ID="ID_1200447326" MODIFIED="1782408872611" TEXT="Bau des Node-Tree in eine Hilfsklasse auslagern">
+<node COLOR="#256094" CREATED="1782408860168" ID="ID_1200447326" MODIFIED="1782494441183" TEXT="Bau des Node-Tree in eine Hilfsklasse auslagern">
+<icon BUILTIN="yes"/>
 <node CREATED="1782408874426" ID="ID_1194116935" MODIFIED="1782408890796" TEXT="das ist weitgehend redundant mit NodeLink_test"/>
 <node CREATED="1782408892650" ID="ID_59723084" MODIFIED="1782408910377" TEXT="Erzeugen der Nodes sollte in einem Scope erfolgen"/>
 <node CREATED="1782408911567" ID="ID_1141231248" MODIFIED="1782408930823" TEXT="brauche schlie&#xdf;lich aber nur eine Referenz auf die Exit-Node"/>
-<node CREATED="1782408938470" ID="ID_1128249575" MODIFIED="1782408948801" TEXT="&#x27f9; Allocation-Cluster verwenden (RAII)"/>
-<node CREATED="1782408961611" ID="ID_223879187" MODIFIED="1782409005657" TEXT="Hilfsfunktion: Verifikation">
+<node COLOR="#338800" CREATED="1782408938470" ID="ID_1128249575" MODIFIED="1782494418455" TEXT="&#x27f9; Allocation-Cluster verwenden (RAII)">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1782440987709" ID="ID_1311583654" MODIFIED="1782440997586" TEXT="Schritt-1 : f&#xfc;r die ProcNodes ">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1782440998662" ID="ID_1634299020" MODIFIED="1782494143417" TEXT="Schritt-2 : auch im Node-Builder">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1782441010843" FOLDED="true" ID="ID_135365194" MODIFIED="1782494527249" STYLE="fork" TEXT="geht gar nicht durch den Compiler">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782441024410" ID="ID_545638454" MODIFIED="1782494268650">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      mir f&#228;llt auf: <i>das hab ich noch nie getestet</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Wie konnte das passieren....?
+    </p>
+    <p>
+      Vermutlich habe ich es <i>genau auf diesen NodeOperation-Test hier verschoben,</i>&#160;weil ich bisher noch gar nicht die M&#246;glichkeit hatte, das ganze Setup im Zusammenhang zu testen....
+    </p>
+    <p>
+      Nun ja, man h&#228;tte daf&#252;r schon einen Testfall im NodeBuilder_test einf&#252;gen k&#246;nnen &#10233; <b><font color="#89113e">das sollte ich dann auch tun </font></b>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wie dem auch sei &#8212; ich hab mich auf den Standpunkt gestellt, da&#223; dieser ganze Aufbau stark typisiert ist, und deshalb funktionieren mu&#223;, sobald er durch den Compiler geht &#8212; unter der Vorraussetzung da&#223; die Basis-Technologie funktioniert (und das w&#228;re lib::Several mit AllocationCluster, was in der Tat getestet ist)
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#744451" DESTINATION="ID_1414448156" ENDARROW="Default" ENDINCLINATION="117;-26;" ID="Arrow_ID_584945221" STARTARROW="None" STARTINCLINATION="-54;128;"/>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1782487867591" ID="ID_398681887" MODIFIED="1782487883421" TEXT="Analyse der Compile-Fehler">
+<node CREATED="1782487887774" ID="ID_654111815" MODIFIED="1782487934295" TEXT="der Einstieg in die Policy-Konstruktion erscheint korrekt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...insofern er identisch ist zu der direkten Verwendung auf lib::SeveralBuilder, welche detailliert per Unit-Test abgedeckt ist
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1782487936694" ID="ID_143918873" MODIFIED="1782487948768" TEXT="hier werden &quot;DataBuilder&quot; verwendet">
+<node CREATED="1782487950532" ID="ID_1169282497" MODIFIED="1782487959461" TEXT="dies sind Instanzen des lib::SetupBuilder"/>
+<node CREATED="1782487960665" ID="ID_1537359439" MODIFIED="1782487970855" TEXT="allerdings f&#xfc;r verschiedene Payload-Typen"/>
+</node>
+<node BACKGROUND_COLOR="#f8e0cb" COLOR="#f76139" CREATED="1782487974421" ID="ID_1567804979" MODIFIED="1782491043264" TEXT="der Fehler tritt auf bei einer cross-construction">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1782488026211" ID="ID_1732296667" MODIFIED="1782488035016" TEXT="der enable-if-Guard sperrt"/>
+<node CREATED="1782488062262" ID="ID_1207274086" MODIFIED="1782488100093" TEXT="Policy&lt;BuffDescr&gt; &#x27fb; Policy&lt;reference_wrapper&lt;Port&gt;&gt;"/>
+<node CREATED="1782488126177" ID="ID_271857749" MODIFIED="1782488137077" TEXT="das Policy-Template wird definiert von SetupSeveral"/>
+<node CREATED="1782488137908" ID="ID_565679200" MODIFIED="1782488153262" TEXT="und dieses wiederum kommt hier spezialisiert zum Einsatz"/>
+<node BACKGROUND_COLOR="#f7c4c4" COLOR="#7a041e" CREATED="1782488322782" ID="ID_1654018850" MODIFIED="1782488389020" TEXT="die Policy f&#xfc;r Allocation-Cluster kann aber nur direkt konstruiert werden">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1782488397034" ID="ID_1405379813" MODIFIED="1782488420941" TEXT="demnach habe ich diesen Fall komplett &#xfc;bersehen....">
+<icon BUILTIN="smiley-neutral"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782488423642" ID="ID_1340478964" MODIFIED="1782488432844" TEXT="(deshalb testet man ja...)"/>
+<node CREATED="1782488434050" ID="ID_965183285" MODIFIED="1782488460698" TEXT="denn: der lib::SeveralBuilder selber...">
+<node CREATED="1782488461704" ID="ID_993929175" MODIFIED="1782488467275" TEXT="verwendet eine AllocatorPolicy"/>
+<node CREATED="1782488471420" ID="ID_163096939" MODIFIED="1782488482025" TEXT="welche wiederum eine ElementFactory wrapped"/>
+<node CREATED="1782488482845" ID="ID_1929173121" MODIFIED="1782488492720" TEXT="und letztere ist trivial cross-constructible"/>
+<node CREATED="1782488493701" ID="ID_1192760450" MODIFIED="1782488510746" TEXT="solange der unterliegende Allokator zuweisbar/konstruierbar ist"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782488514176" ID="ID_734388345" MODIFIED="1782490801478" TEXT="und beim Allocation-Cluster habe ich diesen Fall &#xfc;bersehen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn speziell beim AllocationCluster ist die Lage besonders, da ein dedizierter Adaptor zum Einsatz kommt, in dessen Template-Parameter der Zieltyp eingeht; insofern ist dieser Adapter <b>nicht</b>&#160; cross-constructible, obwohl die unterliegende AllocatorCluster-Instanz gleich w&#228;re
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#054458" CREATED="1782490803570" ID="ID_235276417" MODIFIED="1782490956239" TEXT="cross-ctor explizit nachr&#xfc;sten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      geht einfach, da die Adapter-Policy letztlich nur eine AllocatorPolicy mit dem speziellen Allokator erweitert; insofern ist nur der au&#223;en explizit definierte Konstruktor das Problem; aus Gr&#252;nden der Klarheit ziehe ich es trotzdem vor, den cross-ctor ebenfalls explizit zu definieren, dann aber lediglich an die Basisklasse zu delegieren (die dann selbst auf den unterliegenden Allokator zugreifen kann)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#caa190" COLOR="#990033" CREATED="1782490967370" ID="ID_601628305" MODIFIED="1782494511639">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weiteres Problem: Allocator ist hier <b>explizit nicht monostate</b>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1782491057619" ID="ID_629010474" MODIFIED="1782491081784">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn wir verwenden <i>einen bestimmten</i>&#160;AllocationCluster
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782491083291" ID="ID_1212914505" MODIFIED="1782494491282" TEXT="aber der Code in NodeBuilder::build() erzeugt (naiver Weise) einen neuen Data-Builder">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #f5f8c6; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre-wrap">
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#ff0000">src/steam/engine/node-builder.hpp:260:20: error: use of deleted function 'lib::SeveralBuilder&lt;I, E, POL&gt;::SeveralBuilder() [with I = steam::engine::Port; E = steam::engine::Port; POL = lib::allo::SetupSeveral&lt;std::void_t, lib::AllocationCluster&amp;&gt;::Policy]'</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">260 | PortData ports;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">| ^~~~~</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">In file included from src/steam/engine/weaving-pattern-builder.hpp:135,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">from src/steam/engine/node-builder.hpp:123:</font>
+        </p>
+        <p style="background-color: #f4f7fe; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/lib/several-builder.hpp:407:7: note: 'lib::SeveralBuilder&lt;I, E, POL&gt;::SeveralBuilder() [with I = steam::engine::Port; E = steam::engine::Port; POL = lib::allo::SetupSeveral&lt;std::void_t, lib::AllocationCluster&amp;&gt;::Policy]' is implicitly deleted because the default definition would be ill-formed:</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">407 | SeveralBuilder() = default;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">| ^~~~~~~~~~~~~~</font>
+        </p>
+        <p style="background-color: #f3cfc3; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a2626">src/lib/several-builder.hpp:407:7: error: no matching function for call to 'lib::allo::SetupSeveral&lt;std::void_t, lib::AllocationCluster&amp;&gt;::Policy&lt;steam::engine::Port, steam::engine::Port&gt;::Policy()'</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1782491467864" ID="ID_1277359590" MODIFIED="1782491485107" TEXT="dagegen beim WeavingPatternBuilder hab ich es korrekt gemacht...."/>
+<node CREATED="1782491491172" ID="ID_783588114" MODIFIED="1782491538671" TEXT="&#x27f9; man kann auch hier die &#xbb;leads&#xab; als Quelle f&#xfc;r die weiterzugebende Policy verwenden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ....denn die Leads sind im Objekt bereits instantiiert, und werden nicht erst im Build-Vorgang erzeugt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1782494149505" ID="ID_872844144" MODIFIED="1782494415017" TEXT="kann jetzt Allokationen im Cluster nachweisen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1782494165026" ID="ID_1705181372" MODIFIED="1782494190798" TEXT="konkret ca 2.5 KiB f&#xfc;r 5 Nodes"/>
+<node CREATED="1782494196475" ID="ID_1414448156" MODIFIED="1782494260399" TEXT="hab dazu auch Einzelfall im NodeBuilder_test dargestellt">
+<linktarget COLOR="#744451" DESTINATION="ID_1414448156" ENDARROW="Default" ENDINCLINATION="117;-26;" ID="Arrow_ID_584945221" SOURCE="ID_545638454" STARTARROW="None" STARTINCLINATION="-54;128;"/>
+<node CREATED="1782494281451" ID="ID_1118722522" MODIFIED="1782494307061" TEXT="sehe dort ca. 400 Bytes f&#xfc;r eine Node mit 2 Ports"/>
+<node CREATED="1782494308055" ID="ID_1650807544" MODIFIED="1782494321997" TEXT="rein rechnerische Untergrenze w&#xe4;ren 240 Bytes"/>
+<node CREATED="1782494338622" ID="ID_1317505833" MODIFIED="1782494410458" TEXT="erscheint alles plausibel">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn...
+    </p>
+    <ul>
+      <li>
+        der Aufbau im WeavingPattern ist komplexer als ich im Moment leicht nachvollziehen kann
+      </li>
+      <li>
+        was ich sofort sehe ist die Storage f&#252;r die Connectivity-Komponenten
+      </li>
+      <li>
+        sowie die Feed-Funktore
+      </li>
+      <li>
+        oben drauf kommt, da&#223; meine lib::Several-Implementierung noch verschwenderisch ist
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1782408961611" ID="ID_223879187" MODIFIED="1782440940661" TEXT="Hilfsfunktion: Verifikation">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -116744,7 +116984,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html>
 </richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1782440947559" ID="ID_443596535" MODIFIED="1782440977717" STYLE="bubble" TEXT="Aufruf funktioniert und Checksumme ist korrekt">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782263948069" ID="ID_1944543405" MODIFIED="1782264541446" TEXT="Methode: &#xbb;Prototyp-Integration&#xab;">
@@ -116761,6 +117005,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782348878612" ID="ID_639195897" MODIFIED="1782348912089" TEXT="dann einen Node-Tree aufrufen &#x2014; mit DiagnosticOutputSlot">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782494548626" ID="ID_774195591" MODIFIED="1782494558167" TEXT="Zugriff auf die ausgegebenen Daten">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782264256180" ID="ID_901821600" MODIFIED="1782264427850" TEXT="daraus dann die Bestandteile der NodeInvocation extrahieren">
 <arrowlink COLOR="#535988" DESTINATION="ID_462733128" ENDARROW="Default" ENDINCLINATION="-21;-42;" ID="Arrow_ID_161274584" STARTARROW="None" STARTINCLINATION="-46;2;"/>

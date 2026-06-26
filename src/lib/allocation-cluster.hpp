@@ -361,7 +361,13 @@ namespace lib {
             
             
             Policy (AllocationCluster& clu)
-              : AllocationPolicy<I,E,Adapter> (clu.getAllocator<std::byte>())
+              : Base{clu.getAllocator<std::byte>()}
+              { }
+            
+            /** @note allow cross-construction from any AllocationCluster based allocator */
+            template<class U, class V>
+            Policy (AllocationPolicy<U,V,Adapter>& relatedPolicy)
+              : Base(relatedPolicy)
               { }
             
             bool

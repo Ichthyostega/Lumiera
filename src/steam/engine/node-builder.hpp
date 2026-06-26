@@ -58,7 +58,7 @@
  ** specialised parametrisation for some media handling library, and a lot of cross-linking pointers,
  ** it is important to care for efficient usage of memory with good locality. Furthermore, the higher
  ** levels of the build process will generate additional temporary data structures, refined gradually
- ** until the actual render node network can be emitted. Each builder level can thus be  outfitted
+ ** until the actual render node network can be emitted. Each builder level can thus be outfitted
  ** with a custom allocator — typically an instance of lib::AllocationCluster. Notably the higher
  ** levels can be attached to a separate AllocationCluster instance, which will be discarded once
  ** the build process is complete, while Level-2 (and below) uses the allocator for the actual
@@ -257,7 +257,7 @@ namespace engine {
       Connectivity
       build()
         {
-          PortData ports;
+          PortData ports{leads_.policyConnect()}; // use same allocator...
           patternData_.collectEntries(ports);
           return Connectivity{ports.build()
                              ,leads_.build()

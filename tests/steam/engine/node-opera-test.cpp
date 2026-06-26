@@ -32,7 +32,7 @@
 #include "lib/depend-inject.hpp"
 #include "lib/thread.hpp"
 //#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 #include "test/diagnostic-output.hpp"///////////////TODO
 
 
@@ -52,6 +52,7 @@ using steam::asset::meta::TimeGrid;
 //using lib::Symbol;
 //using util::isnil;
 //using util::isSameObject;
+using util::isLimited;
 using test::TestFrame;
 using test::testRand;
 namespace ont = test::ont;
@@ -314,6 +315,7 @@ namespace test  {
               // A source node to produce random test frames
               auto& n1s = alloc_.create<ProcNode>(
                             prepareNode("srcA")
+                              .withAllocator(alloc_)
                               .preparePort()
                                 .invoke(testGen.procID(), testGen.makeFun())   // params(frameNo, flavour)
                                 .closeParam<1>(SRC_A)                          // --> fix the flavour ≔ SRC_A
@@ -324,6 +326,7 @@ namespace test  {
               // A node to »filter« the data in chain-A
               auto& n1f = alloc_.create<ProcNode>(
                             prepareNode("filterA")
+                              .withAllocator(alloc_)
                               .preparePort()
                                 .invoke(testMan.procID(), testMan.makeFun())
                                 .attachParamFun(autoFilter)                    // filter-param <-- autoFilter(frameNo)
@@ -335,6 +338,7 @@ namespace test  {
               // A secondary source Node for the »chain-B«
               auto& n2s = alloc_.create<ProcNode>(
                             prepareNode("srcB")
+                              .withAllocator(alloc_)
                               .preparePort()
                                 .invoke(testGen.procID(), testGen.makeFun())   // params(frameNo, flavour)
                                 .closeParam<1>(SRC_B)                          // --> fix the flavour ≔ SRC_B
@@ -346,6 +350,7 @@ namespace test  {
               // A mixing Node to combine both chains
               auto& mix = alloc_.create<ProcNode>(
                             prepareNode("mix")
+                              .withAllocator(alloc_)
                               .preparePort()
                                 .invoke(testMix.procID(), testMix.makeFun())
                                 .attachParamFun(autoMixer)                     // mixer-param <-- autoMixer(frameNo)
@@ -358,11 +363,15 @@ namespace test  {
               // Place a »Param-Agent«-Node on top to pre-compute the FrameNo
               auto& parNode = alloc_.create<ProcNode>(
                             prepareNode("Param")
+                              .withAllocator(alloc_)
                               .preparePort()
                                 .computeParam(paramSpec)
                                 .delegateLead(mix)
                                 .completePort()
                               .build());
+              
+              // the AllocationCluster managed some storage...
+              CHECK (isLimited (1_KiB, alloc_.numBytes(), 5_KiB));
               
               // here the »Param-Agent« also acts as the Exit-Node
               return parNode;
