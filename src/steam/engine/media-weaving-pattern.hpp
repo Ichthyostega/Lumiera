@@ -152,7 +152,7 @@ namespace engine {
     /**
      * Standard implementation for a _Weaving Pattern_ to connect
      * the input and output data feeds (buffers) into a processing function.
-     * @tparam INVO a configuration / policy base class to _adapt for invocation_
+     * @tparam INVO a configuration class / prototype to _adapt for invocation_
      * @note assumptions made regarding the overall structure
      *     - `INVO::Feed` defines an _invocation adapter_ for the processing function
      *     - `INVO::buildFeed()` is a functor to (repeatedly) build `Feed` instances

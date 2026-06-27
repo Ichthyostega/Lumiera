@@ -89082,7 +89082,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 <node CREATED="1685050895873" ID="ID_1305413793" MODIFIED="1686789885547" TEXT="JobTicket &#xd83e;&#xdc32; JobFunctor"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685050903817" ID="ID_1951219397" MODIFIED="1782318913646">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685050903817" ID="ID_1951219397" MODIFIED="1782520530286">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -89096,6 +89096,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <linktarget COLOR="#3e6184" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-729;116;" ID="Arrow_ID_1252149896" SOURCE="ID_1316148159" STARTARROW="None" STARTINCLINATION="427;24;"/>
 <linktarget COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="530;22;"/>
+<linktarget COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-140;898;" ID="Arrow_ID_1049525279" SOURCE="ID_1615870321" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714777535544" ID="ID_1292334278" MODIFIED="1714777603974" TEXT="nominell-zeitliche Koordinate">
 <icon BUILTIN="flag-yellow"/>
@@ -89104,6 +89105,29 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node CREATED="1714777558727" ID="ID_501449860" MODIFIED="1714777571297" TEXT="in Lumiera verwenden wir eine direkte Zeitangabe"/>
 <node CREATED="1714777572206" ID="ID_1167720006" MODIFIED="1714777585120" TEXT="auf dieser Basis kann die Quelle angesteuert werden"/>
+<node CREATED="1782519999020" ID="ID_1870049870" MODIFIED="1782520164150" TEXT="Beziehung: output-grid &#x27f7; absolute-nominal-time &#x27f7; source-grid">
+<arrowlink COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_1778039433" STARTARROW="None" STARTINCLINATION="1309;58;"/>
+<node CREATED="1782520197933" HGAP="67" ID="ID_1808712826" MODIFIED="1782520311837" TEXT="output-grid h&#xe4;ngt mit der &#xbb;wall-clock-time&#xab; zusammen" VSHIFT="-1">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aber nur im Fall von <i>&#187;playback&#171;</i>&#160;&#8212; denn falls wir <i>rendern,</i>&#160; erzeugen wir im Ergebnis eine Folge von Frames, die wieder der absolute-nominal-time entsprechen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782520291466" HGAP="76" ID="ID_959091490" MODIFIED="1782520358208" TEXT="source-grid h&#xe4;ngt am Medien-Typ" VSHIFT="-7">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar vermittelt duch die Framerate und den jeweiligen Startpunkt <i>im Medium</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714776494868" ID="ID_1882197279" MODIFIED="1714777606898" TEXT="konkrete top-level ProcNode">
 <icon BUILTIN="flag-yellow"/>
@@ -89791,12 +89815,19 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802711785" ID="ID_296909810" MODIFIED="1685802724498" TEXT="JobFunctor">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782518850699" HGAP="30" ID="ID_158287553" MODIFIED="1782518877762" TEXT="k&#xf6;nnte auch ein Job-Typ sein..." VSHIFT="1">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802725228" ID="ID_848236204" MODIFIED="1685802740418" TEXT="Parameter-Paket">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802741818" ID="ID_87044302" MODIFIED="1685803707711" TEXT="DataSink(Handle)">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802741818" ID="ID_87044302" MODIFIED="1782600490236" TEXT="DataSink(Handle)">
 <linktarget COLOR="#4b3ea5" DESTINATION="ID_87044302" ENDARROW="Default" ENDINCLINATION="1839;-50;" ID="Arrow_ID_594271482" SOURCE="ID_953619048" STARTARROW="None" STARTINCLINATION="669;36;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1782600386128" ID="ID_43350143" MODIFIED="1782600510006" TEXT="m&#xf6;glich: Pointer auf einen RenderCtx">
+<arrowlink COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="960;0;" ID="Arrow_ID_1166250847" STARTARROW="None" STARTINCLINATION="1286;94;"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685986803653" ID="ID_666925478" MODIFIED="1686498849033" TEXT="Exit-Node(Referenz)">
 <linktarget COLOR="#3e3f9b" DESTINATION="ID_666925478" ENDARROW="Default" ENDINCLINATION="426;-58;" ID="Arrow_ID_1306644139" SOURCE="ID_491497133" STARTARROW="None" STARTINCLINATION="311;19;"/>
@@ -97265,7 +97296,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 <linktarget COLOR="#5c6a7a" DESTINATION="ID_1291306906" ENDARROW="Default" ENDINCLINATION="-289;17;" ID="Arrow_ID_1279473915" SOURCE="ID_1296941844" STARTARROW="None" STARTINCLINATION="177;10;"/>
 </node>
-<node CREATED="1733586203584" ID="ID_523248183" MODIFIED="1733587335616" TEXT="aber die Interpretation per Frame-Grid mu&#xdf; in den Nodes liegen....">
+<node CREATED="1733586203584" ID="ID_523248183" MODIFIED="1782520539581" TEXT="aber die Interpretation per Frame-Grid mu&#xdf; in den Nodes liegen....">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -97275,6 +97306,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 <linktarget COLOR="#385061" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="87;339;" ID="Arrow_ID_901283158" SOURCE="ID_970386501" STARTARROW="None" STARTINCLINATION="473;26;"/>
+<linktarget COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_1778039433" SOURCE="ID_1870049870" STARTARROW="None" STARTINCLINATION="1309;58;"/>
+<linktarget COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_277448738" SOURCE="ID_1615870321" STARTARROW="Default" STARTINCLINATION="1590;-110;"/>
 </node>
 </node>
 <node CREATED="1733425451521" ID="ID_1986914320" MODIFIED="1733425474762" TEXT="in Zukunft ggfs dynamische Steuer-Parameter"/>
@@ -98872,16 +98905,13 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1782263611891" ID="ID_714205556" LINK="#ID_462733128" MODIFIED="1782263644973" TEXT="werde wohl daf&#xfc;r einen Unit-Test zum Aufbau brauchen"/>
 <node CREATED="1782318712259" ID="ID_426502930" MODIFIED="1782319131757" TEXT="f&#xfc;r die Job-Invocation notwendige Parameter / Freiheitsgrade beachten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Hier besteht ein &#187;bottleneck&#171; &#8212; insofern wir sparsam mit dem Speicher in den Segmenten und der Job-Activity-Language umgehen m&#252;ssen; m&#246;glicherweise lassen sich gewisse (theoretische) Freiheitsgrade zusammenfalten in eine Processing-ID, an die ein Mapping gebunden wird (&#10230; Stream-Types, Ausf&#252;hrungs-Zustand, Switchboard). Letztlich wird das aber &#252;ber mehrere Stufen heruntergebrochen, so da&#223; beim Einstieg in den jeweiligen Node-Pull eigentlich alle Freiheitsgrade und Parameter disjunkt vorliegen sollten...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" STARTARROW="None" STARTINCLINATION="530;22;"/>
 <arrowlink COLOR="#462f81" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-497;447;" ID="Arrow_ID_1332141638" STARTARROW="None" STARTINCLINATION="827;34;"/>
 </node>
@@ -116680,42 +116710,33 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1780347599733" ID="ID_1443629697" MODIFIED="1782339989101" TEXT="aber Services direkt instantiieren (nicht die &#xbb;echte Engine&#xab;)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das m&#246;chte ich so halten zur Dokumentation der Zusammenh&#228;nge; hier geht es um Komponenten-Integration &#8212; nicht um einen Systemtest. Teils werden jedoch bereits die gleichen Komponenten verwendet, wie in der &#187;echten Engine&#171;, vor allem der BufferProvider mit lokalen Pools. Andererseits werden die RenderNodes noch direkt erzeugt.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node COLOR="#2a7b8f" CREATED="1782348968435" ID="ID_1373429853" MODIFIED="1782349068032" TEXT="Trick: verwende spezielle EngineFacilities">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       diese Subklasse ist zugleich ein BufferProviderSetup, und etabliert damit auch das Schema mit den local-mem-pools
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782349073329" ID="ID_1059252137" MODIFIED="1782349264675" TEXT="mu&#xdf; daf&#xfc;r aber den EngineCtx als Mock instantiieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...ich wollte diese direkten Referenz-Felder, um im produktiven Einsatz mir jeweils eine Indirektion einzusparen &#10233; das hat die Konsequenz, da&#223; ich auch eine neue Instanz des EngineCtx (als front-End) erzeugen mu&#223;, um eine spezielle lokale Instanz des BufferProviderSetup injizieren zu k&#246;nnen. Deshalb mu&#223; EngineCtx dann doch public konstruierbar sein (und nicht private mit fried f&#252;r die DependencyFactory). Schade, aber letztlich irrelevant.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
@@ -116744,20 +116765,15 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="broken-line"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782441024410" ID="ID_545638454" MODIFIED="1782494268650">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       mir f&#228;llt auf: <i>das hab ich noch nie getestet</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Wie konnte das passieren....?
@@ -116775,24 +116791,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       Wie dem auch sei &#8212; ich hab mich auf den Standpunkt gestellt, da&#223; dieser ganze Aufbau stark typisiert ist, und deshalb funktionieren mu&#223;, sobald er durch den Compiler geht &#8212; unter der Vorraussetzung da&#223; die Basis-Technologie funktioniert (und das w&#228;re lib::Several mit AllocationCluster, was in der Tat getestet ist)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#744451" DESTINATION="ID_1414448156" ENDARROW="Default" ENDINCLINATION="117;-26;" ID="Arrow_ID_584945221" STARTARROW="None" STARTINCLINATION="-54;128;"/>
 <icon BUILTIN="smiley-oh"/>
 </node>
 <node CREATED="1782487867591" ID="ID_398681887" MODIFIED="1782487883421" TEXT="Analyse der Compile-Fehler">
 <node CREATED="1782487887774" ID="ID_654111815" MODIFIED="1782487934295" TEXT="der Einstieg in die Policy-Konstruktion erscheint korrekt">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...insofern er identisch ist zu der direkten Verwendung auf lib::SeveralBuilder, welche detailliert per Unit-Test abgedeckt ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1782487936694" ID="ID_143918873" MODIFIED="1782487948768" TEXT="hier werden &quot;DataBuilder&quot; verwendet">
 <node CREATED="1782487950532" ID="ID_1169282497" MODIFIED="1782487959461" TEXT="dies sind Instanzen des lib::SetupBuilder"/>
@@ -116820,64 +116832,50 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782488514176" ID="ID_734388345" MODIFIED="1782490801478" TEXT="und beim Allocation-Cluster habe ich diesen Fall &#xfc;bersehen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       denn speziell beim AllocationCluster ist die Lage besonders, da ein dedizierter Adaptor zum Einsatz kommt, in dessen Template-Parameter der Zieltyp eingeht; insofern ist dieser Adapter <b>nicht</b>&#160; cross-constructible, obwohl die unterliegende AllocatorCluster-Instanz gleich w&#228;re
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#054458" CREATED="1782490803570" ID="ID_235276417" MODIFIED="1782490956239" TEXT="cross-ctor explizit nachr&#xfc;sten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       geht einfach, da die Adapter-Policy letztlich nur eine AllocatorPolicy mit dem speziellen Allokator erweitert; insofern ist nur der au&#223;en explizit definierte Konstruktor das Problem; aus Gr&#252;nden der Klarheit ziehe ich es trotzdem vor, den cross-ctor ebenfalls explizit zu definieren, dann aber lediglich an die Basisklasse zu delegieren (die dann selbst auf den unterliegenden Allokator zugreifen kann)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#caa190" COLOR="#990033" CREATED="1782490967370" ID="ID_601628305" MODIFIED="1782494511639">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       weiteres Problem: Allocator ist hier <b>explizit nicht monostate</b>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1782491057619" ID="ID_629010474" MODIFIED="1782491081784">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       denn wir verwenden <i>einen bestimmten</i>&#160;AllocationCluster
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782491083291" ID="ID_1212914505" MODIFIED="1782494491282" TEXT="aber der Code in NodeBuilder::build() erzeugt (naiver Weise) einen neuen Data-Builder">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div style="background-color: #f5f8c6; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #f5f8c6; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre-wrap">
@@ -116914,23 +116912,19 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1782491467864" ID="ID_1277359590" MODIFIED="1782491485107" TEXT="dagegen beim WeavingPatternBuilder hab ich es korrekt gemacht...."/>
 <node CREATED="1782491491172" ID="ID_783588114" MODIFIED="1782491538671" TEXT="&#x27f9; man kann auch hier die &#xbb;leads&#xab; als Quelle f&#xfc;r die weiterzugebende Policy verwenden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ....denn die Leads sind im Objekt bereits instantiiert, und werden nicht erst im Build-Vorgang erzeugt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -116943,9 +116937,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1782494308055" ID="ID_1650807544" MODIFIED="1782494321997" TEXT="rein rechnerische Untergrenze w&#xe4;ren 240 Bytes"/>
 <node CREATED="1782494338622" ID="ID_1317505833" MODIFIED="1782494410458" TEXT="erscheint alles plausibel">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...denn...
@@ -116965,8 +116957,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -116974,16 +116965,13 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1782408961611" ID="ID_223879187" MODIFIED="1782440940661" TEXT="Hilfsfunktion: Verifikation">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       sollte exakt die gleiche Kalkulation direkt wiederholen (genauso wie in NodeLink_test) und die Checksumme berechnen...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
@@ -117005,8 +116993,112 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782348878612" ID="ID_639195897" MODIFIED="1782348912089" TEXT="dann einen Node-Tree aufrufen &#x2014; mit DiagnosticOutputSlot">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1782519999020" ID="ID_1615870321" MODIFIED="1782520539581">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Verbindung mit den <b>zwei Grids</b> beachten
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_277448738" STARTARROW="Default" STARTINCLINATION="1590;-110;"/>
+<arrowlink COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-140;898;" ID="Arrow_ID_1049525279" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782520550205" HGAP="42" ID="ID_556676562" MODIFIED="1782520578445" TEXT="mu&#xdf; ich in der Render-Invocation als &#xbb;gegeben&#xab; behandeln">
+<icon BUILTIN="yes"/>
+<node CREATED="1782520581899" ID="ID_1050184546" MODIFIED="1782520604863" TEXT="denn logischerweise stellt der Play-Proze&#xdf; diese Verbindung her"/>
+<node CREATED="1782520616985" ID="ID_188304156" MODIFIED="1782520647199" TEXT="konkret ist die Verankerung im Job-Planning bekannt (als Timings)"/>
+<node CREATED="1782520899697" ID="ID_1282300146" MODIFIED="1782521189133" TEXT="Repr&#xe4;sentation im Job-Parameter ist ein separates Implementierungs-Detail">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...eine kurze Analyse zeigt sofort auf, da&#223; hier so einige Informationen Redundant sind; das hat mich schon mehrfach in Verwirrung gebraucht &#8212; aber die Verwirrung besteht wohl ehr in einer Vermischung der Ebenen: lange Zeit (viel zu lange) habe ich den Job als eine Art &#187;Interface&#171; betrachtet (genauer gesagt, ich bin hier naiv Christian's &quot;Analyse&quot; aufgesessen). Das war keine gute Idee, weil damit die Parameter des Jobs eine universelle G&#252;ltigkeit beanspruchen, und &#187;richtig&#171; gew&#228;hlt sein wollen. Tats&#228;chlich ist aber der Job ein Artefakt der Implementierung, und bestimmt sich vornehmlich aus &#220;berlegungen zur Performance; <i>allein daran</i>&#160;w&#228;re zu bemessen, ob in diesem Fall Redundanz <i>gut oder schlecht</i>&#160;ist. Dem entsprechend sollte die Render-Invocation (die n&#228;chste Ebene darunter) wieder <b>alle logisch ben&#246;tigten Parameter explizit ausweisen</b>.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1782520719269" ID="ID_95177602" MODIFIED="1782520887590" TEXT="source-Grid kennen die Nodes implizit, output-grid mu&#xdf; explizit gegeben werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Da das Source-Grid letztlich an der Verwendung der Quell-Medien h&#228;ngt, ist die Beziehung dazu bereits im high-level-Model festgelegt und wird in die Nodes &#187;eingebacken&#171;
+      </li>
+      <li>
+        ganz anders das Output-Grid: die Ausgabe-Frame-Nr mu&#223; explizit angegeben werden, denn sie stellt die Verbindung zur Ausgabe-Zeit her; im Fall von Realtime-Playback ist das die &#187;wall-clock-time&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1782597147062" ID="ID_861330220" MODIFIED="1782597356575">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      allerdings will ich <b>definitiv</b>&#160;keinerlei Frame-Nr irgendwo im Job sehen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn die Gefahr w&#228;re zu gro&#223;, da&#223; irgendjemand das dann als General-Koordinate f&#252;r alles hernimmt &#8212; und den Unterschied zwischen Ausgabe-Grid und Source-Koordinaten per Machtspruch unter den Teppich kehrt. Man darf den all den Schwachmaten dieser Welt auch keinen kleinen Finger geben....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1782598787567" ID="ID_486065484" MODIFIED="1782598906629" TEXT="generell: es gibt Zustands-artige Parametrisierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dazu geh&#246;ren auch Mute-Schalter und das Switchboard &#8212; und der Bezug zur Play-Position / bzw. Loop-Play
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782598283692" ID="ID_1200572345" MODIFIED="1782598931855" TEXT="&#x27f9; wir brauchen einen RenderCtx">
+<arrowlink COLOR="#6d1735" DESTINATION="ID_1335551307" ENDARROW="Default" ENDINCLINATION="1033;-76;" ID="Arrow_ID_689843460" STARTARROW="None" STARTINCLINATION="-50;419;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782600386128" HGAP="32" ID="ID_555990983" MODIFIED="1782600558202" TEXT="m&#xf6;glich: direkt als Ctx-Pointer" VSHIFT="10">
+<arrowlink COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="439;0;" ID="Arrow_ID_1496641793" STARTARROW="None" STARTINCLINATION="-9;370;"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782604693817" ID="ID_281800153" MODIFIED="1782604709039" TEXT="Strukturen aufbauen im Vorgriff auf eine RenderInvocation">
+<icon BUILTIN="pencil"/>
+<node CREATED="1782604710703" ID="ID_1985323008" MODIFIED="1782604728887" TEXT="demnach sollte die RenderInvocation explizit bekommen...">
+<node CREATED="1782604730541" ID="ID_1320188831" MODIFIED="1782604833135" TEXT="die exit-Node + port-Nr"/>
+<node CREATED="1782604743139" ID="ID_445587665" MODIFIED="1782604752876" TEXT="eine DataSink&amp;"/>
+<node CREATED="1782604754126" ID="ID_270918701" MODIFIED="1782604777372" TEXT="absolute-nominal-time"/>
+<node CREATED="1782604778573" ID="ID_1288983492" MODIFIED="1782604791902" TEXT="output-Frame-Nr"/>
+<node CREATED="1782604835685" ID="ID_48911511" MODIFIED="1782604839356" TEXT="processKey"/>
+</node>
+<node CREATED="1782604914398" ID="ID_495984163" MODIFIED="1782604923755" TEXT="es ist die Aufgabe der RenderInvocation">
+<node CREATED="1782604926129" ID="ID_1508367693" MODIFIED="1782604960984" TEXT="den Output-Buffer zu locken(frameNr)"/>
+<node CREATED="1782604969099" ID="ID_1826526451" MODIFIED="1782604984573" TEXT="das resultierende BuffHandle weiterzugeben und nachher zu releasen()"/>
+<node CREATED="1782604994735" ID="ID_852548551" MODIFIED="1782605009104" TEXT="au&#xdf;erdem: den Buffer-Bedarf zu announcen"/>
+<node CREATED="1782605015084" ID="ID_1135268131" MODIFIED="1782605018855" TEXT="nicht">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<node CREATED="1782605021331" ID="ID_1351197066" MODIFIED="1782605035618" TEXT="irgendwelche callback-interaktionen mit dem Kontext"/>
+<node CREATED="1782605036571" ID="ID_504293155" MODIFIED="1782605060777" TEXT="sonstiges Status-Management"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782494548626" ID="ID_774195591" MODIFIED="1782494558167" TEXT="Zugriff auf die ausgegebenen Daten">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1782605072900" ID="ID_203481758" MODIFIED="1782605083595" TEXT="f&#xfc;r den Test einen DiagnosticOutputSlot bereitstellen"/>
+<node CREATED="1782605084898" ID="ID_174759021" MODIFIED="1782605095580" TEXT="dessen Zugriff after-the-fact verwenden"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782264256180" ID="ID_901821600" MODIFIED="1782264427850" TEXT="daraus dann die Bestandteile der NodeInvocation extrahieren">
@@ -117263,8 +117355,73 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1687302645431" ID="ID_1377069136" MODIFIED="1687302651074" TEXT="Aufruf-Schnittstelle">
 <node CREATED="1713819959995" ID="ID_179899941" MODIFIED="1713819974612" TEXT="f&#xfc;r den Modell-Aufbau"/>
 <node CREATED="1713819975157" ID="ID_169491541" MODIFIED="1713819978793" TEXT="f&#xfc;r die Job-Planung"/>
-<node CREATED="1713819979316" ID="ID_1674780860" MODIFIED="1713820000472" TEXT="f&#xfc;r die Ausf&#xfc;hrung"/>
+<node CREATED="1713819979316" ID="ID_1674780860" MODIFIED="1713820000472" TEXT="f&#xfc;r die Ausf&#xfc;hrung">
+<node CREATED="1782598635351" ID="ID_369961777" MODIFIED="1782598639944" TEXT="RenderInvocation"/>
+</node>
 <node CREATED="1713820001615" ID="ID_1711530409" MODIFIED="1713820004276" TEXT="zum Test"/>
+</node>
+<node CREATED="1782598544982" ID="ID_1996566281" MODIFIED="1782598551601" TEXT="Render-Context">
+<node CREATED="1782598568344" ID="ID_1335551307" MODIFIED="1782598931855" TEXT="Bezug zwischen Render-Proze&#xdf; und Job-Invocation">
+<linktarget COLOR="#6d1735" DESTINATION="ID_1335551307" ENDARROW="Default" ENDINCLINATION="1033;-76;" ID="Arrow_ID_689843460" SOURCE="ID_1200572345" STARTARROW="None" STARTINCLINATION="-50;419;"/>
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1782598950362" ID="ID_712583910" MODIFIED="1782598962213" TEXT="Lebenszyklus / Zugriff / Sichtbarkeit">
+<node CREATED="1782598963532" ID="ID_584479542" MODIFIED="1782599266889" TEXT="Key ist eine Proze&#xdf;-ID">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      noch nicht klar, ob f&#252;r den gesamten Play-Process, oder f&#252;r jeden CalcStream separat.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782599443595" ID="ID_938515040" MODIFIED="1782599620828" TEXT="das erzeugt ein Sichtbarkeits-Problem">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn der Job in einem Worker-Thread startet, mu&#223; er eine Mapping-Tabelle mit diesem Key aufsuchen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782599623915" ID="ID_531991894" MODIFIED="1782599883698" TEXT="m&#xf6;glicherweise aber bereits durch das Grooming-Token gel&#xf6;st">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da der Worker ja das Grooming-Token erlangen mu&#223;, bevor er den Job aus dem Scheduler nimmt, und au&#223;erdem die Job-Planung ebenfalls in einem Job erfolgt (unter Grooming-Token, wenn ich mich recht erinnere...), dann w&#252;rder der ausf&#252;hrende Worker implizit alles sehen, was der planende Worker in den Speicher geschrieben hat
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1782599268782" ID="ID_998290585" MODIFIED="1782600547587" TEXT="alternativ k&#xf6;nnte das aber auch ein direkter Pointer sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn dann h&#228;tten wir ohnehin eine Callback-Struktur; <i>wenn wir das akzeptieren,</i>&#160;k&#246;nnte auch die DataSink dar&#252;ber zug&#228;nglich sein
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#635880" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="157;0;" ID="Arrow_ID_1262315415" SOURCE="ID_953619048" STARTARROW="None" STARTINCLINATION="160;9;"/>
+<linktarget COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="960;0;" ID="Arrow_ID_1166250847" SOURCE="ID_43350143" STARTARROW="None" STARTINCLINATION="1286;94;"/>
+<linktarget COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="439;0;" ID="Arrow_ID_1496641793" SOURCE="ID_555990983" STARTARROW="None" STARTINCLINATION="-9;370;"/>
+</node>
+<node CREATED="1782599282962" ID="ID_1365914908" MODIFIED="1782600200209" TEXT="der Kontext mu&#xdf; l&#xe4;nger leben wie der letzte Job">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist eine Lebenszyklus-Bedingung, die an dieser Stelle prominent auftritt, und den gesamten Zugriff auf die Resultate der Job-Planung betrifft, einschlie&#223;lich der von ihr referenzierten Model-Segmente. Es k&#246;nnte sinnvoll sein, das als ein einziges, &#252;bergreifendes Lebenszyklus-Problem zu behandeln, und an die Deadlines der Jobs zu binden
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#662f47" DESTINATION="ID_1365914908" ENDARROW="Default" ENDINCLINATION="651;36;" ID="Arrow_ID_1733530577" SOURCE="ID_914150529" STARTARROW="None" STARTINCLINATION="1007;34;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1687302361438" ID="ID_519176123" MODIFIED="1687302695659" TEXT="Umgang mit der DataSink">
 <linktarget COLOR="#7d3f56" DESTINATION="ID_519176123" ENDARROW="Default" ENDINCLINATION="-1337;-138;" ID="Arrow_ID_1252848442" SOURCE="ID_819115625" STARTARROW="None" STARTINCLINATION="-721;60;"/>
@@ -117272,9 +117429,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1685986971920" ID="ID_1354248617" MODIFIED="1685987005822" TEXT="vorsicht ref-counting &#x27f9; darf nicht in den Job-Parameter">
 <icon BUILTIN="yes"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685987007275" ID="ID_953619048" MODIFIED="1685987465547" TEXT="daher per Pointer auf den Calc-Stream verweisen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685987007275" ID="ID_953619048" MODIFIED="1782600465460" TEXT="daher per Pointer auf den Calc-Stream verweisen">
 <arrowlink COLOR="#4b3ea5" DESTINATION="ID_87044302" ENDARROW="Default" ENDINCLINATION="1839;-50;" ID="Arrow_ID_594271482" STARTARROW="None" STARTINCLINATION="669;36;"/>
 <arrowlink COLOR="#4b3ea5" DESTINATION="ID_1078372838" ENDARROW="Default" ENDINCLINATION="416;-39;" ID="Arrow_ID_209843242" STARTARROW="None" STARTINCLINATION="669;36;"/>
+<arrowlink COLOR="#635880" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="157;0;" ID="Arrow_ID_1262315415" STARTARROW="None" STARTINCLINATION="160;9;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node COLOR="#435e98" CREATED="1687217341462" ID="ID_877655155" MODIFIED="1687218491894" TEXT="Problem: API-Design und Builder-Operationen">
@@ -117351,6 +117509,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" STARTARROW="None" STARTINCLINATION="888;64;"/>
+</node>
 </node>
 </node>
 </node>
@@ -125608,6 +125767,21 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1682612125996" ID="ID_34027511" MODIFIED="1682612133736" TEXT="re-Partitionierung per Builder">
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1782600058814" ID="ID_143735144" MODIFIED="1782600081646" TEXT="Thema: Lebenszyklus &#x27fa; Lebensdauer der Jobs">
+<node CREATED="1782600085208" ID="ID_914150529" MODIFIED="1782600200209">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      selbst <i>nach einem Commit</i>&#160;m&#252;sen die vorhergehenden Daten noch erhalten bleiben
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#662f47" DESTINATION="ID_1365914908" ENDARROW="Default" ENDINCLINATION="651;36;" ID="Arrow_ID_1733530577" STARTARROW="None" STARTINCLINATION="1007;34;"/>
+</node>
+<node CREATED="1782600110347" ID="ID_590196449" MODIFIED="1782600126834" TEXT="solange bis kein vor dem Commit erzeugter Job mehr aktiv werden kann"/>
+<node CREATED="1782600127988" ID="ID_1784528746" MODIFIED="1782600149294" TEXT="das gilt insgesamt f&#xfc;r alle daran h&#xe4;ngenden AllocationCluster"/>
 </node>
 </node>
 </node>
@@ -151276,9 +151450,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1773934250649" ID="ID_1023733837" MODIFIED="1774219522013" TEXT="Umstellen der DataSink">
 <arrowlink COLOR="#2f56b3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" STARTARROW="Default" STARTINCLINATION="-663;70;"/>
-<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <linktarget COLOR="#4a697c" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="31;-117;" ID="Arrow_ID_50406176" SOURCE="ID_1909698021" STARTARROW="None" STARTINCLINATION="-24;182;"/>
 <linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" SOURCE="ID_926670050" STARTARROW="None" STARTINCLINATION="688;37;"/>
+<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1773934262265" ID="ID_1065611224" MODIFIED="1773934275092" TEXT="m&#xf6;glichst das sichtbare API nicht anpassen">
 <node CREATED="1773934291293" ID="ID_736836401" MODIFIED="1773934304615" TEXT="AllocState ist erst der OutputSlot-Impl bekannt"/>

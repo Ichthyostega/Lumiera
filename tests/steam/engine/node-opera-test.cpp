@@ -19,6 +19,7 @@
 #include "test/run.hpp"
 #include "lib/allocation-cluster.hpp"
 #include "test/test-rand-ontology.hpp"
+#include "vault/out/diagnostic-output-slot.hpp"
 #include "vault/mem/buffer-provider-setup.hpp"
 #include "vault/mem/engine-buffer-metadata.hpp"
 #include "vault/mem/engine-buffer-manager.hpp"
@@ -49,6 +50,7 @@ using lib::time::FrameCnt;
 using lib::time::FrameRate;
 using lib::time::PGrid;
 using steam::asset::meta::TimeGrid;
+using vault::out::DiagnosticOutputSlot;
 //using lib::Symbol;
 //using util::isnil;
 //using util::isSameObject;
@@ -198,6 +200,7 @@ namespace test  {
       /** @test perform a RenderInvocation to pull from a complex node tree into an output sink.
        *      - use a test helper class to build a node topology similar to NodeLink_test
        *      - the ProcNodes and all backing structures are managed by an AllocationCluster
+       *      - use a DiagnosticOutputSlot (by default configured for buffers sized for TestFrame)
        */
       void
       invokeNodeTree()
@@ -205,23 +208,29 @@ namespace test  {
           TestEngineCtx mockEngine;
           RenderPipeline pipeline;
           
+          DiagnosticOutputSlot oSlot;
+          auto sink0 = * oSlot.getOpenedSinks();
+          
+          const uint OUTPUT_FRAME{123};
+          
           Thread testWorker{[&] /* === perform a render invocation === */
                               {
                                 Time nomTime{rani(60'000),0};  // drive test with a random »nominal Time« <60s with ms granularity
                                 ProcessKey key{0};
                                 uint port{0};
                                 
-                                BuffHandle buff = EngineCtx::access().mem.lockBufferFor<TestFrame>();
-                                TestFrame& result = buff.accessAs<TestFrame>();
-                                CHECK (result.isPristine());
+                                BuffHandle buff = sink0.lockFrame (OUTPUT_FRAME);   // claim output buffer
+                                CHECK (not buff.accessAs<TestFrame>().isValid());   // underlying buffer is zero initialised, thus no valid TestFrame yet
                                 
                                 // Trigger Node invocation...
                                 buff = pipeline.exitNode.pull (port, buff, nomTime, key);
-                                
-                                CHECK (result.isValid());
-                                CHECK (not result.isPristine());
-                                CHECK (result.getChecksum() == pipeline.expectedChecksum (nomTime));
                                 buff.release();
+                                
+                                // DiagnosticOutputSlot allows to investigate the data sent into the DataSink...
+                                TestFrame const& result = watch(oSlot).feed(0).frame(OUTPUT_FRAME).accessAs<TestFrame>();
+                                CHECK (result.isValid());                                          // data matches checksum
+                                CHECK (not result.isPristine());                                   // is not a source frame (but processed)
+                                CHECK (result.getChecksum() == pipeline.expectedChecksum (nomTime));
                               }};
           
           while (testWorker)
