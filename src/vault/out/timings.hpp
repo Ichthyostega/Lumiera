@@ -52,7 +52,7 @@
 namespace lib {
 namespace time{
   class Quantiser;
-  typedef std::shared_ptr<const Quantiser> PQuant;
+  using PQuant = std::shared_ptr<const Quantiser>;
 }}
 
 namespace vault {

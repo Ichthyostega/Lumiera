@@ -90026,6 +90026,24 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782768121716" ID="ID_1302202579" MODIFIED="1782768149457" TEXT="Aber: es darf nur ein Kontext f&#xfc;r die Output-Modalit&#xe4;ten sein">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782768157933" ID="ID_748748832" MODIFIED="1782768181378" TEXT="keinesfalls darf aus der Render-Pipeline auf den Scheduler zugegriffen werden"/>
+<node CREATED="1782768182225" ID="ID_1170576772" MODIFIED="1782768195522" TEXT="oder auch sonstwie in den Play-Proze&#xdf; (Ausnahme: Planungs-Jobs)"/>
+</node>
+</node>
+<node CREATED="1782768246368" ID="ID_1818871882" MODIFIED="1782768249523" TEXT="Anordnung">
+<node CREATED="1782768250399" ID="ID_1477352838" MODIFIED="1782768272152" TEXT="ein Job-Funktor"/>
+<node CREATED="1782768272901" ID="ID_928119930" MODIFIED="1782768278847" TEXT="absolute-nominal-time"/>
+<node CREATED="1782768279610" ID="ID_28260357" MODIFIED="1782768287115" TEXT="zwei freie Parameter">
+<node CREATED="1782768288378" ID="ID_1256545255" MODIFIED="1782768295157" TEXT="bedeutung obliegt dem Funktor"/>
+<node CREATED="1782768295977" ID="ID_632147877" MODIFIED="1782768303716" TEXT="f&#xfc;r RenderInvocation...">
+<node CREATED="1782768304888" ID="ID_139354961" MODIFIED="1782768310433" TEXT="die Exit-Node"/>
+<node CREATED="1782768311015" ID="ID_210627672" MODIFIED="1782768498649" TEXT="ein RenderOutputCtx">
+<arrowlink COLOR="#3354b9" DESTINATION="ID_1448024210" ENDARROW="Default" ENDINCLINATION="-1323;0;" ID="Arrow_ID_1623593835" STARTARROW="None" STARTINCLINATION="1213;154;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -117313,6 +117331,85 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1782600386128" HGAP="31" ID="ID_555990983" MODIFIED="1782667725747" TEXT="m&#xf6;glich: direkt als Ctx-Pointer" VSHIFT="4">
 <arrowlink COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="439;0;" ID="Arrow_ID_1496641793" STARTARROW="None" STARTINCLINATION="-9;370;"/>
 </node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782768344027" HGAP="36" ID="ID_1448024210" MODIFIED="1782768508067" TEXT="Aber: eingeschr&#xe4;nkt auf Output-Belange" VSHIFT="15">
+<linktarget COLOR="#3354b9" DESTINATION="ID_1448024210" ENDARROW="Default" ENDINCLINATION="-1323;0;" ID="Arrow_ID_1623593835" SOURCE="ID_210627672" STARTARROW="None" STARTINCLINATION="1213;154;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782768510651" ID="ID_645713077" MODIFIED="1782768538637">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Name</u>: &#187;<font face="Monospaced" color="#1920a9">RenderOutputCtx</font>&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782772829381" ID="ID_342661161" MODIFIED="1782772852327" TEXT="Frage: wie optional kann der sein?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1782772868351" ID="ID_1296176586" MODIFIED="1782773117925" TEXT="DataSink ist bisher opaque und niemals &#xbb;leer&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Render-Job, der <i>nicht Daten in einen Buffer</i>&#160;produziert, erscheint mir ziemlich hypothetisch, denn das ist&#160;hier <i>das</i>&#160;mentale Modell schlechthin. Insofern war ich immer davon ausgegangen, da&#223; man einen OutputSlot nur belegt, wenn man ihn auch braucht &#8212; und da&#223; man ihn immer braucht zum Rendern.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782772857200" ID="ID_1295450916" MODIFIED="1782779478894" TEXT="ist aber eigentlich nur ein Problem f&#xfc;r Tests">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und nicht einmal da wirklich, da es nicht viele Tests gibt, die einen Render-Job explizit als Job aufrufen; entweder ist es sowiso ein Mock-Job, oder wir rufen den Node-Pull direkt auf.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782779491260" ID="ID_1811682851" MODIFIED="1782779516116" TEXT="es w&#xfc;rde aber zum Probelem im Turnout-System">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782779334698" ID="ID_420132695" MODIFIED="1782780934396" TEXT="das tiefere Problem sind zuk&#xfc;nftige Steuer-Parameter">
+<arrowlink COLOR="#f34b7b" DESTINATION="ID_1133762826" ENDARROW="Default" ENDINCLINATION="-452;-14;" ID="Arrow_ID_1534709190" STARTARROW="None" STARTINCLINATION="-108;659;"/>
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1782779527520" ID="ID_1419348477" MODIFIED="1782779542838" TEXT="und zwar, weil das derzeit alles Spekulation ist"/>
+<node CREATED="1782779546365" ID="ID_1669853179" MODIFIED="1782779725499" TEXT="da warten noch ganz andere Schwierigkeiten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn was soll so ein &#187;Parameter&#171; &#252;berhaupt f&#252;r einen Wert liefern? Das ganze Thema &#187;parameter-descriptors&#171; f&#252;r die Automation habe ich lediglich in die Zukunft verschoben, und nehme derzeit nur an, <i>da&#223; man da dann ein System bauen kann.</i>&#160;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782779728266" ID="ID_944178358" MODIFIED="1782780702263">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich brauche aber <i>jetzt</i>&#160;eine Anschlu&#223;-Stelle <i>f&#252;r sp&#228;ter...</i>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der <font color="#6d4c4c" face="Monospaced">processKey</font>&#160;war da eine so sch&#246;ne Design-L&#246;sung: es war nur irgendein Key-Wert, und dazu konnte man was von einem &#8222;geplanten Map-Zugriff&#8220; sagen. Sch&#246;n plausibel und stellt keinerlei Gefahr dar, weil man damit &#252;berhaupt nichts anfangen kann. Wie ein Leer-Rohr, das man schon mal duch die Wand gelegt hat. Leider ist diese <i>sch&#246;ne &#187;L&#246;sung&#171;</i>&#160;jetzt inhaltlich sinnlos geworden, und ich m&#252;&#223;te nun viel konkreter darstellen, was hier &#8222;geplant&#8220; ist (wovon ich aber <i>keinen Plan habe</i>)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782782310945" ID="ID_838641685" MODIFIED="1782782371142" TEXT="mu&#xdf; nun implementieren: getOutputBuffer(nominalTime)">
+<linktarget COLOR="#d03b0a" DESTINATION="ID_838641685" ENDARROW="Default" ENDINCLINATION="-655;30;" ID="Arrow_ID_809736708" SOURCE="ID_998089844" STARTARROW="None" STARTINCLINATION="253;-406;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -117345,7 +117442,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      Also beschlie&#223;e ich: das ist eine &#187;<b>Probe-Intgration</b>&#171;
+      Also beschlie&#223;e ich: das ist eine &#187;<b>Probe-Integration</b>&#171;
     </p>
   </body>
 </html></richcontent>
@@ -117543,15 +117640,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1782694045684" ID="ID_641388835" MODIFIED="1782694064362" TEXT="&#x27f9; was ich nun mache....">
-<node CREATED="1782694074243" ID="ID_1471337346" MODIFIED="1782694089622" TEXT="es g&#xe4;be zwei freie Parameter-&#xbb;slots&#xab;"/>
-<node CREATED="1782694099953" ID="ID_541482958" MODIFIED="1782694115948" TEXT="k&#xf6;nnte vorl&#xe4;ufig die InvocationInstanceID genauer belegen"/>
-<node CREATED="1782694174239" ID="ID_453831537" MODIFIED="1782694193816" TEXT="k&#xf6;nnte vorl&#xe4;ufig die JobParameter-Struct erweitern">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782694074243" ID="ID_1471337346" MODIFIED="1782768098876" TEXT="es g&#xe4;be zwei freie Parameter-&#xbb;slots&#xab;">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#5b280f" CREATED="1782694099953" ID="ID_541482958" MODIFIED="1782768072486" TEXT="k&#xf6;nnte vorl&#xe4;ufig die InvocationInstanceID genauer belegen">
+<icon BUILTIN="button_cancel"/>
+</node>
+<node CREATED="1782694174239" ID="ID_453831537" MODIFIED="1782768080490" TEXT="k&#xf6;nnte vorl&#xe4;ufig die JobParameter-Struct erweitern">
+<icon BUILTIN="forward"/>
 <node CREATED="1782694195740" ID="ID_1495155497" MODIFIED="1782694202774" TEXT="hier zwei weitere Felder vorsehen"/>
 <node CREATED="1782694203755" ID="ID_1591710848" MODIFIED="1782694228980" TEXT="diese sind optional im Konstruktor">
 <node CREATED="1782694230288" ID="ID_654465001" MODIFIED="1782694244905" TEXT="damit mu&#xdf; ich mich nicht um das Mock-Job-Framework k&#xfc;mmern"/>
 </node>
 </node>
-<node CREATED="1782694279280" ID="ID_168905518" MODIFIED="1782694293738" TEXT="k&#xf6;nnte dann entsprechend den JobFunctor vorl&#xe4;ufig erweitern"/>
+<node COLOR="#435e98" CREATED="1782694279280" ID="ID_168905518" MODIFIED="1782768083793" TEXT="k&#xf6;nnte dann entsprechend den JobFunctor vorl&#xe4;ufig erweitern"/>
 <node CREATED="1782694301285" ID="ID_328634330" MODIFIED="1782694316463" TEXT="wichtig: alles noch in die bestehendne Job-Structs einbauen">
 <node CREATED="1782694326218" ID="ID_253004631" MODIFIED="1782694337748" TEXT="weil ich weder das Mock-Job-Framework anfassen m&#xf6;chte"/>
 <node CREATED="1782694338692" ID="ID_1286217523" MODIFIED="1782694354195" TEXT="noch die Aufr&#xe4;um-Arbeit mit der Job-Struct angehe"/>
@@ -117621,7 +117723,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1782697098830" ID="ID_907831276" MODIFIED="1782697146355" TEXT="daraus resultiert ein ModelPort-Index und damit ein Job-Ticket"/>
 </node>
 <node CREATED="1782697165900" ID="ID_1495556561" MODIFIED="1782697184363" TEXT="in den Job wird aus dem Job-Ticket die ExitNode &#xfc;bertragen"/>
-<node COLOR="#5b280f" CREATED="1782697185410" ID="ID_1726910968" MODIFIED="1782750447109" TEXT="zus&#xe4;tzlich gibt es einen Verweis auf das RenderEnvironment">
+<node COLOR="#5b280f" CREATED="1782697185410" FOLDED="true" ID="ID_1726910968" MODIFIED="1782768019397" TEXT="zus&#xe4;tzlich gibt es einen Verweis auf das RenderEnvironment">
 <icon BUILTIN="button_cancel"/>
 <node COLOR="#5b280f" CREATED="1782697198408" ID="ID_1856434765" MODIFIED="1782752199357" TEXT="wirklich? damit hab ich seltsamerweise immer noch &#xbb;Bauchschmerzen&#xab;">
 <icon BUILTIN="help"/>
@@ -117639,7 +117741,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1782748797685" ID="ID_1813362440" MODIFIED="1782752209519" TEXT="nochmal eingehend dar&#xfc;ber nachgedacht">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1782748797685" FOLDED="true" ID="ID_1813362440" MODIFIED="1782768009073" TEXT="nochmal eingehend dar&#xfc;ber nachgedacht">
 <icon BUILTIN="idea"/>
 <node CREATED="1782748815829" ID="ID_990702746" MODIFIED="1782752216733" TEXT="RenderEnvironment zu &#xf6;ffnen w&#xe4;re unklug">
 <icon BUILTIN="stop-sign"/>
@@ -117702,9 +117804,17 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#5065cc" DESTINATION="ID_262249590" ENDARROW="Default" ENDINCLINATION="53;-115;" ID="Arrow_ID_77786381" SOURCE="ID_563827475" STARTARROW="None" STARTINCLINATION="-569;19;"/>
 </node>
 </node>
-<node CREATED="1782750500157" ID="ID_1882429127" MODIFIED="1782750513405" TEXT="also dann ein OutputCtx">
+<node CREATED="1782750500157" ID="ID_1882429127" MODIFIED="1782768825207" TEXT="also dann ein RenderOutputCtx">
 <node CREATED="1782750516959" ID="ID_218292766" MODIFIED="1782750521848" TEXT="enth&#xe4;lt die DataSink"/>
-<node CREATED="1782750522676" ID="ID_998089844" MODIFIED="1782750556186" TEXT="oder besser gleich eine getOutputBuffer(nominalTime)"/>
+<node CREATED="1782750522676" ID="ID_998089844" MODIFIED="1782782371142" TEXT="oder besser gleich eine getOutputBuffer(nominalTime)">
+<arrowlink COLOR="#d03b0a" DESTINATION="ID_838641685" ENDARROW="Default" ENDINCLINATION="-655;30;" ID="Arrow_ID_809736708" STARTARROW="None" STARTINCLINATION="253;-406;"/>
+<linktarget COLOR="#565c67" DESTINATION="ID_998089844" ENDARROW="Default" ENDINCLINATION="-826;45;" ID="Arrow_ID_696250842" SOURCE="ID_586390251" STARTARROW="None" STARTINCLINATION="1232;40;"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1782782378687" ID="ID_1148721271" MODIFIED="1782782398438" TEXT="n&#xe4;chstes Problem: Time-Grid WTF ???">
+<icon BUILTIN="smiley-angry"/>
+<node CREATED="1782782406252" ID="ID_1927647339" MODIFIED="1782782429013" TEXT="damit bin ich mitten in dem Thema &#xbb;Timings&#xab;...."/>
+<node CREATED="1782782430197" ID="ID_800213439" MODIFIED="1782782511686" TEXT="ein Thema, das ich m&#xf6;glichst vertagen wollte !!"/>
+</node>
+</node>
 <node CREATED="1782750562197" ID="ID_873040349" MODIFIED="1782750586341" TEXT="enth&#xe4;lt die Spielart des ModelPort als freier Parameter"/>
 <node CREATED="1782750588371" ID="ID_1804668463" MODIFIED="1782750614762" TEXT="kann eine Map mit weiteren Parametern enthalten"/>
 </node>
@@ -117725,6 +117835,20 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1782752022817" ID="ID_1191560866" MODIFIED="1782752044845" TEXT="weitere IDs k&#xf6;nnen stets per OutputCtx bereitgestellt werden....">
 <node CREATED="1782752048247" ID="ID_386908359" MODIFIED="1782752155079" TEXT="das k&#xf6;nnte z.B. eine Stream-Type-ID sein">
 <arrowlink COLOR="#54596c" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="401;17;" ID="Arrow_ID_330076381" STARTARROW="None" STARTINCLINATION="572;41;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782780832252" ID="ID_1133762826" MODIFIED="1782780944239" TEXT="das wirft aber leider das Problem auf: welche Rolle spielt das Turnout-System?">
+<linktarget COLOR="#f34b7b" DESTINATION="ID_1133762826" ENDARROW="Default" ENDINCLINATION="-452;-14;" ID="Arrow_ID_1534709190" SOURCE="ID_420132695" STARTARROW="None" STARTINCLINATION="-108;659;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1782780961913" ID="ID_308035515" MODIFIED="1782781108823" TEXT="das ist n&#xe4;mlich auch so eine &#xbb;konzeptionelle&#xab; Vision">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die zwar in einer architektonischen Betrachtung sehr sinnvoll erscheint, (noch) keinen konkreten Gehalt hat, aber leider jetzt bereits einigerma&#223;en komplex gebaut ist. Und ich m&#246;chte so bauen, da&#223; sich die weitere Entwicklung von selbst ergibt, und zuk&#252;nftige M&#246;glichkeiten derzeit keine Probleme verursachen....
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -118006,7 +118130,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node CREATED="1713820001615" ID="ID_1711530409" MODIFIED="1713820004276" TEXT="zum Test"/>
 </node>
-<node CREATED="1782598544982" ID="ID_1996566281" MODIFIED="1782598551601" TEXT="Render-Context">
+<node CREATED="1782598544982" ID="ID_1996566281" MODIFIED="1782768567889" TEXT="Render-Output-Context">
 <node CREATED="1782598568344" ID="ID_1335551307" MODIFIED="1782598931855" TEXT="Bezug zwischen Render-Proze&#xdf; und Job-Invocation">
 <linktarget COLOR="#6d1735" DESTINATION="ID_1335551307" ENDARROW="Default" ENDINCLINATION="1033;-76;" ID="Arrow_ID_689843460" SOURCE="ID_1200572345" STARTARROW="None" STARTINCLINATION="-50;419;"/>
 <icon BUILTIN="info"/>
@@ -118156,6 +118280,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <arrowlink COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" STARTARROW="None" STARTINCLINATION="888;64;"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782768599417" ID="ID_586390251" MODIFIED="1782768812809" TEXT="6/2026 : DataSink lebt im RenderOutputCtx &#x27f5; Zugriffs-Funktion claimBuffer(nominal-time)">
+<arrowlink COLOR="#565c67" DESTINATION="ID_998089844" ENDARROW="Default" ENDINCLINATION="-826;45;" ID="Arrow_ID_696250842" STARTARROW="None" STARTINCLINATION="1232;40;"/>
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>
@@ -126934,8 +127062,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802625130" ID="ID_1442656492" MODIFIED="1688601316599" TEXT="Job-Daten-Record">
 <linktarget COLOR="#fe3665" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="-1161;156;" ID="Arrow_ID_1073485120" SOURCE="ID_148642807" STARTARROW="None" STARTINCLINATION="-478;30;"/>
-<linktarget COLOR="#8f5058" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="122;-1531;" ID="Arrow_ID_768975506" SOURCE="ID_785409695" STARTARROW="None" STARTINCLINATION="-408;22;"/>
 <linktarget COLOR="#785781" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="358;-1123;" ID="Arrow_ID_7443944" SOURCE="ID_1427736417" STARTARROW="None" STARTINCLINATION="-1525;113;"/>
+<linktarget COLOR="#8f5058" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="122;-1531;" ID="Arrow_ID_768975506" SOURCE="ID_785409695" STARTARROW="None" STARTINCLINATION="-408;22;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802711785" ID="ID_97201971" MODIFIED="1688601092211" TEXT="JobFunctor">
 <icon BUILTIN="flag-yellow"/>
