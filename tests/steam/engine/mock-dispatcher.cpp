@@ -250,7 +250,7 @@ namespace test  {
   {
     InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
     JobClosure& jobFunctor = static_cast<JobClosure&> (*job.jobClosure);     //////////////////////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
-    return lumiera_invokey_eq (&util::unConst(job).parameter.invoKey, &empty)
+    return job.parameter.invoKey == empty
        and util::isSameObject (jobFunctor, nopFunctor());
   }
 

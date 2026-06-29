@@ -138,8 +138,8 @@ using lib::LUID;
         {
           if (empty()) return false;
           
-            InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-          return not lumiera_invokey_eq (&util::unConst(provision_).invocationSeed, &empty)
+          InvocationInstanceID empty;         //////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
+          return provision_.invocationSeed != empty
              and provision_.exitNode.isValid()
              and util::and_all (provision_.prerequisites
                                ,[](auto& pq){ return pq.prereqTicket.isValid(); });

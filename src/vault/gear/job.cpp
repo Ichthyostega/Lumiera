@@ -32,6 +32,19 @@
 #include <typeinfo>
 
 
+/** @deprecated 6/2026 very likely the InvocationInstanceID will be obsoleted,
+ *              and instead just the two parameter values need to be compared.
+ *              As an interim solution, comparing the two 64bit data words
+ */
+bool
+operator== (InvocationInstanceID const& l, InvocationInstanceID const& r)
+{
+  return l.code.w1 == r.code.w1
+     and l.code.w2 == r.code.w2;
+}
+
+
+
 namespace vault{
 namespace gear {
   
@@ -115,44 +128,4 @@ namespace gear {
       return hash;
     }
   
-  
 }} // namespace vault::gear
-
-namespace {
-  using vault::gear::Job;
-    
-  inline Job& 
-  forwardInvocation (lumiera_jobDefinition& jobDef)
-  {
-    Job& job = static_cast<Job&> (jobDef);
-    return job;
-  }
-}
-
-
-
-extern "C" { /* ==== implementation C interface for job invocation ======= */
-  
-void
-lumiera_job_invoke  (LumieraJobDefinition jobDef)
-{
-  REQUIRE (jobDef);
-  forwardInvocation(*jobDef).triggerJob();
-}
-
-size_t
-lumiera_job_get_hash (LumieraJobDefinition jobDef)
-{
-  REQUIRE (jobDef);
-  return hash_value (forwardInvocation (*jobDef));
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-#include "lib/luid.h"
-
-int
-lumiera_invokey_eq (void* l, void* r)
-{
-  return lumiera_uid_eq ((LumieraUid)l, (LumieraUid)r);
-}
-}/* extern "C" */

@@ -32,6 +32,13 @@
  ** the job over to the scheduler.
  ** 
  ** @warning as of 4/2023 the Job datastructure will be remoulded ///////////////////////////////////////////TICKET #1280
+ ** @deprecated in 2026 it does not seem like a good idea anymore to use "Render Jobs"
+ **          to act like an _interface_ between Steam and Vault layer. Meanwhile, while
+ **          the concept of **Jobs** (coroutines) is still upheld, the C datastructure job,
+ **          as defined in this header, seems to mix up the traits of an interface and
+ **          aspects of implementation. It is largely superseded by the _Activity Language_
+ **          of the scheduler, and will likely be remoulded into a technical artifact of
+ **          preparing job definitions in the Dispatcher.
  ** 
  ** @see SchedulerFrontend
  ** @see JobTicket
@@ -100,6 +107,11 @@ typedef struct lumiera_jobClosure* LumieraJobClosure;
  *        hash key for each invocation, which can be used for caching; obviously
  *        this hash need to be built from the JobTicket, based on ProcNode structure
  *        and the nominal Time. ///////////////////////////////////TICKET #1293
+ *  @deprecated 6/2026 now able to conduct a full analysis of required information,
+ *        and it seems the job definition does not need any kind of identity marker;
+ *        caching will rely on chained specification hash keys rather.
+ *        The existing tests will have to switch over using the two free parameter
+ *        values, now present in each LumieraJobParameter...
  */
 union InvocationInstanceID
   {
@@ -128,8 +140,9 @@ struct lumiera_jobParameter_struct
     raw_time_64 nominalTime;        /////////////////////////////////////////////////////////////////////////TICKET #1295 job invocation parameter: framework to interpret this time
     InvocationInstanceID invoKey;
                          //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
-                         ////////////////////////////////////////////////////////////////////////////////////TICKET #1293 job invocation identity
-                         ////////////////////////////////////////////////////////////////////////////////////TICKET #1295 : rework Job parameters to accommodate input / output info required for rendering          
+                         ////////////////////////////////////////////////////////////////////////////////////TICKET #1293 job invocation identity (possibly not needed anymore, can be derived from the data...)
+    size_t srcParam;
+    size_t sinkParam;
   };
 typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
 typedef lumiera_jobParameter* LumieraJobParameter;
@@ -193,6 +206,9 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 #include "lib/time/timevalue.hpp"    ////////////////////////////////////////////////////////////////////////TICKET #1287 : rework Job representation -- and then turn this into a C++ Header
 #include <string>
 
+
+/** @warning performs a comparison on the entire packed content */
+bool operator== (InvocationInstanceID const&, InvocationInstanceID const&);
 
 
 namespace vault{
@@ -284,6 +300,8 @@ namespace gear {
           this->jobClosure = &specificJobDefinition;
           this->parameter.nominalTime = _raw(nominalFrameTime);
           this->parameter.invoKey = invoKey;
+          this->parameter.srcParam = 0;
+          this->parameter.sinkParam = 0;
         }
       
       // using standard copy operations
@@ -326,28 +344,6 @@ namespace gear {
   
   
   
-  
-  
 }} // namespace vault::gear
-
-
-
-
-extern "C" {
-#endif /* =========================== C Interface ===================== */
-
-
-/** trigger execution of a specific job,
- *  assuming availability of all prerequisites */
-void lumiera_job_invoke  (LumieraJobDefinition);
-
-/** calculate a hash value based on the Job's \em identity. */
-size_t lumiera_job_get_hash (LumieraJobDefinition);
-
-int lumiera_invokey_eq (void* l, void* r);
-
-
-#ifdef __cplusplus
-}
 #endif
 #endif /*VAULT_GEAR_JOB_H*/

@@ -117,14 +117,6 @@ namespace engine {
   }
   
   
-  namespace {     ///////////////////////////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-    inline bool
-    operator== (InvocationInstanceID const& l, InvocationInstanceID const& r)
-    {
-      return lumiera_invokey_eq (unConst(&l), unConst(&r));
-    }
-  }
-  
   /**
    * Helper for tests: verify the given invocation parameters match this JobTicket.
    */

@@ -127,7 +127,7 @@ namespace test  {
           CHECK (INSTANCEOF (vault::gear::NopJobFunctor, static_cast<JobClosure*> (nopJob.jobClosure)));   //////////TICKET #1287 : fix actual interface down to JobFunctor (after removing C structs)
           CHECK (nopJob.parameter.nominalTime == frameTime);
           InvocationInstanceID empty; ///////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-          CHECK (lumiera_invokey_eq (&nopJob.parameter.invoKey, &empty));
+          CHECK (nopJob.parameter.invoKey == empty);
           CHECK (MockJob::isNopJob(nopJob));                                           // this diagnostic helper checks the same conditions as done here explicitly
           
           MockJobTicket mockTicket;
@@ -211,7 +211,7 @@ namespace test  {
             // create another job from the (empty) seg1
             job = seg1.jobTicket(0).createJobFor (someTime);
             InvocationInstanceID empty; /////////////////////////////////////////////////////////////////////TICKET #1287 : temporary workaround until we get rid of the C base structs
-            CHECK (lumiera_invokey_eq (&job.parameter.invoKey, &empty));      // indicates that it's just a placeholder to mark a "NOP"-Job
+            CHECK (job.parameter.invoKey == empty);                           // indicates that it's just a placeholder to mark a "NOP"-Job
             CHECK (seg1.jobTicket(0).empty());
             CHECK (seg1.empty());
             CHECK (not seg2.empty());

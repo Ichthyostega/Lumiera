@@ -82549,12 +82549,146 @@
 <linktarget COLOR="#b35d7b" DESTINATION="ID_1061886265" ENDARROW="Default" ENDINCLINATION="-1354;59;" ID="Arrow_ID_1911280206" SOURCE="ID_1778082418" STARTARROW="None" STARTINCLINATION="-1217;-45;"/>
 <icon BUILTIN="yes"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1686587670595" ID="ID_1397178542" MODIFIED="1686587735758" TEXT="RenderEnvironmentClosure">
+<node CREATED="1686587670595" ID="ID_1397178542" MODIFIED="1782667955739" TEXT="RenderEnvironmentClosure">
+<linktarget COLOR="#9f0249" DESTINATION="ID_1397178542" ENDARROW="Default" ENDINCLINATION="477;779;" ID="Arrow_ID_1409454343" SOURCE="ID_589750361" STARTARROW="None" STARTINCLINATION="-909;-1054;"/>
 <icon BUILTIN="info"/>
 <node CREATED="1686587706724" ID="ID_1590315006" MODIFIED="1686587714337" TEXT="kennt die konkreten Timings"/>
 <node CREATED="1686587714829" ID="ID_1834326796" MODIFIED="1686587726016" TEXT="kennt sinnvollerweise den ModelPort"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1686695997437" ID="ID_1676301176" MODIFIED="1686696013892" TEXT="mu&#xdf; bereits implizit auf eine Timeline festgelegt sein">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1782667964320" ID="ID_434677435" MODIFIED="1782667989605" TEXT="Achtung: ist (Stand 2024-26) ein ungekl&#xe4;rter Platzhalter">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1782667992233" ID="ID_1074049096" MODIFIED="1782668001731" TEXT="es gibt eine Klasse RenderEnvironment im Player"/>
+<node CREATED="1782668002671" ID="ID_595844375" MODIFIED="1782668013315" TEXT="diese ist ein weitgehend funktionsloser Stub"/>
+<node CREATED="1782668319572" ID="ID_1493778812" MODIFIED="1782668662002" TEXT="derzeit(2024/26) bekommt jeder CalcStream ein RenderEnvironment als &#xbb;abstracted engine&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/&ast;* </font><font color="#b76746">@internal</font><font color="#b88b63">&#160;extension point</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* Create the environment for rendering a connected and related set of output streams.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* Configure and prepare all the internal components, pre-allocate resources and add</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* entries to the registration tables necessary to get the related render activities</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* into &quot;running&quot; state. The created setup will typically be used to generate all</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the individual channel streams linked together for playback or rendering;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* they all share the same media type and quality settings.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@return</font><font color="#b88b63">&#160;an abstracted representation of the specific setup for this render;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* from this point on, this RenderEnvironment closure will be the only way</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* for client code to talk to &quot;the engine&quot;. The actual instance of this</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* closure is just a handle and can be copied; any CalcStream created</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* off this closure will be linked to the same &quot;environment&quot; and be</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* tracked and managed for resource usage automatically.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@note</font><font color="#b88b63">&#160;variations and especially mock implementations of the render engine</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* might choose to configure internals differently. As long as the</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* CalcStream and the embedded RenderEnvironment are consistent,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* such a specific configuration remains opaque for the user of</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the created render activity</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">*/</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>RenderEnvironment</b></font><font color="#65533c">&amp;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#632d2d"><b>EngineService::configureCalculation</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>ModelPort</b></font><font color="#3a1f18">&#160; mPort</font><font color="#65533c">,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>Timings</b></font><font color="#3a1f18">&#160;nominalTimings</font><font color="#65533c">,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>Quality</b></font><font color="#3a1f18">&#160;serviceQuality</font><font color="#11123a">)</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">{</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#95271a">UNIMPLEMENTED</font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#996e62"><i>&quot;Access and wire to the Scheduler-frontend. &quot;</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#996e62"><i>&quot;Then access the Segmentation and invoke a builder function for a suitable dispatcher table. &quot;</i></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#996e62"><i>&quot;Package all of this into a suitable RenderEnvironementClosure subclass.&quot;</i></font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#635e96"><b>RenderEnvironment</b></font><font color="#65533c">*</font><font color="#3a1f18">&#160;</font><font color="#814422">todo_fake</font><font color="#11123a">(</font><font color="#29466b">0</font><font color="#11123a">)</font><font color="#65533c">;</font><font color="#3a1f18">&#160; </font><font color="#ab815c">////KABOOOM</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>return</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">*</font><font color="#3a1f18">todo_fake</font><font color="#65533c">;</font><font color="#3a1f18">&#160;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#11123a">}</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#ff0014" DESTINATION="ID_1493778812" ENDARROW="Default" ENDINCLINATION="1031;35;" ID="Arrow_ID_49399733" SOURCE="ID_131082460" STARTARROW="None" STARTINCLINATION="825;49;"/>
+<icon BUILTIN="info"/>
+<node CREATED="1782668354071" ID="ID_1275841602" MODIFIED="1782668390782" TEXT="und damit den Zugang zum Dispatcher"/>
+<node CREATED="1782668370916" ID="ID_1986621548" MODIFIED="1782668379969" TEXT="was auch immer das ist...">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782668071390" ID="ID_1084336606" MODIFIED="1782668079141" TEXT="offene Fragen?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1782668082773" ID="ID_1718527798" MODIFIED="1782668096602" TEXT="direkt per CalcStream angebunden?"/>
+<node CREATED="1782668097259" ID="ID_1942407548" MODIFIED="1782668115631" TEXT="sichtbar f&#xfc;r das JobPlanning &#x2014; oder auch die Render-Invocation?"/>
+<node CREATED="1782668128220" ID="ID_1821480737" MODIFIED="1782668149023" TEXT="ist das ein Objekt mit Identit&#xe4;t (Referenz-Semantik?)"/>
+<node CREATED="1782668158442" ID="ID_952384898" MODIFIED="1782668165781" TEXT="spielt das eine Rolle f&#xfc;r den Lifecycle?"/>
+<node CREATED="1782668166777" ID="ID_742658218" MODIFIED="1782668181579" TEXT="stellt es konkret bereit...">
+<node CREATED="1782668182479" ID="ID_357552429" MODIFIED="1782668188419" TEXT="Stream-Typisierung?"/>
+<node CREATED="1782668189150" ID="ID_1216207230" MODIFIED="1782668244106" TEXT="Timings?"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1686587807222" ID="ID_408686784" MODIFIED="1686696248703" TEXT="Dispatcher wird im CalcStream-ctor aufgerufen">
@@ -89095,8 +89229,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 <linktarget COLOR="#3e6184" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-729;116;" ID="Arrow_ID_1252149896" SOURCE="ID_1316148159" STARTARROW="None" STARTINCLINATION="427;24;"/>
-<linktarget COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="530;22;"/>
-<linktarget COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-140;898;" ID="Arrow_ID_1049525279" SOURCE="ID_1615870321" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
+<linktarget COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-227;410;" ID="Arrow_ID_1424052882" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="530;22;"/>
+<linktarget COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-559;554;" ID="Arrow_ID_1049525279" SOURCE="ID_1615870321" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714777535544" ID="ID_1292334278" MODIFIED="1714777603974" TEXT="nominell-zeitliche Koordinate">
 <icon BUILTIN="flag-yellow"/>
@@ -89835,6 +89969,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802759365" ID="ID_377618445" MODIFIED="1685802764857" TEXT="InstanceID">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1782692624747" ID="ID_1699868696" MODIFIED="1782692632397" TEXT="128 bit">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1685802968612" ID="ID_733865950" MODIFIED="1685802988724" TEXT="Problem: Variabilit&#xe4;t erm&#xf6;glichen und steuern">
 <icon BUILTIN="messagebox_warning"/>
@@ -89857,6 +89994,40 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 </node>
+<node CREATED="1782658995342" ID="ID_1463748456" MODIFIED="1782664979996" TEXT="Repr&#xe4;sentation dieser Daten">
+<linktarget COLOR="#26287f" DESTINATION="ID_1463748456" ENDARROW="Default" ENDINCLINATION="-3121;296;" ID="Arrow_ID_1100789233" SOURCE="ID_772100379" STARTARROW="None" STARTINCLINATION="-6355;313;"/>
+<node CREATED="1782659453595" ID="ID_1082543645" MODIFIED="1782659457662" TEXT="M&#xf6;glichkeiten">
+<node CREATED="1782659458945" ID="ID_405448176" MODIFIED="1782659464350" TEXT="komplett explizit">
+<node CREATED="1782659506868" ID="ID_339352741" MODIFIED="1782659513719" TEXT="man definiert einfach eine Struct"/>
+<node CREATED="1782659824961" ID="ID_956457066" MODIFIED="1782659858112" TEXT="Job-Aufruf wird dadurch erstklassig entkoppelt"/>
+<node CREATED="1782659521684" ID="ID_80741768" MODIFIED="1782659532429" TEXT="Problem: ist dann festgelegt auf eine Art Job"/>
+</node>
+<node CREATED="1782659472366" ID="ID_1769030229" MODIFIED="1782659476844" TEXT="praktisch explizit">
+<node CREATED="1782659540515" ID="ID_300410798" MODIFIED="1782659556199" TEXT="verpacke einige Parameter in 64bit-&#xbb;slots&#xab;"/>
+<node CREATED="1782659563820" ID="ID_137502786" MODIFIED="1782659584502" TEXT="Interpretation ist dann abh&#xe4;ngig vom Typ des Jobs"/>
+<node CREATED="1782659591457" ID="ID_1572539671" MODIFIED="1782659624060" TEXT="darauf l&#xe4;uft der bisher geschriebenen Code hinaus">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node CREATED="1782659479352" ID="ID_1029744502" MODIFIED="1782659499721" TEXT="Callback-Kontext">
+<node CREATED="1782659693916" ID="ID_1125437958" MODIFIED="1782659714339" TEXT="nutzt Redundanz zur Reduktion der Daten im Job"/>
+<node CREATED="1782659715856" ID="ID_1887420500" MODIFIED="1782659766459" TEXT="verlagert die Parameter-Verschaltung woanders hin"/>
+<node CREATED="1782659769044" ID="ID_110398287" MODIFIED="1782659809111" TEXT="reduziert die Bedeutung des &#xbb;Render-Job&#xab; als Interface"/>
+</node>
+</node>
+<node CREATED="1782662177512" ID="ID_1063117948" MODIFIED="1782662187153" TEXT="Beschlu&#xdf;: w&#xe4;hle den Callback-Ansatz">
+<node CREATED="1782662188799" ID="ID_343102290" MODIFIED="1782662426793" TEXT="es ist sinnvoll, den &#xbb;Render-Job&#xab; nicht als Interface zu verstehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Damit vollziehe ich lediglich eine Einsicht, die mir, auf allgemeinerer Ebene, schon seit langem vorschwebt: wenn ein Interface so unglaublich plausibel erscheint, da&#223; man es in zwei S&#228;tzen aussprechen kann, dann stimmt was nicht. Es geht mehr um Grenz- und &#220;berganbsbereiche in der Architektur, in denen, auf verschiedenen Ebenen, einzelne Verkn&#252;pfungen hergestellt werden. Die Wichtigste in Lumiera ist das high-Level-Model (dessen Bedeutung ich durch die Diskussion mit Wouter auszuformulieren versuche). Eine weitere solche Grenzzone hat sich in den letzten Jahren aufgetan: der &#187;Plugin-Adapter&#171; bzw. die &#187;Domain-Onology&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1688998359233" HGAP="15" ID="ID_1834678491" MODIFIED="1693270990056" TEXT="ActivityTerm f&#xfc;r Scheduler erstellen" VSHIFT="1">
 <linktarget COLOR="#fc5172" DESTINATION="ID_1834678491" ENDARROW="Default" ENDINCLINATION="-410;29;" ID="Arrow_ID_139741662" SOURCE="ID_1642755650" STARTARROW="None" STARTINCLINATION="-339;0;"/>
@@ -89866,6 +90037,40 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1693258577776" ID="ID_590569538" MODIFIED="1693258595762" TEXT="diese Info ist implizit in der Planning-Pipeline vorhanden">
 <icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1782692900741" ID="ID_1427736417" MODIFIED="1782692990302" TEXT="Parameter-Slots f&#xfc;r Scheduler-Activity">
+<arrowlink COLOR="#785781" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="358;-1123;" ID="Arrow_ID_7443944" STARTARROW="None" STARTINCLINATION="-1525;113;"/>
+<node CREATED="1782692996077" ID="ID_1290325724" MODIFIED="1782693197430">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      m&#246;glicherweise wird das die <i>eigentliche</i>&#160;Job-Repr&#228;sentation
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...insofern sich mit fortschreitendem Design zunehmend &#187;der Render-Job&#171; als Interface <i>aufl&#246;st und irrelevant wird.</i>&#160;Aktuell (6/26) habe ich noch die alten C-Structs von Christian an zentraler Stelle, aber die k&#246;nnte ich m&#246;glicherweise <i>komplett verwerfen,</i>&#160;da sie nicht mehr notwendig sind; ben&#246;tigt wird nur noch eine Interface/Parameter-Repr&#228;sentation f&#252;r die Job-Planning-Pipeline, aus der dann der Activity-Term generiert wird &#8212; und dem entsprechend <i>am unteren Ende</i>&#160;dann eine Definition f&#252;r den JobFunctor, der diese Parameter vom Scheduler bekommt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782693199788" ID="ID_451733625" MODIFIED="1782693240474" TEXT="in der Activity-Language (Stand 2024) sind 6 &#xbb;Slots&#xab; vorgesehen">
+<node CREATED="1782693242318" ID="ID_1521142309" MODIFIED="1782693247299" TEXT="die INVOKE-Activity">
+<node CREATED="1782693248925" ID="ID_355630572" MODIFIED="1782693254175" TEXT="JobFunctor*"/>
+<node CREATED="1782693255005" ID="ID_1929462808" MODIFIED="1782693273502" TEXT="nominal-time (64bit)"/>
+</node>
+<node CREATED="1782693276329" ID="ID_599095311" MODIFIED="1782693281143" TEXT="Feed-1">
+<node CREATED="1782693282119" ID="ID_949801650" MODIFIED="1782693295319" TEXT="InvocationInstanceID (128bit)"/>
+</node>
+<node CREATED="1782693296751" ID="ID_1875091728" MODIFIED="1782693299690" TEXT="Feed-2">
+<node CREATED="1782693300923" ID="ID_1705239040" MODIFIED="1782693314096" TEXT="zwei 64bit-Parameter"/>
+<node CREATED="1782693314947" ID="ID_1511313359" MODIFIED="1782693323970" TEXT="Interpretation liegt beim JobFunctor"/>
+</node>
 </node>
 </node>
 </node>
@@ -90736,7 +90941,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742004652" ID="ID_806189817" MODIFIED="1681742017755" TEXT="Addressierung ModelPort / ExitNode">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1681742004652" ID="ID_806189817" MODIFIED="1782667279992" TEXT="Addressierung ModelPort / ExitNode">
+<linktarget COLOR="#333faf" DESTINATION="ID_806189817" ENDARROW="Default" ENDINCLINATION="47;2853;" ID="Arrow_ID_944096972" SOURCE="ID_1254295843" STARTARROW="None" STARTINCLINATION="-803;27;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1681742024628" ID="ID_1133872595" MODIFIED="1683765880297" TEXT="bis auf welchen Level wird differenziert?">
 <linktarget COLOR="#b9234e" DESTINATION="ID_1133872595" ENDARROW="Default" ENDINCLINATION="78;-135;" ID="Arrow_ID_1952784533" SOURCE="ID_891227892" STARTARROW="Default" STARTINCLINATION="-66;89;"/>
@@ -90965,7 +91171,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1714329868242" ID="ID_184056317" MODIFIED="1714329884644" TEXT="diese werden an geeigneter Stelle in eine Liste zusammengef&#xfc;hrt"/>
 <node CREATED="1714329885352" ID="ID_933373531" MODIFIED="1714329909292" TEXT="der Build-Proze&#xdf; dagegen liefert explizit ausformulierte ModelPorts"/>
 <node CREATED="1714329911460" ID="ID_1543278624" MODIFIED="1714329928581" TEXT="jeder von diesen ist konkret renderbar und es gibt daf&#xfc;r eine ExitNode (in jedem Segment)"/>
-<node CREATED="1782260197214" ID="ID_331896710" MODIFIED="1782260229701" TEXT="der einzelne Job verweist direkt auf eine ExitNode (die dann pro Segment zugeordnet wird)"/>
+<node CREATED="1782260197214" ID="ID_331896710" MODIFIED="1782688722864" TEXT="der einzelne Job verweist per Index auf eine ExitNode (die dann pro Segment zugeordnet wird)"/>
 </node>
 <node CREATED="1714329941216" ID="ID_495533677" MODIFIED="1714329948398" TEXT="L&#xf6;sung-3 : ExitNode">
 <node CREATED="1714329992920" ID="ID_821922749" MODIFIED="1714330011208" TEXT="bereits im ModelPort werden Auspr&#xe4;gungen / Gruppierungen gebildet"/>
@@ -91046,7 +91252,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 </node>
 </node>
-<node CREATED="1714581244537" ID="ID_1987838291" MODIFIED="1773941777860" TEXT="tats&#xe4;chlich ist die InvocationInstanceID redundant">
+<node CREATED="1714581244537" ID="ID_1987838291" MODIFIED="1782752138299" TEXT="tats&#xe4;chlich ist die InvocationInstanceID redundant">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -91055,7 +91261,25 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1489;-64;" ID="Arrow_ID_1643361924" STARTARROW="None" STARTINCLINATION="1123;62;"/>
+<arrowlink COLOR="#695ea3" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1464;-67;" ID="Arrow_ID_1643361924" STARTARROW="None" STARTINCLINATION="1123;62;"/>
+<arrowlink COLOR="#517189" DESTINATION="ID_337291090" ENDARROW="Default" ENDINCLINATION="631;-1471;" ID="Arrow_ID_675431589" STARTARROW="None" STARTINCLINATION="644;37;"/>
+<node CREATED="1782689278176" ID="ID_709130008" MODIFIED="1782689299303">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Vorsicht: es gibt weitere <i>halb-redundante</i>&#160;Strukturen hier
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782689302465" ID="ID_528740298" MODIFIED="1782689346388" TEXT="&#xbb;irgendwo unten&#xab; wird ein Cache-Key ben&#xf6;tigt">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1782689325462" ID="ID_207737231" MODIFIED="1782689346388" TEXT="wir m&#xfc;ssen die konkrete Output-Frame-Nummer wissen">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1782751589839" HGAP="59" ID="ID_1214245197" MODIFIED="1782751621064" TEXT="abh&#xe4;ngige IDs kann man sp&#xe4;ter / unten berechnen" VSHIFT="-13"/>
 </node>
 <node CREATED="1714581651294" ID="ID_1318663500" MODIFIED="1714581669752" TEXT="&#x27f9; es ist sogar noch etwas &#xbb;Luft&#xab;">
 <node CREATED="1714581688960" ID="ID_554965848" MODIFIED="1782261556091" TEXT="oder man kommt mit einem Feed-Token (statt mit zwei) aus">
@@ -91116,8 +91340,8 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </node>
 <node CREATED="1718840198722" ID="ID_821758494" MODIFIED="1782318901343" TEXT="Fazit (1:N)">
 <linktarget COLOR="#77274c" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-254;66;" ID="Arrow_ID_474260214" SOURCE="ID_811413379" STARTARROW="None" STARTINCLINATION="811;-49;"/>
-<linktarget COLOR="#6c5499" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-305;510;" ID="Arrow_ID_1100764489" SOURCE="ID_290743732" STARTARROW="None" STARTINCLINATION="891;35;"/>
 <linktarget COLOR="#462f81" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-497;447;" ID="Arrow_ID_1332141638" SOURCE="ID_426502930" STARTARROW="None" STARTINCLINATION="827;34;"/>
+<linktarget COLOR="#6c5499" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-305;510;" ID="Arrow_ID_1100764489" SOURCE="ID_290743732" STARTARROW="None" STARTINCLINATION="891;35;"/>
 <node CREATED="1718840201860" ID="ID_589597825" MODIFIED="1718840211116" TEXT="die ExitNode bekommt eine neue Rolle"/>
 <node CREATED="1718840212128" ID="ID_815017645" MODIFIED="1718840220877" TEXT="...n&#xe4;mlich genau dieses Mapping zu leisten">
 <node CREATED="1718840222671" ID="ID_965571589" MODIFIED="1718840253430" TEXT="high-Level ggfs strukturierte Model-Ports"/>
@@ -91126,7 +91350,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <node CREATED="1718840493478" ID="ID_1818629071" MODIFIED="1718840531013" TEXT="RenderDrive &#x27fc; ExitNode &#x27fc; konkreter ModelPort">
 <node CREATED="1718840533377" ID="ID_384875437" MODIFIED="1718840544276" TEXT="aus dem RenderDrive kommt eine Selector-ID"/>
 <node CREATED="1718840546287" ID="ID_1115734390" MODIFIED="1718840557120" TEXT="die ExitNode kann diese interpretieren"/>
-<node CREATED="1718841574472" ID="ID_272649775" MODIFIED="1718841591782" TEXT="und findet so zur richtigen top-Level-Node"/>
+<node CREATED="1718841574472" ID="ID_272649775" MODIFIED="1782689478492" TEXT="und findet so zur richtigen top-Level-Node + Node-Port"/>
 </node>
 <node CREATED="1718841610297" ID="ID_1668830479" MODIFIED="1718841624857" TEXT="wenn es mehrere CalcStreams zum Feed gibt....">
 <node CREATED="1718841642592" ID="ID_1316895881" MODIFIED="1718841654773" TEXT="dann gibt es auch mehrere RenderDrives"/>
@@ -91146,12 +91370,12 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="info"/>
 <node CREATED="1714328886449" ID="ID_990676620" MODIFIED="1714328902514" TEXT="Model Port &#x2261; etwas das man rendern kann"/>
 <node CREATED="1714328905358" ID="ID_335535508" MODIFIED="1714328937398" TEXT="Feed &#x2261; das administrative Handle eines solchen Rendervorganges"/>
-<node CREATED="1714328953521" ID="ID_378538252" MODIFIED="1714328984246">
+<node CREATED="1714328953521" ID="ID_378538252" MODIFIED="1782688374182">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      CalcStream &#8801; eine aktiv laufende Folge von Berechnungen f&#252;r <b>einen</b>&#160; Ausgabekanal
+      CalcStream &#8801; eine aktiv laufende Folge von Berechnungen f&#252;r <b>einen</b>&#160;Ausgabekanal/Strom
     </p>
   </body>
 </html></richcontent>
@@ -91167,7 +91391,16 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 </node>
 <node CREATED="1714329014208" ID="ID_1766738306" MODIFIED="1714329023547" TEXT="dies erzeugt eine Folge von Frame-Jobs"/>
-<node CREATED="1719267709323" ID="ID_1324726117" MODIFIED="1719267747754" TEXT="&#xbb;Kanal&#xab; bedeutet hier: gemeinsame Datensequenz"/>
+<node CREATED="1719267709323" ID="ID_1324726117" MODIFIED="1782688574918" TEXT="&#xbb;Kanal&#xab; bedeutet hier: gemeinsame Datensequenz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese Sequenz ist ein atomarer Strom an der Ausgabeschnittstelle und besteht nur noch aus Daten-Frames f&#252;r jeden Zeit-Schritt. Das ist ein Kriterium auf der explizit-technischen Implementierungs-Ebene. Unabh&#228;ngig davon k&#246;nnen die Daten in jedem Frame noch mehrere <i>logische Kan&#228;le</i>&#160;als Multiplex enthalten, aber nur unter der Bedingung da&#223; der Frame <i>als Ganzes ohne weiteres de-Multiplexing</i>&#160;an die unterliegende Ausgabe-Technologie weiterzugeben ist.
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714269278696" ID="ID_697852023" MODIFIED="1714780242820" TEXT="Verschaltung und Verwendung von Exit-Nodes">
@@ -91325,8 +91558,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714781014484" ID="ID_784858734" MODIFIED="1714869590437" TEXT="Umbau: ExitNode &#xfc;bernimmt bisherite Rolle des NodeGraphAttachment">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714781014484" ID="ID_784858734" MODIFIED="1782666695249" TEXT="Umbau: ExitNode &#xfc;bernimmt bisherite Rolle des NodeGraphAttachment">
 <linktarget COLOR="#d55e87" DESTINATION="ID_784858734" ENDARROW="Default" ENDINCLINATION="-704;27;" ID="Arrow_ID_1275017209" SOURCE="ID_760280600" STARTARROW="None" STARTINCLINATION="-466;33;"/>
+<linktarget COLOR="#ec1848" DESTINATION="ID_784858734" ENDARROW="Default" ENDINCLINATION="-1800;71;" ID="Arrow_ID_15945981" SOURCE="ID_496806469" STARTARROW="None" STARTINCLINATION="-841;37;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1714781047574" ID="ID_811413379" MODIFIED="1718972954666" TEXT="Festzulegen: konkrete Ansteuerung des ModelPort">
 <arrowlink COLOR="#77274c" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-254;66;" ID="Arrow_ID_474260214" STARTARROW="None" STARTINCLINATION="811;-49;"/>
@@ -97305,9 +97539,9 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#385061" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="87;339;" ID="Arrow_ID_901283158" SOURCE="ID_970386501" STARTARROW="None" STARTINCLINATION="473;26;"/>
 <linktarget COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_1778039433" SOURCE="ID_1870049870" STARTARROW="None" STARTINCLINATION="1309;58;"/>
 <linktarget COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_277448738" SOURCE="ID_1615870321" STARTARROW="Default" STARTINCLINATION="1590;-110;"/>
+<linktarget COLOR="#385061" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="87;339;" ID="Arrow_ID_901283158" SOURCE="ID_970386501" STARTARROW="None" STARTINCLINATION="473;26;"/>
 </node>
 </node>
 <node CREATED="1733425451521" ID="ID_1986914320" MODIFIED="1733425474762" TEXT="in Zukunft ggfs dynamische Steuer-Parameter"/>
@@ -98903,7 +99137,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 </html></richcontent>
 </node>
 <node CREATED="1782263611891" ID="ID_714205556" LINK="#ID_462733128" MODIFIED="1782263644973" TEXT="werde wohl daf&#xfc;r einen Unit-Test zum Aufbau brauchen"/>
-<node CREATED="1782318712259" ID="ID_426502930" MODIFIED="1782319131757" TEXT="f&#xfc;r die Job-Invocation notwendige Parameter / Freiheitsgrade beachten">
+<node CREATED="1782318712259" ID="ID_426502930" MODIFIED="1782658532391" TEXT="f&#xfc;r die Job-Invocation notwendige Parameter / Freiheitsgrade beachten">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -98912,7 +99146,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-224;272;" ID="Arrow_ID_1424052882" STARTARROW="None" STARTINCLINATION="530;22;"/>
+<arrowlink COLOR="#4151b6" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-227;410;" ID="Arrow_ID_1424052882" STARTARROW="None" STARTINCLINATION="530;22;"/>
 <arrowlink COLOR="#462f81" DESTINATION="ID_821758494" ENDARROW="Default" ENDINCLINATION="-497;447;" ID="Arrow_ID_1332141638" STARTARROW="None" STARTINCLINATION="827;34;"/>
 </node>
 </node>
@@ -117003,18 +117237,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#284cc5" DESTINATION="ID_523248183" ENDARROW="Default" ENDINCLINATION="647;28;" ID="Arrow_ID_277448738" STARTARROW="Default" STARTINCLINATION="1590;-110;"/>
-<arrowlink COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-140;898;" ID="Arrow_ID_1049525279" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
+<arrowlink COLOR="#492eba" DESTINATION="ID_1951219397" ENDARROW="Default" ENDINCLINATION="-559;554;" ID="Arrow_ID_1049525279" STARTARROW="None" STARTINCLINATION="-2223;-117;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1782520550205" HGAP="42" ID="ID_556676562" MODIFIED="1782520578445" TEXT="mu&#xdf; ich in der Render-Invocation als &#xbb;gegeben&#xab; behandeln">
 <icon BUILTIN="yes"/>
 <node CREATED="1782520581899" ID="ID_1050184546" MODIFIED="1782520604863" TEXT="denn logischerweise stellt der Play-Proze&#xdf; diese Verbindung her"/>
 <node CREATED="1782520616985" ID="ID_188304156" MODIFIED="1782520647199" TEXT="konkret ist die Verankerung im Job-Planning bekannt (als Timings)"/>
-<node CREATED="1782520899697" ID="ID_1282300146" MODIFIED="1782521189133" TEXT="Repr&#xe4;sentation im Job-Parameter ist ein separates Implementierungs-Detail">
+<node CREATED="1782520899697" ID="ID_1282300146" MODIFIED="1782657593409" TEXT="Repr&#xe4;sentation im Job-Parameter ist ein separates Implementierungs-Detail">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...eine kurze Analyse zeigt sofort auf, da&#223; hier so einige Informationen Redundant sind; das hat mich schon mehrfach in Verwirrung gebraucht &#8212; aber die Verwirrung besteht wohl ehr in einer Vermischung der Ebenen: lange Zeit (viel zu lange) habe ich den Job als eine Art &#187;Interface&#171; betrachtet (genauer gesagt, ich bin hier naiv Christian's &quot;Analyse&quot; aufgesessen). Das war keine gute Idee, weil damit die Parameter des Jobs eine universelle G&#252;ltigkeit beanspruchen, und &#187;richtig&#171; gew&#228;hlt sein wollen. Tats&#228;chlich ist aber der Job ein Artefakt der Implementierung, und bestimmt sich vornehmlich aus &#220;berlegungen zur Performance; <i>allein daran</i>&#160;w&#228;re zu bemessen, ob in diesem Fall Redundanz <i>gut oder schlecht</i>&#160;ist. Dem entsprechend sollte die Render-Invocation (die n&#228;chste Ebene darunter) wieder <b>alle logisch ben&#246;tigten Parameter explizit ausweisen</b>.
+      ...eine kurze Analyse zeigt sofort auf, da&#223; hier so einige Informationen redundant sind; das hat mich schon mehrfach in Verwirrung gebraucht &#8212; aber die Verwirrung besteht wohl ehr in einer Vermischung der Ebenen: lange Zeit (viel zu lange) habe ich den Job als so eine Art von &#187;Interface&#171; betrachtet (genauer gesagt, ich habe Christian's &quot;Analyse&quot; als gegeben betrachtet und das Thema einfach verschoben). Das war keine gute Idee, weil damit die Parameter des Jobs eine universelle G&#252;ltigkeit beanspruchen, und &#187;richtig&#171; gew&#228;hlt sein wollen. Tats&#228;chlich ist aber der Job ein Artefakt der Implementierung, und bestimmt sich vornehmlich aus &#220;berlegungen zur Performance; <i>allein daran</i>&#160;w&#228;re zu bemessen, ob in diesem Fall Redundanz <i>gut oder schlecht</i>&#160;ist. Dem entsprechend sollte die Render-Invocation (die n&#228;chste Ebene darunter) wieder <b>alle logisch ben&#246;tigten Parameter explizit ausweisen</b>.
     </p>
   </body>
 </html></richcontent>
@@ -117069,7 +117303,14 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <arrowlink COLOR="#6d1735" DESTINATION="ID_1335551307" ENDARROW="Default" ENDINCLINATION="1033;-76;" ID="Arrow_ID_689843460" STARTARROW="None" STARTINCLINATION="-50;419;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
-<node CREATED="1782600386128" HGAP="32" ID="ID_555990983" MODIFIED="1782600558202" TEXT="m&#xf6;glich: direkt als Ctx-Pointer" VSHIFT="10">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782667683344" HGAP="44" ID="ID_1123295565" MODIFIED="1782667771492" TEXT="Zusammenhang mit RenderEnvironment unklar?" VSHIFT="19">
+<arrowlink COLOR="#8e5b7c" DESTINATION="ID_589750361" ENDARROW="Default" ENDINCLINATION="-213;12;" ID="Arrow_ID_758660444" STARTARROW="None" STARTINCLINATION="351;21;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1782668524512" ID="ID_131082460" MODIFIED="1782668662002" TEXT="Verh&#xe4;ltnis zum CalcStream mu&#xdf; gekl&#xe4;rt werden">
+<arrowlink COLOR="#ff0014" DESTINATION="ID_1493778812" ENDARROW="Default" ENDINCLINATION="1031;35;" ID="Arrow_ID_49399733" STARTARROW="None" STARTINCLINATION="825;49;"/>
+</node>
+</node>
+<node CREATED="1782600386128" HGAP="31" ID="ID_555990983" MODIFIED="1782667725747" TEXT="m&#xf6;glich: direkt als Ctx-Pointer" VSHIFT="4">
 <arrowlink COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="439;0;" ID="Arrow_ID_1496641793" STARTARROW="None" STARTINCLINATION="-9;370;"/>
 </node>
 </node>
@@ -117077,28 +117318,433 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782604693817" ID="ID_281800153" MODIFIED="1782604709039" TEXT="Strukturen aufbauen im Vorgriff auf eine RenderInvocation">
 <icon BUILTIN="pencil"/>
-<node CREATED="1782604710703" ID="ID_1985323008" MODIFIED="1782604728887" TEXT="demnach sollte die RenderInvocation explizit bekommen...">
+<node CREATED="1782604710703" ID="ID_1985323008" MODIFIED="1782657084553" TEXT="demnach ben&#xf6;tigt die RenderInvocation explizit....">
 <node CREATED="1782604730541" ID="ID_1320188831" MODIFIED="1782604833135" TEXT="die exit-Node + port-Nr"/>
 <node CREATED="1782604743139" ID="ID_445587665" MODIFIED="1782604752876" TEXT="eine DataSink&amp;"/>
 <node CREATED="1782604754126" ID="ID_270918701" MODIFIED="1782604777372" TEXT="absolute-nominal-time"/>
 <node CREATED="1782604778573" ID="ID_1288983492" MODIFIED="1782604791902" TEXT="output-Frame-Nr"/>
 <node CREATED="1782604835685" ID="ID_48911511" MODIFIED="1782604839356" TEXT="processKey"/>
 </node>
-<node CREATED="1782604914398" ID="ID_495984163" MODIFIED="1782604923755" TEXT="es ist die Aufgabe der RenderInvocation">
+<node CREATED="1782604914398" ID="ID_495984163" MODIFIED="1782657131634" TEXT="Aufgaben der RenderInvocation">
+<node CREATED="1782657134864" ID="ID_1057197444" MODIFIED="1782657176012" TEXT="diese Parameter zug&#xe4;nglich zu machen">
+<node CREATED="1782657253833" ID="ID_953196517" MODIFIED="1782657282268" TEXT="Konsequenz &#x27f9; ist an den RenderCtx gebunden"/>
+<node CREATED="1782657337381" ID="ID_772100379" MODIFIED="1782664979996" TEXT="mu&#xdf; nun Entscheidungen treffen bez&#xfc;glich der Parameter">
+<arrowlink COLOR="#26287f" DESTINATION="ID_1463748456" ENDARROW="Default" ENDINCLINATION="-3121;296;" ID="Arrow_ID_1100789233" STARTARROW="None" STARTINCLINATION="-6355;313;"/>
+<node CREATED="1782661205684" ID="ID_1635327116" MODIFIED="1782662061230" TEXT="widerstrebt mir &#x2014; f&#xfc;hle mich noch nicht reif">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Viel lieber w&#252;rde ich jetzt nur das Thema &#187;Invocation&#171; <i>halbwebs sauber abschlie&#223;en,</i>&#160;und mich dann zun&#228;chst um meinen FrOSCon-Vortrag k&#252;mmern (Thema io_uring). Danach k&#246;nnte ich versuchen, von <i>der anderen Seite her,</i>&#160;also der Job-Planung nach unten zu bohren. Ehrlich gesagt, ich wei&#223;, da&#223; letzteres auch nur halbfertig ist; das Aufr&#228;umen der Planungs-Pipeline war nur das: ein Aufr&#228;umen. Letztlich ist das Design des Players noch auf dem Stand von 2014 steckengeblieben. Allerdings hatte ich f&#252;r die &#252;berarbeitete Planungs-Pipeline ein komplettes Mock-System hochgezogen. Das <i>k&#246;nnte vielleicht schon tragf&#228;hig sein</i>&#160;&#8212; oder aber ein komplettes Desaster. Deshalb habe ich jetzt Angst, von der (fertigen, aber noch in der Luft h&#228;ngenden) Render-Node-Invocation blindlings <i>nach oben zu springen</i>. Angst deshalb, weil sich meine &#8222;gelungene Integration&#8220; wieder einmal als Luftschlo&#223; herausstellen k&#246;nnte. Leider ist bisher noch gar nix in Lumiera <i>einfach fertig geworden</i>&#160;&#8212; ohne da&#223; das Ergebnis sofort wieder relativiert ist und auf ein ungel&#246;stes Problem rekuriert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782662062990" ID="ID_1868130509" MODIFIED="1782662161072">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Also beschlie&#223;e ich: das ist eine &#187;<b>Probe-Intgration</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Ergebnis soll nicht jenseits dieses Systems der Unit-Tests nutzbar sein, aber aufzeigen, wo die bisher gebauten Strukturen nicht zusammenpassen. Induktiv, bottom-up ist f&#252;r ein solches Unterfangen sogar besser, kann ich mir zum Trost sagen...
+    </p>
+  </body>
+</html></richcontent>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782664993927" ID="ID_1075759138" MODIFIED="1782664998141" TEXT="Diskrepanzen">
+<node CREATED="1782665009111" ID="ID_315060004" MODIFIED="1782665384153" TEXT="port-Index-Nr vs. Node-Ports">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Entwurf von 2023 bin ich davon ausgegangen, da&#223; der Build-Proze&#223; bereits eine flache Liste von &#187;Exit Nodes&#171; liefert; demnach w&#252;rde es ausreichen, den Index in dieser Liste zu speichern, um in jedem Segment die Exit-Node zu finden. Sp&#228;ter aber habe ich das Verh&#228;ltnis von Model-Port und Exit-Node genauer analysiert, und eine tiefere Strukturiertheit vorgefunden. Zwar habe ich noch nicht entschieden, ob alle Differenzierungen innerhalb eines &#187;Model-Port&#171; schon im Build-Proze&#223; <i>flach ausgefaltet werden</i>&#160;&#8212; das erscheint aber intuitiv nicht plausibel (da eine kombinatorische Explosion droht). Unabh&#228;ngig davon habe ich dann ab 2024 in der Ausarbeitung des low-Level-Model stets <i>innerhalb der ProcNode noch eine Differenzierung in Node-Ports </i>vorgesehen. Diese sollen dazu dienen, verschiedene Spielarten der &#187;gleichen&#171; Pipeline bereitzustellen (bsp. Mono vs. Stereo, oder low-res vs. high-res).
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782665404581" ID="ID_889137786" MODIFIED="1782665433397" TEXT="der Dispatcher ist eine Funktion (time,portIdx) &#x27fc; JobTicket"/>
+<node CREATED="1782665896048" ID="ID_1756421371" MODIFIED="1782665923379" TEXT="die RenderInvocation mu&#xdf; aber auch den Node-Port wissen"/>
+</node>
+<node CREATED="1782665928173" ID="ID_1108155136" MODIFIED="1782665945604" TEXT="ExitNode ist (noch) nicht ausformuliert">
+<node CREATED="1782665947368" ID="ID_1238178550" MODIFIED="1782666132755">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      im aktuellen Code des Render-Job <b>fehlen</b>&#160;ExitNode und DataSink
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      warum? der aktuelle Code ist immer noch die (irgendwie hingebogene) C-Struct von Christian. Damals gab es diese Konzepte gar nicht, und Christian hat sich stets gegen meine Analyse gewehrt, da&#223; es da noch weitere Abh&#228;ngigkeiten geben sollte, weil das die ganze Sch&#246;nheit des Designs mit dem Scheduler kaputt macht. Zur &#220;berarbeitung der JobPlanung / JobTicket habe ich zumindest die ExitNode schon vorgesehen, aber mehr als Platzhalter behandelt. Das ganze Mock-Job-Universum kommt ohne diese Information aus, und auch das Scheduler-Stress-Testing hat spezielle Job-Funktoren verwendet (die diese Info nicht brauchen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782666139512" ID="ID_496806469" MODIFIED="1782666695249">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>tendentiell</i>&#160;soll &#187;die Exit Node&#171; im Design <i>eine Stufe hochwandern</i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ec1848" DESTINATION="ID_784858734" ENDARROW="Default" ENDINCLINATION="-1800;71;" ID="Arrow_ID_15945981" STARTARROW="None" STARTINCLINATION="-841;37;"/>
+<node CREATED="1782666608984" ID="ID_571791285" MODIFIED="1782666791007" TEXT="hei&#xdf;t: sie koppelt Segmentation/Fixture mit den Node-Pipelines">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hatte daf&#252;r im Design erst den Namen NodeGraphAttachment vorgesehen, und die ExitNode als eine Subklasse von ProcNode angesetzt, dann aber festgestellt, da&#223; es sich um diskunkte Betrachtungsweisen handelt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782666840735" ID="ID_1254295843" MODIFIED="1782667279992" TEXT="es gibt umfangreiche Analysen zum Thema &#xbb;Addressierung ModelPort / Kanal / Strom&#xab;">
+<arrowlink COLOR="#333faf" DESTINATION="ID_806189817" ENDARROW="Default" ENDINCLINATION="47;2853;" ID="Arrow_ID_944096972" STARTARROW="None" STARTINCLINATION="-803;27;"/>
+<node CREATED="1782666927715" ID="ID_851669134" LINK="#ID_821758494" MODIFIED="1782667231421" TEXT="...und das Fazit war...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da&#223; es sich um eine komplexe Wechselbeziehung handelt, die nicht sinnvoll in eine einzige Dimension niveliert werden sollte
+    </p>
+    <ul>
+      <li>
+        die <i>Media-Channels</i>&#160;habe ich als Kategorie komplett beseitigt (genauer: zu einem internen Detail des MediaStream-Type gemacht)
+      </li>
+      <li>
+        daf&#252;r aber nun die verschiedenen Spielarten der gleichen Pipeline eingef&#252;hrt
+      </li>
+      <li>
+        au&#223;erdem ist auch noch ein PlayProcess inh&#228;rent strukturiert (z.B. Video und Sound)
+      </li>
+      <li>
+        insofern kommt stets ein Index-Key aus dem CalcStream hinzu
+      </li>
+      <li>
+        &#10233; die ExitNode kann dieses Mapping aufl&#246;sen
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782667642825" ID="ID_589750361" MODIFIED="1782667955739" TEXT="RenderEnvironment(Closure) als Platzhalter-Konzept">
+<arrowlink COLOR="#9f0249" DESTINATION="ID_1397178542" ENDARROW="Default" ENDINCLINATION="477;779;" ID="Arrow_ID_1409454343" STARTARROW="None" STARTINCLINATION="-909;-1054;"/>
+<linktarget COLOR="#8e5b7c" DESTINATION="ID_589750361" ENDARROW="Default" ENDINCLINATION="-213;12;" ID="Arrow_ID_758660444" SOURCE="ID_1123295565" STARTARROW="None" STARTINCLINATION="351;21;"/>
+<node CREATED="1782668689465" ID="ID_1993427117" MODIFIED="1782668704851" TEXT="h&#xe4;ngt direkt mit dem noch unklaren State/Storage-Management zusammen"/>
+<node CREATED="1782668744184" ID="ID_446079111" MODIFIED="1782668764410" TEXT="sollte auch Zugang zu Engine-Services bieten (&#xd83e;&#xdc32; Scheduler)"/>
+<node CREATED="1782668705815" ID="ID_1877685064" MODIFIED="1782668712252" TEXT="was &#xbb;ist&#xab; ein CalcStream?">
+<node CREATED="1782668816472" ID="ID_61260133" MODIFIED="1782668836637">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      kann er <i>superseded</i>&#160;werden?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782668840836" ID="ID_1531957491" MODIFIED="1782668855399" TEXT="gibt es &#xbb;den&#xab; Dispatcher??"/>
+</node>
+<node CREATED="1782669489285" ID="ID_1357748710" MODIFIED="1782669513482" TEXT="zyklische Strukturen &#x27f7; wollen wir das so?">
+<node CREATED="1782669564121" ID="ID_324945214" MODIFIED="1782669594724" TEXT="idealerweise ... hat man &#xbb;einfach&#xab; einen Pipeline - pull()"/>
+<node CREATED="1782669647619" ID="ID_617514778" MODIFIED="1782669674559" TEXT="nun tauchen aber tats&#xe4;chlich mehr und mehr &quot;Callbacks&quot; und &quot;Services&quot; auf"/>
+<node CREATED="1782674209587" ID="ID_830076575" MODIFIED="1782674612679" TEXT="das ist der architektonisch-methodischen Durchdringung geschuldet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Operative Logik sollte in ihrer jeweilgen Domain ausformuliert werden; Logik sollte dort stehen, wo ihr Sinn sich aus dem Kontext direkt erschlie&#223;t.
+    </p>
+    <p>
+      Beispiel Output-Frame-Nr:
+    </p>
+    <ul>
+      <li>
+        wenn ich einem Node-Pull eine &#187;Frame-Nr&#171; mitgebe, ist aus dem allgemeinen Wesen der Render-Pipeline nicht direkt ersichtlich, was diese Frame-Nr bedeuten soll; man m&#252;&#223;te es unter Bezug auf anderweitigen Kontext erl&#228;utern
+      </li>
+      <li>
+        wenn ich einem Frame-Output-Mechanismus eine Zeitangabe gebe, is wiederum rein aus dem Output-Mechanismus auf generischer Ebene nicht klar, was diese Zeit soll; man m&#252;&#223;te seine Implementierung &#246;ffnen, um z.B. einen Buffer-Flip zu sehen
+      </li>
+      <li>
+        wenn ich aber beide Informationen in einem Job-Planungs-Kontext verkn&#252;pfe, sind sie an ihrem Ort: denn dieser Kontext stellt eine Verbindung her zwischen einer nominellen Zeit und einem aktuellen Processing.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782674615617" ID="ID_657989467" MODIFIED="1782675131345" TEXT="Ma&#xdf;stab: Komplexit&#xe4;t &#x2014; essentiell &#x2014; akzidentell">
+<node CREATED="1782675147049" ID="ID_1241119008" MODIFIED="1782675167162" TEXT="Prinzip mu&#xdf; sein: so fr&#xfc;h wie m&#xf6;glich regeln"/>
+<node CREATED="1782675168522" ID="ID_1018162340" MODIFIED="1782675225039" TEXT="somit verbleibt die essentielle Flexibilit&#xe4;t zur Laufzeit">
+<node CREATED="1782675237725" ID="ID_910424543" MODIFIED="1782675240084" TEXT="Cache"/>
+<node CREATED="1782675241021" ID="ID_436947091" MODIFIED="1782675252478" TEXT="IO + Deaslines"/>
+<node CREATED="1782675253462" ID="ID_60833418" MODIFIED="1782675258149" TEXT="dynamischer Playback"/>
+</node>
+<node CREATED="1782675189763" ID="ID_31553364" MODIFIED="1782675205332" TEXT="Services veringern Komplexit&#xe4;t, solange sie generisch bleiben"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782686860157" ID="ID_943628624" MODIFIED="1782686900264" TEXT="Fazit: Ma&#xdf;st&#xe4;be beachten und diesen Weg weiter gehen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+<node CREATED="1782693510929" ID="ID_344967033" MODIFIED="1782693523468" TEXT="der Sinn der Job-Datenstruktur l&#xf6;st sich zusehends auf">
+<node CREATED="1782693525104" ID="ID_1914575236" MODIFIED="1782693539481" TEXT="anfangs war &#xbb;der Render Job&#xab; als Interface gedacht"/>
+<node CREATED="1782693573790" ID="ID_1124759179" MODIFIED="1782693640188" TEXT="heute empfinde ich das als &#xbb;C-ismen&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      genauer gesagt: eine planlose Vermengung von Bedeutung, Repr&#228;sentation und Implementierungs-Tricks
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782693802978" ID="ID_1057236915" MODIFIED="1782693825184" TEXT="Bezugssysteme laufen auseinander">
+<node CREATED="1782693845092" ID="ID_227689875" MODIFIED="1782694027204" TEXT="die Activity-Language hat ihre eigene Datenhaltung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das ist wohl der festeste Constraint...
+    </p>
+    <ul>
+      <li>
+        habe bisher 6 &#187;slots&#171; &#224; 64bit vorgesehen
+      </li>
+      <li>
+        davon sind 2 &#187;slots&#171; noch frei
+      </li>
+      <li>
+        durch geschicktes Packen der Daten k&#246;nnte man das aber wohl auf 4 &#187;slots&#171; reduzieren
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782693826638" ID="ID_1983445413" MODIFIED="1782693844116" TEXT="die Job-Struct enth&#xe4;lt nicht alle notwendigen Parameter"/>
+<node CREATED="1782693857105" ID="ID_805286564" MODIFIED="1782693877846" TEXT="das Mock-Job-Framework packt viel Testdaten in die Instance-ID"/>
+</node>
+</node>
+</node>
+<node CREATED="1782694045684" ID="ID_641388835" MODIFIED="1782694064362" TEXT="&#x27f9; was ich nun mache....">
+<node CREATED="1782694074243" ID="ID_1471337346" MODIFIED="1782694089622" TEXT="es g&#xe4;be zwei freie Parameter-&#xbb;slots&#xab;"/>
+<node CREATED="1782694099953" ID="ID_541482958" MODIFIED="1782694115948" TEXT="k&#xf6;nnte vorl&#xe4;ufig die InvocationInstanceID genauer belegen"/>
+<node CREATED="1782694174239" ID="ID_453831537" MODIFIED="1782694193816" TEXT="k&#xf6;nnte vorl&#xe4;ufig die JobParameter-Struct erweitern">
+<node CREATED="1782694195740" ID="ID_1495155497" MODIFIED="1782694202774" TEXT="hier zwei weitere Felder vorsehen"/>
+<node CREATED="1782694203755" ID="ID_1591710848" MODIFIED="1782694228980" TEXT="diese sind optional im Konstruktor">
+<node CREATED="1782694230288" ID="ID_654465001" MODIFIED="1782694244905" TEXT="damit mu&#xdf; ich mich nicht um das Mock-Job-Framework k&#xfc;mmern"/>
+</node>
+</node>
+<node CREATED="1782694279280" ID="ID_168905518" MODIFIED="1782694293738" TEXT="k&#xf6;nnte dann entsprechend den JobFunctor vorl&#xe4;ufig erweitern"/>
+<node CREATED="1782694301285" ID="ID_328634330" MODIFIED="1782694316463" TEXT="wichtig: alles noch in die bestehendne Job-Structs einbauen">
+<node CREATED="1782694326218" ID="ID_253004631" MODIFIED="1782694337748" TEXT="weil ich weder das Mock-Job-Framework anfassen m&#xf6;chte"/>
+<node CREATED="1782694338692" ID="ID_1286217523" MODIFIED="1782694354195" TEXT="noch die Aufr&#xe4;um-Arbeit mit der Job-Struct angehe"/>
+<node CREATED="1782694359419" ID="ID_1585577237" MODIFIED="1782694379381" TEXT="bevor ich nicht die tats&#xe4;chliche Integration habe">
+<node CREATED="1782694394545" ID="ID_1810075716" MODIFIED="1782694401163" TEXT="wenn man &#xbb;ein paar Augen zudr&#xfc;ckt&#xab;"/>
+<node CREATED="1782694386490" ID="ID_435455580" MODIFIED="1782694427534" TEXT="diese erscheint n&#xe4;mlich m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      trotz aller Diskrepanzen : es m&#252;&#223;te sich irgendwie mappen lassen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782696193706" ID="ID_783680177" MODIFIED="1782696201795" TEXT="Struktur und Zusammenhang der Parameter">
+<node CREATED="1782696206345" ID="ID_965994105" MODIFIED="1782696233649" TEXT="JobFunktor und nominal-time sind explizit"/>
+<node CREATED="1782696274560" ID="ID_328444825" MODIFIED="1782696294224" TEXT="ModelPort wird vom Dispatcher aufgel&#xf6;st">
+<node CREATED="1782696452527" ID="ID_1043505521" LINK="#ID_495533677" MODIFIED="1782696496821" TEXT="folge Struktur-L&#xf6;sung-3">
+<node CREATED="1782696502952" ID="ID_1271308019" MODIFIED="1782696517594" TEXT="im high-level-Model gibt es OutputDesignations"/>
+<node CREATED="1782696591057" ID="ID_1847251839" LINK="#ID_393919124" MODIFIED="1782697018194" TEXT="durch eine ModelViewActivation wird daraus eine Liste von ModelPorts">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese entspricht einer bestimmten Instantiierung einer ViewConnection(Template) und ist intern noch strukturiert, enth&#228;lt also mehrere ModelPorts (mit R&#252;ckverweis auf die OutputDesignation und damit den StreamType) sowie dazugeh&#246;rige Sub-Qualifikationen / Spielarten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782696610699" ID="ID_1554883442" MODIFIED="1782696679133" TEXT="insgesamt gibt die Fixture eine aggregierte Liste von ModelPorts vor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese entspricht der Vereinigungsmenge aller derzeit im Model vermerkten ModelViewActivations
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782696704119" ID="ID_24709344" MODIFIED="1782696801436" TEXT="jeder ModelPort kann aber noch Auspr&#xe4;gungen haben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      diese sind bereits in der ModelViewActivation mit vermerkt, und &#252;bertragen sich dann direkt in den jeweilgen Feed bzw. CalcStream (ein Feed entspricht einem ModelPort)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782697045785" ID="ID_744539376" MODIFIED="1782697083037" TEXT="f&#xfc;r jeden ModelPort gibt es eine ExitNode">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und diese kann die Auspr&#228;gung letztlich in eine konkrete Render-Node und einen Node-Port &#252;bersetzen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1782697098830" ID="ID_907831276" MODIFIED="1782697146355" TEXT="daraus resultiert ein ModelPort-Index und damit ein Job-Ticket"/>
+</node>
+<node CREATED="1782697165900" ID="ID_1495556561" MODIFIED="1782697184363" TEXT="in den Job wird aus dem Job-Ticket die ExitNode &#xfc;bertragen"/>
+<node COLOR="#5b280f" CREATED="1782697185410" ID="ID_1726910968" MODIFIED="1782750447109" TEXT="zus&#xe4;tzlich gibt es einen Verweis auf das RenderEnvironment">
+<icon BUILTIN="button_cancel"/>
+<node COLOR="#5b280f" CREATED="1782697198408" ID="ID_1856434765" MODIFIED="1782752199357" TEXT="wirklich? damit hab ich seltsamerweise immer noch &#xbb;Bauchschmerzen&#xab;">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1782697218969" ID="ID_1600601168" MODIFIED="1782697244039">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn es nur eine DataSink w&#228;re,
+    </p>
+    <p>
+      w&#252;rde ich mich besser f&#252;hlen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1782748797685" ID="ID_1813362440" MODIFIED="1782752209519" TEXT="nochmal eingehend dar&#xfc;ber nachgedacht">
+<icon BUILTIN="idea"/>
+<node CREATED="1782748815829" ID="ID_990702746" MODIFIED="1782752216733" TEXT="RenderEnvironment zu &#xf6;ffnen w&#xe4;re unklug">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1782748893840" ID="ID_649261210" MODIFIED="1782748907678" TEXT="das ist unn&#xf6;tig zirkul&#xe4;r"/>
+<node CREATED="1782748970715" ID="ID_970006652" MODIFIED="1782749301983" TEXT="es geh&#xf6;rt inhaltlich auf eine andere Ebene">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;die Engine&#171; als Kontext ist nur sinnvoll f&#252;r Services und Prozesse, die direkt auf Ebene der Engine operieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782748908800" ID="ID_1781949125" MODIFIED="1782749269437" TEXT="es widerspricht einer predeterminierten Berechnung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil wir damit den Zugang zum Dispatcher und zum Scheduler &#246;ffnen; somit w&#228;re es implizit erlaubt, einen sich selbst modifizierenden Render-Job zu bauen. Das wollen wir aber nur kontrolliert, f&#252;r die Planungs-Jobs zulassen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782749004907" ID="ID_967958724" MODIFIED="1782749018462" TEXT="insofern w&#xe4;re das nur ein &#xbb;Rumpel-Kontext&#xab;"/>
+</node>
+<node CREATED="1782749043088" ID="ID_675084068" MODIFIED="1782749063021" TEXT="man k&#xf6;nnte dann doch die Output-Frame-Nr als Parameter akzeptieren">
+<node CREATED="1782749073303" ID="ID_1272888470" MODIFIED="1782749199904" TEXT="es w&#xe4;re nat&#xfc;rlicher, als &#xfc;ber eine Time-Grid aufzul&#xf6;sen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nicht nur, weil die Frame-Nr tats&#228;chlich im Planungskontext explizit (als Treiber) vorliegt, sondern auch weil dies eine reine Sequenz-Nummer ist und eigentlich nach Belieben umgesetzt werden kann. Nun gut, dann m&#252;&#223;te man eben die Zeitachse redefinieren...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782749317456" ID="ID_90380736" MODIFIED="1782749335311" TEXT="w&#xfc;rde eigentlich grade noch in die vorhandenen Parameter-Slots passen"/>
+<node CREATED="1782749427281" ID="ID_1087132346" MODIFIED="1782749447611" TEXT="dann bleiben aber doch noch weitere Parameter offen">
+<node CREATED="1782749449322" ID="ID_948298268" MODIFIED="1782749457744" TEXT="vor allem die Output-Spielart"/>
+<node CREATED="1782749459812" ID="ID_559333800" MODIFIED="1782749470864" TEXT="aber auch die Mute/Control-Parameter"/>
+</node>
+<node CREATED="1782750294469" ID="ID_1182114795" MODIFIED="1782750401554" TEXT="damit w&#xe4;ren wir dann doch wieder bei sehr beschr&#xe4;nkten Strukturen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wie z.B. ein 32bit Frame-Nr: damit k&#246;nnte man 90 Tage bei 256 fps bespielen. Eigentlich mehr als genug, und trotzdem eine akzidentelle Beschr&#228;nkung. Analog f&#252;r die Output-Spielart, die dann eben in eine Liste gepackt werden m&#252;&#223;te...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1782750402710" ID="ID_563827475" MODIFIED="1782750494310" TEXT="demgegen&#xfc;ber erscheint ein inhaltlich beschr&#xe4;nkter Kontext dann doch wieder attraktiv">
+<arrowlink COLOR="#5065cc" DESTINATION="ID_262249590" ENDARROW="Default" ENDINCLINATION="53;-115;" ID="Arrow_ID_77786381" STARTARROW="None" STARTINCLINATION="-569;19;"/>
+</node>
+</node>
+</node>
+<node CREATED="1782750455892" ID="ID_262249590" MODIFIED="1782750488140" TEXT="also besser nur ein Kontext beschr&#xe4;nkt auf das Thema Output">
+<linktarget COLOR="#5065cc" DESTINATION="ID_262249590" ENDARROW="Default" ENDINCLINATION="53;-115;" ID="Arrow_ID_77786381" SOURCE="ID_563827475" STARTARROW="None" STARTINCLINATION="-569;19;"/>
+</node>
+</node>
+<node CREATED="1782750500157" ID="ID_1882429127" MODIFIED="1782750513405" TEXT="also dann ein OutputCtx">
+<node CREATED="1782750516959" ID="ID_218292766" MODIFIED="1782750521848" TEXT="enth&#xe4;lt die DataSink"/>
+<node CREATED="1782750522676" ID="ID_998089844" MODIFIED="1782750556186" TEXT="oder besser gleich eine getOutputBuffer(nominalTime)"/>
+<node CREATED="1782750562197" ID="ID_873040349" MODIFIED="1782750586341" TEXT="enth&#xe4;lt die Spielart des ModelPort als freier Parameter"/>
+<node CREATED="1782750588371" ID="ID_1804668463" MODIFIED="1782750614762" TEXT="kann eine Map mit weiteren Parametern enthalten"/>
+</node>
+<node CREATED="1782750617909" ID="ID_1929677175" MODIFIED="1782750628775" TEXT="im Gegenzug w&#xe4;re dann keine Proze&#xdf;-ID mehr notwendig">
+<node CREATED="1782751339818" ID="ID_337291090" MODIFIED="1782751952404" TEXT="damit wird die InvocationInstanceID letztlich &#xfc;berfl&#xfc;ssig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      insofern wir keine <i>absolute UUID</i>&#160;brauchen, sondern nur eine <i>systematische Hash-ID</i>&#160;f&#252;r den Cache. Diese kann <i>errechnet werden aus exakt den Daten der Invocation (ausgenommen die Output-Frame-Nr)</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#517189" DESTINATION="ID_337291090" ENDARROW="Default" ENDINCLINATION="631;-1471;" ID="Arrow_ID_675431589" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="644;37;"/>
+</node>
+<node CREATED="1782751801131" ID="ID_1285837693" MODIFIED="1782751814845" TEXT="es gen&#xfc;gen also 2 generische 64bit-Parameter"/>
+<node CREATED="1782751955886" ID="ID_560234734" MODIFIED="1782751964234" TEXT="plus Funktor und nominal-time"/>
+<node CREATED="1782752022817" ID="ID_1191560866" MODIFIED="1782752044845" TEXT="weitere IDs k&#xf6;nnen stets per OutputCtx bereitgestellt werden....">
+<node CREATED="1782752048247" ID="ID_386908359" MODIFIED="1782752155079" TEXT="das k&#xf6;nnte z.B. eine Stream-Type-ID sein">
+<arrowlink COLOR="#54596c" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="401;17;" ID="Arrow_ID_330076381" STARTARROW="None" STARTINCLINATION="572;41;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782657184140" ID="ID_1357760054" MODIFIED="1782657200052" TEXT="die eigentliche Invocation auszuf&#xfc;hren">
 <node CREATED="1782604926129" ID="ID_1508367693" MODIFIED="1782604960984" TEXT="den Output-Buffer zu locken(frameNr)"/>
 <node CREATED="1782604969099" ID="ID_1826526451" MODIFIED="1782604984573" TEXT="das resultierende BuffHandle weiterzugeben und nachher zu releasen()"/>
 <node CREATED="1782604994735" ID="ID_852548551" MODIFIED="1782605009104" TEXT="au&#xdf;erdem: den Buffer-Bedarf zu announcen"/>
-<node CREATED="1782605015084" ID="ID_1135268131" MODIFIED="1782605018855" TEXT="nicht">
-<font BOLD="true" NAME="SansSerif" SIZE="12"/>
-<node CREATED="1782605021331" ID="ID_1351197066" MODIFIED="1782605035618" TEXT="irgendwelche callback-interaktionen mit dem Kontext"/>
-<node CREATED="1782605036571" ID="ID_504293155" MODIFIED="1782605060777" TEXT="sonstiges Status-Management"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782494548626" ID="ID_774195591" MODIFIED="1782494558167" TEXT="Zugriff auf die ausgegebenen Daten">
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1782605072900" ID="ID_203481758" MODIFIED="1782605083595" TEXT="f&#xfc;r den Test einen DiagnosticOutputSlot bereitstellen"/>
-<node CREATED="1782605084898" ID="ID_174759021" MODIFIED="1782605095580" TEXT="dessen Zugriff after-the-fact verwenden"/>
+<node COLOR="#338800" CREATED="1782605072900" ID="ID_203481758" MODIFIED="1782656751454" TEXT="f&#xfc;r den Test einen DiagnosticOutputSlot bereitstellen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1782605084898" ID="ID_174759021" MODIFIED="1782656757726" TEXT="dessen Zugriff after-the-fact verwenden">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782264256180" ID="ID_901821600" MODIFIED="1782264427850" TEXT="daraus dann die Bestandteile der NodeInvocation extrahieren">
@@ -117406,9 +118052,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#635880" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="157;0;" ID="Arrow_ID_1262315415" SOURCE="ID_953619048" STARTARROW="None" STARTINCLINATION="160;9;"/>
 <linktarget COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="960;0;" ID="Arrow_ID_1166250847" SOURCE="ID_43350143" STARTARROW="None" STARTINCLINATION="1286;94;"/>
 <linktarget COLOR="#454784" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="439;0;" ID="Arrow_ID_1496641793" SOURCE="ID_555990983" STARTARROW="None" STARTINCLINATION="-9;370;"/>
+<linktarget COLOR="#635880" DESTINATION="ID_998290585" ENDARROW="Default" ENDINCLINATION="157;0;" ID="Arrow_ID_1262315415" SOURCE="ID_953619048" STARTARROW="None" STARTINCLINATION="160;9;"/>
 </node>
 <node CREATED="1782599282962" ID="ID_1365914908" MODIFIED="1782600200209" TEXT="der Kontext mu&#xdf; l&#xe4;nger leben wie der letzte Job">
 <richcontent TYPE="NOTE"><html>
@@ -126289,6 +126935,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802625130" ID="ID_1442656492" MODIFIED="1688601316599" TEXT="Job-Daten-Record">
 <linktarget COLOR="#fe3665" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="-1161;156;" ID="Arrow_ID_1073485120" SOURCE="ID_148642807" STARTARROW="None" STARTINCLINATION="-478;30;"/>
 <linktarget COLOR="#8f5058" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="122;-1531;" ID="Arrow_ID_768975506" SOURCE="ID_785409695" STARTARROW="None" STARTINCLINATION="-408;22;"/>
+<linktarget COLOR="#785781" DESTINATION="ID_1442656492" ENDARROW="Default" ENDINCLINATION="358;-1123;" ID="Arrow_ID_7443944" SOURCE="ID_1427736417" STARTARROW="None" STARTINCLINATION="-1525;113;"/>
 <icon BUILTIN="flag-yellow"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802711785" ID="ID_97201971" MODIFIED="1688601092211" TEXT="JobFunctor">
 <icon BUILTIN="flag-yellow"/>
@@ -126298,6 +126945,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685802759365" ID="ID_1501130954" MODIFIED="1685802764857" TEXT="InstanceID">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1782692865178" ID="ID_1237427905" MODIFIED="1782692872622" TEXT="128 bit">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1685986803653" ID="ID_1078372838" MODIFIED="1688601155076" TEXT="Functor-Argumente">
 <richcontent TYPE="NOTE"><html>
@@ -151450,9 +152100,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1773934250649" ID="ID_1023733837" MODIFIED="1774219522013" TEXT="Umstellen der DataSink">
 <arrowlink COLOR="#2f56b3" DESTINATION="ID_848279587" ENDARROW="Default" ENDINCLINATION="-42;-865;" ID="Arrow_ID_998347051" STARTARROW="Default" STARTINCLINATION="-663;70;"/>
+<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <linktarget COLOR="#4a697c" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="31;-117;" ID="Arrow_ID_50406176" SOURCE="ID_1909698021" STARTARROW="None" STARTINCLINATION="-24;182;"/>
 <linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" SOURCE="ID_926670050" STARTARROW="None" STARTINCLINATION="688;37;"/>
-<linktarget COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_867939478" SOURCE="ID_784653137" STARTARROW="None" STARTINCLINATION="888;64;"/>
 <icon BUILTIN="button_ok"/>
 <node CREATED="1773934262265" ID="ID_1065611224" MODIFIED="1773934275092" TEXT="m&#xf6;glichst das sichtbare API nicht anpassen">
 <node CREATED="1773934291293" ID="ID_736836401" MODIFIED="1773934304615" TEXT="AllocState ist erst der OutputSlot-Impl bekannt"/>
@@ -152739,8 +153389,9 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1775917228753" ID="ID_926670050" MODIFIED="1780147358885" TEXT="OutputSlot wurde Fr&#xfc;hjahr26 grundlegend &#xfc;berarbeitet">
 <arrowlink COLOR="#498ad6" DESTINATION="ID_1023733837" ENDARROW="Default" ENDINCLINATION="-757;-817;" ID="Arrow_ID_534861876" STARTARROW="None" STARTINCLINATION="688;37;"/>
 </node>
-<node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1782260312524" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
-<linktarget COLOR="#a35e64" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1489;-64;" ID="Arrow_ID_1643361924" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="1123;62;"/>
+<node CREATED="1773941728897" ID="ID_1047888380" MODIFIED="1782752155080" TEXT="sollte im Data-Sink eine Stream-Type-ID unterbringen (k&#xf6;nnen wollen)">
+<linktarget COLOR="#695ea3" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="1464;-67;" ID="Arrow_ID_1643361924" SOURCE="ID_1987838291" STARTARROW="None" STARTINCLINATION="1123;62;"/>
+<linktarget COLOR="#54596c" DESTINATION="ID_1047888380" ENDARROW="Default" ENDINCLINATION="401;17;" ID="Arrow_ID_330076381" SOURCE="ID_386908359" STARTARROW="None" STARTINCLINATION="572;41;"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1774224466595" ID="ID_580276809" MODIFIED="1774224564250" STYLE="fork" TEXT="dadurch ist eine sehr sch&#xf6;ne Typ/Sichtbarkeits-Hierarchie entstanden">
