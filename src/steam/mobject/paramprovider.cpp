@@ -16,6 +16,8 @@
  ** Implementation functions of the Parameter abstraction.
  ** 
  ** @todo as of 2016, we still need to work out our parameter/automation concept.
+ ** @deprecated 2026 the basic idea is valid — yet the final design will certainly be different;
+ **       the only usage of this code is Fixture::getAutomation() ⟼ `Auto<double>*`
  */
 
 

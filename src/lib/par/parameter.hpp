@@ -16,13 +16,11 @@
  ** Core abstraction: parameter to be controlled and possibly automated.
  ** 
  ** @todo as of 2016, we still need to work out our parameter/automation concept.
- ** @deprecated 2026 the basic idea is valid — yet the final design will certainly be different;
- **       the only usage of this code is Fixture::getAutomation() ⟼ `Auto<double>*`
  */
 
 
-#ifndef STEAM_PROC_MOBJECT_PARAMETER_H
-#define STEAM_PROC_MOBJECT_PARAMETER_H
+#ifndef LIB_PAR_PARAMETER_H
+#define LIB_PAR_PARAMETER_H
 
 
 
@@ -52,4 +50,4 @@ namespace mobject {
   
   
 }} // namespace steam::mobject
-#endif /*STEAM_PROC_MOBJECT_PARAMETER_H*/
+#endif /*LIB_PAR_PARAMETER_H*/

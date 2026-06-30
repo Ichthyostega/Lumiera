@@ -114,7 +114,7 @@ namespace meta{
        * In the typical usage situation, the delegate type \a FUNC is implemented
        * mostly with inline functions, and thus the bulk of the actual implementation
        * code will be emitted into this static delegation function. The template
-       * \ref InvokerBuilder provides the blueprint for this code generation.
+       * \ref FunInline::activate<FUNC>() provides the blueprint for this code generation.
        */
       template<class FUN>
       struct Invoker

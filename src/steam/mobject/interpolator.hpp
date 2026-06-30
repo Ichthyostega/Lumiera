@@ -16,6 +16,8 @@
  ** Core abstraction: automation parameter interpolator.
  ** Each interpolator implementation has the ability to resolve intermediary
  ** values and to provide a parameter value for _every arbitrary point in time_.
+ ** @deprecated 2026 the basic idea is valid — yet the final design will certainly be different;
+ **       the only usage of this code is Fixture::getAutomation() ⟼ `Auto<double>*`
  */
 
 
