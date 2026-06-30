@@ -1,8 +1,8 @@
 /*
-  Parameter  -  representation of an automatable effect/plugin parameter
+  Parameter  -  generic parameter values
 
    Copyright (C)
-     2008,            Hermann Vosseler <Ichthyostega@web.de>
+     2008,2026        Hermann Vosseler <Ichthyostega@web.de>
 
   **Lumiera** is free software; you can redistribute it and/or modify it
   under the terms of the GNU General Public License as published by the
@@ -15,24 +15,19 @@
 /** @file parameter.cpp
  ** Implementation functions of the Parameter abstraction.
  ** 
- ** @todo as of 2016, we still need to work out our parameter/automation concept.
+ ** @todo this is a draft and placeholder, as of 2026
  */
 
 
 #include "lib/error.hpp"
 #include "lib/par/parameter.hpp"
 
-namespace steam {
-namespace mobject {
+namespace lib {
+namespace par {
   
   
-  template<class VAL>
-  VAL
-  Parameter<VAL>::getValue ()
-  {
-    UNIMPLEMENTED ("Any idea how to handle various kinds of parameter types");
-  }
+  /** */
   
   
   
-}} // namespace mobject
+}} // namespace lib::par
