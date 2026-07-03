@@ -51638,6 +51638,22 @@
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769548596" ID="ID_396906197" LINK="https://issues.lumiera.org/ticket/190" MODIFIED="1775769752536" TEXT="#190 Iterator-function to piggyback a lazy evaluation">
 <linktarget COLOR="#b34e74" DESTINATION="ID_396906197" ENDARROW="Default" ENDINCLINATION="431;21;" ID="Arrow_ID_644180135" SOURCE="ID_205807285" STARTARROW="None" STARTINCLINATION="390;18;"/>
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1782861769852" ID="ID_1243622729" MODIFIED="1782861809192" TEXT="m&#xfc;&#xdf;te die drei State-Core-Operationen darstellen">
+<node CREATED="1782861828104" ID="ID_617950956" MODIFIED="1782861836836" TEXT="d.h. ein iterierbares Front-End davor"/>
+<node CREATED="1782861837648" ID="ID_1963171372" MODIFIED="1782862028463" TEXT="und immer den aktuellen Wert liefern (z.B. als Pointer)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hab mir das einmal im Detail durchdacht, und es m&#252;&#223;te aufgehen... ...siehe die Notizen im Ticket.
+    </p>
+    <p>
+      Knackpunkt ist aber dann wieder die Storage f&#252;r den Funktor; wenn dieser kopierbar sein soll (mu&#223; er, f&#252;r Iteratoren), dann kommt die ganze Komplexit&#228;t hier durch die Hintert&#252;r zur&#252;ck: dann w&#228;re das n&#228;mlich ein PolymorphicValue
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -63539,7 +63555,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" FOLDED="true" ID="ID_892437622" MODIFIED="1775823875508" TEXT="Idee: FunInline">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775144014199" FOLDED="true" ID="ID_892437622" MODIFIED="1782845596611" TEXT="Idee: FunInline">
 <icon BUILTIN="hourglass"/>
 <node CREATED="1775144029256" ID="ID_1639408323" MODIFIED="1775144381506" TEXT="funktioniert wie std::function aber mit inline-Storage">
 <richcontent TYPE="NOTE"><html>
@@ -63620,12 +63636,12 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1775147025687" ID="ID_659543362" MODIFIED="1775147883431" TEXT="ein abstrahierter Funktor (std::function) bedingt stets eine zus&#xe4;tzliche Indirektion">
+<node CREATED="1775147025687" ID="ID_659543362" MODIFIED="1782848496122" TEXT="ein abstrahierter Funktor (std::function) bedingt stets eine zus&#xe4;tzliche Indirektion">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...und zwar ist das der Sprung in den &#187;<b>Invoker</b>&#171;. Das ist der Aufruf eines Funktionspointers, und bekommt zus&#228;tzlich zur Signatur auch noch eine Instanz-Adresse. Oder eben nicht, wenn in dem Funktor tats&#228;chlich ein reiner Funktionspointer steckt. Der Code des Invokers ist jeweils anders f&#252;r jeden unterschiedlichen <i>Typ des aufgerufenen Funktor-Objekts</i>. Ist der invocation-Operators des Zielt-Funktor-Objekts inline, dann kann er in die Invocator-Implementierung geinlined werden. Sonst erfolgt dahinter eben <i>ein weiterer</i>&#160;delegierender Funktionsaufruf &#8212; also wieder eine Indirektion mehr als bei direktem Aufruf. Ist in den Funktor zudem eine Member-Pointer gebunden, oder wurden Argumente closed, dann ist dahinter ein weiterer, delegierender Funktor notwendig
+      ...und zwar ist das der Sprung in den &#187;<b>Invoker</b>&#171;. Das ist der Aufruf eines Funktionspointers, und bekommt zus&#228;tzlich zur Signatur auch noch eine Instanz-Adresse. Oder eben nicht, wenn in dem Funktor tats&#228;chlich ein reiner Funktionspointer steckt. Der Code des Invokers ist jeweils anders f&#252;r jeden unterschiedlichen <i>Typ des aufgerufenen Funktor-Objekts</i>. Ist der invocation-Operators des Ziel-Funktor-Objekts inline, dann kann er in die Invoker-Implementierung geinlined werden. Sonst erfolgt dahinter eben <i>ein weiterer</i>&#160;delegierender Funktionsaufruf &#8212; also wieder <i>eine Indirektion mehr</i>&#160;als bei direktem Aufruf. Ist in den Funktor zudem ein Member-Pointer gebunden, oder wurden Argumente closed, dann ist dahinter ein weiterer, delegierender Funktor notwendig, mithin eine doppelte Indirektion
     </p>
   </body>
 </html></richcontent>
@@ -63971,8 +63987,9 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1775751794934" ID="ID_1657369911" MODIFIED="1775770270635" TEXT="M&#xf6;glichkeit-2 : optimale L&#xf6;sung realisieren">
 <linktarget COLOR="#b44554" DESTINATION="ID_1657369911" ENDARROW="Default" ENDINCLINATION="-871;-29;" ID="Arrow_ID_205894406" SOURCE="ID_669428979" STARTARROW="None" STARTINCLINATION="-665;21;"/>
 <icon BUILTIN="full-2"/>
-<node CREATED="1775751848910" ID="ID_1009499088" MODIFIED="1775778545119" TEXT="das w&#xe4;re wohl ein Polymorphic value">
+<node CREATED="1775751848910" ID="ID_1009499088" MODIFIED="1783013840355" TEXT="das w&#xe4;re wohl ein Polymorphic value">
 <arrowlink COLOR="#fef7ce" DESTINATION="ID_350312708" ENDARROW="Default" ENDINCLINATION="1485;0;" ID="Arrow_ID_1028825620" STARTARROW="None" STARTINCLINATION="579;0;"/>
+<linktarget COLOR="#fee7b9" DESTINATION="ID_1009499088" ENDARROW="Default" ENDINCLINATION="-1018;78;" ID="Arrow_ID_248211697" SOURCE="ID_950124427" STARTARROW="None" STARTINCLINATION="473;21;"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1775771601220" HGAP="105" ID="ID_1022383031" MODIFIED="1775778686062" TEXT="diese Aussage nochmal &#xfc;berpr&#xfc;fen" VSHIFT="1">
 <linktarget COLOR="#d82c52" DESTINATION="ID_1022383031" ENDARROW="Default" ENDINCLINATION="56;-41;" ID="Arrow_ID_686464144" SOURCE="ID_1658923821" STARTARROW="Default" STARTINCLINATION="113;5;"/>
 <icon BUILTIN="yes"/>
@@ -63981,7 +63998,7 @@
   <head/>
   <body>
     <p>
-      Wenn man f&#252;r jede auftretende Kombination von Funktions-Signatur und konkret gebundenem Funktor eine Basisklasse generiert, dann erzeugt man eine Menge von Funktionen, die jeweils eine VTable liefern; und da andererseist so ein Function-Wrapper gerne aus generischem Code verwendet wird, kann daraus ein gef&#228;hrlicher Hebel entstehen
+      Wenn man f&#252;r jede auftretende Kombination von Funktions-Signatur und konkret gebundenem Funktor eine Basisklasse generiert, dann erzeugt man eine Menge von Funktionen, die jeweils eine VTable liefern; und da andererseits so ein Function-Wrapper gerne aus generischem Code verwendet wird, kann daraus ein gef&#228;hrlicher Hebel entstehen
     </p>
   </body>
 </html></richcontent>
@@ -64022,7 +64039,7 @@
   <head/>
   <body>
     <p>
-      das hei&#223;t, <b>jede der beiden Operationen</b>&#160;wir mit dem absoluten Minimum an Indirektion aufgerufen (n&#228;mlich ein Funktionspointer)
+      das hei&#223;t, <b>jede der beiden Operationen</b>&#160;wird mit dem absoluten Minimum an Indirektion aufgerufen (n&#228;mlich ein Funktionspointer)
     </p>
   </body>
 </html></richcontent>
@@ -81446,7 +81463,1208 @@
 </node>
 </node>
 </node>
-<node CREATED="1482524569705" ID="ID_1815572475" MODIFIED="1743090754038" TEXT="Parametrisierung"/>
+<node CREATED="1482524569705" ID="ID_1815572475" MODIFIED="1743090754038" TEXT="Parametrisierung">
+<node CREATED="1782835172671" ID="ID_1769788198" MODIFIED="1782835176745" TEXT="Einrichtung"/>
+<node CREATED="1782835182701" ID="ID_1117049085" MODIFIED="1782835484537">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Thema: <b>Automation</b>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#5625c1" DESTINATION="ID_1117049085" ENDARROW="Default" ENDINCLINATION="-3235;422;" ID="Arrow_ID_1628145836" SOURCE="ID_960969418" STARTARROW="None" STARTINCLINATION="-4227;353;"/>
+<node CREATED="1782835212295" ID="ID_1621531160" MODIFIED="1782836782184" TEXT="Grundlagen">
+<linktarget COLOR="#782d9c" DESTINATION="ID_1621531160" ENDARROW="Default" ENDINCLINATION="50;400;" ID="Arrow_ID_201512722" SOURCE="ID_1861136059" STARTARROW="None" STARTINCLINATION="167;-253;"/>
+<node COLOR="#5b280f" CREATED="1782843501966" ID="ID_711710192" MODIFIED="1782843799610" TEXT="2012 : Platzhalter-Code in der Session">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1782843523996" ID="ID_1377649544" MODIFIED="1782843529552" TEXT="mobject::session::Auto">
+<node CREATED="1782843859421" ID="ID_225084349" MODIFIED="1782843874690" TEXT="stammt sogar aus der initialen UML-Generierung von 2008"/>
+<node CREATED="1782843602950" ID="ID_343424926" MODIFIED="1782843632944" TEXT="leitet ab von ParamProvider&lt;VAL&gt;"/>
+<node CREATED="1782843615631" ID="ID_111005780" MODIFIED="1782843628137" TEXT="dieser hat wiederum einen Param&lt;VAL&gt;"/>
+<node CREATED="1782843770578" ID="ID_1290571610" MODIFIED="1782843776471" TEXT="ist au&#xdf;erdem ein Meta-MO">
+<node CREATED="1782843785895" ID="ID_745520720" MODIFIED="1782843789419" TEXT="&#xfc;berschreibt initShortID()"/>
+</node>
+</node>
+<node CREATED="1782843634326" ID="ID_1620182876" MODIFIED="1782843805373" TEXT="einziger Zweck: Fixture::getAutomation &#x27fc; Auto&lt;double&gt;*">
+<icon BUILTIN="forward"/>
+<node COLOR="#5b280f" CREATED="1782843813380" ID="ID_1218569845" MODIFIED="1782843829327" TEXT="so wird das GANZ SICHER nicht laufen">
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node CREATED="1782835522766" ID="ID_354667146" LINK="https://issues.lumiera.org/ticket/1328#comment:4" MODIFIED="1782838004841" TEXT="2024 im &#xbb;Playback Slice&#xab; zusammenh&#xe4;ngend skizziert">
+<arrowlink COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" STARTARROW="None" STARTINCLINATION="1670;84;"/>
+<node CREATED="1782835676763" HGAP="34" ID="ID_450919195" MODIFIED="1782835960190" TEXT="der Ansatz ist mir schon sehr lange klar" VSHIFT="-10">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...bereits unmittelbar vor dem Beginn des Lumiera-Projekts bezogen sich meine Beitr&#228;ge zu Cinelerra vor allem auf die Automation, und die Schwierigkeiten, damit zuverl&#228;ssig zu arbeiten. In parktisch allen Software-Paketen, mit denen ich bisher gearbeitet habe, stelle ich den gleichen &#187;<b>gedanklichen Kurzschlu&#223;</b>&#171; fest, welcher bereits in dem Begriff &#187;Automation&#171; liegt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782835961982" HGAP="105" ID="ID_1183072151" MODIFIED="1782835977222" TEXT="Anti-Pattern" VSHIFT="-9">
+<node CREATED="1782835990399" ID="ID_705631754" MODIFIED="1782835997916" TEXT="ein &#xbb;Macro&#xab; aufzeichnen"/>
+<node CREATED="1782836023213" ID="ID_384878876" MODIFIED="1782836044163" TEXT="Automation &#x2261; Bezier-Kurve (oder Control-Points)"/>
+<node CREATED="1782836087703" ID="ID_678348974" MODIFIED="1782836110831" TEXT="Kn&#xf6;pfe und Hebel bewegen sich &#xbb;von Geisterhand&#xab;"/>
+<node CREATED="1782836227077" ID="ID_158183357" MODIFIED="1782836234869" TEXT="wird als Roboter global oben drauf gesetzt"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1782838986525" ID="ID_1959701065" LINK="https://issues.lumiera.org/ticket/1385" MODIFIED="1782839006739" TEXT="#1385 Concept for Parameter handling in the Render Engine">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1782836835362" ID="ID_186572947" LINK="https://issues.lumiera.org/ticket/1328" MODIFIED="1782836950112" TEXT="Automations-Konzept ausformulieren (#1328)">
+<linktarget COLOR="#ffddd1" DESTINATION="ID_186572947" ENDARROW="Default" ENDINCLINATION="-2120;127;" ID="Arrow_ID_1973029330" SOURCE="ID_1356465047" STARTARROW="None" STARTINCLINATION="-2063;146;"/>
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1782838037103" ID="ID_1131404515" MODIFIED="1782838041367" TEXT="Komponenten">
+<node CREATED="1782838049957" ID="ID_599946886" MODIFIED="1782838068604">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Paket: <font face="Monospaced" color="#341ac2">lib/auto</font>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782843117967" ID="ID_94587283" MODIFIED="1782843122127" TEXT="Parameter">
+<node CREATED="1782843127457" ID="ID_868934457" MODIFIED="1782843155574" TEXT="lege ich erst mal als Platzhalter an">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit man bereits die Stellen markieren kann, an denen ein Parameter erwartet wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782844096458" ID="ID_1581419592" MODIFIED="1782844101528" TEXT="Design-Ansatz">
+<node COLOR="#4f4398" CREATED="1782844103236" ID="ID_1999191485" MODIFIED="1782923146717" TEXT="ist es ein opaque-Value oder ist es ein inline-funktor?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1782848138476" ID="ID_1524003805" LINK="#ID_243505135" MODIFIED="1782848163307" TEXT="m&#xfc;&#xdf;te dann wohl die funInline weiterentwickeln..."/>
+<node CREATED="1782848602797" ID="ID_904712883" MODIFIED="1782848616463" TEXT="was w&#xfc;rde das jeweils bedeuten...?">
+<node CREATED="1782848626329" ID="ID_739404594" MODIFIED="1782848632749" TEXT="opaque-Value">
+<node CREATED="1782848645739" ID="ID_1464952167" MODIFIED="1782848656286" TEXT="der Parameter &#xbb;hat&#xab; stets einen Wert"/>
+<node CREATED="1782848675683" ID="ID_1441575319" MODIFIED="1782848684494" TEXT="man braucht aber einen Accessor f&#xfc;r den Zugriff">
+<node CREATED="1782848716367" ID="ID_316116279" MODIFIED="1782848723819" TEXT="Variante-1 : ungepr&#xfc;ft">
+<node CREATED="1782848724884" ID="ID_1646458823" MODIFIED="1782848729951" TEXT="der Aufrufer kennt den Typ"/>
+<node CREATED="1782848730710" ID="ID_157001078" MODIFIED="1782848749699" TEXT="force-Cast in den inline-Buffer"/>
+<node CREATED="1782848751385" ID="ID_1375813297" MODIFIED="1782848766274" TEXT="nur statischer Konsistenz-Check bzg. Gr&#xf6;&#xdf;e m&#xf6;glich"/>
+<node CREATED="1782848939527" ID="ID_48936562" MODIFIED="1782848956351">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b>kein</b>&#160;Destruktor-Aufruf m&#246;glich
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1782848773302" ID="ID_522360425" MODIFIED="1782848792270" TEXT="Variante-2 : Typ-Deskriptor">
+<node CREATED="1782848795667" ID="ID_1741890010" MODIFIED="1782848807061" TEXT="entweder die Doppel-Schale mit innerer VTable"/>
+<node CREATED="1782848807977" ID="ID_486528235" MODIFIED="1782848821619" TEXT="oder eine Typ-ID mit Dispatch &#xfc;ber eine statische Map"/>
+<node CREATED="1782848990885" ID="ID_224729971" MODIFIED="1782849003690" TEXT="in beiden F&#xe4;llen kann ein Destruktor-Aufruf realisiert werden"/>
+<node CREATED="1782849004917" ID="ID_744252736" MODIFIED="1782849023519" TEXT="und ein falsch typisierter Aufruf scheitert zur Laufzeit"/>
+</node>
+</node>
+<node CREATED="1782849059255" ID="ID_1226669357" MODIFIED="1782849080612" TEXT="eine Quelle (z.B. Automation) steht &#xbb;daneben&#xab;">
+<node CREATED="1782849087341" ID="ID_881101386" MODIFIED="1782849096960" TEXT="Variante-1 : push">
+<node CREATED="1782849098056" ID="ID_1954887799" MODIFIED="1782849108215" TEXT="die Quelle stellt einen neuen Wert ein"/>
+<node CREATED="1782849109952" ID="ID_1559787259" MODIFIED="1782849126018" TEXT="danach kann ohne Bezug auf die Quelle zugegriffen werden"/>
+</node>
+<node CREATED="1782849132205" ID="ID_1083580488" MODIFIED="1782849138788" TEXT="Variante-2 : pull">
+<node CREATED="1782849142386" ID="ID_768330535" MODIFIED="1782849152510" TEXT="es mu&#xdf; dann irgendwo eine marker-Flag im Parameter geben"/>
+<node CREATED="1782849153298" ID="ID_1757053686" MODIFIED="1782849172013" TEXT="dann wird der Wert im Buffer ignoriert und stattdessen eine Funktion aufgerufen"/>
+</node>
+</node>
+</node>
+<node CREATED="1782848633531" ID="ID_963182576" MODIFIED="1782848638524" TEXT="inline-Funktor">
+<node CREATED="1782849180310" ID="ID_851593729" MODIFIED="1782849200657" TEXT="der Parameter macht stets einen &#xbb;pull&#xab;"/>
+<node CREATED="1782849204421" ID="ID_52422961" MODIFIED="1782849219806" TEXT="ein konstanter Wert ist dann ein Funktor mit dem Wert im Buffer"/>
+<node CREATED="1782849226809" ID="ID_499614092" MODIFIED="1782849242305" TEXT="ein dynamischer Wert ersetzt den Funktor"/>
+<node CREATED="1782849272525" ID="ID_1570433257" MODIFIED="1782849285619" TEXT="komplett unabh&#xe4;ngig davon bleibt das Typisierungs-Problem bestehen">
+<node CREATED="1782849310420" ID="ID_53687783" MODIFIED="1782849352962" TEXT="nur da&#xdf; in dem Fall stets eine Indirektion gegeben ist"/>
+<node CREATED="1782849377555" ID="ID_1677975080" MODIFIED="1782859348152" TEXT="...man aber durch den ungepr&#xfc;ften Zugriff auch mehr Schaden anrichten kann"/>
+</node>
+</node>
+</node>
+<node CREATED="1782922675656" ID="ID_1212782390" MODIFIED="1782922679260" TEXT="Abw&#xe4;gung">
+<node CREATED="1782922680191" ID="ID_1233995484" MODIFIED="1782922736425" TEXT="schwierig ohne konkreten Anhaltspunkt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      effektiv liegen die beiden Varianten nah beieinander, wenngleich sie auch sehr unterschiedlich im Code aussehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782922791440" ID="ID_132285472" MODIFIED="1782922811948" TEXT="l&#xe4;uft auf die Frage hinaus: wo liegt der Datenwert?">
+<node CREATED="1782922817619" ID="ID_1286642390" MODIFIED="1782922844849" TEXT="opaque-Value &#x27f9; hat effektiv Value-Semantik (daten sind &#xbb;hier&#xab;)"/>
+<node CREATED="1782922856461" ID="ID_429079652" MODIFIED="1782922875439" TEXT="Funktor &#x27f9; ist nur ein Access-Front-End">
+<node CREATED="1782922913222" ID="ID_37658100" MODIFIED="1782922972578" TEXT="damit ist sofort die Frage nach der Gesamtstruktur (und Auswertung) involviert"/>
+<node CREATED="1782922936066" ID="ID_285478256" MODIFIED="1782922960163" TEXT="man k&#xf6;nnte auf diesem Weg redundante Auswertungen und Datenhaltung einsparen"/>
+</node>
+</node>
+<node CREATED="1782922978068" ID="ID_242721456" MODIFIED="1782922997422" TEXT="defensiver Ansatz &#x27f9; Value-Semantik bevorzugen">
+<node CREATED="1782923000709" ID="ID_1106904126" MODIFIED="1782923013917" TEXT="da aktuell nur ein Platzhlater gebraucht wird"/>
+<node CREATED="1782923014531" ID="ID_191687930" MODIFIED="1782923028866" TEXT="da sich die Auswertung &#xfc;berhaupt erst darstellen mu&#xdf;"/>
+<node CREATED="1782923035670" ID="ID_708684110" MODIFIED="1782923055691" TEXT="vermeidet Thread/Sichtbarkeits-Probleme"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782923062232" ID="ID_1920215680" MODIFIED="1782923082816" TEXT="Beschlu&#xdf;: baue einen opaque-Value">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782923084271" ID="ID_823959132" MODIFIED="1782923094026" TEXT="mit Option sp&#xe4;ter auf einen Funktor umzustellen"/>
+<node CREATED="1782923096709" ID="ID_1843863105" MODIFIED="1782923122118" TEXT="daher immer einen pull()-call f&#xfc;r einen Funktor mit vorsehen"/>
+</node>
+</node>
+<node CREATED="1782923156064" ID="ID_947964693" MODIFIED="1782923165776" TEXT="Cross-Type Access">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782923166673" ID="ID_783189132" MODIFIED="1782923176019" TEXT="das ist die technisch komplexeste Frage">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1782923197680" ID="ID_589773386" MODIFIED="1782923581105" TEXT="gew&#xfc;nscht">
+<icon BUILTIN="yes"/>
+<node CREATED="1782923201185" ID="ID_966945414" MODIFIED="1782923207410" TEXT="einfache zwanglose Verwendung"/>
+<node CREATED="1782923219141" ID="ID_1273955190" MODIFIED="1782923227511" TEXT="m&#xf6;glichst wenig Overhead pro Zugriff"/>
+<node CREATED="1782923228460" ID="ID_1944129816" MODIFIED="1782923265918" TEXT="Indirektionen vermeiden wo m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, w&#252;nschenswert w&#228;re eine unchecked-selber-schuld-Variante
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782923279690" ID="ID_1827983976" MODIFIED="1782923387329" TEXT="Flexibilit&#xe4;t und Typ-Konversionen zulassen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich erwarte, da&#223; diese Parameter durchaus h&#228;ufig verwendet werden; daher m&#246;chte man kein Gew&#252;rge haben, wenn es um Zugriffe wie Integral/Signed/Unsigned geht, oder um Zugriffe auf Strings und String-Konstanten. <i>Dasistleichtergesagtalsgetan</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1782923449945" ID="ID_572588322" MODIFIED="1782923584778" TEXT="Einschr&#xe4;nkungen">
+<icon BUILTIN="yes"/>
+<node CREATED="1782923454965" ID="ID_881930783" MODIFIED="1782923471902" TEXT="denkbar: rein triviale Wert-Typen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782923968137" ID="ID_1604646636" MODIFIED="1782923979712" TEXT="Vorsicht: schlie&#xdf;t std::string aus">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node CREATED="1782923489065" ID="ID_298169531" MODIFIED="1782923571066" TEXT="Verzicht auf Destruktor-Aufruf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      andernfalls <b>mu&#223;</b>&#160;ich eine VTable mitschleppen, und das w&#252;rde mir Bauchschmerzen machen, da die Parameter-Auswertund nun doch in die Render-Engine hineinreicht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1782923626958" ID="ID_386912733" MODIFIED="1782923647319" TEXT="Gefordert ist also: ein halb-dynamischer safety-Check">
+<node CREATED="1782923650363" ID="ID_1362862185" MODIFIED="1782923758909" TEXT="halb statisch, halb dynamisch">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      meint: man kann eine opaque Type-ID verwenden, die durch den Zugriff selber erzeugt wird (zur Compile-Zeit), aber dann zur Laufzeit gegen einen Marker im Parameter-Objekt gepr&#252;ft wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782924048556" ID="ID_101256475" MODIFIED="1782924150710" TEXT="Konsequenz: &#xbb;Doppelkapsel-Design&#xab; scheidet aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist durchaus gravierend; die meisten opaque-Holder, die ich bisher programmiert habe, verwenden entweder so eine Doppel-Kapsel mit innen eingeschlossener VTable (z.B. lib::Variant), oder aber eine bekannte gemeinsame Basisklasse.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782924192282" ID="ID_293859161" MODIFIED="1782924248412" TEXT="Beispiele...">
+<icon BUILTIN="list"/>
+<node CREATED="1782924197882" ID="ID_612140020" MODIFIED="1782924261331" TEXT="lib::Variant">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1782924201201" ID="ID_1947331244" MODIFIED="1782924261334" TEXT="lib::OpaqueHolder">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1782924211328" ID="ID_1118821549" MODIFIED="1782924261334" TEXT="lib::InPlaceBuffer">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node CREATED="1782924223765" ID="ID_372085675" MODIFIED="1782924261333" TEXT="lib::BranchCase &#x27f5; Summen-Typ f&#xfc;r Parser">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+</node>
+<node CREATED="1782923994701" ID="ID_1564769419" MODIFIED="1782925808566" TEXT="brauche aber trotzdem Typ-Deskriptor">
+<arrowlink COLOR="#fdddae" DESTINATION="ID_1301398726" ENDARROW="Default" ENDINCLINATION="40;-63;" ID="Arrow_ID_1797086154" STARTARROW="None" STARTINCLINATION="-278;21;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1782924005821" ID="ID_1083836380" MODIFIED="1782924015686" TEXT="f&#xfc;r den Zugriff per Konversion"/>
+<node CREATED="1782924016360" ID="ID_543662599" MODIFIED="1782924022877" TEXT="f&#xfc;r die Skalen-Definition"/>
+</node>
+</node>
+<node CREATED="1782925783094" ID="ID_1301398726" MODIFIED="1782925799774" TEXT="Typ-Deskriptor">
+<linktarget COLOR="#fdddae" DESTINATION="ID_1301398726" ENDARROW="Default" ENDINCLINATION="40;-63;" ID="Arrow_ID_1797086154" SOURCE="ID_1564769419" STARTARROW="None" STARTINCLINATION="-278;21;"/>
+<node CREATED="1782925818877" ID="ID_1196483221" MODIFIED="1782925823193" TEXT="Anforderungen">
+<node CREATED="1782925824156" ID="ID_341776371" MODIFIED="1782925835215" TEXT="als einfacher eindeutiger Wert zu materialisieren"/>
+<node CREATED="1782925848937" ID="ID_537869987" MODIFIED="1782925871298" TEXT="diese Deskriptor-ID mu&#xdf; statisch aus einem Typ reproduzierbar sein"/>
+<node CREATED="1782925888084" ID="ID_915778678" MODIFIED="1782925910172" TEXT="mu&#xdf; statisch vom Deskriptor auf ein Deskriptor-Objekt zugreifen k&#xf6;nnen"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1782925935677" ID="ID_1512815244" MODIFIED="1782925961191" TEXT="mu&#xdf; unabh&#xe4;ngig vom Basis-Wert-Typ auch noch Skalen-Information anf&#xfc;gen k&#xf6;nnen">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1782926068242" ID="ID_1536827233" MODIFIED="1782926075039" TEXT="Entwurf">
+<node CREATED="1782926076214" ID="ID_613339645" MODIFIED="1782926117524" TEXT="isCompatible&lt;TY&gt; (typeID)"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782927060642" ID="ID_1480682856" MODIFIED="1782927073169" TEXT="Frage: Struktur des ID-Space?">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="help"/>
+<node CREATED="1782927075864" ID="ID_396730348" MODIFIED="1782927083019" TEXT="Variante-1 : flach">
+<node CREATED="1782927084333" ID="ID_680524470" MODIFIED="1782927104264" TEXT="f&#xfc;r jeden neuen Typ-Deskriptor wird eine neue ID vergeben"/>
+<node CREATED="1782927107327" ID="ID_846276815" MODIFIED="1782927130281" TEXT="insofern sind nur exakt gleiche Typ-Deskriptoren unmittelbar als &#xe4;quivalent erkennbar"/>
+<node CREATED="1782927165980" ID="ID_405343006" MODIFIED="1782927231731" TEXT="zwischen zwei beliebigen Type-Deskriptoren bestehen jedoch Kompatibilit&#xe4;ts-Relationen">
+<node CREATED="1782927244070" ID="ID_1007149615" MODIFIED="1782927259723" TEXT="same base type"/>
+<node CREATED="1782927356474" ID="ID_1901520639" MODIFIED="1782927359197" TEXT="Ordnungen">
+<node CREATED="1782927260499" ID="ID_1414978614" MODIFIED="1782927483391" TEXT="convertible base type">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zieltyp kann aus Quelltyp erzeugt werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782927302332" ID="ID_357056682" MODIFIED="1782927402790" TEXT="can represent">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Zieltyp kann den Quellwert vollst&#228;ndig repr&#228;sentieren (eindeutig und in-domain)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782927315623" ID="ID_405835807" MODIFIED="1782927447743" TEXT="can conform">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Quellwert kann in den Zielwert transformiert werden, allerdings m&#246;glicherweise unter Informationsverlust (clamping)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782927745892" ID="ID_700852199" MODIFIED="1782927855009" TEXT="can map">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der Quelltyp kann (eineindeutig?) in den Zietyp transformiert werden; man denke an zwei finite-domain-Skalen mit komplett disjunkten Ennumeratoren &#8212; <i>hier ist viel Potential f&#252;r Komplexit&#228;t und t&#252;ckische Fallen gegeben</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782927504373" ID="ID_550574268" MODIFIED="1782927517553" TEXT="Variante-2 : strukturiert">
+<node CREATED="1782927522988" ID="ID_1910262622" MODIFIED="1782927539867" TEXT="ein Teil der ID stellt den Basistyp dar"/>
+<node CREATED="1782927543972" ID="ID_1102842205" MODIFIED="1782927562513" TEXT="eine weitere Komponente betrifft die Skala"/>
+<node CREATED="1782927596560" ID="ID_920187897" MODIFIED="1782927744787" TEXT="naheliegend: als zwei getrennte Deskriptoren repr&#xe4;sentieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das setzt nat&#252;rlich eine direkte Lookup-Tabelle pro Dimension vorraus, und die Skala m&#252;&#223;te au&#223;erdem (vermutlich) auch noch selber wieder auf einen Basistyp verweisen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782928075567" ID="ID_1846915137" MODIFIED="1782928092732" TEXT="Neben-Frage: Repr&#xe4;sentation der ID?">
+<icon BUILTIN="help"/>
+<node CREATED="1782928104550" ID="ID_1571983028" MODIFIED="1782928116118" TEXT="Pointer w&#xe4;ren denkbar">
+<node CREATED="1782928158347" ID="ID_1287231519" MODIFIED="1782928169310" TEXT="Vorteil: direkt dereferenzierbar"/>
+<node CREATED="1782928174281" ID="ID_825364879" MODIFIED="1782928189019" TEXT="setzt einen (statischen) Singleton-Mechanismus voraus">
+<node CREATED="1782928229540" ID="ID_602682786" MODIFIED="1782928238299" TEXT="naheliegend: Meyer&apos;s Singleton">
+<node CREATED="1782929955190" ID="ID_865469758" MODIFIED="1782929965674" TEXT="erscheint aber als ein schwacher Kompromi&#xdf;"/>
+<node CREATED="1782929966374" ID="ID_544784550" MODIFIED="1782929983144" TEXT="der Accessor mu&#xdf; n&#xe4;mlich statisch (compile-time) addressierbar sein"/>
+<node CREATED="1782929984851" ID="ID_497737102" MODIFIED="1782929995114" TEXT="und man hat trotzdem ein atomic-Lock"/>
+</node>
+<node CREATED="1782928238995" ID="ID_252906942" MODIFIED="1782928251258" TEXT="hier steckt ein concurrency-Problem">
+<node CREATED="1782928293464" ID="ID_1896231849" MODIFIED="1782928437789" TEXT="Variante-1 : man erzwingt Static-Init">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das geht nur, wenn man jedwede Verwendung in der Static-Init-Phase <b>zuverl&#228;ssig ausschlie&#223;en</b>&#160;kann. Denn dann k&#246;nnte man einfach eine statische Instanz irgendwo in einen statischen Pointer legen, oder einen statisch initialisierten unique-Ptr verwenden
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782928467607" ID="ID_1650429656" MODIFIED="1782928479515" TEXT="erfordert Policy / bzw. Disziplin"/>
+<node CREATED="1782928480364" ID="ID_838425868" MODIFIED="1782928789999" TEXT="Vorteil: nur eine einzige Indirektion / keine mem-Barrier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die ID ist einfach dieser Pointer auf den Typ-Deskriptor. Zugriff ist ein einziger virtueller Speicherzugriff. Den Wert sieht jeder Thread, da er vor allen Threads schon im Speicher abgelegt wurde
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782928535410" ID="ID_496404465" MODIFIED="1782928965335" TEXT="Gefahr: undefined behaviour wenn in dynamisch geladenem Code verwendet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die static-Init von DSOs erfolgt im Moment des Ladens. Und das kann schlimmstenfalls sogar concurrent passieren. Wenn man zudem eine Index-Lookup-Tabelle braucht, dann ist das sogar ein knock-out-Kriterium (man m&#252;&#223;te die Tabelle dynamisch vergr&#246;&#223;ern, bzw. eine Hashtable reorganisieren k&#246;nnen). Andernfalls, wenn nur die Pointer auf die Typ-Deskriptoren direkt verwendet werden, besteht ein Deregistrierungs-Problem: nachdem ein DSO <i>ent-laden</i>&#160;wurde, k&#246;nnte der btr. Deskriptor-Pointer trotzdem noch irgendwo im Speicher &#187;herumfliegen&#171; &#10233; Memory-Corruption (wenn der Deskriptor selber auf dem Heap liegt), bzw. SEGFAULT
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782928661137" ID="ID_1256552621" MODIFIED="1782930735921" TEXT="Nachteil: Skalen m&#xfc;ssen bereits statisch festgelegt sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist nicht m&#246;glich, irgend ein Ergebnis der Laufzeit-Auswertung in eine Skalen-Grenze einflie&#223;en zu lassen. Wirklich nicht! Und das ist eine sehr starke Einschr&#228;nkung, denn es schlie&#223;t u.A. aus...
+    </p>
+    <ul>
+      <li>
+        projekt-spezifische Definitionen in die Konfiguration zu legen
+      </li>
+      <li>
+        Ennumeratoren einer Finite-Domain zur Laufzeit zu verwalten / &#228;ndern
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#df818f" DESTINATION="ID_1256552621" ENDARROW="Default" ENDINCLINATION="-248;12;" ID="Arrow_ID_1647000860" SOURCE="ID_280817185" STARTARROW="Default" STARTINCLINATION="130;-6;"/>
+</node>
+</node>
+<node CREATED="1782928305884" ID="ID_519949514" MODIFIED="1782930048176" TEXT="Variante-2 : on-demand mit Lock">
+<arrowlink COLOR="#6722ce" DESTINATION="ID_682986054" ENDARROW="Default" ENDINCLINATION="88;-171;" ID="Arrow_ID_807790358" STARTARROW="None" STARTINCLINATION="-207;18;"/>
+<node CREATED="1782929230347" ID="ID_1017429895" MODIFIED="1782929246482" TEXT="Vorteil: beliebig dynamisch erweiterbar"/>
+<node CREATED="1782929251364" ID="ID_1497210368" MODIFIED="1782929352427" TEXT="Einschr&#xe4;nkung: man sollte niemals etwas deregistrieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese pragmatische Einschr&#228;nkung ist meistens v&#246;llig unproblematisch, und vermeidet jedwede Probleme mit invalide gewordenen Skalen; Knackpunkt ist allerdings, da&#223; die Typ-Deskriptoren selber in ihrer Implementierung niemals auf dynamisch nachgeladenen Code zur&#252;ckgreifen k&#246;nnen d&#252;rfen wollen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782929356310" ID="ID_541318590" MODIFIED="1782929501690" TEXT="Nachteil: jeder Zugriff mu&#xdf; durch eine Art Sync-Barriere gehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das l&#228;&#223;t sich abmildern auf eine Art double-checked-Locking, was aber wenigstens einen atomoic-Access impliziert. Also hat jeder Laufzeit-Zugriff eine Penalty mit Faktor 2-5 (siehe auch: Zugriff auf Thread-Local). Das ist u.U. so geringf&#252;gig, da&#223; es nicht auff&#228;llt, vor allem, wenn man dann den Parameter-Wert, bzw. einen Auswertungs-Funktor aus dem generischen System herausziehen und direkt materialisieren kann.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782929538698" ID="ID_474931081" MODIFIED="1782929604780" TEXT="Nachteil: die Erst-Verwendung einer neuen Skala st&#xf6;rt die global die Concurrency">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch diese Einschr&#228;nkung ist vermutlich theoretischer Natur und f&#228;llt nicht ins Gewicht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782929653854" ID="ID_1811506404" MODIFIED="1782929938716" TEXT="Abmilderung: ein vorliegender Typ-Deskriptor-Pointer geht an der Registrierung vorbei">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das w&#228;re m&#246;glich, wenn man die <i>eigentliche Typ-ID</i>&#160;dann <i>in den Deskriptor</i>&#160;legt. Insofern stellt die Registrierung lediglich sicher, da&#223; keine duplikaten IDs vergeben werden; ansonsten wird sie eigentlich nur f&#252;r Zugriffe &#252;ber einen statischen Typ ben&#246;tigt, oder man f&#228;llt f&#252;r den letzteren Fall dann doch wieder auf Variante-1 zur&#252;ck und erzeugt ein statisches Trampolin (im letztgenannten Fall macht man allerdings auch wieder die gef&#228;hrlichen Grenzf&#228;lle auf, wenn die erste Verwendung aus einem DSO erfolgt, wobei das dann allerdings eingeschr&#228;nkt w&#228;re rein auf statisch repr&#228;sentierbare Skalen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782929146125" ID="ID_682986054" MODIFIED="1782930048176" TEXT="ID-Registry">
+<linktarget COLOR="#6722ce" DESTINATION="ID_682986054" ENDARROW="Default" ENDINCLINATION="88;-171;" ID="Arrow_ID_807790358" SOURCE="ID_519949514" STARTARROW="None" STARTINCLINATION="-207;18;"/>
+<node CREATED="1782928129202" ID="ID_1742576131" MODIFIED="1782928135176" TEXT="Hash-Values">
+<node CREATED="1782930106420" ID="ID_982261668" MODIFIED="1782930114536" TEXT="Gefahr von Hash-Kollisionen"/>
+<node CREATED="1782930115794" ID="ID_1324144424" MODIFIED="1782930243769" TEXT="ist selbst bei 64bit noch gegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein schwierig zu beurteilender Grenzfall. Tats&#228;chlich sind 64bit-Kollisionen ziemlich unwahrscheinlich, und man f&#228;hrt ganz gut damit, sie zu ignorieren. Allerdings w&#228;ren die Konsequenzen einer Kollision in dem Fall durchaus dramatisch (Datenkorruption, Speicherkorruption, schleichende nicht-reproduzierbare Fehler).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782930292072" ID="ID_1458336196" MODIFIED="1782930391504" TEXT="Kombination mehrerer Hashes in 64bit ist sehr fragw&#xfc;rdig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das w&#228;re nur denkbar, wenn es eine Abk&#252;rzung w&#228;re, und von einer echten Verifkation gefolgt w&#228;re; oder wenn man sowiso dann einen direkten Pointer nimmt (aber dann w&#228;re auch die kombinierte Hash-ID eigentlich nicht mehr notwendig)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782930452325" ID="ID_550802886" MODIFIED="1782930466144" TEXT="eine Hashtable kann in begrenztem Speicher liegen"/>
+<node CREATED="1782930467363" ID="ID_1657509582" MODIFIED="1782930478866" TEXT="Update der Hashtable erfordert stets ein hartes Lock"/>
+</node>
+<node CREATED="1782928138443" ID="ID_1966486898" MODIFIED="1782928148651" TEXT="Index-Tabelle">
+<node CREATED="1782930068409" ID="ID_1281751146" MODIFIED="1782930078630" TEXT="ist stets &#xbb;wasserdicht&#xab;"/>
+<node CREATED="1782930079439" ID="ID_832708104" MODIFIED="1782930450150" TEXT="man k&#xf6;nnte trotzdem zwei Komponenten in einen 64bit packen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn man kann die Anzahl der Typ-Instanzen ohne gr&#246;&#223;ere Bedenken als begrenzt ansetzen. Stark begrenzt sogar, niemand hat Speicher f&#252;r 1 Million Typ-Deskriptoren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782930481015" ID="ID_432888224" MODIFIED="1782930605124" TEXT="f&#xfc;r das Update ist eigentlich nur eine Write-Barrier notwendig (Sichtbarkeit)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Allerdings nur unter der Einschr&#228;nkung, da&#223; die Index-Tabelle selber an einer fixen Stelle im Speicher liegen bleibt; man m&#252;&#223;te sie also per compile-Time-Konstante limitieren
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1782930629366" ID="ID_744635431" MODIFIED="1782930633227" TEXT="Diskussion">
+<node CREATED="1782930635252" ID="ID_435864404" MODIFIED="1782930652390" TEXT="dynamische Skalen werden als essentiell betrachtet">
+<node CREATED="1782930653943" ID="ID_280817185" MODIFIED="1782930742718" TEXT="&#x27f9; statisches Singleton mit Pointer acess nach Variante-1 scheidet aus">
+<arrowlink COLOR="#df818f" DESTINATION="ID_1256552621" ENDARROW="Default" ENDINCLINATION="-248;12;" ID="Arrow_ID_1647000860" STARTARROW="Default" STARTINCLINATION="130;-6;"/>
+</node>
+<node CREATED="1782930690039" ID="ID_63405826" MODIFIED="1782930708872" TEXT="das ist gut, denn mit den Grenzf&#xe4;llen f&#xfc;r Plug-ins h&#xe4;tte ich sowiso Bauchschmerzen"/>
+</node>
+<node CREATED="1782931314036" ID="ID_669639243" MODIFIED="1782933784230" TEXT="ID als Pointer erscheint attraktiv &#x2014; mit dynamischer Registrierung">
+<arrowlink DESTINATION="ID_372189629" ENDARROW="Default" ENDINCLINATION="29;-78;" ID="Arrow_ID_312101909" STARTARROW="None" STARTINCLINATION="-269;11;"/>
+<node CREATED="1782931362534" ID="ID_1063964465" MODIFIED="1782931378475" TEXT="dann ist n&#xe4;mlich trotzdem keine Barriere beim Zugriff notwendig"/>
+<node CREATED="1782931396816" ID="ID_846450673" MODIFIED="1782931413129" TEXT="und die neu-Registrierung sollte in eine Index-Tabelle erfolgen"/>
+<node CREATED="1782931426981" ID="ID_530242349" MODIFIED="1782931443565" TEXT="zudem sollte man niemals de-Registrieren (&#x27f9; Vereinfachung)"/>
+</node>
+</node>
+</node>
+<node CREATED="1782933758198" ID="ID_372189629" MODIFIED="1782933784230" TEXT="zur&#xfc;ck zur Struktur...">
+<linktarget COLOR="#a9b4c1" DESTINATION="ID_372189629" ENDARROW="Default" ENDINCLINATION="29;-78;" ID="Arrow_ID_312101909" SOURCE="ID_669639243" STARTARROW="None" STARTINCLINATION="-269;11;"/>
+<node CREATED="1782933787724" ID="ID_145196023" MODIFIED="1782933804018" TEXT="insofern ist diese Struktur vornehmlich zur Organisation im Code wichtig"/>
+<node CREATED="1782933804955" ID="ID_1796996304" MODIFIED="1782933815800" TEXT="aber man hat immer einen Gesamt-Typ, der auch die Skala einschlie&#xdf;t"/>
+<node CREATED="1782933822164" ID="ID_313351540" MODIFIED="1782933841206" TEXT="diesen kann man mit einem full-Domain-Basistyp vergleichen"/>
+<node CREATED="1782933870781" ID="ID_190160601" MODIFIED="1782933919116" TEXT="Wichtige Einsicht: das Parameter-Objekt selber ist eine Sicht auf den &#xbb;Wert&#xab; durch die Skala"/>
+</node>
+</node>
+<node CREATED="1782933987899" ID="ID_1347328602" MODIFIED="1782933992228" TEXT="also ergibt sich...">
+<node CREATED="1782933994294" ID="ID_1685235304" MODIFIED="1782934029583" TEXT="ein Deskriptor">
+<node CREATED="1782934030343" ID="ID_957407340" MODIFIED="1782934037954" TEXT="typisiert auf einen Basis-Typ"/>
+<node CREATED="1782934038566" ID="ID_1083259675" MODIFIED="1782934044719" TEXT="die Skala stellt eine Policy dar"/>
+</node>
+<node CREATED="1782934059019" ID="ID_749549250" MODIFIED="1782934107302" TEXT="der Deskriptor wird registriert und dann durch seinen Pointer repr&#xe4;sentiert"/>
+<node CREATED="1782934126020" ID="ID_309124327" MODIFIED="1782934137620" TEXT="Problem / Aufgabe: Reproduzierbarkeit">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782934176291" ID="ID_1012097809" MODIFIED="1782934951544" TEXT="inwiefern ist das &#xfc;berhaupt ein Problem?">
+<icon BUILTIN="help"/>
+<node CREATED="1782934188215" ID="ID_666162246" MODIFIED="1782934200861" TEXT="wenn ich einen Parameter habe, habe ich bereits seinen Deskriptor"/>
+<node CREATED="1782934202727" ID="ID_1468130444" MODIFIED="1782934233545" TEXT="wenn ich einen neuen Parameter baue, lege ich die Eigenschaften des Deskriptors fest"/>
+<node CREATED="1782934234707" ID="ID_1346611694" MODIFIED="1782934270428" TEXT="wenn ich unmittelbar per Basistyp zugreife, ist das wie ein neuer full-Domain-Basistyp"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b20711" CREATED="1782934309017" ID="ID_67434401" MODIFIED="1782934963199" TEXT="problematisch sind...">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782934315017" ID="ID_393207019" MODIFIED="1782934329150" TEXT="Deduplikation beim Erzeugen neuer Parameter"/>
+<node CREATED="1782934330022" ID="ID_1491698936" MODIFIED="1782934348327" TEXT="die direkten Zugriffe (per full-Domain-Basistyp)"/>
+</node>
+</node>
+<node CREATED="1782934352981" ID="ID_203751727" MODIFIED="1782934383379" TEXT="Konsequenz  &#x27f9; Typ-Deskriptor Prototypen verwenden">
+<node CREATED="1782934397802" ID="ID_364715036" MODIFIED="1782934416572" TEXT="es ist zu erwarten, da&#xdf; diese in den Metadaten die Rolle eines &#xbb;Typs&#xab; spielen"/>
+<node CREATED="1782934417938" ID="ID_1609165510" MODIFIED="1782934439659" TEXT="jeder konkrete Typ kann auch als Prototyp verwendet werden (&#x27f6; mu&#xdf; immutable sein)"/>
+<node CREATED="1782934443840" ID="ID_1929146954" MODIFIED="1782934464080" TEXT="sinnvollerweise eine separate statische Registry f&#xfc;r die full-Domain-Basistypen">
+<node CREATED="1782934489300" ID="ID_1753645320" MODIFIED="1782934494347" TEXT="das mu&#xdf; eine Hashtable sein"/>
+<node CREATED="1782934535498" ID="ID_1516590429" MODIFIED="1782934546327" TEXT="mit einem systematisch generierbaren Hash"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782934585387" ID="ID_836781666" MODIFIED="1783098443001" TEXT="&#x27f9; sinnvollerweise diese Basis-Typ-Registry final vorgenerieren">
+<arrowlink COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" STARTARROW="None" STARTINCLINATION="133;501;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782934627813" ID="ID_231478597" MODIFIED="1783094142508" TEXT="denn sonst wird&apos;s &#xbb;schw&#xfc;l&#xab; wenn die DSOs auftreten"/>
+<node CREATED="1782934660328" ID="ID_87429917" MODIFIED="1782934755477" TEXT="besser dann eine gemeine compile-Time-Fehlermeldung und gut is">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hei&#223;t: die effektiven Basis-Typen, mit denen ich auf einen Paramter zugreifen kann, sind zur compile-time limitiert; effektiv ist das Universum m&#246;glicher Typen sowiso limitiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782934933721" ID="ID_344093674" MODIFIED="1782934945323" TEXT="und wenn ich keinen Prototyp habe??">
+<icon BUILTIN="help"/>
+<node CREATED="1782934977094" ID="ID_1175382535" MODIFIED="1782934985417" TEXT="man k&#xf6;nnte das Problem einfach ignorieren"/>
+<node CREATED="1782934995033" ID="ID_147900097" MODIFIED="1782935015541" TEXT="dann mu&#xdf; man halt beim Erzeugen einer neuen Skala die lineare Suche in Kauf nehmen"/>
+<node CREATED="1782935017568" ID="ID_1493895192" MODIFIED="1782935060595" TEXT="alternativ k&#xf6;nnte man auch einfach jede Skala dupliziert registrieren (naja...)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Klingt nach Selbstmord aus Angst vor dem Tod
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782935078447" ID="ID_1984785088" MODIFIED="1782935175729" TEXT="oder eben eine Prototyp-Registry (Hashtable) pflegen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und jeder Eintrag hier erfordert dann tats&#228;chlich ein Lock; das w&#228;re verschmerzbar, dann man mu&#223; da nur durch, wenn man einen neuen Prototyp anlegt; sobald man einen solchen in der Hand hat, hat man ja den Pointer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1782935176769" ID="ID_415184310" MODIFIED="1782935198386">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>pragmatisch betrachtet</i>&#160;ist das Problem vermutlich nicht relevant
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782935199568" ID="ID_1528659744" MODIFIED="1782935224325" TEXT="es geht somit nur darum, den Speicherbedarf f&#xfc;r Typ-Deskriptoren zu begrenzen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782935238541" ID="ID_1016393562" MODIFIED="1782935326983" TEXT="man sollte daran denken, da&#xdf; (unbeabsichtigt) eine &#xc4;quivalenz entstehen k&#xf6;nnte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn &#252;ber irgendwelche Umwege dann doch ein weiterer Typ-Deskriptor registriert wird, der mit einem anderen effektiv &#228;quivalent ist; das stellt als Solches &#252;berhaupt kein Problem dar, man mu&#223; nur bei der Entscheidungslogik auf diesen Fall gefa&#223;t sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1782935346879" ID="ID_187973274" MODIFIED="1782935380108" TEXT="die Typ-Relationen sind sowiso in Code / Logik realisiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und &#252;ber deren Korrektheit entscheidet der Code, nicht der Registrierungszustand
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782935401309" ID="ID_78435450" MODIFIED="1782935434015" TEXT="nur die Domain-Basistypen sollten reproduzierbar / unique sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und daf&#252;r sorgt bereits std::numeric_limiits
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1782948636452" ID="ID_758265146" MODIFIED="1782948640740" TEXT="Ordnung der Begriffe">
+<node CREATED="1782951139307" ID="ID_204578379" MODIFIED="1782951157090" TEXT="Problem: Begriffe sind nicht offensichtlich klar">
+<node CREATED="1782951161550" ID="ID_836568019" MODIFIED="1782951174050" TEXT="wir brauchen mehr als einen &#xbb;Typ&#xab;"/>
+<node CREATED="1782951193252" ID="ID_341984997" MODIFIED="1782951209813" TEXT="Skala / Scale tritt auf zwei Bedeutungsebenen auf">
+<node CREATED="1782951211513" ID="ID_534693403" MODIFIED="1782951229171" TEXT="Measurement Scale"/>
+<node CREATED="1782951217451" ID="ID_1034096179" LINK="https://en.wikipedia.org/wiki/Level_of_measurement" MODIFIED="1782951247913" TEXT="Level of Measurement (Skalen-Niveau)">
+<node CREATED="1782951249606" ID="ID_286885318" MODIFIED="1782951257983" TEXT="oha ... da gib es so einige Untiefen!!"/>
+<node CREATED="1782951258983" ID="ID_1297628279" MODIFIED="1782951278292" TEXT="die Skalen-Niveus nach Stevens sind zwar weitverbreitet"/>
+<node CREATED="1782951279208" ID="ID_854829576" LINK="https://en.wikipedia.org/wiki/Level_of_measurement#Chrisman&apos;s_typology_(1998)" MODIFIED="1782951313007" TEXT="aber offensichtlich nicht ausreichend und ersch&#xf6;pfend"/>
+<node CREATED="1782951618754" ID="ID_138669286" LINK="https://en.wikipedia.org/wiki/Level_of_measurement#Scale_types_and_Stevens&apos;s_%22operational_theory_of_measurement%22" MODIFIED="1782951638340" TEXT="Beachte: Steven&apos;s operational theory of measurement">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1782952392928" ID="ID_1643159348" LINK="https://en.wikipedia.org/wiki/Statistical_data_type" MODIFIED="1782952401860" TEXT="siehe auch: Statistical Data Type"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1782952447246" ID="ID_515906474" MODIFIED="1782952452237" TEXT="Danger Territory">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782952461784" ID="ID_620054519" MODIFIED="1782952479466" TEXT="Unterschied zwischen &quot;perceptual&quot; und &quot;quantitative&quot;"/>
+<node CREATED="1782954528975" ID="ID_255602378" MODIFIED="1782954614458" TEXT="Naturwissenschaften und &quot;behavioural sciences&quot; sind subtil inkompatibel">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      obwohl sich beide vehement als &quot;quantitativ&quot; bezeichnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1782954626000" ID="ID_283957092" MODIFIED="1782954650188" TEXT="hinzu kommt die ungel&#xf6;ste Verwirrung bez&#xfc;glich der &#xbb;Erkenntnistheorie&#xab;"/>
+<node CREATED="1782954685588" ID="ID_1282962486" MODIFIED="1782954726125" TEXT="nahmhafte Autoren der &quot;behavioural sciences&quot; lehnen die Skalen-Niveaus als zu einfach ab"/>
+</node>
+</node>
+<node CREATED="1783012457432" ID="ID_1617567809" MODIFIED="1783012460883" TEXT="Reflexion">
+<node CREATED="1783012501938" ID="ID_985953889" MODIFIED="1783012512285" TEXT="Extension, Intensit&#xe4;t, Relation, Modalit&#xe4;t ...."/>
+<node CREATED="1783012522540" ID="ID_455550546" MODIFIED="1783012559186" TEXT="Aber: alles hier kann weiterhin unter der Grundform eines &#xbb;Typs&#xab; laufen (im Sinn der Informatik)">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1783012565109" ID="ID_74260294" MODIFIED="1783012590452" TEXT="Generell entwickelt sich in Lumiera eine spezielle Variante des Typbegriffs">
+<node CREATED="1783012591835" ID="ID_1487535870" MODIFIED="1783012594961" TEXT="siehe Stream-Type"/>
+<node CREATED="1783012595873" ID="ID_774342307" MODIFIED="1783012599113" TEXT="siehe Placement"/>
+<node CREATED="1783012599911" ID="ID_1341814745" MODIFIED="1783012604808" TEXT="siehe Buffer-Type"/>
+<node CREATED="1783012610651" ID="ID_1372270066" MODIFIED="1783012621604" TEXT="da zeichnet sich ein Muster ab...">
+<node CREATED="1783012719761" ID="ID_588268047" MODIFIED="1783012738273" TEXT="ein Prototyp und eine DAG aus Bestimmungen"/>
+<node CREATED="1783012740594" ID="ID_157784558" MODIFIED="1783012759399" TEXT="beide zusammen werden &#xfc;ber ein Query-Rig angebunden"/>
+<node CREATED="1783012785092" ID="ID_995942771" MODIFIED="1783012793882" TEXT="es gibt verschiedene Formen und Tiefen der Auswertung"/>
+<node COLOR="#5b280f" CREATED="1783012622480" ID="ID_1896877960" MODIFIED="1783012717685" TEXT="vorerst gen&#xfc;gt es, das zu erkennen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es w&#228;re gef&#228;hrlich, sofort nach einer &#187;generischen Form&#171; zu greifen; denn eine solche Form mu&#223; sich herausbilden, indem man darauf zuarbeitet. Also werde ich nun nicht versuchen, <i>ein Konstrukt</i>&#160;zu schaffen.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+</node>
+<node CREATED="1783012836032" ID="ID_1668665310" MODIFIED="1783012844332" TEXT="Aber eine Einsicht kann man daraus ziehen...">
+<node CREATED="1783012849155" ID="ID_1424154331" MODIFIED="1783012870212" TEXT="das &#xbb;Query-Rig&#xab; ist so etwas wie ein Policy-Interface"/>
+<node CREATED="1783012871777" ID="ID_850184784" MODIFIED="1783012900648" TEXT="darunter liegt ein Schema der Bestimmung in verschiedenen Hinsichtien / Dimensionen"/>
+<node CREATED="1783012902580" ID="ID_1982594796" MODIFIED="1783012927106" TEXT="Typen sind stets hierarchisch mit Prototyp-Ansatz"/>
+<node CREATED="1783012935592" ID="ID_722843640" MODIFIED="1783013421499" TEXT="dem &#xbb;Prototyp&#xab; kommt aber ein dar&#xfc;ber hinausgehende symbolische Verweisform zu">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das bedeutet: der Prototyp ist nicht nur <i>irgend eine Ansammlung von Merkmalen,</i>&#160;sondern im Setup der Applikation oder des Modells werden bestimmte Prototypen etabliert, um auf Rollen und Arbeitsmuster zu verweisen, welche jenseits des implementierten Konstrukts liegen. Der Prototyp dient auch als Marker auf der Metadaten-Ebene, und die Merkmals-Auspr&#228;gungen werden so eingerichtet, da&#223; sich um einen Prototyp herum eine Klasse bilden kann.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      F&#252;r sich genommen ist das alles recht gew&#246;hnlich; bemerkenswert ist nur, da&#223; wir definitorisch eine L&#252;cke zwischen dem Prototyp als Marker lassen, und der Einrichtung der Auspr&#228;gungen. Der dadurch geschaffene Spielraum soll den Regeln und der Regelbasierten Konfiguration zug&#228;nglich sein. So will ich mit den Stream-Types umgehen, und mit den Placement-Prototypes. Und entsprechend auch mit den Parameter-Prototypes: es gibt also z.B. diskret-Integrale Parameter, oder es gibt Gain-Parameter und Farb-Parameter oder es gibt Auswahl-Konfigurationen. Dem entspricht jeweils eine gewisse Auspr&#228;gung an primitiven Eigenschaften (welche auch nicht komplett abgeschlossen sind). <i>Welche Auspr&#228;gung aber genau,</i>&#160;ist nur durch einer Art Konfiguration festgelegt; der operative Teil des Codes macht heir&#252;ber m&#246;glichst keine impliziten Annahmen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1782948792629" ID="ID_1623866120" MODIFIED="1782949000542" TEXT="a Parameter has...">
+<node CREATED="1782948801636" ID="ID_224051194" MODIFIED="1783012188400" TEXT=" a Disposition"/>
+<node CREATED="1783012199995" ID="ID_1245050792" MODIFIED="1783012219836" TEXT="which comprises">
+<node CREATED="1783012221304" ID="ID_1384741652" MODIFIED="1783012226307" TEXT="the ParamType">
+<node CREATED="1783012377090" ID="ID_1006852836" MODIFIED="1783012384142" TEXT="using a Domain"/>
+<node CREATED="1783012384746" ID="ID_702451698" MODIFIED="1783012387221" TEXT="and a Scale"/>
+</node>
+<node CREATED="1783012231419" ID="ID_194332924" MODIFIED="1783012364136" TEXT="the Provision"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1783012426948" ID="ID_618035658" MODIFIED="1783013523710" TEXT="Struktur-Aufbau (experimenteller Entwurf)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Moment mache ich nur eine Skizze zu dem Thema, und die Entwicklung soll lediglich so weit gehen, da&#223; man sieht &#187;wie der Hase l&#228;uft&#171; und da&#223; man &#187;Parameter&#171; in eine Map legen k&#246;nnte (f&#252;r die Render-Invocation)
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1783013534719" ID="ID_1275296715" MODIFIED="1783013563112" TEXT="Anordnung nach dem PImpl-Pattern">
+<node CREATED="1783013564573" ID="ID_635500547" MODIFIED="1783013580724" TEXT="par::Parameter ist eine &#xe4;u&#xdf;ere H&#xfc;lle"/>
+<node CREATED="1783013581680" ID="ID_1888909252" MODIFIED="1783013602869" TEXT="die Disposition ist ein virtuelles Interface"/>
+<node CREATED="1783013603761" ID="ID_61165666" MODIFIED="1783013658186" TEXT="eine konkrete Disposition liegt direkt im Parameter-Buffer"/>
+<node BACKGROUND_COLOR="#e5cbab" CREATED="1783096207982" ID="ID_1654446767" MODIFIED="1783096252653">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b><u>Invariante</u></b>: der Wert im Buffer ist <i>stets konform</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1783013660958" ID="ID_1089086419" MODIFIED="1783013679715">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Implementierung als <b>PolymorphicValue</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1783013721977" ID="ID_950124427" MODIFIED="1783014286619" TEXT="hier geht auch meine Einsicht bez&#xfc;glich &#xbb;Inline-Functor&#xab; mit ein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Denn die Design-Analyse hat gezeigt, da&#223; der &#187;Opaque-Buffer&#171;-Ansatz inhaltlich sehr nahe an einer &#187;Inline-Funktion&#171; liegt, und letztere ist aber strukturell am effizientesten zu implementieren als PolymorphicValue &#8212; was vor allem an der Notwendigkeit eines &#187;Managers&#171; liegt, um das Instanz- und Copy-Verhalten zu bestimmen. Die Begr&#252;ndung ist, da&#223; ein <i>virtuelles Interface</i>&#160;tats&#228;chlich bereits die effizienteste Reallisierung darstellt, sobald es mehrere virtualisierte &#187;methoden&#171; gibt, denn sie fa&#223;t das Instanz-Management und den Zugang zu einem gemeinsamen Datenkontext bereits optimal zusammen. Selbst wenn man <i>bewu&#223;t nicht die Implementierung aus der C++-Runtime nimmt, </i>(wie im Fall der <font face="Monospaced" color="#6f3636">std::function</font>) so l&#228;uft die Struktur doch immer wieder darauf hinaus, Zugang zu einem gemeinsamen Datenpaket zu bekommen (egal ob das nun per PImpl im Heap liegt, oder direkt in einem Inline-Buffer). Denn ohne solchen gemeinsamen Zustand kann es auch kein tangibles Verhalten geben....
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fee7b9" DESTINATION="ID_1009499088" ENDARROW="Default" ENDINCLINATION="-1018;78;" ID="Arrow_ID_248211697" STARTARROW="None" STARTINCLINATION="473;21;"/>
+</node>
+<node CREATED="1783014257825" ID="ID_1236933544" MODIFIED="1783014659723" TEXT="denn die erweiterte Datenquelle bedeutet : irgendwie ist ein Funktor involviert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      derzeit kann ich nicht entscheiden, ob die Auswertung &quot;pull&quot; oder &quot;push&quot; ist. Wobei allerdings irgend eine Art von Auswertungs-Trigger sehr wahrscheinlich ist; insofern l&#228;uft die pull/push-Unterscheidung lediglich darauf hinaus, wie weit das Resultat nach einem solchen Trigger transportiert wird; im Falle von &quot;pull&quot; w&#252;rde nur eine Auswertung der Basis-Treiber und Kurven erfolgen, w&#228;hrend alle nachgelagerten Aggregationen und Transformationen on-demand erfolgen. Die Automationskurven w&#228;ren mithin eine Art Datenquelle, und die weitere Auswertung w&#252;rde in Nodes erfolgen.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Wie dem auch sei &#8212; f&#252;r die Struktur ergibt sich, da&#223; jeder Zugriff eine Methode aufruft, welche aber u.U. rekursiv delegiert.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783036916503" ID="ID_1669853507" MODIFIED="1783036956863" TEXT="das hei&#xdf;t: das konkrete Objekt ist zugleich ein Inline-Buffer und ein Delegate">
+<arrowlink COLOR="#c51d73" DESTINATION="ID_101058576" ENDARROW="Default" ENDINCLINATION="-41;-57;" ID="Arrow_ID_1162387219" STARTARROW="None" STARTINCLINATION="-148;6;"/>
+</node>
+</node>
+<node CREATED="1783013690890" ID="ID_89051931" MODIFIED="1783013718234" TEXT="das Disposition-Interface ist aber halb-konkret und erlaubt Direkt-Zugriff">
+<node CREATED="1783014672339" ID="ID_895627690" MODIFIED="1783014684521" TEXT="dazu braucht es ein minimales Guard-Pr&#xe4;dikat"/>
+<node CREATED="1783014685423" ID="ID_1670263195" MODIFIED="1783014920795" TEXT="wenn dieses einen Direktzugriff erlaubt...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und das hat zwei Vorrausetzungen...
+    </p>
+    <ul>
+      <li>
+        ein lokaler Wert kann direkt ohne Anpassung verwendet werden, weil keine weitere Auswertung notwendig ist
+      </li>
+      <li>
+        und der implizite Ziel-Typ ist mit dem Wert-Typ Domain-kompatibel (beide haben den gleichen Basis-Typ und der Wert hat eine kleinere Dom&#228;ne)
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783014709872" ID="ID_1971882666" MODIFIED="1783014720522" TEXT="...dann mu&#xdf; keine Indirektion mehr erfolgen"/>
+<node CREATED="1783014730050" ID="ID_805331152" MODIFIED="1783014748983" TEXT=".....sondern der Wert kann direkt aus dem Buffer in der Disposition genommen werden"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783014922379" ID="ID_1702693548" MODIFIED="1783015115282" TEXT="ersatzweise gibt es aber auch virtuelle Konvertierungen und Adaptierungen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...auf die die Auswertung zur&#252;ckf&#228;llt, wenn kein direkt-Zugriff m&#246;glich ist. Das ist dann wohl einigerma&#223;en komplex zu implementieren, denn dieser indirekt Zugriff erfordert einen double-dispatch (Visitor)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1783015122776" ID="ID_1470792732" MODIFIED="1783015146185" TEXT="hier mu&#xdf; eine Kompatibilit&#xe4;tsmatrix in virtuellen Funktionen realisiert werden"/>
+<node CREATED="1783015147484" ID="ID_1885332452" MODIFIED="1783015170246" TEXT="nicht klar, wie weit das gehen mu&#xdf;"/>
+<node CREATED="1783015171142" ID="ID_579527029" MODIFIED="1783015176294" TEXT="deshalb vertagt">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1783036834486" ID="ID_101058576" MODIFIED="1783036949647" TEXT="Ooops &#x2014; das pa&#xdf;t jetzt nicht mit dem Type-ID-Pointer zusammen">
+<linktarget COLOR="#c51d73" DESTINATION="ID_101058576" ENDARROW="Default" ENDINCLINATION="-41;-57;" ID="Arrow_ID_1162387219" SOURCE="ID_1669853507" STARTARROW="None" STARTINCLINATION="-148;6;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1783037016985" ID="ID_273854941" MODIFIED="1783037025187" TEXT="wo w&#xe4;re denn nun die Indirektion...?">
+<node CREATED="1783037026601" ID="ID_123662361" MODIFIED="1783037036682" TEXT="Type-ID-Pointer...">
+<node CREATED="1783037050835" ID="ID_1507486885" MODIFIED="1783038320339" TEXT="im front-End-Objekt hat einen Type-Pointer"/>
+<node CREATED="1783037063631" ID="ID_770194280" MODIFIED="1783037077451" TEXT="der zeigt auf einen Typ-Deskriptor"/>
+<node CREATED="1783037078204" ID="ID_1424326384" MODIFIED="1783037086099" TEXT="welcher irgendwo &#xbb;statisch&#xab; vorliegt">
+<node CREATED="1783037110291" ID="ID_1314589990" MODIFIED="1783037130060" TEXT="von dort zeigt ein weiterer Pointer auf die VTable"/>
+<node CREATED="1783037139111" ID="ID_1761188757" MODIFIED="1783037146985" TEXT="ansonsten liegen dort nur einige Flags"/>
+<node CREATED="1783037159892" ID="ID_1638481854" MODIFIED="1783037189463" TEXT="und: dieser Deskriptor wurde irgendwie reegistriert &#x27f9; eindeutige ID"/>
+</node>
+<node CREATED="1783037270685" ID="ID_1749902470" MODIFIED="1783037275120" TEXT="f&#xfc;r einen Zugriff">
+<node CREATED="1783037276900" ID="ID_424509185" MODIFIED="1783037292530" TEXT="geht der Aufruf erst durch den Type-Pointer"/>
+<node CREATED="1783037292856" ID="ID_799641509" MODIFIED="1783037306465" TEXT="dann &#xfc;ber den VTable-Pointer und die virtuelle Funktion"/>
+<node CREATED="1783037307305" ID="ID_366908303" MODIFIED="1783037440665" TEXT="und dieser wird dann wieder ein Pointer auf den Buffer gegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil der Buffer <i>woanders</i>&#160;liegt, n&#228;mlich im Parameter selber
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783037509182" ID="ID_1686168782" MODIFIED="1783037529497">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist <i>nicht besonders effizient&#160;!</i>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1783037533315" ID="ID_1509843873" MODIFIED="1783037606455" TEXT="aber: die base-Domain-ID schaltet direkten Zugriff frei">
+<node CREATED="1783037623887" ID="ID_1583480747" MODIFIED="1783037636538" TEXT="die base-Domain-ID liegt auch im Typ-Deskriptor"/>
+<node CREATED="1783037637990" ID="ID_803443807" MODIFIED="1783037676865" TEXT="f&#xfc;r sie wird kein virtueller Aufruf ben&#xf6;tigt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sondern nur die eine Indirektion &#252;ber den Type-Pointer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783037677849" ID="ID_202919846" MODIFIED="1783037860829" TEXT="das Gegenst&#xfc;ck wird statisch erzeugt und direkt verglichen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn ein Client verlangt <font face="Monospaced" color="#513c3c">get&lt;TY&gt;()</font>, dann kann der Compiler die BaseDomain&lt;TY&gt; erstellen und direkt deren Hash-ID ermitteln (consteval). Diesen 64bit-Wert vergleicht er mit der entsprechenden ID, die per Type-Pointer gefunden wird. Wenn beide gleich sind, kann der Zugriff einfach direkt auf den Buffer durchgehen, mit force-cast.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1783037892158" ID="ID_631545530" MODIFIED="1783037897228" TEXT="Deduplikation f&#xfc;r...">
+<node CREATED="1783037958503" ID="ID_1434834299" MODIFIED="1783037966538" TEXT="eventuell spezielle Limit-Konfigs"/>
+<node CREATED="1783037967571" ID="ID_785325871" MODIFIED="1783037980089" TEXT="Flags f&#xfc;r die Art der Skala"/>
+<node CREATED="1783037981204" ID="ID_1427826403" MODIFIED="1783037994135" TEXT="weitere Policy-Config"/>
+<node CREATED="1783038022468" ID="ID_1514421147" MODIFIED="1783038038669">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      jedoch <b>nicht</b>&#160;f&#252;r die base-Domain-ID
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783038057103" ID="ID_1544786797" MODIFIED="1783038072430" TEXT="&#x27f9; mehr Deduplikation bedingt mehr Indirektion"/>
+</node>
+</node>
+<node CREATED="1783038148329" ID="ID_274985351" MODIFIED="1783038160139" TEXT="PolymorphicValue...">
+<node CREATED="1783038291176" ID="ID_327426206" MODIFIED="1783038431816" TEXT="front-End-Objekt enth&#xe4;lt Typ-Deskriptor direkt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      lediglich an einem festen Offset, wie ein sub-Objekt; denn der PolymorphicValue ist ja vor allem ein Casting-Trick. Insofern <i>z&#228;hlt das effektiv nicht als &#187;Indirektion&#171;</i>&#160;(es ist i.d.R bereits im CPU-Cache, und der Offest steht fest im Assembly)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783038438591" ID="ID_1054295875" MODIFIED="1783038452169" TEXT="allerdings mu&#xdf; nun die TypID eine Basisklasse sein"/>
+<node CREATED="1783038458644" ID="ID_603351531" MODIFIED="1783038469232" TEXT="direkt hier (lokal) liegt auch der Pointer in die VTable"/>
+<node CREATED="1783038490265" ID="ID_66241177" MODIFIED="1783038502597" TEXT="und der Data-Buffer liegt auch lokal"/>
+<node CREATED="1783038503904" ID="ID_2167298" MODIFIED="1783038537292" TEXT="insofern deutlich effizientere Daten-Anordnung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      selbst bei formal gleichem Grad an Virtualisierung / Indirektion f&#252;r die Funktions-Aufrufe
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783038573677" ID="ID_814534530" MODIFIED="1783038585410" TEXT="eine base-Domain-ID kann man trotzdem genauso einsetzen"/>
+<node CREATED="1783038608724" ID="ID_380978094" MODIFIED="1783038618633" TEXT="Nachteil: keine Deduplikation">
+<node CREATED="1783038630138" ID="ID_30848140" MODIFIED="1783038649219" TEXT="direkt gespeicherte Limits sind in jedem Parameter-Objekt repliziert"/>
+<node CREATED="1783038656630" ID="ID_121238495" MODIFIED="1783038665409" TEXT="entsprechend auch jedwede Skalen-Konfiguration"/>
+<node CREATED="1783038680348" ID="ID_121314162" MODIFIED="1783038709336" TEXT="&#x27f9; Deduplikation &#xfc;berhaupt nur per zus&#xe4;tzlicher Indirektion m&#xf6;glich"/>
+<node CREATED="1783038717460" ID="ID_321664353" MODIFIED="1783038736924" TEXT="aber jede weitere Indirektion profitiert nicht mehr von der Inline-Anordnung"/>
+</node>
+</node>
+</node>
+<node CREATED="1783039740230" ID="ID_490714316" MODIFIED="1783039778895" TEXT="also ist der Polymorphic-Ansatz sogar besser">
+<node CREATED="1783039780014" ID="ID_911520504" MODIFIED="1783039785483" TEXT="allerdings nur auf der 1.Ebene"/>
+<node CREATED="1783039786143" ID="ID_1714192276" MODIFIED="1783040123777" TEXT="und er macht eigentlich nur Sinn, wenn es auch eine substantielle VTable g&#xe4;be">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...also m&#246;glichst viele Operationen direkt &#252;ber dieses verpackte Disposition-Objekt dispatched werden, also dieses direkt auf der Typ-Ebene aus Bausteinen per Vererbung zusammengef&#252;gt w&#252;rde. Denn sonst w&#228;re es nur ein in-Place-Buffer mit virtual-copy-Support (den wir eigentlich hier nicht brauchen, da wir auch bitwise-copy machen k&#246;nnten, und die Kopierbarkeit f&#252;r Parameter sowiso nicht besonders bedeutsam ist, da sie i.d.R. zu einem Objekt mit Identit&#228;t geh&#246;ren)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783039806210" ID="ID_1998181812" MODIFIED="1783040231699" TEXT="aber eben dann auch bl&#xe4;ht sich der Speicherbedarf auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und das macht mir Sorge, denn ich gehe davon aus, da&#223; Parameter eine sehr h&#228;ufige Einrichtung werden, und man durchaus dutzende Parameter an einem Objekt haben k&#246;nnte. Einen Typ-Descriptor w&#252;rde ich noch akzeptieren (Faktor 2), aber sicher nicht 3-6 weitere Steuerwerte, die obendrein ziemlich redundant sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#be1294" CREATED="1783040255151" ID="ID_1595484083" MODIFIED="1783040312603" TEXT="damit wieder &#xbb;back to square one&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wo ich doch heute Abend noch so stolz auf meine Errungenschaften war...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
+<node CREATED="1783040349995" ID="ID_1865443974" MODIFIED="1783040366820" TEXT="es ist nun weiterhin unklar wie der Typ strukturiert wird"/>
+<node CREATED="1783040367840" ID="ID_910738575" MODIFIED="1783040393515" TEXT="und wie die Provision platzsparend dargestellt werden kann"/>
+<node CREATED="1783040405392" ID="ID_1883727059" MODIFIED="1783041074344" TEXT="schlimmer noch: wei&#xdf; nicht ob diese Performance-&#xdc;berlegungen &#xfc;berhaupt relevant sind">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nochmal zur Erinnerung: bin in dieses ganze Riesen-Thema nur reingeschlittert, weil ich den processKey als Job-Parameter aufgeben mu&#223;te (und der war eine so &#187;sch&#246;ne L&#246;sung&#171;, die das Thema markiert und auf sp&#228;ter verschiebt). Dann habe ich gesagt, einen Zacken nachlegen und mal eben ein Design f&#252;r Parameter machen. Ich wei&#223; aber noch gar nicht, wo genau die Parameter sonst noch eingesetzt werden sollen. Ich wei&#223; nur, da&#223; ich sie universell einsetzen m&#246;chte.
+    </p>
+    <p>
+      Im Besonderen ist die ganze Auswertung von Parameter komplett ungekl&#228;rt. Diese Auswertung passiert irgendwie in Response auf Interaktionen im GUI (vor allem: &#228;ndern der Playback-Position, aber nat&#252;rlich auch direkte Wert-Tweaks). Es ist klar, da&#223; die Auswertung nicht im GUI selber stattfinden wird, denn daf&#252;r haben wir die Trennung (die Commands, den UI-Bus und das Event-Sourcing). Wahrscheinlich wird eine Auswertung in einer Projektion der Events passieren, entweder nach einem Builder-Lauf, oder in vielen F&#228;llen anstelle eines Solchen (wenn gar nichts neu gebaut werden mu&#223;). Auch der Builder ist ja konzeptionell eine Projektion. Dann aber ist andererseits auch klar, da&#223; Parameter irgendwie in der Render-Engine ausgewerter werden, und zwar dort verpackt in einen Automations-Funktor. M&#246;glicherweise wird diese Auswertung aber auch eine Art <i>compilierte Variante</i>&#160;sein.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      In beiden F&#228;llen hab ich keinerlei Anhaltspunkt, welche Gr&#246;&#223;enordnung an Aufwand das ganze Parameter-Thema verursacht; ich hab lediglich ein ungutes Bauchgef&#252;hl &#8212; denn das ganze Konzept schreit direkt danach, auf einen generischen Level gehoben zu werden, und dann pervasiv zum Einsatz zu kommen, einschlie&#223;lich Introspektion von Parametern.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1783041075841" ID="ID_544097121" MODIFIED="1783041092743" TEXT="wenn also &#xbb;Platz sparen&#xab; h&#xf6;chste Priorit&#xe4;t h&#xe4;tte...">
+<node CREATED="1783041117246" ID="ID_1209348964" MODIFIED="1783041135606" TEXT="dann w&#xe4;re die Disposition ein PImpl &#x2014; gerne in Inline-Anordnung"/>
+<node CREATED="1783041140116" ID="ID_1294364897" MODIFIED="1783041200335" TEXT="m&#xfc;&#xdf;te aber ansonsten sehr knapp gehalten sein">
+<node CREATED="1783041202439" ID="ID_1566675889" MODIFIED="1783041717493" TEXT="in einem Funktor oder der VTable steckt das Thema &#xbb;Provision&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also das konfigurierbare Verhalten, ob und wann ein pull auf eine Datenquelle stattfinden soll. Sehr wahrscheinlich wird es daf&#252;r eben mindestens ein pr&#252;f-Pr&#228;dikat geben, neben der eigentchen Auswertungsfunktion. Genauer gesagt, wenn es mehr als ein einfaches bool-Merkmal ist, dann wird eine VTable effizienter als mehrere Funktoren. Meine Einsch&#228;tzung ist, da&#223; das h&#246;chstwahrscheinlich der Fall sein wird, allein schon, weil die Verkn&#252;pfung mit einem lokalen Value auch von der Skala abh&#228;ngt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783041520894" ID="ID_117006493" MODIFIED="1783041546590" TEXT="daneben darf es nur noch einen Type-Pointer geben"/>
+</node>
+<node CREATED="1783041747071" ID="ID_1015081539" MODIFIED="1783041764368" TEXT="der Typ-Deskriptor selber w&#xfc;rde alle weitere Konfiguration tragen">
+<node CREATED="1783041782359" ID="ID_936382226" MODIFIED="1783041797228" TEXT="ob man dann die Domain nochmal dedupliziert ist eine Optimierungs-Frage"/>
+<node CREATED="1783041809671" ID="ID_136615697" MODIFIED="1783041822353" TEXT="eine base-Domain-ID mu&#xdf; in jedem Fall sein"/>
+<node CREATED="1783041835107" ID="ID_1615403061" MODIFIED="1783041849330" TEXT="au&#xdf;erdem w&#xe4;re die Scale zu konfigurieren"/>
+</node>
+<node CREATED="1783086950848" ID="ID_1781862701" MODIFIED="1783086957136" TEXT="was ist mit der VTable?">
+<node CREATED="1783086965229" ID="ID_975144620" MODIFIED="1783087000582">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      h&#228;ngt mit der <b>Kopierbarkeit</b>&#160;zusammen
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ohne VTable m&#252;&#223;te das Objekt non-copyable sein
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5f0f69" CREATED="1783087011755" ID="ID_522578531" MODIFIED="1783090291858" TEXT="stelle die Frage: ist das angemessen?">
+<icon BUILTIN="help"/>
+<node CREATED="1783087038084" ID="ID_192113507" MODIFIED="1783087050833" TEXT="ein Parameter ist nicht unbedingt ein &#xbb;Value&#xab;"/>
+<node CREATED="1783087061644" ID="ID_529127857" MODIFIED="1783091373689" TEXT="Einsicht: Symbolische Repr&#xe4;sentationen liegen oft in einem Zwischenfeld">
+<linktarget COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2603;104;" ID="Arrow_ID_1457907870" SOURCE="ID_936945076" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
+<node CREATED="1783087081345" ID="ID_909620394" MODIFIED="1783087087812" TEXT="Beispiel: eine M&#xfc;nze">
+<node CREATED="1783087094301" ID="ID_1763897712" MODIFIED="1783087102346" TEXT="wir behandeln sie zwar als fungibel"/>
+<node CREATED="1783087105729" ID="ID_167575054" MODIFIED="1783090315462">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber sie ist <b>nicht</b>&#160;kopierbar (f&#228;lschungssicher)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783087121444" ID="ID_1092006503" MODIFIED="1783087142199" TEXT="d.h. es kommt darauf an, da&#xdf; eine M&#xfc;nze an einem bestimmten Ort ist"/>
+<node CREATED="1783087143137" ID="ID_243794857" MODIFIED="1783087232505" TEXT="die M&#xfc;nze ist mehr als blo&#xdf; &#xbb;Information&#xab; &#xfc;ber einen &#xbb;Wert&#xab;"/>
+<node CREATED="1783087244819" ID="ID_1551397346" MODIFIED="1783087254265" TEXT="aber sie wird nicht &#xfc;ber ihre Identit&#xe4;t referenziert"/>
+</node>
+<node CREATED="1783087266720" ID="ID_803892636" MODIFIED="1783087392607" TEXT="in IT-Systemen tragen Symbole eine Bedeutung &#xfc;ber ihre Funktion hinaus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es liegt an ihnen ein Element der Bedeutung und Relevanz, welches aus Sicht des technischen Konstrukts <i>als kontingent erscheint: </i>es l&#228;&#223;t sich nicht aus den Eigenschaften des reinen Funktionierens und dem damit verbundenen Informationsgehalt herleiten
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1783087429970" ID="ID_231322951" MODIFIED="1783087453203" TEXT="Kopierbarkeit wird hier aus technisch-konstruktiven Gr&#xfc;nden gefordert">
+<icon BUILTIN="idea"/>
+<node CREATED="1783087510040" ID="ID_1562216049" MODIFIED="1783087522045" TEXT="erm&#xf6;glicht transiente Verarbeitung mit geringen Kosten"/>
+<node CREATED="1783087526228" ID="ID_1612818092" MODIFIED="1783087582778" TEXT="erm&#xf6;glicht concurrent-processing und Proze&#xdf;-Verarbeitung"/>
+<node CREATED="1783087599584" ID="ID_865552139" MODIFIED="1783087633468" TEXT="Problem dabei: Subsidiarit&#xe4;t bzw. Umgang mit der Komplexit&#xe4;t">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1783087806888" ID="ID_175108462" MODIFIED="1783088153245" TEXT="Subsidiarit&#xe4;t bedeutet, Details nach innen zu nehmen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist die einzige echte L&#246;sung im Umgang mit der Komplexit&#228;t. Alle anderen Ans&#228;tze verschieben nur die Probleme in einen Bereich, der im Moment nicht so st&#246;rt, und erkaufen das durch zus&#228;tzliche Komplexit&#228;t.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783087822814" ID="ID_690566957" MODIFIED="1783088068846" TEXT="das ist bisher nur in einer festen Einrichtung m&#xf6;glich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      eine solche Struktur mu&#223; einmal aufgebaut werden, aus einem Build-Kontext mit erweiterten Bez&#252;gen; danach werden diese unsichtbar gemacht (Type-Erasure), aber nun ist das subsidi&#228;re Element frei gestellt, und kann nur noch mit den einmal etablierten Beziehungen arbeiten. Entweder, man kann die zus&#228;tzliche Komplexit&#228;t nicht abstreifen (also eigentlich keine echte Subsidiarit&#228;t), oder das subsidi&#228;re Element wird zum Unikat und mu&#223; global alle es betreffenden Aufgaben meistern. Das wirderspricht einer Aufteilung und anderweitigen Strukturierung der Verarbeitungsvorg&#228;nge. Sei es, in dem man einen Proze&#223; ablaufen l&#228;&#223;t, oder sei es, in dem man parallelisiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1783087641015" ID="ID_307620534" MODIFIED="1783087664610" TEXT="ein PolymorphicValue ist ein neuartiger Ausweg aus diesem Dilemma">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1783089184811" ID="ID_1299132056" MODIFIED="1783089203300">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Konsequenz: <b>pull-Prinzip</b>&#160;ist verfplichtend
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1783089205648" ID="ID_1349301541" MODIFIED="1783089221992" TEXT="nur so l&#xe4;&#xdf;t sich Subsidiarit&#xe4;t und Kopierbarkeit realisieren"/>
+<node CREATED="1783089231521" ID="ID_156122886" MODIFIED="1783089247103" TEXT="ein kopiertes Automations-Netzwerk kann unabh&#xe4;ngig ausgewertet werden"/>
+<node CREATED="1783089284992" ID="ID_1890528520" MODIFIED="1783089339628" TEXT="und zwar ohne ein separates, zentrales Steuer-Model zu erzwingen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist die Leistung der Subsidiarit&#228;t: komplexe Zusammenh&#228;nge konnen lokal geregelt werden, und m&#252;ssen nicht externalisiert werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1783092313541" ID="ID_414920838" MODIFIED="1783092329207" TEXT="das legt den Entwurf (vorerst) ausreichend fest">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1783092339601" ID="ID_121697070" MODIFIED="1783092342652" TEXT="nun aufzubauen">
+<node CREATED="1783092344401" ID="ID_723247866" MODIFIED="1783092356166" TEXT="ParamType">
+<node CREATED="1783092477119" ID="ID_1734714581" MODIFIED="1783092481906" TEXT="Interfaface">
+<node CREATED="1783092482966" ID="ID_1196126403" MODIFIED="1783092486026" TEXT="virtuell"/>
+<node CREATED="1783092486716" ID="ID_1507254773" MODIFIED="1783092489572" TEXT="generisch">
+<node CREATED="1783096359085" ID="ID_1975981963" MODIFIED="1783096419344" TEXT="read&lt;TY&gt; (Buffer&amp;)">
+<node CREATED="1783096428327" ID="ID_1932842632" MODIFIED="1783096434384" TEXT="Fall-1 : Domain-Match">
+<node CREATED="1783096455900" ID="ID_392453476" MODIFIED="1783096479850" TEXT="BaseDomain&lt;TY&gt; &#x2261; this.BaseDomain"/>
+<node CREATED="1783096490502" ID="ID_519964980" MODIFIED="1783096503477" TEXT="Zugriff force-Cast auf den Buffer"/>
+<node CREATED="1783096505081" ID="ID_1662573806" MODIFIED="1783096593145" TEXT="Begr&#xfc;ndung: BaseDomain &#x2287; abgeleitete Domain">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      TY wird identifiziert mit BaseDomain&lt;TY&gt;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1783096649826" ID="ID_635617915" MODIFIED="1783096656736" TEXT="Fall-2 : convertible">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1783096668611" ID="ID_1774686345" MODIFIED="1783096682092" TEXT="Aufgabe: das feststellen">
+<icon BUILTIN="yes"/>
+<node CREATED="1783097205817" ID="ID_1999962808" MODIFIED="1783097216653" TEXT="l&#xe4;uft auf einen reflexiven Visitor hinaus..."/>
+<node CREATED="1783097503131" ID="ID_483426018" MODIFIED="1783097518253" TEXT="gegeben: eine Domain (Interface) + ein konkreter Typ"/>
+<node CREATED="1783098286033" ID="ID_624769242" MODIFIED="1783098301627" TEXT="Aufruf-Trick: der Ergebnis-Wert ist der &#xbb;Buffer&#xab; + RVO"/>
+</node>
+</node>
+<node CREATED="1783096657920" ID="ID_1533980494" MODIFIED="1783096661991" TEXT="sonst: compile-Fehler">
+<node CREATED="1783098319213" ID="ID_947038917" MODIFIED="1783098339095" TEXT="Requires-Klausel verwenden: kann man den Ausdruck bilden?"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1783097554556" ID="ID_1339731751" MODIFIED="1783097566222" TEXT="Domain">
+<node CREATED="1783097568770" ID="ID_1817564997" MODIFIED="1783097571619" TEXT="Interface">
+<node CREATED="1783097957599" ID="ID_1329465295" MODIFIED="1783098213366" TEXT="accept (Buffer, TY&amp;&amp;)"/>
+<node CREATED="1783098344748" ID="ID_1291147742" MODIFIED="1783098357707" TEXT="dieses Interface mu&#xdf; generiert werden"/>
+<node CREATED="1783098358531" ID="ID_1280505955" MODIFIED="1783098443001" TEXT="Type-Sequenz der erlaubten Basis-Typen">
+<linktarget COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" SOURCE="ID_836781666" STARTARROW="None" STARTINCLINATION="133;501;"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1783093092796" ID="ID_1726265613" MODIFIED="1783093108821" TEXT="intendierte Verwendung">
+<node CREATED="1783093125033" ID="ID_1254949400" MODIFIED="1783093128185" TEXT="use-cases">
+<node CREATED="1783093317856" ID="ID_856771096" MODIFIED="1783093324150" TEXT="get&lt;TY&gt;()"/>
+<node CREATED="1783093436187" ID="ID_136990462" MODIFIED="1783093443517" TEXT="set(TY newVal)"/>
+<node CREATED="1783093767301" ID="ID_1335018454" MODIFIED="1783093803789" TEXT="Param::build&lt;TY&gt;(val=TY{})"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783093472793" ID="ID_1689475149" MODIFIED="1783093761099" TEXT="adjust (Control&lt;X&gt;)">
+<icon BUILTIN="hourglass"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783093751636" ID="ID_1739226245" MODIFIED="1783093759439" TEXT="connect(...)">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1783088795196" ID="ID_1506122335" MODIFIED="1783088801007" TEXT="Einsichten">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1783088823625" ID="ID_653748451" MODIFIED="1783088832517" TEXT="hier zeichnet sich eine generische Struktur ab">
+<node CREATED="1783088855840" ID="ID_1175670295" MODIFIED="1783088878285" TEXT="sie liegt zwischen Konfiguration und Entscheidung"/>
+<node CREATED="1783088888985" ID="ID_463587124" MODIFIED="1783088908282" TEXT="dies wird &#xfc;bersetzt in ein hierarisches System aus Prototypen"/>
+</node>
+<node CREATED="1783088989907" ID="ID_929628053" MODIFIED="1783092302619" TEXT="Parameter stellen ein sekund&#xe4;res Netzwerk dar, das die Medienverarbeitung &#xfc;berspannt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...insofern <i>alle weiteren Belange,</i>&#160;die sich nicht auf Anordnung und Berechnung von Mediendaten herunterbrechen lassen, &#252;ber Parameter, Automation und dynamische Verkn&#252;pfung derselben dargestellt werden m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#1b49cc" DESTINATION="ID_729629430" ENDARROW="Default" ENDINCLINATION="-1510;0;" ID="Arrow_ID_967325219" STARTARROW="None" STARTINCLINATION="-2410;76;"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1448314890907" ID="ID_411012156" MODIFIED="1557498707236" POSITION="right" TEXT="Session">
@@ -81774,6 +82992,15 @@
 <linktarget COLOR="#7e23c4" DESTINATION="ID_182440787" ENDARROW="Default" ENDINCLINATION="648;35;" ID="Arrow_ID_1169189687" SOURCE="ID_860541201" STARTARROW="None" STARTINCLINATION="496;18;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1782836592321" ID="ID_1731759154" MODIFIED="1782836597992" TEXT="Bedeutung und Auslegung">
+<node CREATED="1782836605676" ID="ID_586522072" MODIFIED="1782836609091" TEXT="Rolle der Placements"/>
+<node CREATED="1782836624472" ID="ID_1699103545" MODIFIED="1782836631288" TEXT="Routing und OutputDesignations"/>
+<node CREATED="1782836632182" ID="ID_668252378" MODIFIED="1782836700632" TEXT="Umgang mit der Automation">
+<node CREATED="1782836737587" ID="ID_1861136059" MODIFIED="1782836793274" TEXT="siehe allgemeines Konzept">
+<arrowlink COLOR="#782d9c" DESTINATION="ID_1621531160" ENDARROW="Default" ENDINCLINATION="50;400;" ID="Arrow_ID_201512722" STARTARROW="None" STARTINCLINATION="167;-253;"/>
+</node>
 </node>
 </node>
 </node>
@@ -112569,7 +113796,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node COLOR="#338800" CREATED="1728786158476" ID="ID_287270915" MODIFIED="1736113137474" TEXT="Parameter definieren">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#0f694f" CREATED="1733082536485" ID="ID_14036913" MODIFIED="1736117651979" TEXT="Tja.... wir m&#xfc;ssen &#xfc;ber Parameter reden">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#0f694f" CREATED="1733082536485" ID="ID_14036913" MODIFIED="1782836394077" TEXT="Tja.... wir m&#xfc;ssen &#xfc;ber Parameter reden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -112579,9 +113806,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <linktarget COLOR="#2229dd" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="270;-959;" ID="Arrow_ID_294414347" SOURCE="ID_145148184" STARTARROW="None" STARTINCLINATION="-735;32;"/>
+<linktarget COLOR="#0d72c9" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="-305;1295;" ID="Arrow_ID_1179454576" SOURCE="ID_570229743" STARTARROW="None" STARTINCLINATION="-2295;138;"/>
 <icon BUILTIN="smily_bad"/>
 <node COLOR="#338800" CREATED="1733082597960" FOLDED="true" ID="ID_51687123" MODIFIED="1736113113105" TEXT="Skizze ins Unreine">
 <linktarget COLOR="#fddab2" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="-264;821;" ID="Arrow_ID_117441899" SOURCE="ID_1596041137" STARTARROW="None" STARTINCLINATION="672;-66;"/>
+<linktarget COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" SOURCE="ID_354667146" STARTARROW="None" STARTINCLINATION="1670;84;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1733084053391" ID="ID_903308136" MODIFIED="1733084076106" TEXT="Parameter">
 <node CREATED="1733084101368" ID="ID_1882508638" MODIFIED="1733084108051" TEXT="k&#xf6;nnen fest oder beweglich sein"/>
@@ -112656,7 +113885,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      Es ist eine ungekl&#228;rte Frage, ob Abk&#252;rzungen in der Render-Engine sinnvoll sind. Diese Frage kann nur empirisch gekl&#228;rt werden, und vermutlich niemals abschlie&#223;end. Erfahrung im high-Performance-Computing zeigt, da&#223; Schematisierung oft der Einzelfallbehandlung &#252;berlegen ist &#8212; es sei denn, der Einzelfalls stellt selbst ein Schema dar
+      Es ist eine ungekl&#228;rte Frage, ob Abk&#252;rzungen in der Render-Engine sinnvoll sind. Diese Frage kann nur empirisch gekl&#228;rt werden, und vermutlich niemals abschlie&#223;end. Erfahrung im high-Performance-Computing zeigt, da&#223; Schematisierung oft der Einzelfallbehandlung &#252;berlegen ist &#8212; es sei denn, der Einzelfall stellt selbst ein Schema dar
     </p>
   </body>
 </html></richcontent>
@@ -117849,6 +119078,42 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1782829702421" ID="ID_160433970" MODIFIED="1782829774250" TEXT="aber ich sollte seine Bedeutung bekr&#xe4;ftigen (nicht in Frage stellen)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Schlie&#223;lich habe ich nicht umsonst gr&#252;ndlich &#252;ber die Architektur nachgedacht; sie mu&#223; und soll sich nun bew&#228;hren, und dann erst wird Bilanz gezogen!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782829786629" ID="ID_1661083117" MODIFIED="1782830009673" TEXT="Konsequenz">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1782829792766" ID="ID_1273060906" MODIFIED="1782829898533" TEXT="zus&#xe4;tzliche neue Rolle: ein Fehler-Status">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...den brauchen wir ohnehin, und ich wollte in dem Bereich bewu&#223;t nicht mit Exceptions arbeiten (au&#223;er f&#252;r die wirklich unvorhersehbaren F&#228;lle, in denen aber die gesamte Engine heruntergefahren wird). Insofern w&#252;rde es genau zur Vision passen, diese Art sekund&#228;re Koordination hier zu b&#252;ndeln.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1782829905581" ID="ID_570229743" MODIFIED="1782836394077" TEXT="die Control-Parameter bereits jetzt anlegen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auch in diesem Fall gibt es keinen grunds&#228;tzlichen Widerspruch; also mu&#223; ich lediglich etwas h&#228;rter mit mir selber sein, und das eben auch noch jetzt stemmen. Gebraucht wird ein Parameter-System ohnehin, und <i>im Prinzip</i>&#160;wei&#223; ich ohne gro&#223;e &#220;berlegung, wie man so etwas anlegt.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#0d72c9" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="-305;1295;" ID="Arrow_ID_1179454576" STARTARROW="None" STARTINCLINATION="-2295;138;"/>
+</node>
 </node>
 </node>
 </node>
@@ -185455,6 +186720,45 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1737320216607" ID="ID_900361053" MODIFIED="1737320223218" TEXT="algebraische Terme"/>
 </node>
 </node>
+<node CREATED="1783090370273" ID="ID_6978439" MODIFIED="1783090382728">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Rolle und Problem der <b>Modelle</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1783090502042" ID="ID_324106079" MODIFIED="1783090529872" TEXT="ein zentrales Model ist gef&#xe4;hrlich &#x2014; weil es sich verfestigt">
+<node CREATED="1783090535915" ID="ID_1597061880" MODIFIED="1783090571307" TEXT="Software mu&#xdf; sich anpassen k&#xf6;nnen &#x27f6; sonst geht sie unter bevor sie &#x201e;fertig&#x201c; ist"/>
+<node CREATED="1783090577038" ID="ID_463256794" MODIFIED="1783090605086" TEXT="ein Modell stellt ein Prinzip in das Zentrum &#x2014; diese Entscheidung ist aber zeitgebunden"/>
+<node CREATED="1783090609274" ID="ID_1534751821" MODIFIED="1783090643353" TEXT="&#x27f9; in langlebiger Software ist daher stets &#xbb;das Modell&#xab; veraltet und inad&#xe4;quat"/>
+</node>
+<node CREATED="1783090674277" ID="ID_2240804" MODIFIED="1783090677711" TEXT="Auswege">
+<node CREATED="1783090679624" ID="ID_1513515503" MODIFIED="1783090717823" TEXT="das Gesamtmodel als Ordnungsschema nur implizieren, nicht realisieren"/>
+<node CREATED="1783090743784" ID="ID_374904226" MODIFIED="1783090759666" TEXT="Koh&#xe4;rente Themenkomplexe mit loser Kopplung"/>
+<node CREATED="1783090857295" ID="ID_1246361645" MODIFIED="1783090867234" TEXT="mehrere Zentren mit Subsidiarit&#xe4;t zulassen">
+<node CREATED="1783090886989" ID="ID_379722799" MODIFIED="1783090900175" TEXT="bedeutet: externe Belange lokal durchleiten k&#xf6;nnen"/>
+<node CREATED="1783090943891" ID="ID_1250735796" MODIFIED="1783090956829" TEXT="Aufgaben symbolisch repr&#xe4;sentieren und &#xfc;ber Schnittstellen delegieren"/>
+</node>
+</node>
+<node CREATED="1783091014540" ID="ID_1203674099" MODIFIED="1783091028737" TEXT="Referenz- und Wertsemantik und symbolische Repr&#xe4;sentation">
+<node CREATED="1783091039152" ID="ID_1993377880" MODIFIED="1783091171174" TEXT="Referenz-Semantik enth&#xe4;lt die Tendenz auf ein globales Modell">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn ein Belang irgendwo &#187;gel&#246;st&#171; ist, kann man dorthin verweisen &#8212; aber nur wenn die Identit&#228;t des Ortes, an den verwiesen wird, eindeutig, klar und endg&#252;litg ist. Wenn dagegen die Koordination flexibel &#228;nderbar sein soll, darf es keine lokalen Bedingtheiten geben, die <i>das Durchgreifen behinden.</i>&#160;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783091204417" ID="ID_497644225" MODIFIED="1783091237042" TEXT="Werte dagegen sind sch&#xf6;n &#xbb;sauber&#xab; aber implizieren ein externalisiertes Deutungsschema"/>
+<node CREATED="1783091263541" ID="ID_936945076" MODIFIED="1783091373689" TEXT="symbolische Repr&#xe4;sentation liegt zwischen diesen beiden Extremen">
+<arrowlink COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2603;104;" ID="Arrow_ID_1457907870" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
+</node>
+</node>
+</node>
 <node CREATED="1748737119043" ID="ID_1848488024" MODIFIED="1748737134366">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -185543,6 +186847,66 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+<node CREATED="1782834141251" ID="ID_562846439" MODIFIED="1782834149750" TEXT="f&#xfc;r Parametrisierung und Automation">
+<node CREATED="1782834199657" ID="ID_996080392" MODIFIED="1782834212526" TEXT="essentielle Probleme">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1782834161864" ID="ID_1900374942" MODIFIED="1782834205966" TEXT="nur markierbar &#x2014; nicht repr&#xe4;sentierbar"/>
+<node CREATED="1782834215705" ID="ID_1453372628" MODIFIED="1782834539453" TEXT="Vollst&#xe4;ndigkeit der Einflu&#xdf;gr&#xf6;&#xdf;en oft nicht beweisbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Zuge der Gestaltung wird vom Benutzer etwas festgestellt und festgelegt; der Benutzer sieht ein Eingriff &#10236; Reaktions - Verhalten, und erwartet instinktiv, da&#223; sein Eingriff und seine Gestaltung vollst&#228;ndig und urs&#228;chlich das beobachtete Verhalten bedingen. Das ist in den meisten F&#228;llen eine T&#228;uschung. Man kann nur danch streben, m&#246;glichst alle Umst&#228;nde konsistent und konstant zu halten, solange bis das Resultat <i>materialisiert ist.</i>&#160;Besonders brennend wird dieses Problem, sofern das Format eines Werkes gar nicht auf vollst&#228;ndige Materialisierung angelegt ist.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fdf0b2" DESTINATION="ID_1198841098" ENDARROW="Default" ENDINCLINATION="1003;-44;" ID="Arrow_ID_1325189963" STARTARROW="None" STARTINCLINATION="-413;23;"/>
+<linktarget COLOR="#e43a62" DESTINATION="ID_1453372628" ENDARROW="Default" ENDINCLINATION="58;62;" ID="Arrow_ID_539851404" SOURCE="ID_225895508" STARTARROW="Default" STARTINCLINATION="95;-8;"/>
+</node>
+</node>
+<node CREATED="1782834577141" ID="ID_960969418" MODIFIED="1782835484537" TEXT="wird in zwei Formen repr&#xe4;sentiert">
+<arrowlink COLOR="#5625c1" DESTINATION="ID_1117049085" ENDARROW="Default" ENDINCLINATION="-3235;422;" ID="Arrow_ID_1628145836" STARTARROW="None" STARTINCLINATION="-4227;353;"/>
+<node CREATED="1782834594269" ID="ID_1649452902" MODIFIED="1782834603172" TEXT="als symbolische Definition"/>
+<node CREATED="1782834603820" ID="ID_147180572" MODIFIED="1782834613174" TEXT="als aufgezeichneter externer Wert"/>
+</node>
+</node>
+</node>
+<node CREATED="1782833548117" ID="ID_223392977" MODIFIED="1782833554624" TEXT="Inkompatible Elemente">
+<node CREATED="1782833577656" ID="ID_890766336" MODIFIED="1782833595378" TEXT="was sich nicht als Ganzes symbolisch repr&#xe4;sentieren l&#xe4;&#xdf;t"/>
+<node CREATED="1782833596952" ID="ID_424366158" MODIFIED="1782833614294" TEXT="was jenseits dieser Repr&#xe4;sentation eine eigne Logik hat"/>
+<node CREATED="1782833621371" ID="ID_1531707990" MODIFIED="1782833631718" TEXT="was implizit in Daten (nicht Metadaten) gegeben ist">
+<node CREATED="1782833636400" ID="ID_1152850344" MODIFIED="1782833674519" TEXT="external control connections"/>
+<node CREATED="1782833678059" ID="ID_1920729395" MODIFIED="1782833685965" TEXT="Einbindung von Medienstr&#xf6;men"/>
+<node CREATED="1782833712886" ID="ID_244881181" MODIFIED="1782833719905" TEXT="aufgezeichnetes Verhalten">
+<node CREATED="1782833723185" ID="ID_1791539105" MODIFIED="1782833728338" TEXT="Automation"/>
+<node CREATED="1782833738266" ID="ID_931406767" MODIFIED="1782833744275" TEXT="haptische Controller"/>
+<node CREATED="1782833744961" ID="ID_757177620" MODIFIED="1782833749341" TEXT="AI-Agents"/>
+</node>
+</node>
+<node CREATED="1782833803811" ID="ID_280212389" MODIFIED="1782833809333" TEXT="funktionale Definitionen">
+<node CREATED="1782833813264" ID="ID_883155565" MODIFIED="1782833822787" TEXT="wenn deren Konsequenz nicht absehbar ist"/>
+<node CREATED="1782833870109" ID="ID_113746370" MODIFIED="1782833891464">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn sie auf <i>emergent behaviour</i>&#160;einwirken
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#eecda1" COLOR="#690f14" CREATED="1782833892914" ID="ID_225895508" MODIFIED="1782834492018" TEXT="wichtiges Beispiel: Automation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Automation wird in der Regel abgestimmt auf ein wahrgenommenes, resultierendes Verhalten des Gesamtsystems; was in der Automation festgelegt ist, ist nicht greifbar und bestimmbar, wenn man lediglich ihre Definition vorliegen hat.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#e43a62" DESTINATION="ID_1453372628" ENDARROW="Default" ENDINCLINATION="58;62;" ID="Arrow_ID_539851404" STARTARROW="Default" STARTINCLINATION="95;-8;"/>
+</node>
 </node>
 </node>
 </node>
@@ -185672,6 +187036,27 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1748822125067" ID="ID_1713086918" MODIFIED="1748822141962" TEXT="dieser Modell-Bestand ist eine &#xbb;Projektion&#xab; im Sinn von CQRS"/>
 </node>
 </node>
+<node CREATED="1783091543258" ID="ID_226328132" MODIFIED="1783091547976" TEXT="was das Modell darstellt">
+<node CREATED="1783091573057" ID="ID_1981288175" MODIFIED="1783091582132" TEXT="Anordnung von Medienelementen"/>
+<node CREATED="1783091583119" ID="ID_875408207" MODIFIED="1783091603718" TEXT="Beziehungen in einer sich entwickelnden Anordnung">
+<node CREATED="1783091988577" ID="ID_729629430" MODIFIED="1783092302620" TEXT="&#xfc;bergreifende Rolle der Parameter">
+<arrowlink COLOR="#4844e4" DESTINATION="ID_1200024427" ENDARROW="Default" ENDINCLINATION="-144;37;" ID="Arrow_ID_434965526" STARTARROW="None" STARTINCLINATION="-168;14;"/>
+<linktarget COLOR="#1b49cc" DESTINATION="ID_729629430" ENDARROW="Default" ENDINCLINATION="-1510;0;" ID="Arrow_ID_967325219" SOURCE="ID_929628053" STARTARROW="None" STARTINCLINATION="-2410;76;"/>
+<node CREATED="1783092010797" ID="ID_1463783511" MODIFIED="1783092021255" TEXT="repr&#xe4;sentieren Gestaltungsm&#xf6;glichkeit"/>
+<node CREATED="1783092021700" ID="ID_1660523836" MODIFIED="1783092030010" TEXT="sind Niederschlag der Gestaltung"/>
+</node>
+</node>
+<node CREATED="1783091604473" ID="ID_1593975611" MODIFIED="1783091622550" TEXT="einen Auswertungs- und Berechnungsplan">
+<node CREATED="1783092167521" ID="ID_946310657" MODIFIED="1783092175811" TEXT="wird schrittweise aufgebaut und entwickelt"/>
+<node CREATED="1783092176391" ID="ID_1442910348" MODIFIED="1783092181183" TEXT="mu&#xdf; stets reproduzierbar sein"/>
+<node CREATED="1783092219839" ID="ID_1200024427" MODIFIED="1783092283406" TEXT="Parameter">
+<linktarget COLOR="#4844e4" DESTINATION="ID_1200024427" ENDARROW="Default" ENDINCLINATION="-144;37;" ID="Arrow_ID_434965526" SOURCE="ID_729629430" STARTARROW="None" STARTINCLINATION="-168;14;"/>
+<node CREATED="1783092224582" ID="ID_458794441" MODIFIED="1783092229356" TEXT="als Kontroll-Element"/>
+<node CREATED="1783092230104" ID="ID_1884066268" MODIFIED="1783092236351" TEXT="als Bindeglied"/>
+</node>
+</node>
+<node CREATED="1783091647087" ID="ID_1376924130" MODIFIED="1783091654233" TEXT="die Partitur einer Performance"/>
+</node>
 </node>
 <node CREATED="1748737180852" ID="ID_1653171650" MODIFIED="1748737227045">
 <richcontent TYPE="NODE"><html>
@@ -185716,6 +187101,33 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <icon BUILTIN="help"/>
 </node>
 </node>
+</node>
+</node>
+<node CREATED="1782833227154" ID="ID_243083181" MODIFIED="1782833236998">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Fragen der <b>Verl&#228;sslichkeit</b>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1782833250416" ID="ID_978987613" MODIFIED="1782833269912" TEXT="Bedingung der M&#xf6;glichkeit gr&#xf6;&#xdf;erer Projekte"/>
+<node BACKGROUND_COLOR="#ece4ae" COLOR="#37187d" CREATED="1782834040793" ID="ID_1198841098" MODIFIED="1782834531259">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>der &#187;Kontrakt&#171;</u>: <i>alles bleibt so wie festgestellt</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fdf0b2" DESTINATION="ID_1198841098" ENDARROW="Default" ENDINCLINATION="1003;-44;" ID="Arrow_ID_1325189963" SOURCE="ID_1453372628" STARTARROW="None" STARTINCLINATION="-413;23;"/>
+</node>
+<node CREATED="1782833330562" ID="ID_910895202" MODIFIED="1782833333733" TEXT="Gefahren">
+<node CREATED="1782833349111" ID="ID_1478452633" MODIFIED="1782833369421" TEXT="Einwirken externer Umst&#xe4;nde"/>
+<node CREATED="1782833341302" ID="ID_1212567598" MODIFIED="1782833394113" TEXT="inkonsistentes Verhalten"/>
+<node CREATED="1782833382827" ID="ID_355333855" MODIFIED="1782833386717" TEXT="die eigene Entwicklung"/>
 </node>
 </node>
 <node CREATED="1737319070929" ID="ID_1581929006" MODIFIED="1737319192871">
@@ -207224,7 +208636,8 @@ runner.run(test_suite())</font></code></pre>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1694381118468" ID="ID_708575663" LINK="https://issues.lumiera.org/ticket/1224" MODIFIED="1694786921016" TEXT="#1224 Layered Configuration">
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1694382811290" ID="ID_1356465047" LINK="https://issues.lumiera.org/ticket/1328" MODIFIED="1694786939453" TEXT="#1328 Layered Automation">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1694382811290" ID="ID_1356465047" LINK="https://issues.lumiera.org/ticket/1328" MODIFIED="1782836947906" TEXT="#1328 Layered Automation">
+<arrowlink COLOR="#ffddd1" DESTINATION="ID_186572947" ENDARROW="Default" ENDINCLINATION="-2120;127;" ID="Arrow_ID_1973029330" STARTARROW="None" STARTINCLINATION="-2063;146;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1694385302821" ID="ID_77053195" LINK="https://issues.lumiera.org/ticket/1329" MODIFIED="1694789360186" TEXT="#1329 Model Versioning">
