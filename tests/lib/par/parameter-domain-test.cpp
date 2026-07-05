@@ -48,7 +48,7 @@ namespace test{
       };
     
     typedef Some<Thing> SomeThing;
-    
+
   }//(End)Test fixture
   
   
@@ -68,20 +68,34 @@ namespace test{
       virtual void
       run (Arg)
         {
-          simpleUsage();
-          verify_typeMarker();
+          seedRand();
+          basics();
+          verify_typeVisitor();
         }
       
       
       void
-      simpleUsage()
+      basics()
         {
         }
       
       
       void
-      verify_typeMarker()
+      verify_typeVisitor()
         {
+          BaseDomain<int> domInt;
+          Domain& d1{domInt};
+          
+          int val1 = 1 + rani (1000);
+          ValBuff& src1 = asValBuff (val1);
+          
+          uint target1{0};
+          CHECK (not target1);
+          
+//          TypeHandler<uint>& dd1{d1};
+//          dd1.extractAs (target1, src1);
+          d1.extractAs (target1, src1);
+          CHECK (target1 == uint(val1));
         }
     };
   

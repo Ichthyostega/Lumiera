@@ -82174,7 +82174,19 @@
 <node CREATED="1783012377090" ID="ID_1006852836" MODIFIED="1783012384142" TEXT="using a Domain"/>
 <node CREATED="1783012384746" ID="ID_702451698" MODIFIED="1783012387221" TEXT="and a Scale"/>
 </node>
-<node CREATED="1783012231419" ID="ID_194332924" MODIFIED="1783012364136" TEXT="the Provision"/>
+<node CREATED="1783012231419" ID="ID_194332924" MODIFIED="1784376447831" TEXT="the Provision">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      bestimmt die Art und Weise des Zugriffs auf eine Datenquelle: entweder als Wert der in enem Buffer abgelegt ist, oder als pull von einem Funktor
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -82290,12 +82302,12 @@
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1783037016985" ID="ID_273854941" MODIFIED="1783037025187" TEXT="wo w&#xe4;re denn nun die Indirektion...?">
 <node CREATED="1783037026601" ID="ID_123662361" MODIFIED="1783037036682" TEXT="Type-ID-Pointer...">
-<node CREATED="1783037050835" ID="ID_1507486885" MODIFIED="1783038320339" TEXT="im front-End-Objekt hat einen Type-Pointer"/>
+<node CREATED="1783037050835" ID="ID_1507486885" MODIFIED="1784375909119" TEXT="im front-End-Objekt gibts einen Type-Pointer"/>
 <node CREATED="1783037063631" ID="ID_770194280" MODIFIED="1783037077451" TEXT="der zeigt auf einen Typ-Deskriptor"/>
 <node CREATED="1783037078204" ID="ID_1424326384" MODIFIED="1783037086099" TEXT="welcher irgendwo &#xbb;statisch&#xab; vorliegt">
 <node CREATED="1783037110291" ID="ID_1314589990" MODIFIED="1783037130060" TEXT="von dort zeigt ein weiterer Pointer auf die VTable"/>
 <node CREATED="1783037139111" ID="ID_1761188757" MODIFIED="1783037146985" TEXT="ansonsten liegen dort nur einige Flags"/>
-<node CREATED="1783037159892" ID="ID_1638481854" MODIFIED="1783037189463" TEXT="und: dieser Deskriptor wurde irgendwie reegistriert &#x27f9; eindeutige ID"/>
+<node CREATED="1783037159892" ID="ID_1638481854" MODIFIED="1784375931160" TEXT="und: dieser Deskriptor wurde irgendwie registriert &#x27f9; eindeutige ID"/>
 </node>
 <node CREATED="1783037270685" ID="ID_1749902470" MODIFIED="1783037275120" TEXT="f&#xfc;r einen Zugriff">
 <node CREATED="1783037276900" ID="ID_424509185" MODIFIED="1783037292530" TEXT="geht der Aufruf erst durch den Type-Pointer"/>
@@ -82554,12 +82566,14 @@
 </node>
 </node>
 </node>
-<node CREATED="1783089184811" ID="ID_1299132056" MODIFIED="1783089203300">
+<node CREATED="1783089184811" ID="ID_1299132056" MODIFIED="1783181849203">
 <richcontent TYPE="NODE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
-      Konsequenz: <b>pull-Prinzip</b>&#160;ist verfplichtend
+      Konsequenz: <b>pull-Prinzip</b>&#160;ist verpflichtend
     </p>
   </body>
 </html></richcontent>
@@ -82575,6 +82589,27 @@
   </body>
 </html></richcontent>
 </node>
+</node>
+</node>
+<node CREATED="1783182571290" ID="ID_41969896" MODIFIED="1783182584988" TEXT="m&#xf6;glichst viel direkt &#xfc;ber diese VTable leiten...?">
+<node CREATED="1783183185380" ID="ID_1945100188" MODIFIED="1783183203452" TEXT="Alle Methoden hierher"/>
+<node CREATED="1783097205817" ID="ID_1999962808" MODIFIED="1783183255718" TEXT="l&#xe4;uft auf einen reflexiven Visitor hinaus...">
+<icon BUILTIN="idea"/>
+<node CREATED="1783176305447" ID="ID_1093158750" MODIFIED="1783176788938" TEXT="Domain.accept(Domain&lt;X&gt;) &#x27f6; Domain&lt;X&gt;.visit(Domain&lt;U&gt;)"/>
+<node CREATED="1783177071573" ID="ID_1874719754" MODIFIED="1783178527301" TEXT="DomainSrc.supply(buffTar, DomainTar) &#x27f6; DomainTar.conform(buffTar, DomainSrc.get&lt;U&gt;))"/>
+<node CREATED="1783178829490" ID="ID_1988622013" MODIFIED="1783178833747" TEXT="Methoden">
+<node CREATED="1783178838358" ID="ID_1473718330" MODIFIED="1783181315927" TEXT="supply(srcBuffer, targetBuffer, Domain)"/>
+<node CREATED="1783178876883" ID="ID_220362444" MODIFIED="1783178892718" TEXT="conform(Buffer, TY&amp;&amp;)"/>
+</node>
+<node CREATED="1783098344748" ID="ID_1291147742" MODIFIED="1783183273021" TEXT="dieses Interface mu&#xdf; generiert werden">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1783182588840" ID="ID_1680648382" MODIFIED="1783182598138" TEXT="cross-Type-access">
+<node CREATED="1783182600606" ID="ID_1709539951" MODIFIED="1783182629564" TEXT="Disposition.read&lt;TY&gt;()">
+<node CREATED="1783182937350" ID="ID_509249241" MODIFIED="1783182949891" TEXT="supply(TY&amp;)"/>
+</node>
+<node CREATED="1783182964964" ID="ID_1325516678" MODIFIED="1783182991051" TEXT="Disposition.conform(TY&amp;&amp;)"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1783092313541" ID="ID_414920838" MODIFIED="1783092329207" TEXT="das legt den Entwurf (vorerst) ausreichend fest">
@@ -82605,9 +82640,8 @@
 <node CREATED="1783096649826" ID="ID_635617915" MODIFIED="1783096656736" TEXT="Fall-2 : convertible">
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1783096668611" ID="ID_1774686345" MODIFIED="1783096682092" TEXT="Aufgabe: das feststellen">
 <icon BUILTIN="yes"/>
-<node CREATED="1783097205817" ID="ID_1999962808" MODIFIED="1783097216653" TEXT="l&#xe4;uft auf einen reflexiven Visitor hinaus..."/>
 <node CREATED="1783097503131" ID="ID_483426018" MODIFIED="1783097518253" TEXT="gegeben: eine Domain (Interface) + ein konkreter Typ"/>
-<node CREATED="1783098286033" ID="ID_624769242" MODIFIED="1783098301627" TEXT="Aufruf-Trick: der Ergebnis-Wert ist der &#xbb;Buffer&#xab; + RVO"/>
+<node CREATED="1783098286033" ID="ID_624769242" MODIFIED="1783178792544" TEXT="Aufruf-Trick zum Lesen: der Ergebnis-Wert ist der &#xbb;Buffer&#xab; + RVO"/>
 </node>
 </node>
 <node CREATED="1783096657920" ID="ID_1533980494" MODIFIED="1783096661991" TEXT="sonst: compile-Fehler">
@@ -82616,15 +82650,60 @@
 </node>
 </node>
 </node>
+<node CREATED="1783101507062" ID="ID_1298955481" MODIFIED="1783101521840" TEXT="Header: lib/par/param-type.hpp|cpp">
+<node CREATED="1783101523306" ID="ID_1764325281" MODIFIED="1783172855177" TEXT="hier auch die Type-Registry"/>
+</node>
 </node>
 <node CREATED="1783097554556" ID="ID_1339731751" MODIFIED="1783097566222" TEXT="Domain">
 <node CREATED="1783097568770" ID="ID_1817564997" MODIFIED="1783097571619" TEXT="Interface">
-<node CREATED="1783097957599" ID="ID_1329465295" MODIFIED="1783098213366" TEXT="accept (Buffer, TY&amp;&amp;)"/>
-<node CREATED="1783098344748" ID="ID_1291147742" MODIFIED="1783098357707" TEXT="dieses Interface mu&#xdf; generiert werden"/>
+<node CREATED="1783097957599" ID="ID_1329465295" MODIFIED="1783183411733" TEXT="extractAs (TY&amp;, Buffer)"/>
+<node CREATED="1783183422820" ID="ID_1468231461" MODIFIED="1783183995261" TEXT="conform (Buffer, TY&amp;&amp;)"/>
 <node CREATED="1783098358531" ID="ID_1280505955" MODIFIED="1783098443001" TEXT="Type-Sequenz der erlaubten Basis-Typen">
 <linktarget COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" SOURCE="ID_836781666" STARTARROW="None" STARTINCLINATION="133;501;"/>
 </node>
+<node CREATED="1783209319403" ID="ID_571533481" MODIFIED="1783209758676" TEXT="Code-technische Schwierigkeiten">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1783209333347" ID="ID_1718416802" MODIFIED="1783209352373" TEXT="GCC warnt wegen Ambiguit&#xe4;t">
+<node CREATED="1783209353662" ID="ID_1454319261" MODIFIED="1783209468214" TEXT="der multiple-mix-in-Ansatz funktioniert gar nicht (mehr)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...interessanterweise auch nicht (mehr) beim Variant-Visitor: auch dort habe ich in die Zugriffsfunktion schon vor einiger Zeit einen Upcast auf das Type-Handler-Interface eingebaut. Der Compiler erlaubt anscheinend nicht mehr, verschiedene Overloads einer gleich benannten Funktion aus mehreren Basisklassen zusammenzuf&#252;hren
+    </p>
+  </body>
+</html></richcontent>
 </node>
+<node CREATED="1783209469407" ID="ID_490480880" MODIFIED="1783209607495" TEXT="mit einer linearisierten Vererbunskette gibt&apos;s lediglich eine Warnung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...auch das Problem kenne ich schon: -Woverloaded-virtual : da hatten die Compiler-Entwickler durchaus relevante Gefahren im Blick, aber haben die Warnung zu billig implementiert, n&#228;mlich bereits bei der Definition eines &#252;berladenen Virtual. Die Gefahr w&#252;rde jedoch erst beim zweideutigen Aufruf bestehen. Daher kann man diese Warnung per Pragma &#252;bersteuern. Hab ich bereits bei verschiedenen Verwendungen des Generator-Templates getan.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1783209608510" ID="ID_703553750" MODIFIED="1783209752232" TEXT="mu&#xdf; dem Implementierungs-Template einen zus&#xe4;tzlichen Typ-Parameter zukommen lassen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist kniffelig, da das ein template-template-Parameter ist, mit zwei bereits festgelegten Typ-Parametern (Zieltyp und Basisklasse). Hier implementieren wir aber Domain&lt;X&gt;, also mu&#223; der Quell-Parameter X auch irgendiw zus&#228;tzlich in den Type-Handler gebracht werden. Idee: als nested-Templates definieren und dann am Ende per templated Typedef rausziehen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1783101484020" ID="ID_1158137372" MODIFIED="1783101497340" TEXT="entwicklen per ParameterDomain_test"/>
 </node>
 </node>
 </node>
@@ -113809,8 +113888,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#0d72c9" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="-305;1295;" ID="Arrow_ID_1179454576" SOURCE="ID_570229743" STARTARROW="None" STARTINCLINATION="-2295;138;"/>
 <icon BUILTIN="smily_bad"/>
 <node COLOR="#338800" CREATED="1733082597960" FOLDED="true" ID="ID_51687123" MODIFIED="1736113113105" TEXT="Skizze ins Unreine">
-<linktarget COLOR="#fddab2" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="-264;821;" ID="Arrow_ID_117441899" SOURCE="ID_1596041137" STARTARROW="None" STARTINCLINATION="672;-66;"/>
 <linktarget COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" SOURCE="ID_354667146" STARTARROW="None" STARTINCLINATION="1670;84;"/>
+<linktarget COLOR="#fddab2" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="-264;821;" ID="Arrow_ID_117441899" SOURCE="ID_1596041137" STARTARROW="None" STARTINCLINATION="672;-66;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1733084053391" ID="ID_903308136" MODIFIED="1733084076106" TEXT="Parameter">
 <node CREATED="1733084101368" ID="ID_1882508638" MODIFIED="1733084108051" TEXT="k&#xf6;nnen fest oder beweglich sein"/>

@@ -34,11 +34,52 @@
 #define LIB_PAR_DOMAIN_H
 
 
+#include "lib/meta/typelist.hpp"
+//#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/generator.hpp"
 
 
 namespace lib {
 namespace par {
+      
+  struct ValBuff { /*placeholder*/ };
   
+  template<typename X>
+  constexpr inline ValBuff&
+  asValBuff (X& something)
+  {
+    void* rawMem{& something};
+    return * static_cast<ValBuff*> (rawMem);
+  }
+  
+  template<typename X>
+  constexpr inline ValBuff const&
+  asValBuff (X const& something)
+  {
+    void const * rawMem{& something};
+    return * static_cast<ValBuff const *> (rawMem);
+  }
+  
+  template<typename X, class BAS>
+  class TypeHandler
+    : public BAS
+    {
+      public:
+        virtual void extractAs (X&, ValBuff&)  =0;
+    };
+  
+//  using lib::meta::typeseq;
+  
+  
+  using BaseTypes = meta::Types<int
+                               ,int64_t
+                               ,uint
+                               ,uint64_t
+                               ,double
+                               ,bool
+                               >;
+  /** build a generic visitor interface for all types in list */
+  using TypeHandlerInterface = meta::InstantiateChained<BaseTypes::List, TypeHandler>;
   
   
   /**
@@ -52,9 +93,22 @@ namespace par {
    *       at compile time, if a sensible conversion can not be provided.
    */
   class Domain
+    : public TypeHandlerInterface
     {
     public:
       virtual ~Domain();  ///< this is an interface
+      
+    protected:
+      
+    };
+  
+  
+  template<typename X>
+  class BaseDomain
+    : public Domain
+    {
+      void extractAs (uint&, ValBuff& valBuff) override { UNIMPLEMENTED("ex uint"); }
+      void extractAs (double&, ValBuff& valBuff) override { UNIMPLEMENTED("ex double"); }
     };
   
   
