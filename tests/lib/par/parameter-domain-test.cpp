@@ -19,7 +19,7 @@
 #include "test/run.hpp"
 //#include "test/test-helper.hpp"
 #include "lib/par/domain.hpp"
-//#include "lib/format-cout.hpp"
+#include "test/diagnostic-output.hpp"////////////TODO
 
 //#include <utility>
 //#include <string>
@@ -70,7 +70,7 @@ namespace test{
         {
           seedRand();
           basics();
-          verify_typeVisitor();
+          verify_valueAccess();
         }
       
       
@@ -81,7 +81,7 @@ namespace test{
       
       
       void
-      verify_typeVisitor()
+      verify_valueAccess()
         {
           BaseDomain<int> domInt;
           Domain& d1{domInt};
@@ -92,9 +92,15 @@ namespace test{
           uint target1{0};
           CHECK (not target1);
           
-          TypeHandler<uint>& dd1{d1};
-          dd1.extractAs (target1, src1);
+          TypeHandler<uint>& du1{d1};
+          du1.extractAs (target1, src1);
           CHECK (target1 == uint(val1));
+          
+          float target2{0};
+          
+          TypeHandler<float>& df1{d1};
+          df1.extractAs (target2, src1);
+          CHECK (target2 == float(val1));
         }
     };
   

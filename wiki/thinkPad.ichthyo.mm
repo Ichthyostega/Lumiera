@@ -82879,7 +82879,15 @@
 <node BACKGROUND_COLOR="#c8c0b6" CREATED="1784489444352" ID="ID_1412623970" MODIFIED="1784489521150" TEXT="doch! das funktioniert weiterhin">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1784491530502" TEXT="allerdings darf der Aufruf selber keine Ambiguit&#xe4;t erzueugen...">
+<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1784502126671">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      allerdings darf der Aufruf selber <font color="#a70e0e">keine Ambiguit&#228;t</font>&#160;erzueugen...
+    </p>
+  </body>
+</html></richcontent>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -82907,6 +82915,7 @@
   </body>
 </html></richcontent>
 <linktarget COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="236;9;" ID="Arrow_ID_1412212027" SOURCE="ID_711986937" STARTARROW="None" STARTINCLINATION="236;9;"/>
+<linktarget COLOR="#fe8953" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="368;0;" ID="Arrow_ID_1535827259" SOURCE="ID_1219008003" STARTARROW="None" STARTINCLINATION="463;38;"/>
 </node>
 </node>
 <node CREATED="1783209469407" ID="ID_490480880" MODIFIED="1783209607495" TEXT="mit einer linearisierten Vererbunskette gibt&apos;s lediglich eine Warnung">
@@ -82994,7 +83003,45 @@
 </node>
 </node>
 </node>
-<node CREATED="1783101484020" ID="ID_1158137372" MODIFIED="1783101497340" TEXT="entwicklen per ParameterDomain_test"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1783101484020" ID="ID_1158137372" MODIFIED="1784502236650" TEXT="entwicklen per ParameterDomain_test">
+<icon BUILTIN="pencil"/>
+<node COLOR="#984388" CREATED="1784502242602" ID="ID_635909141" MODIFIED="1784502276027" TEXT="okok .... das artet in Arbeit aus ....">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1784501919054" ID="ID_1834839968" MODIFIED="1784501936727" TEXT="beginne mit Templates f&#xfc;r frei-stehende cross-Type-Zugriffe">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784501937939" ID="ID_1946888391" MODIFIED="1784501952147">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist noch <i>kein</i>&#160;Visitor
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#d9c0bd" COLOR="#990033" CREATED="1784502003675" ID="ID_115402714" MODIFIED="1784502055057" TEXT="essentiell da&#xdf; die Domain zum tats&#xe4;chlichen Inhalt des ValBuff pa&#xdf;t">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1784501953246" ID="ID_1520405558" MODIFIED="1784502078308" TEXT="essentiell da&#xdf; der richtige Type-Handler explizit gew&#xe4;hlt wird">
+<icon BUILTIN="smiley-neutral"/>
+<node CREATED="1784502084663" ID="ID_1219008003" MODIFIED="1784502137582" TEXT="sonst gibts Probleme mit Ambituit&#xe4;t">
+<arrowlink COLOR="#fe8953" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="368;0;" ID="Arrow_ID_1535827259" STARTARROW="None" STARTINCLINATION="463;38;"/>
+</node>
+<node CREATED="1784502096998" ID="ID_35168456" MODIFIED="1784502221459" TEXT="&#xe4;rgerlich &#x2014; aber isso">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Glaube nicht, da&#223; ich mich damit aufhalten sollte; das f&#252;hrt direkt in das l&#228;stige Thema mit den automatischen Konversionen zwischen Basistypen &#8212; wenn &#252;berhaupt sollte eine Spezialbehandlung daf&#252;r in ein Regelwerk gelenkt werden (und darauf ziehlt doch das ganze Setup mit dem Visitor ab....)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -184216,7 +184263,7 @@ class Something
 <linktarget COLOR="#415ab4" DESTINATION="ID_197491932" ENDARROW="Default" ENDINCLINATION="-1574;159;" ID="Arrow_ID_1382804093" SOURCE="ID_1579820839" STARTARROW="None" STARTINCLINATION="-2029;0;"/>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1774627260591" FOLDED="true" ID="ID_1784884752" MODIFIED="1774628681299" TEXT="Grundz&#xfc;ge">
+<node CREATED="1774627260591" ID="ID_1784884752" MODIFIED="1784495142011" TEXT="Grundz&#xfc;ge">
 <icon BUILTIN="back"/>
 <node CREATED="1774627283191" ID="ID_115112464" MODIFIED="1774628259773">
 <richcontent TYPE="NODE"><html>
@@ -184260,7 +184307,11 @@ class Something
   </body>
 </html></richcontent>
 <node CREATED="1774627743029" ID="ID_1990543481" MODIFIED="1774627754085" TEXT="es erzeugt einen SFINAE-Scope"/>
-<node CREATED="1774627755233" ID="ID_1578349738" MODIFIED="1774627765109" TEXT="sein Ergebnis ist constexpr bool"/>
+<node CREATED="1774627755233" ID="ID_1578349738" MODIFIED="1774627765109" TEXT="sein Ergebnis ist constexpr bool">
+<node COLOR="#2c1951" CREATED="1784495496764" HGAP="27" ID="ID_1533050856" MODIFIED="1784495547265" TEXT="true &#x27fb; wenn alle enthaltenen Ausdr&#xfc;cke gebildet werden k&#xf6;nnen" VSHIFT="2">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 <node CREATED="1774627767320" ID="ID_1887793857" MODIFIED="1774628409651" TEXT="er erzeugt declval-Parameter">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -184303,12 +184354,12 @@ class Something
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1774627839278" ID="ID_477641322" MODIFIED="1774627981787" TEXT="requires-Klausel">
+<node CREATED="1774627839278" ID="ID_477641322" MODIFIED="1784495900932" TEXT="requires-Klausel">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      die Requires-Klausel darf nicht scheitern
+      die Requires-Klausel darf nicht scheitern; insofern mu&#223; das Argument der Requires-Klausel (&#8793; ein constraint oder concept) syntaktisch korrekt gebildet werden k&#246;nnen, und es mu&#223; zur Compile-Zeit zu true evaluieren.
     </p>
   </body>
 </html></richcontent>
@@ -184324,9 +184375,20 @@ class Something
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1784495716108" HGAP="32" ID="ID_1258175475" MODIFIED="1784495809959" TEXT="requires requires {...}" VSHIFT="7">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist eine Requires-<b>Klausel</b>&#160;die einen anonymen Constraint pr&#252;ft (der als eingeschachtelter Requires-<b>Ausdruck</b>&#160;formuliert wurde)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
 </node>
 </node>
-<node CREATED="1774562489996" ID="ID_1581229318" MODIFIED="1774563657284" TEXT="Iteratoren">
+</node>
+<node CREATED="1774562489996" FOLDED="true" ID="ID_1581229318" MODIFIED="1774563657284" TEXT="Iteratoren">
 <linktarget COLOR="#4c86e5" DESTINATION="ID_1581229318" ENDARROW="Default" ENDINCLINATION="-2159;523;" ID="Arrow_ID_58259000" SOURCE="ID_389716197" STARTARROW="None" STARTINCLINATION="-1280;85;"/>
 <node CREATED="1774562670530" ID="ID_1893015368" LINK="https://en.cppreference.com/w/cpp/iterator.html" MODIFIED="1774562682659" TEXT="siehe: &#xbb;Iterator-Library&#xab;">
 <icon BUILTIN="info"/>

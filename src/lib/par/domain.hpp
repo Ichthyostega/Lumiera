@@ -37,6 +37,7 @@
 #include "lib/meta/typelist.hpp"
 //#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/meta/trait.hpp"
 
 
 namespace lib {
@@ -61,10 +62,27 @@ namespace par {
   }
   
   template<typename X>
+  constexpr inline X&
+  asValue (ValBuff& storage)
+  {
+    void* rawMem{& storage};
+    return * static_cast<X*> (rawMem);
+  }
+  
+  template<typename X>
+  constexpr inline X const&
+  asValue (ValBuff const& storage)
+  {
+    void const * rawMem{& storage};
+    return * static_cast<X const *> (rawMem);
+  }
+  
+  
+  template<typename X>
   class TypeHandler
     {
       public:
-        virtual void extractAs (X&, ValBuff&)  =0;
+        virtual void extractAs (X&, ValBuff const&)  =0;
     };
   
 //  using lib::meta::typeseq;
@@ -113,18 +131,14 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   
   
   template<typename U>
-  struct TypeDomainSetup
+  struct TypeSetup
     {
       
       template<typename X, class BAS>
       class TypeHandlerImpl
         : public BAS
         {
-          void
-          extractAs (X& srcVal, ValBuff& valBuff)  override
-            {
-              UNIMPLEMENTED ("extract into Buffer");
-            }
+          void extractAs (X& targetVal, ValBuff const& valBuff)  override;
         };
       
       using TypeHandlerChain = meta::InstantiateChained<BaseTypes::List, TypeHandlerImpl, Domain>;
@@ -134,11 +148,32 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   
   template<typename X>
   class BaseDomain
-    : public TypeDomainSetup<X>::TypeHandlerChain
+    : public TypeSetup<X>::TypeHandlerChain
     {
     public:
     };
   
+  
+  /* ===== type conversion details ===== */
+
+  template<typename U>
+  template<typename X, class BAS>
+  inline void
+  TypeSetup<U>::TypeHandlerImpl<X,BAS>::extractAs (X& targetVal, ValBuff const& valBuff)
+  {
+    if constexpr (std::is_assignable_v<X&, U const&>)
+      {
+        targetVal = asValue<U> (valBuff);
+      }
+    else
+    if constexpr (std::is_constructible_v<X, U const&>)
+      {
+        targetVal.~X();
+        new(&targetVal) X (asValue<U> (valBuff));
+      }
+    else
+      static_assert (!sizeof(X), "this type conversion is not supported");
+  }
   
   
 }} // namespace lib::par
