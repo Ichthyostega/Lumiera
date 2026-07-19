@@ -81709,6 +81709,23 @@
 <font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
+<node COLOR="#5b280f" CREATED="1784472855120" ID="ID_1579989472" MODIFIED="1784473044476" TEXT="STOP. Vorschnelle Schlu&#xdf;folgerungen vermeiden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Da&#223; die meisten &#187;Doppelkapseln&#171;, die ich bisher gebaut haben, von einem statischen Anker ausgehen, sagt noch lange nicht, da&#223; die Doppelkapsel-Struktur <i>grunds&#228;tzlich ungeeignet w&#228;re! </i>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      So k&#246;nnte man die VTable mit einer Typ-ID identifizieren. Im weiteren Verlauf dieser Design-Analyse hat sich das als ein m&#246;glicher Pfad herausgebildet (im Besonderen weil ich Platzbeschr&#228;nkung als leitenden Constraint identifiziert habe)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="stop-sign"/>
+</node>
 </node>
 <node CREATED="1782923994701" ID="ID_1564769419" MODIFIED="1782925808566" TEXT="brauche aber trotzdem Typ-Deskriptor">
 <arrowlink COLOR="#fdddae" DESTINATION="ID_1301398726" ENDARROW="Default" ENDINCLINATION="40;-63;" ID="Arrow_ID_1797086154" STARTARROW="None" STARTINCLINATION="-278;21;"/>
@@ -81806,7 +81823,8 @@
 <node CREATED="1782929984851" ID="ID_497737102" MODIFIED="1782929995114" TEXT="und man hat trotzdem ein atomic-Lock"/>
 </node>
 <node CREATED="1782928238995" ID="ID_252906942" MODIFIED="1782928251258" TEXT="hier steckt ein concurrency-Problem">
-<node CREATED="1782928293464" ID="ID_1896231849" MODIFIED="1782928437789" TEXT="Variante-1 : man erzwingt Static-Init">
+<node CREATED="1782928293464" ID="ID_1896231849" MODIFIED="1784474158099" TEXT="Variante-1 : man erzwingt Static-Init">
+<node CREATED="1782928467607" ID="ID_1650429656" MODIFIED="1784474163031" TEXT="erfordert Policy / bzw. Disziplin">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -81815,7 +81833,7 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1782928467607" ID="ID_1650429656" MODIFIED="1782928479515" TEXT="erfordert Policy / bzw. Disziplin"/>
+</node>
 <node CREATED="1782928480364" ID="ID_838425868" MODIFIED="1782928789999" TEXT="Vorteil: nur eine einzige Indirektion / keine mem-Barrier">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -81879,7 +81897,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1782929538698" ID="ID_474931081" MODIFIED="1782929604780" TEXT="Nachteil: die Erst-Verwendung einer neuen Skala st&#xf6;rt die global die Concurrency">
+<node CREATED="1782929538698" ID="ID_474931081" MODIFIED="1782929604780" TEXT="Nachteil: die Erst-Verwendung einer neuen Skala st&#xf6;rt global die Concurrency">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -81981,6 +81999,32 @@
 <node CREATED="1782933994294" ID="ID_1685235304" MODIFIED="1782934029583" TEXT="ein Deskriptor">
 <node CREATED="1782934030343" ID="ID_957407340" MODIFIED="1782934037954" TEXT="typisiert auf einen Basis-Typ"/>
 <node CREATED="1782934038566" ID="ID_1083259675" MODIFIED="1782934044719" TEXT="die Skala stellt eine Policy dar"/>
+<node CREATED="1784474502116" ID="ID_21486098" MODIFIED="1784474533772" TEXT="k&#xf6;nnte hier dynamische Parameter mit integrieren....">
+<icon BUILTIN="idea"/>
+<node CREATED="1784474537631" ID="ID_555862966" MODIFIED="1784474550819" TEXT="ein Parameter h&#xe4;tte dann eine Weise der Gegebenheit"/>
+<node CREATED="1784474555383" ID="ID_1176887105" MODIFIED="1784474574336" TEXT="&#xbb;vorliegend&#xab; w&#xe4;re dann lediglich der h&#xe4;ufigste Spezialfall"/>
+<node CREATED="1784474575613" ID="ID_929604442" MODIFIED="1784474706120" TEXT="und eine Automations-Auswertung k&#xf6;nnte einen lokalen Wert beaufschlagen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein <i>automatisierter</i>&#160;Parameter w&#228;re mithin ein Hybrid, wobei ein <i>Anker-Wert</i>&#160; stets lokal vorliegt, man dann aber aus der Automationskurve einen Offset oder Faktor bezieht...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+<node CREATED="1784474736440" ID="ID_560655168" MODIFIED="1784474782036" TEXT="aber Vorsicht &#x27f9; das f&#xfc;hrt mehrere Dimensionen von &#xbb;Deskriptoren&#xab; ein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist dann definitiv nicht mehr <i>blo&#223; ein Typ</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1782934059019" ID="ID_749549250" MODIFIED="1782934107302" TEXT="der Deskriptor wird registriert und dann durch seinen Pointer repr&#xe4;sentiert"/>
 <node CREATED="1782934126020" ID="ID_309124327" MODIFIED="1782934137620" TEXT="Problem / Aufgabe: Reproduzierbarkeit">
@@ -82129,7 +82173,7 @@
 <node CREATED="1783012595873" ID="ID_774342307" MODIFIED="1783012599113" TEXT="siehe Placement"/>
 <node CREATED="1783012599911" ID="ID_1341814745" MODIFIED="1783012604808" TEXT="siehe Buffer-Type"/>
 <node CREATED="1783012610651" ID="ID_1372270066" MODIFIED="1783012621604" TEXT="da zeichnet sich ein Muster ab...">
-<node CREATED="1783012719761" ID="ID_588268047" MODIFIED="1783012738273" TEXT="ein Prototyp und eine DAG aus Bestimmungen"/>
+<node CREATED="1783012719761" ID="ID_588268047" MODIFIED="1783012719761" TEXT="ein Prototyp und ein DAG aus Bestimmungen"/>
 <node CREATED="1783012740594" ID="ID_157784558" MODIFIED="1783012759399" TEXT="beide zusammen werden &#xfc;ber ein Query-Rig angebunden"/>
 <node CREATED="1783012785092" ID="ID_995942771" MODIFIED="1783012793882" TEXT="es gibt verschiedene Formen und Tiefen der Auswertung"/>
 <node COLOR="#5b280f" CREATED="1783012622480" ID="ID_1896877960" MODIFIED="1783012717685" TEXT="vorerst gen&#xfc;gt es, das zu erkennen">
@@ -82149,7 +82193,7 @@
 <node CREATED="1783012849155" ID="ID_1424154331" MODIFIED="1783012870212" TEXT="das &#xbb;Query-Rig&#xab; ist so etwas wie ein Policy-Interface"/>
 <node CREATED="1783012871777" ID="ID_850184784" MODIFIED="1783012900648" TEXT="darunter liegt ein Schema der Bestimmung in verschiedenen Hinsichtien / Dimensionen"/>
 <node CREATED="1783012902580" ID="ID_1982594796" MODIFIED="1783012927106" TEXT="Typen sind stets hierarchisch mit Prototyp-Ansatz"/>
-<node CREATED="1783012935592" ID="ID_722843640" MODIFIED="1783013421499" TEXT="dem &#xbb;Prototyp&#xab; kommt aber ein dar&#xfc;ber hinausgehende symbolische Verweisform zu">
+<node CREATED="1783012935592" ID="ID_722843640" MODIFIED="1784476000114" TEXT="dem &#xbb;Prototyp&#xab; aber kommt eine dar&#xfc;ber hinausreichende symbolische Verweisform zu">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -82176,16 +82220,13 @@
 </node>
 <node CREATED="1783012231419" ID="ID_194332924" MODIFIED="1784376447831" TEXT="the Provision">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       bestimmt die Art und Weise des Zugriffs auf eine Datenquelle: entweder als Wert der in enem Buffer abgelegt ist, oder als pull von einem Funktor
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -82227,12 +82268,12 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1783013721977" ID="ID_950124427" MODIFIED="1783014286619" TEXT="hier geht auch meine Einsicht bez&#xfc;glich &#xbb;Inline-Functor&#xab; mit ein">
+<node CREATED="1783013721977" ID="ID_950124427" MODIFIED="1784476471894" TEXT="hier geht auch meine Einsicht bez&#xfc;glich &#xbb;Inline-Functor&#xab; mit ein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Denn die Design-Analyse hat gezeigt, da&#223; der &#187;Opaque-Buffer&#171;-Ansatz inhaltlich sehr nahe an einer &#187;Inline-Funktion&#171; liegt, und letztere ist aber strukturell am effizientesten zu implementieren als PolymorphicValue &#8212; was vor allem an der Notwendigkeit eines &#187;Managers&#171; liegt, um das Instanz- und Copy-Verhalten zu bestimmen. Die Begr&#252;ndung ist, da&#223; ein <i>virtuelles Interface</i>&#160;tats&#228;chlich bereits die effizienteste Reallisierung darstellt, sobald es mehrere virtualisierte &#187;methoden&#171; gibt, denn sie fa&#223;t das Instanz-Management und den Zugang zu einem gemeinsamen Datenkontext bereits optimal zusammen. Selbst wenn man <i>bewu&#223;t nicht die Implementierung aus der C++-Runtime nimmt, </i>(wie im Fall der <font face="Monospaced" color="#6f3636">std::function</font>) so l&#228;uft die Struktur doch immer wieder darauf hinaus, Zugang zu einem gemeinsamen Datenpaket zu bekommen (egal ob das nun per PImpl im Heap liegt, oder direkt in einem Inline-Buffer). Denn ohne solchen gemeinsamen Zustand kann es auch kein tangibles Verhalten geben....
+      Denn die Design-Analyse hat gezeigt, da&#223; der &#187;Opaque-Buffer&#171;-Ansatz inhaltlich sehr nahe an einer &#187;Inline-Funktion&#171; liegt, und letztere ist aber strukturell am effizientesten zu implementieren als PolymorphicValue &#8212; was im Besonderen an der Notwendigkeit eines &#187;Managers&#171; liegt, um das Instanz- und Copy-Verhalten zu bestimmen. Die Begr&#252;ndung ist, da&#223; ein <i>virtuelles Interface</i>&#160;tats&#228;chlich bereits die effizienteste Reallisierung darstellt, sobald es mehrere virtualisierte &#187;Methoden&#171; gibt, denn sie fa&#223;t das Instanz-Management und den Zugang zu einem gemeinsamen Datenkontext bereits optimal zusammen. Selbst wenn man <i>bewu&#223;t nicht die Implementierung aus der C++-Runtime nimmt, </i>(wie im Fall der <font color="#6f3636" face="Monospaced">std::function</font>) so l&#228;uft die Struktur doch immer wieder darauf hinaus, Zugang zu einem gemeinsamen Datenpaket zu bekommen (egal ob das nun per PImpl im Heap liegt, oder direkt in einem Inline-Buffer). Denn ohne solchen gemeinsamen Zustand kann es auch kein tangibles Verhalten geben....
     </p>
   </body>
 </html></richcontent>
@@ -82295,6 +82336,12 @@
 <node CREATED="1783015147484" ID="ID_1885332452" MODIFIED="1783015170246" TEXT="nicht klar, wie weit das gehen mu&#xdf;"/>
 <node CREATED="1783015171142" ID="ID_579527029" MODIFIED="1783015176294" TEXT="deshalb vertagt">
 <icon BUILTIN="yes"/>
+<node COLOR="#5b280f" CREATED="1784478105565" HGAP="22" ID="ID_1344760315" MODIFIED="1784478175523" TEXT="ja &#x2014; und nein" VSHIFT="5">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#9c0116" CREATED="1784478137809" ID="ID_1651631052" MODIFIED="1784478170730" TEXT="sollte zumindest kl&#xe4;ren da&#xdf; das m&#xf6;glich ist(bleibt)">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 </node>
 <node COLOR="#5b280f" CREATED="1783036834486" ID="ID_101058576" MODIFIED="1783036949647" TEXT="Ooops &#x2014; das pa&#xdf;t jetzt nicht mit dem Type-ID-Pointer zusammen">
@@ -82442,7 +82489,7 @@
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1783040349995" ID="ID_1865443974" MODIFIED="1783040366820" TEXT="es ist nun weiterhin unklar wie der Typ strukturiert wird"/>
 <node CREATED="1783040367840" ID="ID_910738575" MODIFIED="1783040393515" TEXT="und wie die Provision platzsparend dargestellt werden kann"/>
-<node CREATED="1783040405392" ID="ID_1883727059" MODIFIED="1783041074344" TEXT="schlimmer noch: wei&#xdf; nicht ob diese Performance-&#xdc;berlegungen &#xfc;berhaupt relevant sind">
+<node CREATED="1783040405392" ID="ID_1883727059" MODIFIED="1784479444811" TEXT="schlimmer noch: wei&#xdf; nicht ob diese Performance-&#xdc;berlegungen &#xfc;berhaupt relevant sind">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -82450,7 +82497,7 @@
       nochmal zur Erinnerung: bin in dieses ganze Riesen-Thema nur reingeschlittert, weil ich den processKey als Job-Parameter aufgeben mu&#223;te (und der war eine so &#187;sch&#246;ne L&#246;sung&#171;, die das Thema markiert und auf sp&#228;ter verschiebt). Dann habe ich gesagt, einen Zacken nachlegen und mal eben ein Design f&#252;r Parameter machen. Ich wei&#223; aber noch gar nicht, wo genau die Parameter sonst noch eingesetzt werden sollen. Ich wei&#223; nur, da&#223; ich sie universell einsetzen m&#246;chte.
     </p>
     <p>
-      Im Besonderen ist die ganze Auswertung von Parameter komplett ungekl&#228;rt. Diese Auswertung passiert irgendwie in Response auf Interaktionen im GUI (vor allem: &#228;ndern der Playback-Position, aber nat&#252;rlich auch direkte Wert-Tweaks). Es ist klar, da&#223; die Auswertung nicht im GUI selber stattfinden wird, denn daf&#252;r haben wir die Trennung (die Commands, den UI-Bus und das Event-Sourcing). Wahrscheinlich wird eine Auswertung in einer Projektion der Events passieren, entweder nach einem Builder-Lauf, oder in vielen F&#228;llen anstelle eines Solchen (wenn gar nichts neu gebaut werden mu&#223;). Auch der Builder ist ja konzeptionell eine Projektion. Dann aber ist andererseits auch klar, da&#223; Parameter irgendwie in der Render-Engine ausgewerter werden, und zwar dort verpackt in einen Automations-Funktor. M&#246;glicherweise wird diese Auswertung aber auch eine Art <i>compilierte Variante</i>&#160;sein.
+      Im Besonderen ist die ganze <i>Auswertung von Parametern</i>&#160;komplett ungekl&#228;rt. Diese Auswertung passiert irgendwie in Response auf Interaktionen im GUI (vor allem: &#228;ndern der Playback-Position, aber nat&#252;rlich auch direkte Wert-Tweaks). Es ist klar, da&#223; die Auswertung nicht im GUI selber stattfinden wird, denn daf&#252;r haben wir die Trennung (die Commands, den UI-Bus und das Event-Sourcing). Wahrscheinlich wird eine Auswertung in einer Projektion der Events passieren, entweder nach einem Builder-Lauf, oder in vielen F&#228;llen anstelle eines Solchen (wenn gar nichts neu gebaut werden mu&#223;). Auch der Builder ist ja konzeptionell eine Projektion. Dann aber ist andererseits auch klar, da&#223; Parameter irgendwie in der Render-Engine ausgewerter werden, und zwar dort verpackt in einen Automations-Funktor. M&#246;glicherweise wird diese Auswertung aber auch eine Art <i>compilierte Variante</i>&#160;sein.
     </p>
     <p>
       
@@ -82568,9 +82615,7 @@
 </node>
 <node CREATED="1783089184811" ID="ID_1299132056" MODIFIED="1783181849203">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Konsequenz: <b>pull-Prinzip</b>&#160;ist verpflichtend
@@ -82612,12 +82657,168 @@
 <node CREATED="1783182964964" ID="ID_1325516678" MODIFIED="1783182991051" TEXT="Disposition.conform(TY&amp;&amp;)"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784480336698" ID="ID_440800496" MODIFIED="1784480356903" TEXT="Spielr&#xe4;ume">
+<icon BUILTIN="yes"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1784480360439" ID="ID_1260735860" MODIFIED="1784480368981" TEXT="nicht zu sehr verr&#xfc;ckt machen....">
+<icon BUILTIN="ksmiletris"/>
+</node>
+<node CREATED="1784480371646" ID="ID_74554440" MODIFIED="1784480388324">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      &#187;klein&#171; hei&#223;t nicht <i>wirklich klein</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1784480390644" ID="ID_1402184236" MODIFIED="1784480408676" TEXT="ein &#xab;Slot&#xbb; &#x2259; 8 Byte"/>
+<node CREATED="1784480433845" ID="ID_705502812" MODIFIED="1784480445354" TEXT="bereits ein double-Wert braucht einen weiteren Slot"/>
+<node CREATED="1784480464257" ID="ID_1171181752" MODIFIED="1784480955078" TEXT="f&#xfc;r einen halbwegs &#xbb;generischen&#xab; Parameter sind wir in der Gr&#xf6;&#xdf;enordnung eines std::string">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es w&#228;re denkbar, eine unter-Klasse der Parameter zu bilden, die dann <i>reine Werte</i>&#160;sind. Die k&#246;nnte man auf 2 &#171;Slots&#187; limitieren. Alles, was dar&#252;ber hinausgeht ist zwangsl&#228;ufig ein flexibel belegter, lokaler Container. Und da wir <i>definitiv</i>&#160;so etwas wie &#187;generische Parameter&#171; als einen Datentyp haben wollen, mu&#223; der Inline-Buffer gro&#223; genug sein, um darin zumindest einen Delegations-Mechanismus zu realisieren, oder eben doch ein paar Flags mit abzulegen. Au&#223;erdem gewinnt man bei diesen Trade-Offs typischerweise nicht viel, wenn man von 2-er-Potenzen abweicht, denn die Alignments auf 2, 4, oder 8 Slots sind allgegenw&#228;rtig; eine Cache-Line hat typischerweise 64 Slots (64 x 64bit). Mein Bauchgef&#252;hlt sagt mir, 3 Slots bringen &#252;berhaupt nichts (gegen&#252;ber 4 Slots), aber &#252;ber 5 statt 8 k&#246;nnte man reden.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1784480957118" ID="ID_271247937" MODIFIED="1784481060756" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u><font color="#3d1a77">Vorurteil</font></u>: 4 &#171;Slots&#187; &#8793; <b><font color="#530c0c">32</font>&#160;Bytes</b>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f9f4b9" COLOR="#451874" CREATED="1784481079566" ID="ID_1735949891" MODIFIED="1784481713695">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Trade-Off-Ansatz: &#187;<b>statische Basisklassen</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+<node CREATED="1784481116929" ID="ID_1988682814" MODIFIED="1784481201124">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      nat&#252;rlich weiterhin ein klassisches, <b>virtuelles Interface</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784481126125" ID="ID_763928468" MODIFIED="1784481174734">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      aber die Basisklassen-Instanz hat keine zus&#228;tzlichen <b>Laufzeit-Daten</b>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784481135575" ID="ID_611313643" MODIFIED="1784481165217">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      vielmehr wurde sie per <b>Template-Metaprogramming</b>&#160;generiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784481263694" ID="ID_858590367" MODIFIED="1784481399604" TEXT="alle &#xbb;Eigenschaften&#xab; sind als virtuelle Funktion zug&#xe4;nglich">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wof&#252;r man zun&#228;chst in der klassichen OO-Programmierung ein privates Datenfeld einsetzen w&#252;rde, wird hier als ein statisches privates Datenfeld repr&#228;sentiert, das direkt (oder indirekt) &#252;ber eine Interface-Methode zug&#228;nglich ist. Die Auslegung und Parametrisierung der Basisklasse erfolgt also <i>zur Compile-time.</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784481228034" ID="ID_742661193" MODIFIED="1784481677627" TEXT="Preis: kombinatorische Explosion im Code-Segment">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Jede, wirklich jede Auspr&#228;gungs-Variante schl&#228;gt sich nieder in Form einiter (deduplizierter) Datenfelder in einem Daten-Segment (private static), sowie einem <b>kompletten</b>&#160;Satz an Methoden-Implementierungen im Code-Segment, und einer VTable mit Zeigern auf diese. Mu&#223; man eine weitere Methode ins Interface aufnehmen, entsteht sofort ein starker Hebel...
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      So ein Ansatz w&#228;re vertretbar, wenn letztlich die Anzahl der Auspr&#228;gungen doch &#252;berschaubar bleibt, davon aber sehr viele Einzelinstanzen existieren. Im Besonderen m&#252;&#223;te man darauf achten, da&#223; Finite-Domain bzw. Enummerationen dann doch noch einmal kaskadierend herausgezogen werden &#8212; oder eben doch wenigstens per ID in den Payload-Daten referenziert sind.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1783092313541" ID="ID_414920838" MODIFIED="1783092329207" TEXT="das legt den Entwurf (vorerst) ausreichend fest">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ac1b01" CREATED="1784481754220" ID="ID_357858713" MODIFIED="1784481818217">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Aufgabe</u>&#160;ist nun: Bausteine skizzieren
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#ac1b01" CREATED="1784481773524" ID="ID_50851004" MODIFIED="1784481801844" TEXT="eine Machbarkeits-Studie">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 </node>
 <node CREATED="1783092339601" ID="ID_121697070" MODIFIED="1783092342652" TEXT="nun aufzubauen">
+<node COLOR="#322980" CREATED="1784481861979" ID="ID_1854009134" MODIFIED="1784482631679">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b><font size="4">Vorentwurf</font></b>(Zusammenfassung):
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1784481879651" ID="ID_1091882528" MODIFIED="1784481929912" TEXT="par::Parameter ist ein Polymorphic-Value + Front-end-Funktionen"/>
+<node CREATED="1784481938579" ID="ID_1702499411" MODIFIED="1784481966368" TEXT="Im Container liegt eine Disposition (&#x2259; OO-Interface)"/>
+<node CREATED="1784482171445" ID="ID_1336361533" MODIFIED="1784482183591" TEXT="Variationsm&#xf6;glichkeit per &#xbb;statischer Basisklasse&#xab;"/>
+<node CREATED="1784482185860" ID="ID_1609655650" MODIFIED="1784484698919" TEXT="Aber der erste Entwurf verwendet eine packed-ID">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Diese kombiniert verschiedene Registrierungs-Indices, m&#246;glicherweise f&#252;r die Base-Domain, einen (Domain)Prototype und/oder eine Scale. Denkbar w&#228;re auch, hier noch ein &#187;Schema&#171; einzuf&#252;hren, um ggfs direkt, an der VTable vorbei, gewisse Zugriffs-Schemata direkt &#252;ber die Front-end-Funktionen zu realisieren (wobei im Moment nicht klar ist ob sowas &#252;berhaupt sinnvoll ist, und dann nicht doch gleich ein anderer statischer Basistyp angemessener w&#228;re)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784482541002" ID="ID_1545323850" MODIFIED="1784482587667">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      die Gr&#246;&#223;e ist insgesamt auf <b><font color="#8b0264">32</font>&#160;Bytes</b>&#160;fest limitiert
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1783092344401" ID="ID_723247866" MODIFIED="1783092356166" TEXT="ParamType">
 <node CREATED="1783092477119" ID="ID_1734714581" MODIFIED="1783092481906" TEXT="Interfaface">
 <node CREATED="1783092482966" ID="ID_1196126403" MODIFIED="1783092486026" TEXT="virtuell"/>
@@ -82661,39 +82862,129 @@
 <node CREATED="1783098358531" ID="ID_1280505955" MODIFIED="1783098443001" TEXT="Type-Sequenz der erlaubten Basis-Typen">
 <linktarget COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" SOURCE="ID_836781666" STARTARROW="None" STARTINCLINATION="133;501;"/>
 </node>
-<node CREATED="1783209319403" ID="ID_571533481" MODIFIED="1783209758676" TEXT="Code-technische Schwierigkeiten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783209319403" ID="ID_571533481" MODIFIED="1784492334714" TEXT="Code-technische Schwierigkeiten">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1783209333347" ID="ID_1718416802" MODIFIED="1783209352373" TEXT="GCC warnt wegen Ambiguit&#xe4;t">
-<node CREATED="1783209353662" ID="ID_1454319261" MODIFIED="1783209468214" TEXT="der multiple-mix-in-Ansatz funktioniert gar nicht (mehr)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#6b0990" CREATED="1783209333347" ID="ID_1718416802" MODIFIED="1784492354321" TEXT="GCC warnt wegen Ambiguit&#xe4;t">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#5b280f" CREATED="1783209353662" ID="ID_1454319261" MODIFIED="1784489442770" TEXT="der multiple-mix-in-Ansatz funktioniert gar nicht (mehr)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...interessanterweise auch nicht (mehr) beim Variant-Visitor: auch dort habe ich in die Zugriffsfunktion schon vor einiger Zeit einen Upcast auf das Type-Handler-Interface eingebaut. Der Compiler erlaubt anscheinend nicht mehr, verschiedene Overloads einer gleich benannten Funktion aus mehreren Basisklassen zusammenzuf&#252;hren
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#c8c0b6" CREATED="1784489444352" ID="ID_1412623970" MODIFIED="1784489521150" TEXT="doch! das funktioniert weiterhin">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1784491530502" TEXT="allerdings darf der Aufruf selber keine Ambiguit&#xe4;t erzueugen...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Kann jetzt nur <i>spekulieren, warum ich da seinerzeit eine Fehlermeldung </i>hatte. K&#246;nnte an dem vorl&#228;ufigen Stand der Test-Implementierung damals liegen, denn ich wollte compilieren, ohne bereits die Implementierungs-Chain zu definieren (was ich erst jetzt kann, nachdem ich auf den Trick mit dem Typ-Parameter im umschlie&#223;enden Scope gekommen bin) &#8212; hatte also explizite Implementierungen geschrieben.
+    </p>
+    <h2>
+      Experimente mit Varianten
+    </h2>
+    <p>
+      Es zeigt sich, da&#223; dieses Konstrukt den Compiler in eine komplexe Situation bringt, in der wirklich jedes Detail stimmig sein mu&#223;. Im Besonderen kann die Diagnostik komplett irref&#252;hrend sein; wenn etwas mit der Sichtbarkeit nicht stimmt, kommt es zu einer (verdeckten) Ambiguit&#228;t, die u.U. (abh&#228;ngig vom konkreten Typ) automatisch vom Compiler &#8222;repariert&#8220; wird (ich meine diese problematischen Regeln, da&#223; z.B. ein unsigned an vielen Stellen ger&#228;uschlos auf einen Signed zugewiesen werden kann). Au&#223;erdem ist es wichtig, das Pragma zum Unterdr&#252;cken von <font color="#6a3728" face="Monospaced">-Woverloaded-virtual</font>&#160;bereits <i>vor</i>&#160;&#160;dem Template stehen mu&#223;, in dem das Shaddowing auftritt (nicht etwa, wie man intuitiv erwarten w&#252;rde, vor der Verwendung).
+    </p>
+    <p>
+      In diesen Experimenten erscheint dann doch das urspr&#252;ngliche Baumuster von Alexandrescu die stabilste L&#246;sung zu sein. Also ein multiple-mix-in f&#252;r das Interface, aber eine Kette f&#252;r die Implementierung. Das liegt daran, da&#223; dann eine eventuelle Ambiguit&#228;t beim Aufruf wirklich direkt im Interface passiert, nicht irgendwo in einer Kette; hinzu kommt, da&#223; wir in einer Kette die Sichtbarkeit explizit wieder herstellen m&#252;ssen durch ein <font face="Monospaced">using </font><font color="#921717" face="Monospaced">BAS</font><font color="#5f4e4e" face="Monospaced">::functionname</font><font face="Monospaced">;</font>&#160;&#8212; und das kann weitere Ambiguit&#228;ten erzeugen, und erfordert vor allem irgendwo eine catch-all-Definition (z.B. mit leerer Argumentliste). Das ist verwirrend und kann weitere Ambiguit&#228;ten erzeugen.
+    </p>
+    <p>
+      Wenn der Compiler irgendwo automatisch (falsch) konvertiert, kann es dann zu v&#246;llig verwirrenden anderen Problemen kommen, wie z.B. der Zugriff &#252;ber eine Referenz auf ein Objekt anderen Typs (was nur mit einer const-Referenz erlaubt ist).
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <i>Insofern verstehe ich durchaus die Motivation, warum </i><font face="Monospaced" color="#692727">-Woverloaded-virtual</font><i>&#160; eingef&#252;hrt wurde; hier gibt es viele Fallen, die einen unerfahren Programmierer vor unl&#246;sbare Probleme stellen k&#246;nnen</i>
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="236;9;" ID="Arrow_ID_1412212027" SOURCE="ID_711986937" STARTARROW="None" STARTINCLINATION="236;9;"/>
+</node>
 </node>
 <node CREATED="1783209469407" ID="ID_490480880" MODIFIED="1783209607495" TEXT="mit einer linearisierten Vererbunskette gibt&apos;s lediglich eine Warnung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...auch das Problem kenne ich schon: -Woverloaded-virtual : da hatten die Compiler-Entwickler durchaus relevante Gefahren im Blick, aber haben die Warnung zu billig implementiert, n&#228;mlich bereits bei der Definition eines &#252;berladenen Virtual. Die Gefahr w&#252;rde jedoch erst beim zweideutigen Aufruf bestehen. Daher kann man diese Warnung per Pragma &#252;bersteuern. Hab ich bereits bei verschiedenen Verwendungen des Generator-Templates getan.
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1784489651047" ID="ID_780658502" MODIFIED="1784490820223" TEXT="die man (derzeit?) mit GCC-Pragma unterdr&#xfc;cken mu&#xdf;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// GCC &gt; 13 warns at class definition when a new overload shadows an inherited virtual function.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// While theoretically correct, in practice any call will be dispatched through the base interface,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// which in turn is also generated by metaprogramming from a type list.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#977b75">// See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=109740</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#3a1f18">_Pragma</font><font color="#11123a">(</font><font color="#996e62"><i>&quot;GCC diagnostic push&quot;</i></font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#65533c">\</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#3a1f18">_Pragma</font><font color="#11123a">(</font><font color="#996e62"><i>&quot;GCC diagnostic ignored \&quot;-Woverloaded-virtual\&quot;&quot;</i></font><font color="#11123a">)</font>
+        </p>
+      </div>
+    </div>
+    <p>
+      <br />
+      <u>Wichtig</u>: mu&#223; bereits <b>vor</b>&#160;dem Template stehen, in dem das Shaddowing auftritt (kann aber durchaus mitten in einem Namespace sein)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784489714610" ID="ID_626901816" MODIFIED="1784490126318" TEXT="interessanterweise ist nichteinmal ein using BASE::extractAs notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn an der Stelle spielt Sichtbarkeit gar keine Rolle mehr, es wird nur eine schon vorhandene Interface-Methode in der VTable auf eine konkrete Implementierung gebunden. Allerdings <b>nur</b>, wenn man tats&#228;chlich das Interface als multiple-mix-in generiert &#8212; denn das <i>umgeht das Sichtbarkeits-Problem</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#352c84" CREATED="1784491298401" ID="ID_427305032" MODIFIED="1784491357026" TEXT="Fazit {generiertes Mulit-TypeHandler-OO-Interface}">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1784491360016" ID="ID_711986937" MODIFIED="1784491537887" TEXT="das Original-Baumuster von Alexandrescu ist immer noch die beste L&#xf6;sung">
+<arrowlink COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="236;9;" ID="Arrow_ID_1412212027" STARTARROW="None" STARTINCLINATION="236;9;"/>
+</node>
+<node CREATED="1784491373675" ID="ID_1952132123" MODIFIED="1784491392120" TEXT="die Implementierung per Chain braucht keine Sichtbarkeit der anderen Overloads"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784491392987" ID="ID_1626670078" MODIFIED="1784491428279" TEXT="auf Ambiguit&#xe4;ten in den Typ-Signaturen achten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das gr&#246;&#223;te Problem sind die automatischen Umwandlungen von Basis-Typen in C++
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+</node>
 </node>
 </node>
 <node CREATED="1783209608510" ID="ID_703553750" MODIFIED="1783209752232" TEXT="mu&#xdf; dem Implementierungs-Template einen zus&#xe4;tzlichen Typ-Parameter zukommen lassen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist kniffelig, da das ein template-template-Parameter ist, mit zwei bereits festgelegten Typ-Parametern (Zieltyp und Basisklasse). Hier implementieren wir aber Domain&lt;X&gt;, also mu&#223; der Quell-Parameter X auch irgendiw zus&#228;tzlich in den Type-Handler gebracht werden. Idee: als nested-Templates definieren und dann am Ende per templated Typedef rausziehen
@@ -152794,9 +153085,149 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <icon BUILTIN="bell"/>
 <node CREATED="1778113251791" ID="ID_719985737" MODIFIED="1778113329577" TEXT="Basis: Async-IO (IO_URING)">
 <arrowlink COLOR="#323ccd" DESTINATION="ID_513273421" ENDARROW="Default" ENDINCLINATION="-1630;-298;" ID="Arrow_ID_1806410644" STARTARROW="None" STARTINCLINATION="-1524;159;"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779805310242" ID="ID_478770549" MODIFIED="1779805815322" TEXT="Mai26: bewerbe mich f&#xfc;r einen FrOSCon-Vortrag &#xfc;ber dieses Thema">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1779805310242" ID="ID_478770549" MODIFIED="1783968789239" TEXT="Mai26: bewerbe mich f&#xfc;r einen FrOSCon-Vortrag &#xfc;ber dieses Thema (akzeptiert)">
 <arrowlink COLOR="#ac193d" DESTINATION="ID_1356755436" ENDARROW="Default" ENDINCLINATION="-2519;165;" ID="Arrow_ID_1080225006" STARTARROW="None" STARTINCLINATION="-2364;98;"/>
 <icon BUILTIN="bell"/>
+</node>
+<node CREATED="1783468862456" ID="ID_1034005387" MODIFIED="1783468882878" TEXT="Vorl&#xe4;ufige Einsichten">
+<icon BUILTIN="idea"/>
+<node CREATED="1783468898190" ID="ID_1475247705" MODIFIED="1783468930846" TEXT="io_uring markiert die Jobs mit einem Kontext-Pointer">
+<node CREATED="1783468937958" ID="ID_1565848180" MODIFIED="1783468989732" TEXT="das pa&#xdf;t perfekt auf die geplanten &#xbb;Continuations&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die hatte ich intuitiv so angelegt, weil ich schon vermutet habe, da&#223; &#187;man&#171; ein asynchrones IO-Interface so definiert....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1783469012311" ID="ID_1044169368" MODIFIED="1783469057752" TEXT="ein Problem der Konstruktion ist aber, wie die Completion-Entries gehandhabt werden">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1783469074326" ID="ID_932942159" MODIFIED="1783469080817" TEXT="wir wollen keinen Reaktor-Thread">
+<node CREATED="1783469111721" ID="ID_405029887" MODIFIED="1783469111721">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      weil dann wieder ein zentraler Verteiler da w&#228;re, der andere Threads antriggern m&#252;&#223;te
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783469115153" ID="ID_559476903" MODIFIED="1783469132499" TEXT="oder der neue Jobs in den Scheduler einspeisen m&#xfc;&#xdf;te"/>
+<node CREATED="1783469133423" ID="ID_1627275429" MODIFIED="1783469142818" TEXT="oder Jobs am Scheduler vorbei ausl&#xf6;sen m&#xfc;&#xdf;te"/>
+</node>
+<node CREATED="1783469162550" ID="ID_1178541379" MODIFIED="1783469171910" TEXT="konsequenterweise m&#xfc;&#xdf;ten die Worker das selber machen"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1783469172986" ID="ID_1986009047" MODIFIED="1783469190808" TEXT="dann ist aber das praktische Problem: wie verteilt man die Last?">
+<icon BUILTIN="help"/>
+<node CREATED="1783469200423" ID="ID_1975068205" MODIFIED="1783469213993" TEXT="es k&#xf6;nnten auf einmal jede Menge CQ-Entries da sein"/>
+<node CREATED="1783469317962" ID="ID_942113151" MODIFIED="1783469338513" TEXT="wir sehen nicht, welcher dieser Continuations am dringensten ist"/>
+<node CREATED="1783469379035" ID="ID_1417098709" MODIFIED="1783469502430" TEXT="das Abr&#xe4;umen und triggern einer Continuation allein ist zu wenig f&#xfc;r einen Job-Zyklus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Will sagen: wenn man sich einen Completion-Entry nimmt, dann wei&#223; man erst noch nicht, ob daraus nur das dekrementieren einer Gate-Activity folgt, oder ob das direkt in einen aufwendigen Computation-Job m&#252;ndet. Ein reines Triggern geht sehr schnell, und steht in keinem Verh&#228;ltnis zum Overhead, den ein Worker durchl&#228;uft, bis er den n&#228;chsten Job hat
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783469504485" ID="ID_1115841193" MODIFIED="1783469719178" TEXT="&#x27f9; die Frage ist: wann droppt man das Grooming-Token?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Solange ein Job aus der Completion-Queue entnimmt, mu&#223; er das Grooming-Token haben, weil die Ringbuffer von io_uring nur single-Producer/Consumer-f&#228;hig sind. Man m&#252;&#223;te also irgendwie feststellen k&#246;nnen, ob ein Entry tats&#228;chlich in die Verarbeitung eines Calculation-Jobs m&#252;ndet. Denn dann k&#246;nnte man bis dorthin arbeiten, dann das Grooming-Token droppen, und in diesen Job einsteigen. Das w&#228;re dann konsistent mit unserer Architektur: der n&#228;chste Job h&#228;tte dann die n&#228;chsten anstehenden Completion-Entries zu bearbeiten.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783469737866" ID="ID_1720621872" MODIFIED="1783469766981">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Konsequenz</u>: Pr&#252;fung und <b>Priorisierung</b>&#160;der Completions notwendig
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1783469820544" ID="ID_227034303" MODIFIED="1783469844240" TEXT="mu&#xdf; mir die Konstruktion von Gates und Triggern daraufhin ansehen">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1783968668546" ID="ID_107626150" LINK="https://claude.ai/share/2d09d5e6-1a47-45e9-b05b-500550fb0977" MODIFIED="1783968913377" STYLE="fork" TEXT="Design/Architektur-Dialog mit Claude zum Thema IO_URING">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Gr&#246;&#223;tenteils um das Design f&#252;r die Demo-Applikation festzulegen, die ich derzeig f&#252;r den FrOSCon-Talk (IO_uring f&#252;r Video-Widergabe) entwickle
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node CREATED="1783968139661" ID="ID_721741944" MODIFIED="1783968157925" TEXT="Proactor ist push &#x2014; unsere Architektur ist konsistent pull"/>
+<node COLOR="#5b280f" CREATED="1783968173638" ID="ID_1363800541" MODIFIED="1783968193807" TEXT="man sollte nicht versuchen, einen Proactor in unser Design zu integrieren">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1783968195246" ID="ID_1729925953" MODIFIED="1783968212467" TEXT="stattdessen kann man die Proactor-Loop in Activities oder Jobs packen"/>
+<node CREATED="1783968233008" ID="ID_1599145728" MODIFIED="1783968259313" TEXT="Auf Engine-Level: Zugang zum URing mu&#xdf; in der &#xbb;Grooming-Zone&#xab; bleiben">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1783968264384" ID="ID_1390930082" MODIFIED="1783968803545" TEXT="das ist ausreichend um die Cross-Thread-Visibility sicherzustellen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      aber man sollte konzeptionell zwischen der visibility mit dem Kernel und der Visibility zwischen den Workern unterscheiden; f&#252;r ersteres gibt es die Barrieren in Liburing
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783968339226" ID="ID_52764530" MODIFIED="1783968361355" TEXT="Blocken in der Grooming-Phase verhindern &#x27f6; sonst Engine-Stall">
+<icon BUILTIN="clanbomber"/>
+</node>
+<node CREATED="1783968381176" ID="ID_291465589" MODIFIED="1783968803561" TEXT="Flow/Capacity-Steuerung ist essentiell notwendig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der Umstand da&#223; neue IO-Aktivit&#228;ten gescheduled werden und Completions entnommen werden m&#252;ssen, garantiert nur eine passive Backpressure (nicht entnommene Completions gehen nicht verloren, und der Platz in den URings ist begrenzt). Sehr wahrscheinlich ist mehr notwendig, damit die Engine rund l&#228;uft.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783968535936" ID="ID_1390321079" MODIFIED="1783968546673" TEXT="Einordnung in gegenw&#xe4;rtige Trends">
+<node CREATED="1783968547646" ID="ID_1203574703" MODIFIED="1783968635282" TEXT="Scheduler/Worker-Pattern wird standardisiert (C++26)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Es ist eine etablierte und bew&#228;hrte Methode, und wird nicht weggehen. Was wir geschaffen haben konvergiert gut mit den allgemeinen Einsichten im Feld
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783968562254" ID="ID_1154684301" MODIFIED="1783968600700" TEXT="High-Performance-Computing: thread-per-core no shared data">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist ein Gegentrend, der aber auf einer anderen Gr&#246;&#223;enordnung arbeitet (im Nanosekunden-Bereich)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1783968636663" ID="ID_1048046164" MODIFIED="1783968651582" TEXT="sollte an sehr hohe Anzahl an Cores denken">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1778113564544" ID="ID_1131259858" MODIFIED="1778113686162" TEXT="Integration IO-Buffer">

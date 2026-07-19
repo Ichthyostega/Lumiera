@@ -92,9 +92,8 @@ namespace test{
           uint target1{0};
           CHECK (not target1);
           
-//          TypeHandler<uint>& dd1{d1};
-//          dd1.extractAs (target1, src1);
-          d1.extractAs (target1, src1);
+          TypeHandler<uint>& dd1{d1};
+          dd1.extractAs (target1, src1);
           CHECK (target1 == uint(val1));
         }
     };
