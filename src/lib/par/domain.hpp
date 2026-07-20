@@ -38,10 +38,19 @@
 //#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/util.hpp"
+
+#include <concepts>
+#include <limits>
 
 
 namespace lib {
 namespace par {
+  
+  using std::same_as;
+  using std::floating_point;
+  using std::numeric_limits;
+  
   
   struct ValBuff { /*placeholder*/ };
   
@@ -116,6 +125,8 @@ namespace par {
     public:
       virtual ~Domain();  ///< this is an interface
       
+      virtual void applyLimit (ValBuff&)  =0;
+      
     protected:
     };
   
@@ -131,7 +142,7 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   
   
   template<typename U>
-  struct TypeSetup
+  struct DomainSetup
     {
       
       template<typename X, class BAS>
@@ -148,32 +159,82 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   
   template<typename X>
   class BaseDomain
-    : public TypeSetup<X>::TypeHandlerChain
+    : public DomainSetup<X>::TypeHandlerChain
     {
     public:
+      void applyLimit (ValBuff&)  override;
     };
   
   
   /* ===== type conversion details ===== */
-
+  
+  template<typename SUB, typename BAS>
+  concept sub_domain = std::signed_integral<SUB> != std::signed_integral<BAS>
+                    or std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
+                    or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
+                     ;
+  
+  /** generic helper to conform into a common value domain
+   * @tparam SUB the implied target value domain
+   * @tparam BAS source data type
+   * @return a value in source data type,
+   *         yet conformed into the target data range
+   */
+  template<typename SUB, typename BAS>
+  inline constexpr BAS
+  preClamp (BAS const& value)
+  {
+    return value;
+  }
+  
+  /** special case: clamp the source value into the target value domain */
+  template<typename SUB, typename BAS>   requires sub_domain<SUB,BAS>
+  inline constexpr BAS
+  preClamp (BAS const& rawVal)
+  {
+    auto upperBound = numeric_limits<SUB>::max();
+    auto lowerBound = numeric_limits<SUB>::lowest();
+    return util::limited (lowerBound, rawVal, upperBound);
+  }
+  
+  /** special case: trigger a bool at the 0.5 level */
+  template<same_as<bool> B, floating_point F>
+  inline constexpr F
+  preClamp (F const& rawVal)
+  {
+    return 0.5 < rawVal? F{1} : F{0};
+  }
+  
+  
+  template<typename X>
+  inline void
+  BaseDomain<X>::applyLimit (ValBuff& valBuff)
+  {
+    X& val{asValue<X> (valBuff)};
+    val = preClamp<X> (val);
+  }
+  
+  
+  
   template<typename U>
   template<typename X, class BAS>
   inline void
-  TypeSetup<U>::TypeHandlerImpl<X,BAS>::extractAs (X& targetVal, ValBuff const& valBuff)
+  DomainSetup<U>::TypeHandlerImpl<X,BAS>::extractAs (X& targetVal, ValBuff const& valBuff)
   {
-    if constexpr (std::is_assignable_v<X&, U const&>)
+    if constexpr (std::is_assignable_v<X&, U&&>)
       {
-        targetVal = asValue<U> (valBuff);
+        targetVal = preClamp<X> (asValue<U> (valBuff));
       }
     else
-    if constexpr (std::is_constructible_v<X, U const&>)
+    if constexpr (std::is_constructible_v<X, U&&>)
       {
         targetVal.~X();
-        new(&targetVal) X (asValue<U> (valBuff));
+        new(&targetVal) X (preClamp<X> (asValue<U> (valBuff)));
       }
     else
       static_assert (!sizeof(X), "this type conversion is not supported");
   }
+  
   
   
 }} // namespace lib::par

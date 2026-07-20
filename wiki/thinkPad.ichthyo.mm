@@ -82211,7 +82211,9 @@
 </node>
 </node>
 </node>
-<node CREATED="1782948792629" ID="ID_1623866120" MODIFIED="1782949000542" TEXT="a Parameter has...">
+<node BACKGROUND_COLOR="#ffcea1" CREATED="1782948792629" ID="ID_1623866120" MODIFIED="1784583297397" TEXT="a Parameter has...">
+<cloud COLOR="#e8ceb0"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1782948801636" ID="ID_224051194" MODIFIED="1783012188400" TEXT=" a Disposition"/>
 <node CREATED="1783012199995" ID="ID_1245050792" MODIFIED="1783012219836" TEXT="which comprises">
 <node CREATED="1783012221304" ID="ID_1384741652" MODIFIED="1783012226307" TEXT="the ParamType">
@@ -82971,7 +82973,7 @@
 </html></richcontent>
 </node>
 </node>
-<node COLOR="#352c84" CREATED="1784491298401" ID="ID_427305032" MODIFIED="1784491357026" TEXT="Fazit {generiertes Mulit-TypeHandler-OO-Interface}">
+<node COLOR="#352c84" CREATED="1784491298401" ID="ID_427305032" MODIFIED="1784491298401" TEXT="Fazit {generiertes Multi-TypeHandler-OO-Interface}">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1784491360016" ID="ID_711986937" MODIFIED="1784491537887" TEXT="das Original-Baumuster von Alexandrescu ist immer noch die beste L&#xf6;sung">
@@ -83039,6 +83041,131 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d8b58c" COLOR="#930225" CREATED="1784502897450" ID="ID_1330060370" LINK="https://stackoverflow.com/a/19921030/444796" MODIFIED="1784503377607" TEXT="Nebenbei bemerkt: std::is_assignable verh&#xe4;lt sich &#xbb;unintuitiv&#xab;">
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bb050f" CREATED="1784503389623" ID="ID_1439488420" MODIFIED="1784503437563" TEXT="is_assignable_v&lt;int,int&gt; &#x2261; false">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1784503100809" ID="ID_1277115906" MODIFIED="1784503126112" TEXT="weil es definiert ist per std::declval&lt;X&gt;()"/>
+<node CREATED="1784503127869" ID="ID_1665184398" MODIFIED="1784503141705" TEXT="und ein unqualifizierter Typ hier eine RValue-Refernz liefert"/>
+<node CREATED="1784503156556" ID="ID_1901180022" MODIFIED="1784503174041" TEXT="man kann das so deuten: ein Literal ist nicht zuweisbar">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1784503185446" ID="ID_472398753" MODIFIED="1784503227927" TEXT="mu&#xdf; also immer bedenken, da&#xdf; man normalerweise eine Referenz auf ein Objekt bekommt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist implizites Standard-Verhalten von C++ in praktisch jedem Ausdruck und Funktionsaufruf
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1784590564427" ID="ID_1119403748" MODIFIED="1784590780419" TEXT="sollte auch noch limitieren">
+<arrowlink COLOR="#4490cf" DESTINATION="ID_1748150865" ENDARROW="Default" ENDINCLINATION="-102;-5;" ID="Arrow_ID_1245799800" STARTARROW="None" STARTINCLINATION="-15;97;"/>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1784583466853" ID="ID_1381198266" MODIFIED="1784583478931" TEXT="erweitere auf &#xbb;conforiming&#xab;-Funktionalit&#xe4;t">
+<node CREATED="1784583493969" ID="ID_1551792524" MODIFIED="1784583530626">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist die <i>zweite H&#228;lfte</i>&#160;des Domain-Begriffs
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1784583588306" ID="ID_479207205" MODIFIED="1784583601739">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Basis ist ein Typ als <i>Grundgesammtheit</i>
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784583605161" ID="ID_1455528542" MODIFIED="1784583626539" TEXT="zusammen mit einer Wert-Einschr&#xe4;nkung"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784583633429" ID="ID_246137093" MODIFIED="1784583668394" TEXT="Vorsicht: an Vektor-f&#xf6;rmige Typen denken...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      z.B. Farben
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1784583901650" ID="ID_66120766" MODIFIED="1784583966561" TEXT="hier zeigt sich ein komplexes Verh&#xe4;ltnis zwischen Domain und BaseDomain">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      naiver Weise dachte ich erst, eine Domain ist lediglich ein Teilintervall einer BaseDomain. Tja zu fr&#252;h gefreut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1784583716571" ID="ID_38727535" MODIFIED="1784583732840" TEXT="das Conforming mu&#xdf; u.U mehrstufig sein">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1784583737728" ID="ID_388891052" MODIFIED="1784583753674" TEXT="ein erster Schritt mu&#xdf; in der Quell-Domain erfolgen">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1784593401491" ID="ID_1670494263" MODIFIED="1784593411005" TEXT="Vorsicht Falle: signed vs unsigned">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1784593415546" ID="ID_985867046" MODIFIED="1784593437214" TEXT="die numeric-Limits werden im jeweiligen Typ angegeben"/>
+<node CREATED="1784593442299" ID="ID_814649582" MODIFIED="1784593459136" TEXT="bei direkten Vergleichen passiert zwar die erwartete Promotion"/>
+<node COLOR="#5b280f" CREATED="1784593459863" ID="ID_492548018" MODIFIED="1784593634425" TEXT="aber signed vs. unsigned- Werte lassen sich &#xfc;berhaupt nicht ohne Weiteres vergleichen">
+<arrowlink COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" STARTARROW="None" STARTINCLINATION="195;6;"/>
+<icon BUILTIN="closed"/>
+</node>
+</node>
+</node>
+<node CREATED="1784583754452" ID="ID_1524391258" MODIFIED="1784583768830" TEXT="dann kann innerhalb der Wert-BaseDomain eine weitere Einschr&#xe4;nkung folgen"/>
+<node CREATED="1784586543839" ID="ID_1702195769" MODIFIED="1784586550867" TEXT="Teil-Operationen">
+<node CREATED="1784586551999" ID="ID_1288354893" MODIFIED="1784586565918" TEXT="preClamp&lt;TAR&gt; (SRC const&amp;)">
+<node CREATED="1784586572069" ID="ID_70379943" MODIFIED="1784586582520" TEXT="l&#xe4;&#xdf;t sich komplett generisch implementieren"/>
+<node CREATED="1784586675600" ID="ID_876196754" MODIFIED="1784588546088" TEXT="concept sub_domain&lt;SUB,BAS&gt;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a4060f" CREATED="1784593517692" ID="ID_1240698281" MODIFIED="1784593627634" TEXT="mu&#xdf; hier signed &#x2260; unsigned explizit pr&#xfc;fen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sonst geht der nachfolgende Vergleich f&#252;r die untere Schwelle ganz glorreich in die Hose, sch&#246;nen Gru&#223; vom uint(-1)
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" SOURCE="ID_492548018" STARTARROW="None" STARTINCLINATION="195;6;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1784593545688" ID="ID_1890105632" MODIFIED="1784593569629" TEXT="kann au&#xdf;erdem gleich das Trigger-Verhalten f&#xfc;r Booleans implementieren">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node CREATED="1784587186873" ID="ID_1998060966" MODIFIED="1784587208674" TEXT="virtual applyLimit(Buffer&amp;)">
+<node CREATED="1784587905137" ID="ID_196992570" MODIFIED="1784587939787" TEXT="f&#xfc;r BaseDomain&lt;X&gt; &#x27f5; folgt direkt aus numeric_limits&lt;X&gt;"/>
+<node CREATED="1784588869240" ID="ID_1210483864" MODIFIED="1784588882120" TEXT="kann man auf die generische constexpr preClamp zur&#xfc;ckf&#xfc;hren">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1784588917160" ID="ID_174389664" MODIFIED="1784588970730" TEXT="beide Zuweisungs-Operationen auf Basis des &#xbb;conforming&#xab;- reimplementieren">
+<node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784591447465" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wir wollen explizit kein uint(-1) haben
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#4490cf" DESTINATION="ID_1748150865" ENDARROW="Default" ENDINCLINATION="-102;-5;" ID="Arrow_ID_1245799800" SOURCE="ID_1119403748" STARTARROW="None" STARTINCLINATION="-15;97;"/>
 </node>
 </node>
 </node>
@@ -184806,6 +184933,10 @@ class Something
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#8c0041" CREATED="1784503310882" ID="ID_376662071" MODIFIED="1784503330829" TEXT="woot">
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1784503253634" ID="ID_1878512579" LINK="#ID_1330060370" MODIFIED="1784503258591" TEXT="std::is_assignable verh&#xe4;lt sich &#xbb;unintuitiv&#xab;"/>
 </node>
 </node>
 </node>

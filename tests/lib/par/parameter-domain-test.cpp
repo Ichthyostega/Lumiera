@@ -70,6 +70,7 @@ namespace test{
         {
           seedRand();
           basics();
+          verify_valueLimits();
           verify_valueAccess();
         }
       
@@ -77,6 +78,30 @@ namespace test{
       void
       basics()
         {
+        }
+      
+      
+      void
+      verify_valueLimits()
+        {
+SHOW_EXPR(preClamp<int> (23))
+SHOW_EXPR(preClamp<int> (-55))
+SHOW_EXPR(preClamp<uint> (23))
+SHOW_EXPR(preClamp<uint> (-55))
+SHOW_EXPR((sub_domain<uint,int>))
+SHOW_EXPR((sub_domain<int,uint>))
+SHOW_EXPR((sub_domain<short,long>))
+SHOW_EXPR(std::numeric_limits<uint>::max())
+SHOW_EXPR(std::numeric_limits<int>::max())
+SHOW_EXPR(std::numeric_limits<uint>::lowest())
+SHOW_EXPR(std::numeric_limits<int>::lowest())
+//  concept sub_domain = std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
+//                    or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
+//SHOW_EXPR(std::numeric_limits<uint>::lowest() > std::numeric_limits<int>::lowest())
+//SHOW_EXPR(abs(std::numeric_limits<uint>::lowest()) < (std::numeric_limits<int>::lowest()))
+
+SHOW_EXPR(preClamp<short> (INT64_MAX))
+SHOW_EXPR(preClamp<short> (INT64_MIN))
         }
       
       
