@@ -91,17 +91,24 @@ SHOW_EXPR(preClamp<uint> (-55))
 SHOW_EXPR((sub_domain<uint,int>))
 SHOW_EXPR((sub_domain<int,uint>))
 SHOW_EXPR((sub_domain<short,long>))
+SHOW_EXPR((sub_domain<long,short>))
 SHOW_EXPR(std::numeric_limits<uint>::max())
 SHOW_EXPR(std::numeric_limits<int>::max())
 SHOW_EXPR(std::numeric_limits<uint>::lowest())
 SHOW_EXPR(std::numeric_limits<int>::lowest())
-//  concept sub_domain = std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
-//                    or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
-//SHOW_EXPR(std::numeric_limits<uint>::lowest() > std::numeric_limits<int>::lowest())
-//SHOW_EXPR(abs(std::numeric_limits<uint>::lowest()) < (std::numeric_limits<int>::lowest()))
 
 SHOW_EXPR(preClamp<short> (INT64_MAX))
 SHOW_EXPR(preClamp<short> (INT64_MIN))
+
+SHOW_EXPR(preClamp<ushort> (numeric_limits<float>::max()))
+SHOW_EXPR(preClamp<ushort> (numeric_limits<float>::lowest()))
+
+SHOW_EXPR(preClamp<float> (numeric_limits<uint64_t>::max()))
+SHOW_EXPR(preClamp<float> (numeric_limits<double>::lowest()))
+
+SHOW_EXPR(preClamp<bool> (0.5));
+SHOW_EXPR(preClamp<bool> (0.5 + numeric_limits<double>::epsilon()))
+SHOW_EXPR(preClamp<bool> (numeric_limits<double>::min()))
         }
       
       

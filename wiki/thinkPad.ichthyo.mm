@@ -81663,15 +81663,22 @@
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
-<node CREATED="1782923489065" ID="ID_298169531" MODIFIED="1782923571066" TEXT="Verzicht auf Destruktor-Aufruf">
+<node CREATED="1782923489065" ID="ID_298169531" MODIFIED="1782923489065" TEXT="Verzicht auf Destruktor-Aufruf">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      andernfalls <b>mu&#223;</b>&#160;ich eine VTable mitschleppen, und das w&#252;rde mir Bauchschmerzen machen, da die Parameter-Auswertund nun doch in die Render-Engine hineinreicht
+      andernfalls <b>mu&#223;</b>&#160;ich eine VTable mitschleppen, und das w&#252;rde mir Bauchschmerzen machen, da die Parameter-Auswertung nun doch in die Render-Engine hineinreicht
     </p>
   </body>
 </html></richcontent>
+<node CREATED="1784672063532" HGAP="26" ID="ID_874197913" MODIFIED="1784672142538" TEXT="nicht mehr so klar &#x2014; VTable brauche ich ohnehin f&#xfc;r die Kopierbarkeit" VSHIFT="2">
+<arrowlink COLOR="#fedeb1" DESTINATION="ID_1260735860" ENDARROW="Default" ENDINCLINATION="221;-1409;" ID="Arrow_ID_871558965" STARTARROW="None" STARTINCLINATION="1349;50;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784672159561" ID="ID_1607967603" MODIFIED="1784672179337" TEXT="Unterscheidung &#xbb;Basiswerte&#xab; &#x2014; &#xbb;komplexe Parameter&#xab;?">
+<icon BUILTIN="help"/>
 </node>
 </node>
 <node CREATED="1782923626958" ID="ID_386912733" MODIFIED="1782923647319" TEXT="Gefordert ist also: ein halb-dynamischer safety-Check">
@@ -82662,7 +82669,8 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784480336698" ID="ID_440800496" MODIFIED="1784480356903" TEXT="Spielr&#xe4;ume">
 <icon BUILTIN="yes"/>
 <icon BUILTIN="forward"/>
-<node CREATED="1784480360439" ID="ID_1260735860" MODIFIED="1784480368981" TEXT="nicht zu sehr verr&#xfc;ckt machen....">
+<node CREATED="1784480360439" ID="ID_1260735860" MODIFIED="1784672142539" TEXT="nicht zu sehr verr&#xfc;ckt machen....">
+<linktarget COLOR="#fedeb1" DESTINATION="ID_1260735860" ENDARROW="Default" ENDINCLINATION="221;-1409;" ID="Arrow_ID_871558965" SOURCE="ID_874197913" STARTARROW="None" STARTINCLINATION="1349;50;"/>
 <icon BUILTIN="ksmiletris"/>
 </node>
 <node CREATED="1784480371646" ID="ID_74554440" MODIFIED="1784480388324">
@@ -83122,6 +83130,275 @@
 <node COLOR="#5b280f" CREATED="1784593459863" ID="ID_492548018" MODIFIED="1784593634425" TEXT="aber signed vs. unsigned- Werte lassen sich &#xfc;berhaupt nicht ohne Weiteres vergleichen">
 <arrowlink COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" STARTARROW="None" STARTINCLINATION="195;6;"/>
 <icon BUILTIN="closed"/>
+<node CREATED="1784669864149" ID="ID_1893387322" MODIFIED="1784669867944" TEXT="man k&#xf6;nnte....">
+<node CREATED="1784669870432" ID="ID_111028032" MODIFIED="1784669894580" TEXT="in Einzelf&#xe4;lle aufteilen">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1784669944683" ID="ID_739218208" MODIFIED="1784670003838" STYLE="fork" TEXT="Stackoverflow.AI generiert folgende Fallunterscheidung....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced" size="2">#include &lt;type_traits&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">#include &lt;limits&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">#include &lt;cmath&gt;&#160;&#160;&#160;&#160;// std::isnan, std::trunc, std::llround (if needed) </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">template&lt;typename X, typename U&gt; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">constexpr X safe_clamp_cast(U value) noexcept { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;using Dx = std::numeric_limits&lt;X&gt;; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;using Du = std::numeric_limits&lt;U&gt;; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// If target can represent all values of source, direct cast is safe. </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;if constexpr (std::is_same_v&lt;X, U&gt; || </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(std::is_integral_v&lt;X&gt; &amp;&amp; std::is_integral_v&lt;U&gt; &amp;&amp; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(std::is_signed_v&lt;X&gt; == std::is_signed_v&lt;U&gt;) &amp;&amp; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(sizeof(X) &gt;= sizeof(U))) || </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(std::is_floating_point_v&lt;X&gt; &amp;&amp; std::is_floating_point_v&lt;U&gt; &amp;&amp; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(sizeof(X) &gt;= sizeof(U)))) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// Handle floating source separately </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;if constexpr (std::is_floating_point_v&lt;U&gt;) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (std::isnan(value)) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// policy: map NaN to 0 (could be Dx::lowest() or Dx::min() depending on needs) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(0); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;long double v = static_cast&lt;long double&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (v &lt;= static_cast&lt;long double&gt;(Dx::lowest())) return static_cast&lt;X&gt;(Dx::lowest()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (v &gt;= static_cast&lt;long double&gt;(Dx::max()))&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(Dx::max()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// when casting float-&gt;int, truncate toward zero (same as static_cast) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(v); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// Now source is integral (U), target X might be integral or floating </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;if constexpr (std::is_integral_v&lt;U&gt; &amp;&amp; std::is_floating_point_v&lt;X&gt;) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// integer -&gt; float: float may not represent huge integers exactly, but no UB; clamp to finite range </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;long double v = static_cast&lt;long double&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (v &lt;= static_cast&lt;long double&gt;(Dx::lowest())) return static_cast&lt;X&gt;(Dx::lowest()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (v &gt;= static_cast&lt;long double&gt;(Dx::max()))&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(Dx::max()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(v); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// Both integral but possibly differing signedness/range </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;if constexpr (std::is_integral_v&lt;X&gt; &amp;&amp; std::is_integral_v&lt;U&gt;) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if constexpr (std::is_signed_v&lt;U&gt; &amp;&amp; !std::is_signed_v&lt;X&gt;) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// signed source -&gt; unsigned target </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (value &lt; 0) return static_cast&lt;X&gt;(0); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;using UT_prom = std::make_unsigned_t&lt;U&gt;; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;UT_prom uv = static_cast&lt;UT_prom&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (uv &gt; static_cast&lt;std::make_unsigned_t&lt;X&gt;&gt;(Dx::max())) return static_cast&lt;X&gt;(Dx::max()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(uv); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} else if constexpr (!std::is_signed_v&lt;U&gt; &amp;&amp; std::is_signed_v&lt;X&gt;) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// unsigned source -&gt; signed target </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;using UX_prom = std::make_unsigned_t&lt;X&gt;; </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (value &gt; static_cast&lt;std::make_unsigned_t&lt;U&gt;&gt;(Dx::max())) return static_cast&lt;X&gt;(Dx::max()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(value); // safe </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} else { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;// same signedness but different sizes </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if constexpr (sizeof(U) &gt; sizeof(X)) { </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (value &gt; static_cast&lt;U&gt;(Dx::max())) return static_cast&lt;X&gt;(Dx::max()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;if (std::is_signed_v&lt;U&gt; &amp;&amp; value &lt; static_cast&lt;U&gt;(Dx::lowest())) return static_cast&lt;X&gt;(Dx::lowest()); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;} </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;// Fallback </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;&#160;&#160;&#160;return static_cast&lt;X&gt;(value); </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">}</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+<node CREATED="1784669896248" ID="ID_406155259" LINK="https://stackoverflow.com/a/53027613/444796" MODIFIED="1784670033706" TEXT="die Vergleichsoperation sicher machen">
+<node CREATED="1784670911841" ID="ID_601580251" MODIFIED="1784671009442" TEXT="man kann sicher auf &quot;negativ&quot; testen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Unter der Annahme, da&#223; lediglich die signed/unsigned Integers das Problem sind; denn f&#252;r jeden Integer-Typ kann man val &lt; TY(0) bilden
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1784671014259" ID="ID_242078970" MODIFIED="1784671026710" TEXT="&#xd83e;&#xdc32; das sollte in util-hpp"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784671027530" ID="ID_398950707" MODIFIED="1784671109521" TEXT="oops ... da ist geich daneben ein Bug">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die Funktion &quot;noneg()&quot; macht den Verlgeich genau falsch herum:&#160; <font color="#a10000">0 &lt; uint(-1) &#10233; true</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1784676789512" ID="ID_597609808" MODIFIED="1784676806736" TEXT="danach &#x27f9; Fallunterscheidung cross-sign">
+<node CREATED="1784676809839" ID="ID_1209038292" MODIFIED="1784676891332" TEXT="wenn beide auf der positiven oder negativen Seite &#x27f9; kann vergleichen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier hilft uns die automatische Promotion in den Typ mit dem h&#246;heren Rank: nur deshalb k&#246;nnen wir die Vergleichsoperation machen. Zudem kann der Verleich im negativen Segment &#252;berhaupt nur stattfinden, wenn beide Typen negativ sind, also mithin signed
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1784676822935" ID="ID_148161124" MODIFIED="1784676835365" TEXT="sonst gen&#xfc;gt es, festzustellen, wer auf der negativen Seite steht"/>
+</node>
+<node CREATED="1784676915183" ID="ID_426278136" MODIFIED="1784676924529" TEXT="&#xbb;Untiefen&#xab;">
+<node CREATED="1784676925660" ID="ID_659876949" MODIFIED="1784676940511" TEXT="nicht wirklich klar, was hier &#xbb;zahlenartige&#xab; Typen sind...."/>
+<node CREATED="1784676941683" ID="ID_1586533827" MODIFIED="1784676970939" TEXT="Annahme: wenn auseinander konstruierbar &#x27f9; Wert-Dom&#xe4;nen &#xfc;berlappen sich"/>
+<node CREATED="1784676972079" ID="ID_459908237" MODIFIED="1784677047037" TEXT="Trennung der Wert-Dom&#xe4;nen liegt tats&#xe4;chlich auf der Null, mithin innerhalb der Sub-Dom&#xe4;ne"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784677065579" ID="ID_1383641297" MODIFIED="1784677094780" TEXT="schalte -Wsign-compare explizit ab f&#xfc;r diese Funktion">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1784677107645" HGAP="26" ID="ID_290383571" MODIFIED="1784677121609" TEXT="GCC-spezifisches Pragma" VSHIFT="7">
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -83167,6 +83444,9 @@
 </html></richcontent>
 <linktarget COLOR="#4490cf" DESTINATION="ID_1748150865" ENDARROW="Default" ENDINCLINATION="-102;-5;" ID="Arrow_ID_1245799800" SOURCE="ID_1119403748" STARTARROW="None" STARTINCLINATION="-15;97;"/>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b3020b" CREATED="1784674883894" ID="ID_25505345" MODIFIED="1784674910088" TEXT="viele offene Flanken hier: setzt eigentlich &#xbb;zahlenartige&#xab; Basistypen vorraus">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -83184,6 +83464,97 @@
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783093751636" ID="ID_1739226245" MODIFIED="1783093759439" TEXT="connect(...)">
 <icon BUILTIN="hourglass"/>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784672238011" ID="ID_1348610595" MODIFIED="1784672242463" TEXT="offene Fragen">
+<icon BUILTIN="help"/>
+<node CREATED="1784672283635" ID="ID_164133408" MODIFIED="1784672380497" TEXT="wollen wir eine Art &#xbb;String&#xab; unterst&#xfc;tzen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hier steckt das Thema Speicher, deep-copy, interned-strings, Konstanten, Inline-IDs? Vielleicht gen&#252;gt guter Support f&#252;r Ennumerationen?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784672304720" ID="ID_1556240219" MODIFIED="1784672496130" TEXT="wie repr&#xe4;sentieren wir Ennummerationen / Finite-Domain?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      gemeint ist: man mu&#223; die Ennumeratoren irgendwo in Textform vorhalten, und mu&#223; parsen k&#246;nnen; einzelne Ennumeratoren k&#246;nnten dynamisch hinzugef&#252;gt werden, oder gar ganze Finite-Domains per Konfiguration oder dynamischer Definition. Hier tut sich ein Abgrund an Komplexit&#228;t auf &#8212; im Grunde verweist das direkt in den Themenkomplex &#187;<b>Domain-Ontology</b>&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1784672517211" ID="ID_189232786" MODIFIED="1784672718824" TEXT="wollen wir &#xbb;numerische&#xab; Parameter eigens per Typ fassen?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      was hei&#223;t hier &#187;numerisch&#171;?
+    </p>
+    <ul>
+      <li>
+        sind bool und char mit eingeschlossen?
+      </li>
+      <li>
+        wollen wir spezielle Custom-Types, wie Big-Deciamal varianten hier miterfassen?
+      </li>
+      <li>
+        was ist mit Br&#252;chen (boost::rational) und Komplexen Zahlen? Bitte nicht lachen...
+      </li>
+      <li>
+        wollen wir auf das Konzept einer Algebra abstellen? Also zumindest eine Gruppe sowie eine Ordnungsrelation?
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1784672543927" ID="ID_1055715376" MODIFIED="1784673139404" TEXT="beruhen die BaseDomains eigentlich immer auf einem &#xbb;numerischen&#xab; Parameter?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im ersten Entwurf habe ich die unterliegenden Typen einfach in eine Typelist gepackt. Die Analyse zeigte ganz klar, da&#223; diese Menge der Basiswerte bereits zur Compile-time festgelegt sein mu&#223;, sonst tun sich ganz ekelhafte Probleme auf mit Registrierung und Locking im Zusammenhang mit dem Laden von dynamischen Objekten (Plug-ins)....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1784672259758" ID="ID_1765265570" MODIFIED="1784673727205" TEXT="wie gehen wir mit Produkttypen um (Vektoren, Farben)?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein billiger Ansatz w&#228;re, das Thema zu ignorieren, und solche Parameter einfach als eine Gruppe von Einzelparametern zu behandeln. Das w&#228;re angemessen, wenn man das als Randthema betrachtet. Gegen diesen Ansatz spricht, da&#223; man an einen Farbwert auch eine Kalibrierungskurve und einen Farbraum anh&#228;ngen m&#246;chte, sonst wird Arbeiten mit professionellen Medien-Produktionsprozessen (HDR, Grading, Mastering) praktisch unm&#246;glich. Auch an verschiedene Spielarten von &#187;3D&#171; sollte man denken, incl. virtueller Projektionsr&#228;ume. Ein MIttelweg w&#228;re, da&#223; man Parameter-Tupel unterst&#252;tzt, denen Metadaten angeh&#228;ngt werden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1784672899810" ID="ID_116986809" MODIFIED="1784673414049" TEXT="wie steht&apos;s mit der Animation von &#xbb;shape Keys&#xab; und Masken?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....zun&#228;chst einmal sind das Produkttypen, aber mit einer hohen Kardinalit&#228;t. Das Konzept der Shape-Keys reduziert das wieder auf eine Achse, auf der man einen Kontrollparameter animieren kann. Bei Masken besteht das zus&#228;tzliche (in der Praxis sehr relevante) Problem, da&#223; &#187;unterwegs&#171; weitere Maskenpunkte dazukommen k&#246;nnen, und da&#223; einzelne Maskenpunkte noch weitere Parameter tragen k&#246;nnen, wie z.B. eine feather-strength, was extrem wichtig ist f&#252;r Rotoscoping.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1784673142319" ID="ID_79827229" MODIFIED="1784673414046" TEXT="es k&#xf6;nnte auf zwei Kategorien hinauslaufen: einfach vs komplex">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das hei&#223;t, die <i>einfachen Parameter</i>&#160;w&#228;ren tats&#228;chlich in der Speichergr&#246;&#223;e beschr&#228;nkt (z.B. 4 Slots) und k&#246;nnten stets inline transportiert werden; nur f&#252;r diese einfachen Parameter g&#228;be es den Ansatz eines generischen Parameters. Wohingegen die <i>komplexen Parameter</i>&#160; von Vornherein symbolisch repr&#228;sentiert werden, und nur als Funktion zug&#228;nglich sind, m&#246;glicherweise &#252;berhaupt nur als Resultat einer Animations-Auswertung auf Basis <i>einfacher Steuerparameter.</i>&#160;Damit w&#252;rden im &#187;Parameter-System&#171; auch zwei Zonen entstehen; die <i>einfachen Parameter</i>&#160;w&#228;ren im Kernsystem festgelegt, die Basis-Parameter vielleicht sogar zur Compile-Zeit&#8212; wohingegen alle komplexen Parameter in eine &#187;Domain-Ontology&#171; geh&#246;ren und indirekt &#252;ber ein Plug-in angesprochen werden....
+    </p>
+  </body>
+</html></richcontent>
 </node>
 </node>
 </node>

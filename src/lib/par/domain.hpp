@@ -168,11 +168,46 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   
   /* ===== type conversion details ===== */
   
+  /** Constraint: type \a SUB can not represent the full domain of type \a BAS
+   * @todo implicitly also implements a limitation to »numeric« types,
+   *       due to the use of std::numeric_limits
+   */
   template<typename SUB, typename BAS>
   concept sub_domain = std::signed_integral<SUB> != std::signed_integral<BAS>
                     or std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
                     or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
                      ;
+
+  template<typename NUM>
+  inline constexpr bool
+  isNeg (NUM const& num)
+  {
+    return num < NUM(0);
+  };
+
+
+_Pragma("GCC diagnostic push") \
+_Pragma("GCC diagnostic ignored \"-Wsign-compare\"")
+// the following functions are specifically crafted to work around
+// the ambiguities caused by automatic signed-to-unsigned promotion;
+// furthermore, the automatic promotion allows to perform the comparison.
+  
+  template<typename X, typename Y>
+  inline constexpr bool
+  isLower_safe (X const& x, Y const& y)
+  {
+    return isNeg(x) == isNeg(y)? x < y
+                               : isNeg(x);
+  }
+
+  template<typename X, typename Y>
+  inline constexpr bool
+  isLarger_safe (X const& x, Y const& y)
+  {
+    return isNeg(x) == isNeg(y)? x > y
+                               : isNeg(y);
+  }
+_Pragma("GCC diagnostic pop")
   
   /** generic helper to conform into a common value domain
    * @tparam SUB the implied target value domain
@@ -187,14 +222,23 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     return value;
   }
   
-  /** special case: clamp the source value into the target value domain */
-  template<typename SUB, typename BAS>   requires sub_domain<SUB,BAS>
+  /** special case: clamp the source value into the target value domain.
+   * @remark tricky due to automatic conversions between signed/unsigned */
+  template<typename SUB, typename BAS>   requires (sub_domain<SUB,BAS>
+                                                   and not same_as<SUB,bool>)
   inline constexpr BAS
   preClamp (BAS const& rawVal)
   {
+    static_assert (std::is_constructible_v<BAS,SUB const&>
+                  ,"Value domains must overlap at least partially "
+                   "and values must be cross-constructible within overlap");
+    
     auto upperBound = numeric_limits<SUB>::max();
     auto lowerBound = numeric_limits<SUB>::lowest();
-    return util::limited (lowerBound, rawVal, upperBound);
+    
+    return isLarger_safe(rawVal, upperBound)? BAS(upperBound)
+         : isLower_safe (rawVal, lowerBound)? BAS(lowerBound)
+                                            : rawVal;
   }
   
   /** special case: trigger a bool at the 0.5 level */
