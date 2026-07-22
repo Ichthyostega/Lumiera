@@ -83122,16 +83122,32 @@
 </node>
 <node CREATED="1784583716571" ID="ID_38727535" MODIFIED="1784583732840" TEXT="das Conforming mu&#xdf; u.U mehrstufig sein">
 <icon BUILTIN="messagebox_warning"/>
-<node CREATED="1784583737728" ID="ID_388891052" MODIFIED="1784583753674" TEXT="ein erster Schritt mu&#xdf; in der Quell-Domain erfolgen">
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1784593401491" ID="ID_1670494263" MODIFIED="1784593411005" TEXT="Vorsicht Falle: signed vs unsigned">
+<node COLOR="#435e98" CREATED="1784583737728" ID="ID_388891052" MODIFIED="1784754065176" TEXT="ein erster Schritt mu&#xdf; in der Quell-Domain erfolgen">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0c28d" COLOR="#9a075c" CREATED="1784593401491" ID="ID_1670494263" MODIFIED="1784740605113" TEXT="Vorsicht Falle: signed vs unsigned">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1784593415546" ID="ID_985867046" MODIFIED="1784593437214" TEXT="die numeric-Limits werden im jeweiligen Typ angegeben"/>
 <node CREATED="1784593442299" ID="ID_814649582" MODIFIED="1784593459136" TEXT="bei direkten Vergleichen passiert zwar die erwartete Promotion"/>
-<node COLOR="#5b280f" CREATED="1784593459863" ID="ID_492548018" MODIFIED="1784593634425" TEXT="aber signed vs. unsigned- Werte lassen sich &#xfc;berhaupt nicht ohne Weiteres vergleichen">
-<arrowlink COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" STARTARROW="None" STARTINCLINATION="195;6;"/>
+<node COLOR="#5b280f" CREATED="1784593459863" ID="ID_492548018" MODIFIED="1784740659183">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aber signed vs. unsigned- Werte lassen sich
+    </p>
+    <p>
+      gar nicht so ohne Weiteres vergleichen
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" STARTARROW="None" STARTINCLINATION="28;3;"/>
 <icon BUILTIN="closed"/>
 <node CREATED="1784669864149" ID="ID_1893387322" MODIFIED="1784669867944" TEXT="man k&#xf6;nnte....">
-<node CREATED="1784669870432" ID="ID_111028032" MODIFIED="1784669894580" TEXT="in Einzelf&#xe4;lle aufteilen">
+<node COLOR="#5b280f" CREATED="1784669870432" ID="ID_111028032" MODIFIED="1784740683624" TEXT="in Einzelf&#xe4;lle aufteilen">
+<icon BUILTIN="button_cancel"/>
 <node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1784669944683" ID="ID_739218208" MODIFIED="1784670003838" STYLE="fork" TEXT="Stackoverflow.AI generiert folgende Fallunterscheidung....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -83341,13 +83357,12 @@
       <font face="Monospaced" size="2">}</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
 <icon BUILTIN="wizard"/>
 </node>
 </node>
-<node CREATED="1784669896248" ID="ID_406155259" LINK="https://stackoverflow.com/a/53027613/444796" MODIFIED="1784670033706" TEXT="die Vergleichsoperation sicher machen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1784669896248" ID="ID_406155259" LINK="https://stackoverflow.com/a/53027613/444796" MODIFIED="1784740687444" TEXT="die Vergleichsoperation sicher machen">
 <node CREATED="1784670911841" ID="ID_601580251" MODIFIED="1784671009442" TEXT="man kann sicher auf &quot;negativ&quot; testen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -83356,8 +83371,7 @@
       Unter der Annahme, da&#223; lediglich die signed/unsigned Integers das Problem sind; denn f&#252;r jeden Integer-Typ kann man val &lt; TY(0) bilden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <node CREATED="1784671014259" ID="ID_242078970" MODIFIED="1784671026710" TEXT="&#xd83e;&#xdc32; das sollte in util-hpp"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784671027530" ID="ID_398950707" MODIFIED="1784671109521" TEXT="oops ... da ist geich daneben ein Bug">
 <richcontent TYPE="NOTE"><html>
@@ -83367,8 +83381,7 @@
       die Funktion &quot;noneg()&quot; macht den Verlgeich genau falsch herum:&#160; <font color="#a10000">0 &lt; uint(-1) &#10233; true</font>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
@@ -83381,8 +83394,7 @@
       hier hilft uns die automatische Promotion in den Typ mit dem h&#246;heren Rank: nur deshalb k&#246;nnen wir die Vergleichsoperation machen. Zudem kann der Verleich im negativen Segment &#252;berhaupt nur stattfinden, wenn beide Typen negativ sind, also mithin signed
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1784676822935" ID="ID_148161124" MODIFIED="1784676835365" TEXT="sonst gen&#xfc;gt es, festzustellen, wer auf der negativen Seite steht"/>
 </node>
@@ -83398,16 +83410,34 @@
 </node>
 </node>
 </node>
+<node COLOR="#338800" CREATED="1784740694926" HGAP="116" ID="ID_884664715" MODIFIED="1784753995212" TEXT="Testabdeckung....">
+<icon BUILTIN="yes"/>
+<node CREATED="1784753603557" ID="ID_673330401" MODIFIED="1784753614651" TEXT="int &#x27f7; uint"/>
+<node CREATED="1784753615308" ID="ID_882206102" MODIFIED="1784753629486" TEXT="integer &#x27f7; floating point"/>
+<node CREATED="1784753630562" ID="ID_380930919" MODIFIED="1784753657666" TEXT="non-standard type 128-bit integer">
+<node CREATED="1784753670316" ID="ID_1012177379" MODIFIED="1784753695781" TEXT="(unterst&#xfc;tzt in GCC und libstdc++ im Gnu-Modus)"/>
+<node CREATED="1784753660673" ID="ID_282192889" MODIFIED="1784753664932" TEXT="wird in float gekappt"/>
+</node>
+<node CREATED="1784753701406" ID="ID_585682892" MODIFIED="1784753725785" TEXT="trigger-Schwelle f&#xfc;r bool bei 0.5+&#x3b5;"/>
+<node CREATED="1784753874143" ID="ID_801539454" MODIFIED="1784753893936" TEXT="systematisch alle Domain-Relationen signed &#x27f7; unsigned">
+<node CREATED="1784753898316" ID="ID_1214113459" MODIFIED="1784753906114" TEXT="integers von verschiedenem Rank"/>
+<node CREATED="1784753908650" ID="ID_350184416" MODIFIED="1784753916276" TEXT="aber auch der gleiche Rank auf beiden Seiten"/>
+</node>
+<node CREATED="1784753940609" ID="ID_1656941400" MODIFIED="1784753975081" TEXT="Limitieren auch in extracAs&lt;TY&gt;() demonstrieren">
+<linktarget COLOR="#4da5bd" DESTINATION="ID_1656941400" ENDARROW="Default" ENDINCLINATION="-128;80;" ID="Arrow_ID_543303907" SOURCE="ID_1748150865" STARTARROW="None" STARTINCLINATION="803;34;"/>
 </node>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1784754033268" ID="ID_1076783794" MODIFIED="1784754058137" TEXT="erst danach den limitierten Wert zuweisen oder konvertieren"/>
 </node>
 <node CREATED="1784583754452" ID="ID_1524391258" MODIFIED="1784583768830" TEXT="dann kann innerhalb der Wert-BaseDomain eine weitere Einschr&#xe4;nkung folgen"/>
 <node CREATED="1784586543839" ID="ID_1702195769" MODIFIED="1784586550867" TEXT="Teil-Operationen">
 <node CREATED="1784586551999" ID="ID_1288354893" MODIFIED="1784586565918" TEXT="preClamp&lt;TAR&gt; (SRC const&amp;)">
 <node CREATED="1784586572069" ID="ID_70379943" MODIFIED="1784586582520" TEXT="l&#xe4;&#xdf;t sich komplett generisch implementieren"/>
 <node CREATED="1784586675600" ID="ID_876196754" MODIFIED="1784588546088" TEXT="concept sub_domain&lt;SUB,BAS&gt;">
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a4060f" CREATED="1784593517692" ID="ID_1240698281" MODIFIED="1784593627634" TEXT="mu&#xdf; hier signed &#x2260; unsigned explizit pr&#xfc;fen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a4060f" CREATED="1784593517692" ID="ID_1240698281" MODIFIED="1784740659183" TEXT="mu&#xdf; hier signed &#x2260; unsigned explizit pr&#xfc;fen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -83416,7 +83446,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" SOURCE="ID_492548018" STARTARROW="None" STARTINCLINATION="195;6;"/>
+<linktarget COLOR="#c30d0f" DESTINATION="ID_1240698281" ENDARROW="Default" ENDINCLINATION="318;0;" ID="Arrow_ID_1820583210" SOURCE="ID_492548018" STARTARROW="None" STARTINCLINATION="28;3;"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1784593545688" ID="ID_1890105632" MODIFIED="1784593569629" TEXT="kann au&#xdf;erdem gleich das Trigger-Verhalten f&#xfc;r Booleans implementieren">
@@ -83433,7 +83463,7 @@
 </node>
 </node>
 <node CREATED="1784588917160" ID="ID_174389664" MODIFIED="1784588970730" TEXT="beide Zuweisungs-Operationen auf Basis des &#xbb;conforming&#xab;- reimplementieren">
-<node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784591447465" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
+<node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784753983595" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -83442,6 +83472,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#4da5bd" DESTINATION="ID_1656941400" ENDARROW="Default" ENDINCLINATION="-128;80;" ID="Arrow_ID_543303907" STARTARROW="None" STARTINCLINATION="803;34;"/>
 <linktarget COLOR="#4490cf" DESTINATION="ID_1748150865" ENDARROW="Default" ENDINCLINATION="-102;-5;" ID="Arrow_ID_1245799800" SOURCE="ID_1119403748" STARTARROW="None" STARTINCLINATION="-15;97;"/>
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#b3020b" CREATED="1784674883894" ID="ID_25505345" MODIFIED="1784674910088" TEXT="viele offene Flanken hier: setzt eigentlich &#xbb;zahlenartige&#xab; Basistypen vorraus">
@@ -83510,8 +83541,7 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1784672543927" ID="ID_1055715376" MODIFIED="1784673139404" TEXT="beruhen die BaseDomains eigentlich immer auf einem &#xbb;numerischen&#xab; Parameter?">
 <richcontent TYPE="NOTE"><html>
@@ -83521,8 +83551,7 @@
       Im ersten Entwurf habe ich die unterliegenden Typen einfach in eine Typelist gepackt. Die Analyse zeigte ganz klar, da&#223; diese Menge der Basiswerte bereits zur Compile-time festgelegt sein mu&#223;, sonst tun sich ganz ekelhafte Probleme auf mit Registrierung und Locking im Zusammenhang mit dem Laden von dynamischen Objekten (Plug-ins)....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1784672259758" ID="ID_1765265570" MODIFIED="1784673727205" TEXT="wie gehen wir mit Produkttypen um (Vektoren, Farben)?">
 <richcontent TYPE="NOTE"><html>
@@ -83532,8 +83561,7 @@
       Ein billiger Ansatz w&#228;re, das Thema zu ignorieren, und solche Parameter einfach als eine Gruppe von Einzelparametern zu behandeln. Das w&#228;re angemessen, wenn man das als Randthema betrachtet. Gegen diesen Ansatz spricht, da&#223; man an einen Farbwert auch eine Kalibrierungskurve und einen Farbraum anh&#228;ngen m&#246;chte, sonst wird Arbeiten mit professionellen Medien-Produktionsprozessen (HDR, Grading, Mastering) praktisch unm&#246;glich. Auch an verschiedene Spielarten von &#187;3D&#171; sollte man denken, incl. virtueller Projektionsr&#228;ume. Ein MIttelweg w&#228;re, da&#223; man Parameter-Tupel unterst&#252;tzt, denen Metadaten angeh&#228;ngt werden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1784672899810" ID="ID_116986809" MODIFIED="1784673414049" TEXT="wie steht&apos;s mit der Animation von &#xbb;shape Keys&#xab; und Masken?">
 <richcontent TYPE="NOTE"><html>
@@ -83543,8 +83571,7 @@
       ....zun&#228;chst einmal sind das Produkttypen, aber mit einer hohen Kardinalit&#228;t. Das Konzept der Shape-Keys reduziert das wieder auf eine Achse, auf der man einen Kontrollparameter animieren kann. Bei Masken besteht das zus&#228;tzliche (in der Praxis sehr relevante) Problem, da&#223; &#187;unterwegs&#171; weitere Maskenpunkte dazukommen k&#246;nnen, und da&#223; einzelne Maskenpunkte noch weitere Parameter tragen k&#246;nnen, wie z.B. eine feather-strength, was extrem wichtig ist f&#252;r Rotoscoping.
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1784673142319" ID="ID_79827229" MODIFIED="1784673414046" TEXT="es k&#xf6;nnte auf zwei Kategorien hinauslaufen: einfach vs komplex">
 <richcontent TYPE="NOTE"><html>

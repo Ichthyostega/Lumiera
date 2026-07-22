@@ -24,6 +24,7 @@
 //#include <utility>
 //#include <string>
 //#include <vector>
+#include <concepts>
 
 //using std::string;
 //using std::vector;
@@ -35,20 +36,19 @@ namespace par {
 namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using std::floating_point;
   
   namespace {//Test fixture....
     
-    class Thing
-      { };
+    template<typename NUM>
+    constexpr NUM _MAX = std::numeric_limits<NUM>::max();
     
-    template<typename X>
-    struct Some
-      {
-        X x;
-      };
+    template<typename NUM>
+    constexpr NUM _MIN = std::numeric_limits<NUM>::lowest();
     
-    typedef Some<Thing> SomeThing;
-
+    template<floating_point FLO>
+    constexpr FLO _EPSILON = std::numeric_limits<FLO>::epsilon();
+    
   }//(End)Test fixture
   
   
@@ -69,6 +69,7 @@ namespace test{
       run (Arg)
         {
           seedRand();
+          
           basics();
           verify_valueLimits();
           verify_valueAccess();
@@ -81,37 +82,93 @@ namespace test{
         }
       
       
+      /** @test base operation to bracket a given value
+       *        so that it fits within another target type's value domain.
+       *  @note properly handles the signed vs. unsigned mismatch, so that
+       *        conversion from signed to unsigned can not wrap.
+       */
       void
       verify_valueLimits()
         {
-SHOW_EXPR(preClamp<int> (23))
-SHOW_EXPR(preClamp<int> (-55))
-SHOW_EXPR(preClamp<uint> (23))
-SHOW_EXPR(preClamp<uint> (-55))
-SHOW_EXPR((sub_domain<uint,int>))
-SHOW_EXPR((sub_domain<int,uint>))
-SHOW_EXPR((sub_domain<short,long>))
-SHOW_EXPR((sub_domain<long,short>))
-SHOW_EXPR(std::numeric_limits<uint>::max())
-SHOW_EXPR(std::numeric_limits<int>::max())
-SHOW_EXPR(std::numeric_limits<uint>::lowest())
-SHOW_EXPR(std::numeric_limits<int>::lowest())
+          // Generic check if the first (target) type can hold
+          // only a limited part of the second (source) type's domain
+          CHECK ((sub_domain<uint,int> == true));
+          CHECK ((sub_domain<int,uint> == true));
+          CHECK ((sub_domain<short,long> ==  true));
+          CHECK ((sub_domain<long,short> == false));
+          CHECK ((sub_domain<float,double> ==  true));
+          CHECK ((sub_domain<double,float> == false));
+          
+          // Limit a value to within a target type's domain
+          // (without actually converting into the target type)
+          CHECK (preClamp<int>  (23) ==  23);
+          CHECK (preClamp<int> (-55) == -55);
+          CHECK (preClamp<uint> (23) ==  23);
+          CHECK (preClamp<uint>(-55) ==   0);
 
-SHOW_EXPR(preClamp<short> (INT64_MAX))
-SHOW_EXPR(preClamp<short> (INT64_MIN))
+          CHECK (preClamp<short> (_MAX<int64_t>) ==  32767);
+          CHECK (preClamp<short> (_MIN<int64_t>) == -32768);
+          
+          CHECK (preClamp<ushort> (_MAX<float>)  == 65535);
+          CHECK (preClamp<ushort> (_MIN<float>)  == 0    );
+          
+          // the return value has the same type as the argument...
+          CHECK (preClamp<float> (_MAX<uint64_t>) == _MAX<uint64_t>);
+          CHECK (preClamp<float> (_MIN<double>) == double(_MIN<float>) );
+          
+          // Warning: the following is not standard C++, yet supported on GCC / CLang / libstdc++
+          static_assert (_MAX<float> < _MAX<unsigned __int128>);
+          CHECK (float(_MAX<unsigned __int128>) == "inf"_expect );
+          CHECK ((unsigned __int128)_MAX<float> == "340282346638528859811704183484516925440"_expect );
+          
+          CHECK (preClamp<float> (_MAX<unsigned __int128>) == (unsigned __int128)_MAX<float>);
 
-SHOW_EXPR(preClamp<ushort> (numeric_limits<float>::max()))
-SHOW_EXPR(preClamp<ushort> (numeric_limits<float>::lowest()))
+          // Note: a trigger at 0.5+ε is built into the clamp towards bool
+          CHECK (preClamp<bool> (0.5)                  == 0 );
+          CHECK (preClamp<bool> (0.5+_EPSILON<double>) == 1 );
+          CHECK (preClamp<bool> (_MIN<double>)         == 0 );
+          
+          
+          // Systematic coverage of signed ⟷ unsigned
+          CHECK (preClamp<int8_t> (_MAX<int16_t>) ==  127);
+          CHECK (preClamp<int8_t> (   int16_t{0}) ==    0);
+          CHECK (preClamp<int8_t> (_MIN<int16_t>) == -128);
 
-SHOW_EXPR(preClamp<float> (numeric_limits<uint64_t>::max()))
-SHOW_EXPR(preClamp<float> (numeric_limits<double>::lowest()))
+          CHECK (preClamp<int8_t> (_MAX<uint16_t>) == 127);
+          CHECK (preClamp<int8_t> (_MIN<uint16_t>) ==   0);
 
-SHOW_EXPR(preClamp<bool> (0.5));
-SHOW_EXPR(preClamp<bool> (0.5 + numeric_limits<double>::epsilon()))
-SHOW_EXPR(preClamp<bool> (numeric_limits<double>::min()))
+          CHECK (preClamp<uint8_t> (_MAX<int16_t>) == 255);
+          CHECK (preClamp<uint8_t> (   int16_t{0}) ==   0);
+          CHECK (preClamp<uint8_t> (_MIN<int16_t>) ==   0);
+
+          CHECK (preClamp<int16_t> (_MAX<int8_t>) ==  127);
+          CHECK (preClamp<int16_t> (   int8_t{0}) ==    0);
+          CHECK (preClamp<int16_t> (_MIN<int8_t>) == -128);
+
+          CHECK (preClamp<int16_t> (_MAX<uint8_t>) == 255);
+          CHECK (preClamp<int16_t> (_MIN<uint8_t>) ==   0);
+
+          CHECK (preClamp<uint16_t> (_MAX<int8_t>) == 127);
+          CHECK (preClamp<uint16_t> (   int8_t{0}) ==   0);
+          CHECK (preClamp<uint16_t> (_MIN<int8_t>) ==   0);
+
+          CHECK (preClamp<int8_t> (_MAX<int8_t>) ==  127);
+          CHECK (preClamp<int8_t> (   int8_t{0}) ==    0);
+          CHECK (preClamp<int8_t> (_MIN<int8_t>) == -128);
+
+          CHECK (preClamp<int8_t> (_MAX<uint8_t>) == 127);
+          CHECK (preClamp<int8_t> (_MIN<uint8_t>) ==   0);
+
+          CHECK (preClamp<uint8_t> (_MAX<int8_t>) == 127);
+          CHECK (preClamp<uint8_t> (   int8_t{0}) ==   0);
+          CHECK (preClamp<uint8_t> (_MIN<int8_t>) ==   0);
         }
       
       
+      
+      /** @test base function to access the contents of an opaque buffer
+       *        with known type, and convert into another target type.
+       */
       void
       verify_valueAccess()
         {
@@ -133,6 +190,13 @@ SHOW_EXPR(preClamp<bool> (numeric_limits<double>::min()))
           TypeHandler<float>& df1{d1};
           df1.extractAs (target2, src1);
           CHECK (target2 == float(val1));
+          
+          // value clamped to target domain...
+          val1 = _MIN<int>;
+          uint64_t target3{55};
+          TypeHandler<uint64_t>& du64{d1};
+          du64.extractAs (target3, src1);
+          CHECK (target3 == _MIN<uint64_t>);
         }
     };
   

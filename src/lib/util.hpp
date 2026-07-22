@@ -60,7 +60,9 @@ namespace util {
   inline constexpr int
   sgn (NUM n)
   {
-    return (n==0)? 0 :((n<0)? -1:+1 );
+    return n== NUM{0}?  0
+         : n < NUM{0}? -1
+                     : +1;
   }
   
   template <class N1, class N2>
@@ -77,12 +79,20 @@ namespace util {
     return n1 < n2? N1(n2) : n1;
   }
   
+  /** @remark safe to use also on unsigned */
+  template<typename NUM>
+  inline constexpr bool
+  isNeg (NUM const& num)
+  {
+    return num < NUM{0};
+  };
+  
   /** cut a numeric value to be >=0 */
   template <typename NUM>
   inline constexpr NUM
   noneg (NUM val)
   {
-    return (0<val? val : 0);
+    return max (val, NUM(0));
   }
   
   /** force a numeric to be within bounds, inclusively */

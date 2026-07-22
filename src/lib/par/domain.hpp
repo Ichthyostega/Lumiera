@@ -47,6 +47,7 @@
 namespace lib {
 namespace par {
   
+  using util::isNeg;
   using std::same_as;
   using std::floating_point;
   using std::numeric_limits;
@@ -177,15 +178,8 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
                     or std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
                     or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
                      ;
-
-  template<typename NUM>
-  inline constexpr bool
-  isNeg (NUM const& num)
-  {
-    return num < NUM(0);
-  };
-
-
+  
+  
 _Pragma("GCC diagnostic push") \
 _Pragma("GCC diagnostic ignored \"-Wsign-compare\"")
 // the following functions are specifically crafted to work around
