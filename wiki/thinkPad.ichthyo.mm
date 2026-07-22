@@ -82650,12 +82650,15 @@
 <node CREATED="1783097205817" ID="ID_1999962808" MODIFIED="1783183255718" TEXT="l&#xe4;uft auf einen reflexiven Visitor hinaus...">
 <icon BUILTIN="idea"/>
 <node CREATED="1783176305447" ID="ID_1093158750" MODIFIED="1783176788938" TEXT="Domain.accept(Domain&lt;X&gt;) &#x27f6; Domain&lt;X&gt;.visit(Domain&lt;U&gt;)"/>
-<node CREATED="1783177071573" ID="ID_1874719754" MODIFIED="1783178527301" TEXT="DomainSrc.supply(buffTar, DomainTar) &#x27f6; DomainTar.conform(buffTar, DomainSrc.get&lt;U&gt;))"/>
+<node CREATED="1783177071573" ID="ID_1874719754" MODIFIED="1784758219726" TEXT="domainSrc.supply(buffTar, domainTar) &#x27f6; domainTar.conform(buffTar, domainSrc.get&lt;U&gt;))"/>
 <node CREATED="1783178829490" ID="ID_1988622013" MODIFIED="1783178833747" TEXT="Methoden">
-<node CREATED="1783178838358" ID="ID_1473718330" MODIFIED="1783181315927" TEXT="supply(srcBuffer, targetBuffer, Domain)"/>
+<node CREATED="1783178838358" ID="ID_1473718330" MODIFIED="1784759687907" TEXT="supply(srcBuffer, targetBuffer, Domain)">
+<icon BUILTIN="button_cancel"/>
+</node>
 <node CREATED="1783178876883" ID="ID_220362444" MODIFIED="1783178892718" TEXT="conform(Buffer, TY&amp;&amp;)"/>
 </node>
-<node CREATED="1783098344748" ID="ID_1291147742" MODIFIED="1783183273021" TEXT="dieses Interface mu&#xdf; generiert werden">
+<node CREATED="1783098344748" ID="ID_1291147742" MODIFIED="1784758273811" TEXT="dieses Interface mu&#xdf; generiert werden">
+<linktarget COLOR="#d1e6ff" DESTINATION="ID_1291147742" ENDARROW="Default" ENDINCLINATION="1295;91;" ID="Arrow_ID_1120239892" SOURCE="ID_733556074" STARTARROW="None" STARTINCLINATION="1212;44;"/>
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -83477,6 +83480,181 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#b3020b" CREATED="1784674883894" ID="ID_25505345" MODIFIED="1784674910088" TEXT="viele offene Flanken hier: setzt eigentlich &#xbb;zahlenartige&#xab; Basistypen vorraus">
 <icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1784755619215" ID="ID_442355801" MODIFIED="1784755680734">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann nun auch generisch implementieren: <font face="Monospaced" color="#5a3b3b">conform (Buffer, TY&amp;&amp;)</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784756538681" ID="ID_418313150" MODIFIED="1784756874558" TEXT="k&#xf6;nnte man beide auf eine geimeinsame Konverter-Funktion zur&#xfc;ckf&#xfc;hren?">
+<icon BUILTIN="help"/>
+<node CREATED="1784756882079" ID="ID_538469694" MODIFIED="1784756892917" TEXT="klares jein">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node CREATED="1784756896430" ID="ID_1129853767" MODIFIED="1784756906272" TEXT="X und U sind n&#xe4;mlich nicht symmetrisch">
+<node CREATED="1784756908100" ID="ID_401960199" MODIFIED="1784756925542" TEXT="X ist limitiert auf die BaseTypes"/>
+<node CREATED="1784756926913" ID="ID_1644350727" MODIFIED="1784756960777" TEXT="wohingegen U (Wert im Buffer) zun&#xe4;chst einmal beliebig ist"/>
+<node CREATED="1784757649025" ID="ID_880224441" MODIFIED="1784757670914" TEXT="allerdings ist die Absicht, da&#xdf; jede Domain auf einer BaseDomain beruht"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1784757678029" ID="ID_346932340" MODIFIED="1784767437075" TEXT="als Implementierung gen&#xfc;gt tats&#xe4;chlich eine einzige Funktion">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784758020773" ID="ID_155922585" MODIFIED="1784758042381" TEXT="aber: warum implementiere ich die nicht gleich als frei-stehende, generische Funktion??">
+<icon BUILTIN="help"/>
+<node CREATED="1784758054555" ID="ID_1324383100" MODIFIED="1784758083895" TEXT="also ohne den ganzen Schlonz mit dem ValBuff...."/>
+<node CREATED="1784759410733" ID="ID_1397558335" MODIFIED="1784759468923" TEXT="der ValBuff liegt als Datenstruktur (erst) im  Parameter-PImpl">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1784758097925" ID="ID_733556074" MODIFIED="1784758273811" TEXT="ich baruche den TypeHandler + VTable weil ich einen Visitor bauen m&#xf6;chte">
+<arrowlink COLOR="#d1e6ff" DESTINATION="ID_1291147742" ENDARROW="Default" ENDINCLINATION="1295;91;" ID="Arrow_ID_1120239892" STARTARROW="None" STARTINCLINATION="1212;44;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1784758560207" HGAP="43" ID="ID_1477498393" MODIFIED="1784758761480" TEXT="und das Argument f&#xfc;r den Visitor mu&#xdf; &#xbb;opaque&#xab; sein...." VSHIFT="26">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...sonst funktioniert diese doppelte Indirektion gar nicht; die erste aufgerufene Funktion ist ja ein visit(opaqueTarget) &#8212; und erst in der <i>Implementierung</i>&#160; derselben kenne ich den konkreten &#187;Quell&#171;-Typ. Hier aber ist die Sache nochmal komplexer, da ich die Idee hatte, den Visitor &quot;reflexiv&quot; zu machen, womit ich meine, da&#223; der Mechanismus in beide Richtungen anwendbar ist; keine Ahnung ob das &#252;berhaupt geht...
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a90067" CREATED="1784758504542" ID="ID_841428299" MODIFIED="1784758541482" TEXT="oh weh ... jetzt entgleitet mir gedanklich wieder der ganze Kontext">
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1784758764748" ID="ID_1103041122" MODIFIED="1784759651696" TEXT="die Wurzel des Problems &#x27f6; ich wei&#xdf; noch gar nicht was ich will">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...deshalb bin ich ja ins Prototyping eingestiegen...
+    </p>
+    <ul>
+      <li>
+        ich m&#246;chte &#8222;etwas mit einem PolymorphicValue&#8220; bauen
+      </li>
+      <li>
+        die konkrete Ausgestaltung des opaque-Buffers m&#246;chte ich mir offen halten
+      </li>
+      <li>
+        ich brauche einen Typ-Deskriptor, will aber dessen Storage einsparen (bzw. in der VTable verstecken)
+      </li>
+      <li>
+        ich brauche aber BaseDomains als Anker, und diese m&#252;ssen statisch konstruierbar sein
+      </li>
+      <li>
+        letztlich m&#246;chte ich ein generisches front-End, das dann entweder &#8222;durchmarschiert&#8220; &#8212; oder eben in den Visitor-call einsteigt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1784758887539" ID="ID_1280960188" MODIFIED="1784758911281" TEXT="&#x27f9; also sollte ich das Problem rigoros klein hacken">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1784758914304" ID="ID_746306801" MODIFIED="1784758930913" TEXT="Neuer Ansatz: versuche die Konversion vom Visitor zu trennen">
+<node CREATED="1784758983302" ID="ID_1060750018" MODIFIED="1784759007140" TEXT="Konvertierungs-Operation: assignConverted"/>
+<node CREATED="1784759017487" ID="ID_216527581" MODIFIED="1784759048177" TEXT="Visitor-Type-Handler: conformInto"/>
+<node CREATED="1784767401504" ID="ID_1709093017" MODIFIED="1784767430565" TEXT="bauche dann auch eine &#xbb;visit&#xab;-Funktion">
+<arrowlink COLOR="#4a38c4" DESTINATION="ID_1663137291" ENDARROW="Default" ENDINCLINATION="212;0;" ID="Arrow_ID_235931915" STARTARROW="None" STARTINCLINATION="273;19;"/>
+</node>
+</node>
+<node CREATED="1784767003590" ID="ID_1335422214" MODIFIED="1784767020327" TEXT="verwandle die bisherigen API-Funktionen in front-End-Funktionen">
+<node CREATED="1784767043912" HGAP="33" ID="ID_291090709" MODIFIED="1784767092087" STYLE="bubble" VSHIFT="8">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>void</b></font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>extractAs</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; targetVal</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>ValBuff</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; valBuff</font><font color="#11123a">)</font><font color="#65533c">; </font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#7f004c"><b>void</b></font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>conform</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>ValBuff</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; targetBuff</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>X</u></b></font><font color="#65533c">&amp;&amp;</font><font color="#3a1f18">&#160; srcVal</font><font color="#11123a">)</font><font color="#65533c">;</font>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1784767115198" ID="ID_1413576709" MODIFIED="1784767132871" TEXT="nur eine Funktion &#x27f9; mu&#xdf; zwangsl&#xe4;ufig hier bereits den Visitor verwenden">
+<node CREATED="1784767140523" ID="ID_1663137291" MODIFIED="1784767421666" TEXT="schaffe &#xbb;visit&#xab;-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>virtual</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#7f004c" face="DejaVu Sans Mono" size="9pt"><b>void</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#632d2d" face="DejaVu Sans Mono" size="9pt"><b>supply</b></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">(</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>ValBuff</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>const</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;src</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">,</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>ValBuff</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; target</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">,</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>Domain</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;targetDomain</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">)</font>
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#4a38c4" DESTINATION="ID_1663137291" ENDARROW="Default" ENDINCLINATION="212;0;" ID="Arrow_ID_235931915" SOURCE="ID_1709093017" STARTARROW="None" STARTINCLINATION="273;19;"/>
+</node>
+<node CREATED="1784767211734" ID="ID_1635413093" MODIFIED="1784767234257" TEXT="diese nimmt ein Hilfsobjekt f&#xfc;r eine &#xbb;target-domain&#xab;"/>
+<node CREATED="1784767245163" ID="ID_1580930003" MODIFIED="1784767274319">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      kann nun auf dieser Basis die <i>umgekehrte Richtung</i>&#160;auch implementieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3a1c96" CREATED="1784767291287" ID="ID_47331874" MODIFIED="1784767348465">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <u>Zwischenfazit</u>: <b>ja</b>&#160;man kann
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1784767301013" ID="ID_1969163382" MODIFIED="1784767357608" TEXT="dann verwendet allerdings eine Richtung sofort den double-dispatch">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784767316633" ID="ID_285451857" MODIFIED="1784767326901" TEXT="ist das sinnvoll? will ich das??">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 </node>
