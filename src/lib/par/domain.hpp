@@ -92,7 +92,9 @@ namespace par {
   class TypeHandler
     {
       public:
-        virtual void conformInto (ValBuff&, X const&)   =0;
+        virtual void extractAs (X& targetVal, ValBuff const& valBuff)  =0;
+        virtual void conform (ValBuff& targetBuff, X const& srcVal)    =0;
+
     };
   
 //  using lib::meta::typeseq;
@@ -127,13 +129,7 @@ namespace par {
       virtual ~Domain();  ///< this is an interface
       
       virtual void applyLimit (ValBuff&)  =0;
-      virtual void supply(ValBuff const& src, ValBuff& target, Domain& targetDomain) =0;
-      
-      template<typename X>
-      void extractAs (X& targetVal, ValBuff const& valBuff);
-      
-      template<typename X>
-      void conform (ValBuff& targetBuff, X&& srcVal);
+      virtual void assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source) =0;
       
     protected:
     };
@@ -157,7 +153,8 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
       class TypeHandlerImpl
         : public BAS
         {
-          void conformInto (ValBuff& targetBuff, X const& srcVal)  override;
+          void extractAs (X& targetVal, ValBuff const& valBuff)  override;
+          void conform (ValBuff& targetBuff, X const& srcVal)    override;
         };
       
       using TypeHandlerChain = meta::InstantiateChained<BaseTypes::List, TypeHandlerImpl, Domain>;
@@ -171,7 +168,7 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     {
     public:
       void applyLimit (ValBuff&)  override;
-      void supply (ValBuff const& src, ValBuff& target, Domain& targetDomain)  override;
+      void assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source) override;
     };
   
   
@@ -253,15 +250,6 @@ _Pragma("GCC diagnostic pop")
   
   
   
-  template<typename V>
-  inline void
-  BaseDomain<V>::applyLimit (ValBuff& valBuff)
-  {
-    V& val{asValue<V> (valBuff)};
-    val = preClamp<V> (val);
-  }
-  
-  
   template<typename V, typename X>
   inline void
   assignConverted (V& targetVal, X const& srcVal)
@@ -284,7 +272,17 @@ _Pragma("GCC diagnostic pop")
   template<typename V>
   template<typename X, class BAS>
   inline void
-  DomainSetup<V>::TypeHandlerImpl<X,BAS>::conformInto (ValBuff& targetBuff, X const& srcVal)
+  DomainSetup<V>::TypeHandlerImpl<X,BAS>::extractAs (X& targetVal, ValBuff const& valBuff)
+  {
+    V const& srcVal = asValue<V> (valBuff);
+    assignConverted (targetVal, srcVal);
+  }
+  
+  
+  template<typename V>
+  template<typename X, class BAS>
+  inline void
+  DomainSetup<V>::TypeHandlerImpl<X,BAS>::conform (ValBuff& targetBuff, X const& srcVal)
   {
     V& targetVal = asValue<V> (targetBuff);
     assignConverted (targetVal, srcVal);
@@ -293,30 +291,21 @@ _Pragma("GCC diagnostic pop")
 
   template<typename V>
   inline void
-  BaseDomain<V>::supply (ValBuff const& srcBuff, ValBuff& targetBuff, Domain& targetDomain)
+  BaseDomain<V>::applyLimit (ValBuff& valBuff)
   {
-    targetDomain.conform (targetBuff, asValue<V> (srcBuff));
+    V& val{asValue<V> (valBuff)};
+    val = preClamp<V> (val);
   }
   
-  template<typename X>
+  
+  template<typename V>
   inline void
-  Domain::extractAs (X& targetVal, ValBuff const& valBuff)
+  BaseDomain<V>::assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source)
   {
-    BaseDomain<X> target;
-    ValBuff& targetBuff{asValBuff<X> (targetVal)};
-    supply (valBuff, targetBuff, target);
+    TypeHandler<V>& typeHandler{targetDomain};
+    typeHandler.conform (target, asValue<V> (source));
+    targetDomain.applyLimit (target);
   }
-  
-  template<typename X>
-  inline void
-  Domain::conform (ValBuff& targetBuff, X&& srcVal)
-  {
-    using Src = std::decay_t<X>;
-    TypeHandler<Src>& typeHandler{*this};
-    typeHandler.conformInto (targetBuff, srcVal);
-    applyLimit (targetBuff);
-  }
-  
   
   
   

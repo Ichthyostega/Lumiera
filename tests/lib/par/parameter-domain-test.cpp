@@ -181,24 +181,21 @@ namespace test{
           uint target1{0};
           CHECK (not target1);
           
-//        TypeHandler<uint>& du1{d1};
-//        du1.extractAs (target1, src1);
-          d1.extractAs(target1, src1);
+          TypeHandler<uint>& du1{d1};
+          du1.extractAs (target1, src1);
           CHECK (target1 == uint(val1));
           
           float target2{0};
           
-//        TypeHandler<float>& df1{d1};
-//        df1.extractAs (target2, src1);
-          d1.extractAs(target2, src1);
+          TypeHandler<float>& df1{d1};
+          df1.extractAs (target2, src1);
           CHECK (target2 == float(val1));
           
           // value clamped to target domain...
           val1 = _MIN<int>;
           uint64_t target3{55};
-//        TypeHandler<uint64_t>& du64{d1};
-//        du64.extractAs (target3, src1);
-          d1.extractAs (target3, src1);
+          TypeHandler<uint64_t>& du64{d1};
+          du64.extractAs (target3, src1);
           CHECK (target3 == _MIN<uint64_t>);
         }
     };
