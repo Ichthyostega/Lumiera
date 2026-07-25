@@ -73,6 +73,8 @@ namespace test{
           basics();
           verify_valueLimits();
           verify_valueAccess();
+          verify_valueSetting();
+          verify_opaqueAssign();
         }
       
       
@@ -173,30 +175,98 @@ namespace test{
       verify_valueAccess()
         {
           BaseDomain<int> domInt;
-          Domain& d1{domInt};
+          Domain& dom{domInt};
           
-          int val1 = 1 + rani (1000);
-          ValBuff& src1 = asValBuff (val1);
+          int val = 1 + rani (1000);
+          ValBuff& src = asValBuff (val);
           
           uint target1{0};
           CHECK (not target1);
           
-          TypeHandler<uint>& du1{d1};
-          du1.extractAs (target1, src1);
-          CHECK (target1 == uint(val1));
+          TypeHandler<uint>& hu{dom};
+          hu.extractAs (target1, src);
+          CHECK (target1 == uint(val));
           
           float target2{0};
           
-          TypeHandler<float>& df1{d1};
-          df1.extractAs (target2, src1);
-          CHECK (target2 == float(val1));
+          TypeHandler<float>& hf{dom};
+          hf.extractAs (target2, src);
+          CHECK (target2 == float(val));
           
           // value clamped to target domain...
-          val1 = _MIN<int>;
+          val = _MIN<int>;
           uint64_t target3{55};
-          TypeHandler<uint64_t>& du64{d1};
-          du64.extractAs (target3, src1);
+          TypeHandler<uint64_t>& hu64{dom};
+          hu64.extractAs (target3, src);
           CHECK (target3 == _MIN<uint64_t>);
+        }
+      
+      
+      /** @test base function to assign a directly given data value
+       *        into an opaque buffer with known (yet different) type.
+       */
+      void
+      verify_valueSetting()
+        {
+          BaseDomain<int> domInt;
+          Domain& dom{domInt};
+          
+          int val_in_buff = 0;
+          ValBuff& target = asValBuff (val_in_buff);
+          
+          uint src1 = 1 + rani (1000);
+          TypeHandler<uint>& hu{dom};
+          hu.conform (target, src1);
+          CHECK (val_in_buff == int(src1));
+          
+          double src2 = ranRange (1,100);
+          CHECK (1 <= src2 and src2 < 100);
+          TypeHandler<double>& hd{dom};
+          hd.conform (target, src2);
+          CHECK (val_in_buff == int(floor (src2)));
+          
+          // value clamped to target domain...
+          auto mini = _MIN<int64_t>;
+          TypeHandler<int64_t>& h64{dom};
+          h64.conform (target, mini);
+          CHECK (val_in_buff == _MIN<int>);
+        }
+      
+      
+      /** @test value transfer between opaque buffers with double-dispatch.
+       *      - use several typed values, yet access these only marked as `ValBuff`
+       *      - the call must be passed through _two virtual functions_, in order
+       *        to re-gain the fully typed context; this is the »visitor pattern«
+       * @remark the API might seem bewildering; this is due to passing both source
+       *        and target as reference to _some value buffer_, since this API describes
+       *        only a data type disposition, while the actual data storage is defined
+       *        as derived parameter data type.
+       */
+      void
+      verify_opaqueAssign()
+        {
+          double double_val = ranRange (2,100);
+          int64_t i64_val{0};
+          bool boo{false};
+          
+          BaseDomain<double> ddom;
+          BaseDomain<int64_t> idom;
+          BaseDomain<bool> bdom;
+          
+          Domain& d1{ddom};
+          Domain& d3{bdom};
+          
+          CHECK (i64_val == 0);
+          d1.transferTo (asValBuff(double_val), idom, asValBuff(i64_val));
+          CHECK (i64_val == int64_t(floor (double_val)));
+          
+          CHECK (not boo);
+          d1.transferTo (asValBuff(double_val), bdom, asValBuff(boo));
+          CHECK (boo);
+          
+          CHECK (double_val != 1.0);
+          d3.transferTo (asValBuff(boo), ddom, asValBuff(double_val));
+          CHECK (double_val == 1.0);
         }
     };
   

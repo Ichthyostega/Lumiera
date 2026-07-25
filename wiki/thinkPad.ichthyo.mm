@@ -83021,7 +83021,8 @@
 <node COLOR="#984388" CREATED="1784502242602" ID="ID_635909141" MODIFIED="1784502276027" TEXT="okok .... das artet in Arbeit aus ....">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1784501919054" ID="ID_1834839968" MODIFIED="1784501936727" TEXT="beginne mit Templates f&#xfc;r frei-stehende cross-Type-Zugriffe">
+<node COLOR="#338800" CREATED="1784501919054" ID="ID_1834839968" MODIFIED="1785008647038" TEXT="beginne mit Templates f&#xfc;r frei-stehende cross-Type-Zugriffe">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784501937939" ID="ID_1946888391" MODIFIED="1784501952147">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -83080,7 +83081,8 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node CREATED="1784583466853" ID="ID_1381198266" MODIFIED="1784583478931" TEXT="erweitere auf &#xbb;conforiming&#xab;-Funktionalit&#xe4;t">
+<node COLOR="#338800" CREATED="1784583466853" ID="ID_1381198266" MODIFIED="1785008649447" TEXT="erweitere auf &#xbb;conforiming&#xab;-Funktionalit&#xe4;t">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1784583493969" ID="ID_1551792524" MODIFIED="1784583530626">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -83123,19 +83125,17 @@
 </node>
 </node>
 </node>
-<node CREATED="1784583716571" ID="ID_38727535" MODIFIED="1784583732840" TEXT="das Conforming mu&#xdf; u.U mehrstufig sein">
+<node COLOR="#435e98" CREATED="1784583716571" ID="ID_38727535" MODIFIED="1785008653725" TEXT="das Conforming mu&#xdf; u.U mehrstufig sein">
 <icon BUILTIN="messagebox_warning"/>
 <node COLOR="#435e98" CREATED="1784583737728" ID="ID_388891052" MODIFIED="1784754065176" TEXT="ein erster Schritt mu&#xdf; in der Quell-Domain erfolgen">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#e0c28d" COLOR="#9a075c" CREATED="1784593401491" ID="ID_1670494263" MODIFIED="1784740605113" TEXT="Vorsicht Falle: signed vs unsigned">
+<node BACKGROUND_COLOR="#e0c28d" COLOR="#9a075c" CREATED="1784593401491" FOLDED="true" ID="ID_1670494263" MODIFIED="1784588882120" TEXT="Vorsicht Falle: signed vs unsigned">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1784593415546" ID="ID_985867046" MODIFIED="1784593437214" TEXT="die numeric-Limits werden im jeweiligen Typ angegeben"/>
 <node CREATED="1784593442299" ID="ID_814649582" MODIFIED="1784593459136" TEXT="bei direkten Vergleichen passiert zwar die erwartete Promotion"/>
 <node COLOR="#5b280f" CREATED="1784593459863" ID="ID_492548018" MODIFIED="1784740659183">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       aber signed vs. unsigned- Werte lassen sich
@@ -83464,7 +83464,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1784588917160" ID="ID_174389664" MODIFIED="1784588970730" TEXT="beide Zuweisungs-Operationen auf Basis des &#xbb;conforming&#xab;- reimplementieren">
+<node COLOR="#338800" CREATED="1784588917160" ID="ID_174389664" MODIFIED="1785008698199" TEXT="Zuweisungs-Operationen auf die Basis-Operationen aufsetzen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784753983595" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -83482,9 +83483,7 @@
 </node>
 <node CREATED="1784755619215" ID="ID_442355801" MODIFIED="1784755680734">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       kann nun auch generisch implementieren: <font face="Monospaced" color="#5a3b3b">conform (Buffer, TY&amp;&amp;)</font>
@@ -83492,7 +83491,7 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784756538681" ID="ID_418313150" MODIFIED="1784756874558" TEXT="k&#xf6;nnte man beide auf eine geimeinsame Konverter-Funktion zur&#xfc;ckf&#xfc;hren?">
+<node COLOR="#435e98" CREATED="1784756538681" ID="ID_418313150" MODIFIED="1785006057349" TEXT="k&#xf6;nnte man beide auf eine geimeinsame Konverter-Funktion zur&#xfc;ckf&#xfc;hren?">
 <icon BUILTIN="help"/>
 <node CREATED="1784756882079" ID="ID_538469694" MODIFIED="1784756892917" TEXT="klares jein">
 <icon BUILTIN="smiley-neutral"/>
@@ -83502,9 +83501,9 @@
 <node CREATED="1784756926913" ID="ID_1644350727" MODIFIED="1784756960777" TEXT="wohingegen U (Wert im Buffer) zun&#xe4;chst einmal beliebig ist"/>
 <node CREATED="1784757649025" ID="ID_880224441" MODIFIED="1784757670914" TEXT="allerdings ist die Absicht, da&#xdf; jede Domain auf einer BaseDomain beruht"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1784757678029" ID="ID_346932340" MODIFIED="1784767437075" TEXT="als Implementierung gen&#xfc;gt tats&#xe4;chlich eine einzige Funktion">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784758020773" ID="ID_155922585" MODIFIED="1784758042381" TEXT="aber: warum implementiere ich die nicht gleich als frei-stehende, generische Funktion??">
+<node COLOR="#435e98" CREATED="1784757678029" FOLDED="true" ID="ID_346932340" MODIFIED="1785008736351" TEXT="als Implementierung gen&#xfc;gt tats&#xe4;chlich eine einzige Funktion">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3d0f69" CREATED="1784758020773" ID="ID_155922585" MODIFIED="1785005974411" TEXT="aber: warum implementiere ich die nicht gleich als frei-stehende, generische Funktion??">
 <icon BUILTIN="help"/>
 <node CREATED="1784758054555" ID="ID_1324383100" MODIFIED="1784758083895" TEXT="also ohne den ganzen Schlonz mit dem ValBuff...."/>
 <node CREATED="1784759410733" ID="ID_1397558335" MODIFIED="1784759468923" TEXT="der ValBuff liegt als Datenstruktur (erst) im  Parameter-PImpl">
@@ -83515,9 +83514,7 @@
 <icon BUILTIN="yes"/>
 <node CREATED="1784758560207" HGAP="43" ID="ID_1477498393" MODIFIED="1784758761480" TEXT="und das Argument f&#xfc;r den Visitor mu&#xdf; &#xbb;opaque&#xab; sein...." VSHIFT="26">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...sonst funktioniert diese doppelte Indirektion gar nicht; die erste aufgerufene Funktion ist ja ein visit(opaqueTarget) &#8212; und erst in der <i>Implementierung</i>&#160; derselben kenne ich den konkreten &#187;Quell&#171;-Typ. Hier aber ist die Sache nochmal komplexer, da ich die Idee hatte, den Visitor &quot;reflexiv&quot; zu machen, womit ich meine, da&#223; der Mechanismus in beide Richtungen anwendbar ist; keine Ahnung ob das &#252;berhaupt geht...
@@ -83532,9 +83529,7 @@
 </node>
 <node CREATED="1784758764748" ID="ID_1103041122" MODIFIED="1784759651696" TEXT="die Wurzel des Problems &#x27f6; ich wei&#xdf; noch gar nicht was ich will">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...deshalb bin ich ja ins Prototyping eingestiegen...
@@ -83559,7 +83554,7 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1784758887539" ID="ID_1280960188" MODIFIED="1784758911281" TEXT="&#x27f9; also sollte ich das Problem rigoros klein hacken">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1784758887539" ID="ID_1280960188" MODIFIED="1785005978681" TEXT="&#x27f9; also sollte ich das Problem rigoros klein hacken">
 <icon BUILTIN="yes"/>
 </node>
 </node>
@@ -83573,9 +83568,7 @@
 <node CREATED="1784767003590" ID="ID_1335422214" MODIFIED="1784767020327" TEXT="verwandle die bisherigen API-Funktionen in front-End-Funktionen">
 <node CREATED="1784767043912" HGAP="33" ID="ID_291090709" MODIFIED="1784767092087" STYLE="bubble" VSHIFT="8">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
@@ -83600,12 +83593,11 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1784767115198" ID="ID_1413576709" MODIFIED="1784767132871" TEXT="nur eine Funktion &#x27f9; mu&#xdf; zwangsl&#xe4;ufig hier bereits den Visitor verwenden">
+<node CREATED="1784767115198" ID="ID_1413576709" MODIFIED="1784767115198" TEXT="nur eine Funktion &#x27f9; mu&#xdf; zwangsl&#xe4;ufig hier bereits den Visitor verwenden">
+<arrowlink COLOR="#c30a2f" DESTINATION="ID_1969163382" ENDARROW="Default" ENDINCLINATION="169;0;" ID="Arrow_ID_952248450" STARTARROW="None" STARTINCLINATION="52;8;"/>
 <node CREATED="1784767140523" ID="ID_1663137291" MODIFIED="1784767421666" TEXT="schaffe &#xbb;visit&#xab;-Funktion">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>virtual</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#7f004c" face="DejaVu Sans Mono" size="9pt"><b>void</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#632d2d" face="DejaVu Sans Mono" size="9pt"><b>supply</b></font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">(</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>ValBuff</b></font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; </font><font color="#4a1a65" face="DejaVu Sans Mono" size="9pt"><b>const</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;src</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">,</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>ValBuff</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160; target</font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">,</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;</font><font color="#635e96" face="DejaVu Sans Mono" size="9pt"><b>Domain</b></font><font color="#65533c" face="DejaVu Sans Mono" size="9pt">&amp;</font><font color="#3a1f18" face="DejaVu Sans Mono" size="9pt">&#160;targetDomain</font><font color="#11123a" face="DejaVu Sans Mono" size="9pt">)</font>
@@ -83617,9 +83609,7 @@
 <node CREATED="1784767211734" ID="ID_1635413093" MODIFIED="1784767234257" TEXT="diese nimmt ein Hilfsobjekt f&#xfc;r eine &#xbb;target-domain&#xab;"/>
 <node CREATED="1784767245163" ID="ID_1580930003" MODIFIED="1784767274319">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       kann nun auf dieser Basis die <i>umgekehrte Richtung</i>&#160;auch implementieren
@@ -83629,21 +83619,20 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3a1c96" CREATED="1784767291287" ID="ID_47331874" MODIFIED="1784767348465">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3a1c96" CREATED="1784767291287" FOLDED="true" ID="ID_47331874" MODIFIED="1784767348465">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <u>Zwischenfazit</u>: <b>ja</b>&#160;man kann
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1784767301013" ID="ID_1969163382" MODIFIED="1784767357608" TEXT="dann verwendet allerdings eine Richtung sofort den double-dispatch">
+<node BACKGROUND_COLOR="#e0bfaa" COLOR="#690f14" CREATED="1784767301013" ID="ID_1969163382" MODIFIED="1785006028076" TEXT="dann verwendet allerdings eine Richtung sofort den double-dispatch">
+<linktarget COLOR="#c30a2f" DESTINATION="ID_1969163382" ENDARROW="Default" ENDINCLINATION="169;0;" ID="Arrow_ID_952248450" SOURCE="ID_1413576709" STARTARROW="None" STARTINCLINATION="52;8;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784767316633" ID="ID_285451857" MODIFIED="1784767326901" TEXT="ist das sinnvoll? will ich das??">
+<node COLOR="#644398" CREATED="1784767316633" ID="ID_285451857" MODIFIED="1785006047251" TEXT="ist das sinnvoll? will ich das??">
 <icon BUILTIN="help"/>
 <node COLOR="#5b280f" CREATED="1784912223561" ID="ID_1609174252" MODIFIED="1784912245077" TEXT="der Visitor geh&#xf6;rt sicherlich nicht auf das low-level-Interface">
 <icon BUILTIN="stop-sign"/>
@@ -83670,7 +83659,9 @@
 </node>
 <node CREATED="1784913136921" ID="ID_726598996" MODIFIED="1784913145684" TEXT="Zuweisen">
 <node CREATED="1784913152480" ID="ID_909919602" MODIFIED="1784913160946" TEXT="habe zwei Parameter (implizit V und X)"/>
-<node CREATED="1784913609066" ID="ID_1077737786" MODIFIED="1784913701425" TEXT="Schritt-1 : auf Quell-Parameter assignInto(targetParam)"/>
+<node CREATED="1784913609066" ID="ID_1077737786" MODIFIED="1785007563909" TEXT="Schritt-1 : auf Quell-Parameter transferTo(targetParam)">
+<linktarget COLOR="#5a7279" DESTINATION="ID_1077737786" ENDARROW="Default" ENDINCLINATION="-79;4;" ID="Arrow_ID_1710364310" SOURCE="ID_319245212" STARTARROW="None" STARTINCLINATION="9;-16;"/>
+</node>
 <node CREATED="1784913707877" ID="ID_291983090" MODIFIED="1784913760433" TEXT="Schritt-2 : dies implementiert als targetParam.conform (targetBuff, X const&amp; srcVal)"/>
 </node>
 </node>
@@ -83680,9 +83671,28 @@
 <linktarget COLOR="#187381" DESTINATION="ID_756435674" ENDARROW="Default" ENDINCLINATION="31;-50;" ID="Arrow_ID_741860554" SOURCE="ID_807588033" STARTARROW="None" STARTINCLINATION="-204;13;"/>
 <icon BUILTIN="yes"/>
 <node COLOR="#435e98" CREATED="1784914866629" ID="ID_1966139685" MODIFIED="1784914938354" TEXT="weitgehend wieder zur&#xfc;ck zur zuerst entworfenen Struktur"/>
-<node COLOR="#435e98" CREATED="1784914869233" ID="ID_256578955" MODIFIED="1784914938355" TEXT="aber nun die high-level-Zuweisung als Visitor implementieren"/>
+<node COLOR="#435e98" CREATED="1784914869233" ID="ID_256578955" MODIFIED="1784914938355" TEXT="aber nun die high-level-Zuweisung als Visitor implementieren">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1785007500546" ID="ID_319245212" MODIFIED="1785007698040" TEXT="Signatur mu&#xdf; operieren &#xbb;von uns&#xab; &#x27fc; target">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was auf den ersten Blick verwirrend erscheint;
+    </p>
+    <p>
+      aber <i>es mu&#223; so sein,</i>&#160;wegen der double-dispatch-Struktur: die eigentliche Operation erfolgt erst im zweiten Schritt, und das mu&#223; logischerweise eine &#187;conform&#171;-Operation sein &#8212; mithin passiert <i>der erste Schritt auf der Quelle</i>&#160;(die &#187;accept&#171;-Operation des Visitors)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#5a7279" DESTINATION="ID_1077737786" ENDARROW="Default" ENDINCLINATION="-79;4;" ID="Arrow_ID_1710364310" STARTARROW="None" STARTINCLINATION="9;-16;"/>
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1785006078479" ID="ID_770448079" MODIFIED="1785008635920" TEXT="Testabdeckung: beide Basis-Zugriffe sowie die opaque-Zuweisung">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>

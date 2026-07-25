@@ -129,7 +129,7 @@ namespace par {
       virtual ~Domain();  ///< this is an interface
       
       virtual void applyLimit (ValBuff&)  =0;
-      virtual void assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source) =0;
+      virtual void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target) =0;
       
     protected:
     };
@@ -168,7 +168,7 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     {
     public:
       void applyLimit (ValBuff&)  override;
-      void assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source) override;
+      void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target) override;
     };
   
   
@@ -300,7 +300,7 @@ _Pragma("GCC diagnostic pop")
   
   template<typename V>
   inline void
-  BaseDomain<V>::assignInto (ValBuff& target, Domain& targetDomain, ValBuff const& source)
+  BaseDomain<V>::transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)
   {
     TypeHandler<V>& typeHandler{targetDomain};
     typeHandler.conform (target, asValue<V> (source));
