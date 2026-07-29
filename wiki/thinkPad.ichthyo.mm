@@ -186781,6 +186781,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
+<node CREATED="1785342801875" ID="ID_1405023206" MODIFIED="1785342804915" TEXT="Whitespace">
+<node CREATED="1785342805895" ID="ID_1257543911" MODIFIED="1785342815245" TEXT="{nbsp} f&#xfc;gt einen non-breaking-space ein"/>
+<node CREATED="1785342816113" ID="ID_764054254" MODIFIED="1785342842114" TEXT="ein leerer Paragraph mit nur einem {nbsp} erzeugt &#xbb;Leerzeilen&#xab;"/>
+</node>
 </node>
 <node CREATED="1538838573613" ID="ID_1610361741" MODIFIED="1779805486150" TEXT="Graphics">
 <node CREATED="1538838576956" ID="ID_1174319279" MODIFIED="1665346614450" TEXT="SVG-Icons">
@@ -189729,7 +189733,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 </node>
 </node>
-<node CREATED="1664630921300" FOLDED="true" HGAP="183" ID="ID_1033335255" MODIFIED="1784903398734" TEXT="Dokumentation" VSHIFT="40">
+<node CREATED="1664630921300" HGAP="183" ID="ID_1033335255" MODIFIED="1785113362854" TEXT="Dokumentation" VSHIFT="40">
 <edge COLOR="#815b70"/>
 <cloud COLOR="#d7c3a8"/>
 <font NAME="SansSerif" SIZE="12"/>
@@ -190078,10 +190082,583 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1757603600075" ID="ID_1055769269" MODIFIED="1757603604124" TEXT="Workflow">
 <icon BUILTIN="flag-yellow"/>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1757603611279" ID="ID_52631420" MODIFIED="1757603648059" TEXT="Diskussion mit Wouter weiter f&#xfc;hren und dokmentieren">
-<linktarget COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="150;7;" ID="Arrow_ID_549406601" SOURCE="ID_1976063610" STARTARROW="None" STARTINCLINATION="350;33;"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1757603611279" ID="ID_52631420" MODIFIED="1785114994990" TEXT="Diskussion mit Wouter weiter f&#xfc;hren und dokmentieren">
+<linktarget COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="129;6;" ID="Arrow_ID_549406601" SOURCE="ID_1976063610" STARTARROW="None" STARTINCLINATION="350;33;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
+<node CREATED="1785114551870" ID="ID_115162360" LINK="https://lumiera.org/documentation/design/workflow/Verwijlen/WorkflowProposals.html" MODIFIED="1785114985557" TEXT="Wouter&apos;s Dokument: &#xbb;Luimera Workflow Proposals&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wouter war im Fr&#252;hjahr 2025 mit der Idee f&#252;r ein solches Dokument im Entwickler-Meeting (wieder)aufgetaucht. Wir kannten uns bereits aus der Anfangszeit des Lumiera-Projekts. Damals war Wouter noch Filmstudent in Utrecht. Er hatte schon damals Ideen zum &#187;Workflow&#171; ge&#228;u&#223;ert, sich dann aber zun&#228;chst vor allem bei den Arbeiten zur neuen Lumiera-Website n&#252;tzlich gemacht. Anl&#228;&#223;lich der LAC-2010 in Utrecht hatten wir uns pers&#246;nlich kennengelernt und sofort einen guten Draht zueinander gefunden. Damals waren auch Raffaella Traniello, Hermann Robak und Christian Th&#228;ter mit dabei.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      F&#252;r micht war diser Vorschlag wie ein Geschenk; ich hatte nicht mit sowas gerechnet; zudem entspricht sein Ansatz genau meiner eigenen Herangehensweise: man schaut sich erst einmal die Natur der Sache an, indem man beobachtet, wie damit umgegangen wird. Daher habe ich Wouter ermutigt, dieses Dokument zu schreiben, und zwar vor allem <i>als sein Dokument.</i>&#160;Unabh&#228;ngig davon habe ich vorgef&#252;hlt, ob Wouter mit mir zusammen an einem Workflow-Konzept arbeiten k&#246;nnte. Er war dieser Idee gegen&#252;ber sehr aufgeschlossen.
+    </p>
+    <p>
+      Wouter hat von seinem Dokument zun&#228;chst das zentrale Kapitel verfa&#223;t, zur Timeline und den Edit-Methoden. Dies hat er schrittweise, in drei &#252;berarbeiteten Versionen vorgestellt. Ich hatte zun&#228;chst gesagt, jedes Format ist akzeptabel; daraufhin hat er mit Word gearbeitet und PDF geliefert; sp&#228;ter habe ich einen einfachen Weg gefunden, das in Asciidoc umzusetzen und habe es, mit Wouter's Einverst&#228;ndnis in die Website integriert. Zwei weitere Kapitel hat Wouter im Herbst 25 und Fr&#252;hjahr 26 verfa&#223;t.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785113386999" ID="ID_649032482" MODIFIED="1785113395249" TEXT="Diskussionen in 2025">
+<node CREATED="1785113402954" ID="ID_1975154406" MODIFIED="1785114548830" TEXT="Mail-Threads (Fr&#xfc;hjahr/Sommer 25)">
+<node CREATED="1785115027463" ID="ID_340691669" MODIFIED="1785115037922" TEXT="M&#xe4;rz/April 25: First version of workflow proposal document">
+<node CREATED="1785115202060" ID="ID_771305583" MODIFIED="1785115216430" TEXT="Ichthyo: steckt den Rahmen im Projekt ab">
+<node CREATED="1785115237687" ID="ID_170139022" MODIFIED="1785115242450" TEXT="aktueller Stand"/>
+<node CREATED="1785115243062" ID="ID_90544332" MODIFIED="1785115260712" TEXT="Vorschlag: Workflow-Konzept ausarbeiten"/>
+<node CREATED="1785115261472" ID="ID_1803160049" MODIFIED="1785115318833" TEXT="Charakterisierert eigene Arbeit als Fundement f&#xfc;r sowas">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      als Pionier-Arbeit, um die Art flexiblen Workflow zu erm&#246;glichen, der mir vorschwebt. Hier vor allem: das Placement-Konzept
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1785115353188" ID="ID_135410294" MODIFIED="1785115374048" TEXT="Wouter: best&#xe4;tigt Modalit&#xe4;ten und fragt nach Erl&#xe4;uterung zu den Workflow-Konzepten"/>
+</node>
+<node CREATED="1785115055487" ID="ID_1097385483" MODIFIED="1785115074232" TEXT="April: Diskussions-Thread: Workflow and Structure">
+<node CREATED="1785115648208" ID="ID_1168873200" MODIFIED="1785116687282" TEXT="Ichthyo: greift zun&#xe4;chst drei strukturelle Aspekte erl&#xe4;uternd auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      2.4.25
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1785115674412" ID="ID_1229621194" MODIFIED="1785115678671" TEXT="Sturcture of Keybindings"/>
+<node CREATED="1785116150865" ID="ID_1648204689" MODIFIED="1785116159868" TEXT="Event-Sourcing / CQRS"/>
+<node CREATED="1785116370894" ID="ID_1711198729" MODIFIED="1785116712089" TEXT="Placement">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier ist mir eine sehr kompakte Zusammenfassung meiner Idee gelungen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+</node>
+<node CREATED="1785116784384" ID="ID_1377465694" MODIFIED="1785116853571" TEXT="Abschlu&#xdf;: wie Timeline und virtuelle Clips funktionieren (sollen)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Tja ... da habe ich schon eine viel zu lange Mail geschrieben. Aber als Abschlu&#223; habe ich gezeigt, wie diese Konzepte zusammenwirken, wodurch sie gewisserma&#223;en motiviert sind
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1785117087191" ID="ID_807911245" MODIFIED="1785117176404" TEXT="Wouter: greift zun&#xe4;chst nur das Thema &quot;Keybindings&quot; auf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zeigt an, die Bedeutung der von mir erl&#228;uterten Grundkonzepte zu sehen; er geht dann aber auf sein mentales Modell zu den Keybindings ein und zeigt lediglich an, da&#223; er die von mir benannten Schwierigkeiten sieht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785117230289" ID="ID_1627300972" MODIFIED="1785164251152" TEXT="Wouter: erweitert seinen Text &#x2014; f&#xfc;hrt sein Konzept der &#xbb;leightweight groups&#xab; ein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      4.4. aber vor allem in seiner langen Mail vom 6.4.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785117258497" ID="ID_437521671" MODIFIED="1785164172687" TEXT="Ichtyo: zeigt an, da&#xdf; Placement and &quot;modeless tracks&quot; das vereinfachen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      5.4.
+    </p>
+    <p>
+      eigentlich nur ein paar Anmerkungen / Klarstellungen (aber verhindert, da&#223; Wouter tiefer in seinen Ansatz einsteigt ... er tut das sp&#228;ter dann doch, aber aus einem reicheren Kontext; insofern war mein Vorgehen hier im R&#252;ckblick sinnvoll)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785117716573" ID="ID_1523248902" MODIFIED="1785164102962" TEXT="Wouter: f&#xfc;hrt sein Grouping-Konzept aus // Anmerkungen (Skepsis) bzgl. Nodes">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      6.4.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785117860145" ID="ID_1650188781" MODIFIED="1785164088171" TEXT="Ichthyo: zeigt an da&#xdf; mit Sequences etwas &#xc4;hnliches auf andere Weise erreicht werden k&#xf6;nnte">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      7.4. (sehr lange Mail)
+    </p>
+    <p>
+      ...dabei auch auf Nodes eingegangen, zeige aber den entgegens&#228;tzichen Schlu&#223;: dann m&#252;ssen eben Nodes neu gedacht werden
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785117973738" ID="ID_167241766" MODIFIED="1785163981910" TEXT="Wouter: hat Ichthyo&apos;s Ausf&#xfc;hrungen durchdacht &#x2014; f&#xfc;hrt Gesichtspunkt des &#xbb;Flow&#xab; ein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      8.4.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785118174359" ID="ID_171583208" MODIFIED="1785163994393" TEXT="Wouter: f&#xfc;hrt Bedenken ein bez&#xfc;glich &#xdc;bersicht / Handhabbarkeit / zu viel auf/zuklappen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ebenfalls 8.4. (gleiche Mail)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785118217863" ID="ID_1422293970" MODIFIED="1785118227258" TEXT="Workflow-Meeting im IRC">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1785118378021" ID="ID_975246358" MODIFIED="1785164001159" TEXT="Wouter: greift verschiedene Ideen auf; &#xbb;Linked-Clips&#xab; als alternatives Gruppierungs-Konzept">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      18.4.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785118682637" ID="ID_1485841833" MODIFIED="1785118699566" TEXT="Ichthyo: hat &#xbb;Lumiera Workflow Proposals&#xab; in Asciidoc &#xfc;bersetzt"/>
+<node CREATED="1785118700706" ID="ID_1112817931" MODIFIED="1785118750519" TEXT="Ichthyo: Keybindings vs. Gestures &#x2014; &#xbb;Gear-Switch&#xab; proposal"/>
+<node CREATED="1785118785190" ID="ID_826039309" MODIFIED="1785118802699" TEXT="Ichthyo: Keybindings vs. Navigation-Concept"/>
+</node>
+<node CREATED="1785115082276" ID="ID_389951841" MODIFIED="1785115167860" TEXT="Mai: Pers&#xf6;nliches">
+<node CREATED="1785115090392" ID="ID_515587909" MODIFIED="1785115097893" TEXT="Kurz vor der Geburt seines Sohnes"/>
+<node CREATED="1785115098505" ID="ID_1352080704" MODIFIED="1785115115979" TEXT="meine Anmerkungen zum DOK.fest M&#xfc;nchen (im Mai)"/>
+<node CREATED="1785115120198" ID="ID_1923405053" MODIFIED="1785115159967">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Antowrt auf &quot;Fingers crossed&quot; &#10233; Wouter <b>reflektiert die Themen</b>&#160;des ersten Thread
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="back"/>
+</node>
+</node>
+</node>
+<node CREATED="1785113409594" ID="ID_1866257477" MODIFIED="1785114531199" TEXT="Treffen auf der FrOSCon-2025">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wouter hatte von sich aus vorgeschlagen, er k&#246;nne nach K&#246;ln / St.Augustin kommen, es sei ja nicht so weit weg von Utrecht. Er ist grade im Juni 2025 Vater geworden; seine Partnerin stammt aus Griechenland und der Kleine he&#223;t &#187;Orestes&#171; &#8212; insofern war lang nicht klar, ob er &#252;berhaupt kommen kann, und wie lange. Tats&#228;chlich ist er dann am Samstag-Abend nach K&#246;ln gefahren, hat dort &#252;bernachtet und war am Sonntag kurz nach 10:00 in der Hochschule Rhein-Sieg in St.Augustin. Zusammen mit Benny haben wir dann bis zum Nachmittag in einer Art Seminar verbracht, zun&#228;chst in einem der sch&#246;nen Inneh&#246;fe der Universit&#228;t, und sp&#228;ter in einem der &#220;bungsr&#228;ume.
+    </p>
+    <p>
+      Bereits in den Diskussionen im Vorfeld hatte sich das Thema &#187;Control-Systems&#171; herausgebildet. Wir haben das Treffen zwar nicht geplant, aber am Abend vorher habe ich vier Stunden lang mit Benny die Mails vom ersten Thread durchgesprochen, und waren zu dem Schlu&#223; gekommen, da&#223; hier einige grundlegende Ans&#228;tze gut im pers&#246;nlichen Gespr&#228;ch gekl&#228;rt werden k&#246;nnten.
+    </p>
+    <p>
+      Tats&#228;chlich verlief der Anfang sehr leicht und produktiv; es zeigte sich da&#223; Wouter und ich eine &#228;hnliche Grundhaltung haben &#8212; auch wenn wir in so machen praktischen Fragen verschiedene Perspektiven vertreten. Somit erscheint hier die M&#246;glichkeit einer sehr produktiven Zusammenarbeit.
+    </p>
+    <p>
+      Bereits vor dem Mittagessen hatten wir uns auf eine grunds&#228;tzliche Haltung bzg. Modes und Tools geeinigt. Wouter scheint auch mein Anliegen mit den gleichbereichtigten, durchg&#228;ngigen Control-Systems und Gesten zu verstehen (Maus allein, Maus/Keyboard, Tablett, ....). Am Nachmittag haben wir versucht, den Themenkomplex &#187;Grouping-Devices&#171; anzurei&#223;en; das war viel m&#252;hsamer, da ich hier darauf bestand, zun&#228;chst mein Placement-Konzept deutlich zu machen, welches eine Ebene tiefer sitzt, und damit f&#252;r Wouter (als technisch-interessiertem nicht-Programmierer) zun&#228;chst schwer zu fassen war. Wouter ist ein sehr angenehmer Diskussionspartner; er h&#246;rt genau zu, fa&#223;t schnell auf, und beharrt nirgends auf einem vorgefa&#223;ten Standpunkt &#8212; was ihm wichtig ist, merkt man erst im Lauf der Zeit (tats&#228;chlich hat er einige Punkte, die sind f&#252;r ihn nicht verhandelbar; gl&#252;cklicherweise vertrete ich in den meisten Punkten eine &#228;hnliche Haltung, bzw. sehe sofort seine Expertise und schlie&#223;e mich seinen Erfahrungen an. Das gr&#246;&#223;te Konfliktpotential liegt wohl in dem manchmal mehr systemischen Ansatz, den ich verfolge).
+    </p>
+    <p>
+      Zum Abschlu&#223; der Diskussion, in der letzten Stunde, wollte Benny noch auf Wouter's &#187;Personas&#171; eingehen &#8212; Benny hatte Schwierigkeiten, Wouter's Ansatz zu verstehen, die Disussion hat uns aber allen viel Klarheit gebracht. Insofern war der Nachmittag m&#252;hsam, aber der direkte Austausch, wo man einfach mal an eine Tafel malen kann, hat diese Diskussion enorm bef&#246;rdert, so da&#223; wir beschlossen haben, sie vertieft fortzuf&#252;hren.
+    </p>
+    <p>
+      Am n&#228;chsten Tag, bei Benny in Bernburg/Schwarzwalt, habe ich darauf bestanden, sofort eine Zusammenfassung dieser Diskussion zu schreiben; Wouter hat sp&#228;ter dazu noch einige wenige Korrekturen beigetragen, sah aber insgesamt die Diskussion als gut repr&#228;sentiert. Au&#223;erdem habe ich die bisher vorliegenden Versionen seines &#187;Lumiera Workflow Proposals&#171; von PDF auf Asciidoc umgeschrieben und ebenfalls auf Lumiera.org ver&#246;ffentlicht...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785114532818" ID="ID_149441632" MODIFIED="1785114541495" TEXT="Mail-Threads (Winter 25/26)">
+<node CREATED="1785156541311" ID="ID_1933100929" MODIFIED="1785156555618" TEXT="Ichthyo(24.8.) : Vorschlag f&#xfc;r eine Gliederung des Feldes"/>
+<node CREATED="1785157211709" ID="ID_314449413" MODIFIED="1785157848747" TEXT="Wouter: steigt ein in follow-up // Portal-Idee f&#xfc;r Gruppen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      26.8.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785157752118" ID="ID_1330527587" MODIFIED="1785157837389" TEXT="Ichthyo: definiert &#xbb;Placement prototypes&#xab; // Analyse of &#xbb;ripple&#xab; (vs. sync-lock)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      29.8.25
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785160511269" ID="ID_412621271" MODIFIED="1785160584771" TEXT="Wouter: greift Analyse auf, differenziert. Offsets, swapping clips, (tmp)deactivate clip con">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      1.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785160587011" ID="ID_746930918" MODIFIED="1785160672726" TEXT="Ichthyo: publiziert n&#xe4;chste Version von Wouter&apos;s doc // follow-up details">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      5.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785157988150" ID="ID_314642634" MODIFIED="1785158041205" TEXT="Wouter: reflektiert/kritisiert ripple / betrachtet default-Placement-Prototype">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      3.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785158489680" ID="ID_1465504861" MODIFIED="1785158561298" TEXT="Ichthyo: ripple-Konsequenzen // Erl&#xe4;uterung drag &#x27f6; Event-Sourcing // connected placements">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      4.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785158587324" ID="ID_263792732" MODIFIED="1785158622634" TEXT="Wouter: widerspricht, schl&#xe4;gt hierarchie + group-leaders vor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      4.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785158844490" ID="ID_886840768" MODIFIED="1785158899388" TEXT="Ichthyo: modifier for sub-mode-variation // blocking // problem real-time-feedback">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      4.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785159088865" ID="ID_1292399811" MODIFIED="1785159108127" TEXT="Wouter: schlie&#xdf;t ab // geht weiter zu add-clip">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      6.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785159340776" ID="ID_659357848" MODIFIED="1785159464297" TEXT="Ichthyo: mildert &quot;dont compete with industry&quot; // Vorschlag f&#xfc;r automatische Placement-Wahl">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      8.10.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Mit &quot;mildert&quot; meine ich: das Prinzip bleibt, aber man kann nach architektonischen L&#246;sungen suchen, die das Problem umschiffen, selbst wenn das etwas mehr Konstruktionsaufwand ist (das ist anders als der Industrie-typische-Ansatz, einfach Geld f&#252;r eine brute-force-L&#246;sung auszugeben)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785159580836" ID="ID_1883407766" MODIFIED="1785159612748" TEXT="Wouter: greift das auf, schl&#xe4;gt Varianten vor, automatische Placement-Wahl">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      21.10
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785159806408" ID="ID_108810810" MODIFIED="1785159842499" TEXT="Ichthyo: sieht ein &quot;ripple&quot;-Feature kritisch // schl&#xe4;gt verschiedene &quot;mechanik&quot;-Varianten vor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      9.11
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785159917148" ID="ID_1628299273" MODIFIED="1785159945875" TEXT="Wouter: betrachtet nun rearrange-clips // antwortet auf automatische Placement-Wahl">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      25.11
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785160125415" ID="ID_1604173328" MODIFIED="1785166427205" TEXT="Ichthyo: fallunterscheidung add-clip // fragt extract vs. lift // Vorschlag hook-gesture">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      7.12
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785160346852" ID="ID_496455714" MODIFIED="1785160381688" TEXT="Wouter: kl&#xe4;rt, differenziert // hook-gesture interessant, skeptisch, schl&#xe4;gt Varianten vor">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      11.12
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1785162179151" ID="ID_1800007311" MODIFIED="1785162186410" TEXT="Zusammenfassung schaffen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1785162187542" ID="ID_1450925874" MODIFIED="1785162240800" TEXT="notwendig zur Vorbereitung FrOSCon-26">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und nat&#252;rlich auch l&#228;ngerfristig; wir brauchen eine allgemein zug&#228;ngliche Repr&#228;sentation dieser sehr tief gehenden Diskussionen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1785162254245" ID="ID_286859306" MODIFIED="1785162289216" STYLE="fork" TEXT="verwende Claude-Code zurm Aufschlie&#xdf;en">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="wizard"/>
+<node COLOR="#338800" CREATED="1785162293712" ID="ID_188324563" MODIFIED="1785162310550" TEXT="Auftrag: Themen identifizieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1785162320797" ID="ID_32593485" MODIFIED="1785162325867" TEXT="mache dabei leitende Vorgaben"/>
+<node CREATED="1785162328505" ID="ID_721588572" MODIFIED="1785162343709" TEXT="Claude findet selbst&#xe4;ndig den Verlauf der Diskusison"/>
+<node CREATED="1785162355024" ID="ID_44675529" MODIFIED="1785162389271" TEXT="gebe meine Gliederung als Ankerpunkt (&#xd83e;&#xdc32; 24.8.25)"/>
+<node CREATED="1785162391347" ID="ID_201771735" MODIFIED="1785162420615" TEXT="Vorschlag Claude">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>A. Shared goals and method</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(framing, before the four categories)</i></em>
+    </p>
+    <ol dir="ltr" start="1" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 20px; list-style: decimal; display: flex; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <li style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">
+        <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Vision and common ground</b></strong>&#160;&#8212; flow and &quot;organic editing&quot; (Wouter's core framing: interruptions kill flow; the goal is focus on storytelling), software as extension of the body, protecting settled parts of an edit, the trackless aspiration, medium level of abstraction / &quot;not a Premiere clone&quot;. Largely&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>agreed</i></em>&#160;&#8212; this is where you two converged fastest.
+      </li>
+      <li style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">
+        <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Working method</b></strong>&#160;&#8212; explorative reasoning (&quot;enumerate what's possible, narrow by plausibility, look for game-like mechanics&quot;), Wouter's scenario catalogue, the recognised need to build and user-test before judging. Includes the agreed intent to produce a design document.
+      </li>
+    </ol>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>B. Grouping</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(the richest material)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />3.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Grouping devices and encapsulation</b></strong>&#160;&#8212; Wouter's sections&gt;groups&gt;clips model with three sync modes (Apr 2025) vs. your &quot;everything is a sequence&quot; self-similarity; the convergence: groups as evolution of linked clips, co-existing with nested sequences; implicit grouping through placements; the &quot;group leader&quot; concept. Status: substantially converged, representation open.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />4.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Placement prototypes</b></strong>&#160;&#8212; the settled set of three (relative-to-parent/absolute, magnetic, content-anchored), the move/trim/slip behaviour matrix from your 29.8. mail, &quot;fewer prototypes the better&quot;. Status: largely&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>agreed</i></em>; edge cases open (swapping, offset inheritance, deletion of anchors, negative time &#8212; the last one resolved: no brick wall, relocatable zero point).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />5.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Moving, reordering and ripple behaviour</b></strong>&#160;&#8212; drag semantics (your a/b/c &#8594; Wouter's hierarchy principle &quot;parents move children&quot;; magic depends on placement, not modifier), blocking vs. never-say-no (open!), reordering of magnetic clips (open!), lift vs. extract (terminology settled), the parked ripple-trim debate incl. your power-of-defaults argument.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />6.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Adding clips and automatic placement setup</b></strong>&#160;&#8212; the three setup options, proximity rules, your hooking gesture (Dec 2025, &quot;would like to try it&quot;), Wouter's arrow/two-step alternatives, the clip-lifetime state model, the Gimp pattern (sticky sub-mode + temporary modifier &#8212; explicitly endorsed by both). Status: converging but undecided; this is where the discussion&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>paused in December</i></em>.
+    </p>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>C. Control</b></strong><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />7.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Keybindings, gestures, navigation</b></strong>&#160;&#8212; your flat-keymap critique and context-based primitives, Wouter's configurability requirement and ergonomics analysis (the &quot;Fingers crossed&quot; mail is a hidden gem), the synthesis &quot;simplify down / map down&quot;, sticky selection vs. selection-in-undo-stack, keyboard navigation gestures, modifier budget (Shift=select, Alt=duplicate, Ctrl=alternative action &#8212; late convergence).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />8.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Tools, modes, views, contextual tool palette</b></strong>&#160;&#8212; anchored in Wouter's document and the FrOSCon-25 meeting; the palette as carrier for placement types; Blender-style key popups; trim mode as contextual mode.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />9.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>The gear switch</b></strong>&#160;&#8212; your proposal, Wouter's concerns (gear-recall, Speed Editor experience), unresolved: sub-mode or always-on (his FrOSCon correction).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />10.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Immediate feedback and gesture architecture</b></strong>&#160;&#8212; the gesture controller / command-sentence pipeline, live-preview economics (&quot;don't compete with industry&quot;), the Priority-1/Priority-2 cue scheme, Wouter's concrete cue wishlist (locked-indicator + direction arrows). Status: goals agreed, feasibility open.
+    </p>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>D. Routing</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(thin &#8212; mostly agenda fodder)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />11.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Layering, tracks as space, tag-based routing</b></strong>&#160;&#8212; layering decoupled from track order, subtracks as fluid working space, shear-aside on collision, tagging for organisation&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>and</i></em>&#160;routing (Wouter's &quot;get rid of bins entirely&quot;), vertical-space and black-box concerns with nested sequences, the popup-portal idea.
+    </p>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>E. Scope and priorities</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(cross-cutting, discussed substantively)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />12.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Scope boundaries</b></strong>&#160;&#8212; node compositing inside the NLE (Wouter contra, you &quot;agree and disagree&quot;), i18n/RTL priority decision, GTK vs. Qt, target personas. Status: partly settled, partly consciously deferred.
+    </p>
+    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+      Topics 1&#8211;2 and 12 sit outside your fourfold scheme; I'd frame A as introduction-adjacent and E as a closing section. The&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>agenda document</b></strong>&#160;then derives from the &quot;open&quot; entries per topic plus the uncovered Routing/Editing-trimming ground.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1785162748465" ID="ID_1858027522" MODIFIED="1785162748465" TEXT="A. Shared goals and method">
+<node CREATED="1785162748466" ID="ID_361860919" MODIFIED="1785162748466" TEXT="1. Vision and common ground"/>
+<node CREATED="1785162748466" ID="ID_1914562132" MODIFIED="1785162748466" TEXT="2. Working method"/>
+</node>
+<node CREATED="1785162748467" ID="ID_1358927747" MODIFIED="1785162748467" TEXT="B. Grouping">
+<node CREATED="1785162748467" ID="ID_877147180" MODIFIED="1785162748467" TEXT="3. Grouping devices and encapsulation"/>
+<node CREATED="1785162748467" ID="ID_4603102" MODIFIED="1785162748467" TEXT="4. Placement prototypes"/>
+<node CREATED="1785162748468" ID="ID_1440321056" MODIFIED="1785162748468" TEXT="5. Moving, reordering and ripple behaviour"/>
+<node CREATED="1785162748468" ID="ID_1141703990" MODIFIED="1785162748468" TEXT="6. Adding clips and automatic placement setup"/>
+</node>
+<node CREATED="1785162748468" ID="ID_1558377249" MODIFIED="1785162748468" TEXT="C. Control">
+<node CREATED="1785162748469" ID="ID_1782198351" MODIFIED="1785162748469" TEXT="7. Keybindings, gestures, navigation"/>
+<node CREATED="1785162748469" ID="ID_616989663" MODIFIED="1785162748469" TEXT="8. Tools, modes, views, contextual tool palette"/>
+<node CREATED="1785162748469" ID="ID_217590603" MODIFIED="1785162748469" TEXT="9. The gear switch"/>
+<node CREATED="1785162748470" ID="ID_1477564003" MODIFIED="1785162748470" TEXT="10. Immediate feedback and gesture architecture"/>
+</node>
+<node CREATED="1785162748470" ID="ID_505516339" MODIFIED="1785162748470" TEXT="D. Routing">
+<node CREATED="1785162748470" ID="ID_690412701" MODIFIED="1785162748470" TEXT="11. Layering, tracks as space, tag-based routing"/>
+</node>
+<node CREATED="1785162748471" ID="ID_285181099" MODIFIED="1785162748471" TEXT="E. Scope and priorities">
+<node CREATED="1785162748471" ID="ID_1774851613" MODIFIED="1785162748471" TEXT="12. Scope boundaries">
+<node CREATED="1785162748471" ID="ID_397123600" MODIFIED="1785162748471" TEXT="node compositing inside the NLE"/>
+<node CREATED="1785162748472" ID="ID_1142691223" MODIFIED="1785162748472" TEXT="i18n/RTL priority decision"/>
+<node CREATED="1785162748472" ID="ID_1645904328" MODIFIED="1785162748472" TEXT="GTK vs. Qt"/>
+<node CREATED="1785162748472" ID="ID_667831659" MODIFIED="1785162748472" TEXT="target personas"/>
+</node>
+</node>
+</node>
+<node CREATED="1785162786631" ID="ID_1889050822" MODIFIED="1785162795103" TEXT="Analyse / Reflexion">
+<icon BUILTIN="back"/>
+<node CREATED="1785163025743" ID="ID_1272877613" MODIFIED="1785163041393" TEXT="Claude erfa&#xdf;t den &#xbb;Gespr&#xe4;chskontext&#xab; &#xfc;berhaupt nicht">
+<node CREATED="1785163042836" ID="ID_833124425" MODIFIED="1785163053537" TEXT="wie zu erwarten..."/>
+<node CREATED="1785163054146" ID="ID_463386270" MODIFIED="1785163089604" TEXT="das ist eine Chance">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich selber w&#228;re nicht im Stande gewesen, mich so locker aus diesem Kontext zu l&#246;sen und zu einer Thematischen Aufbereitung zu kommen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1785163102756" ID="ID_1785070097" MODIFIED="1785163116667" TEXT="meine einf&#xfc;hrenden Erl&#xe4;uterungen fehlen">
+<node CREATED="1785164974881" ID="ID_767441708" MODIFIED="1785164976543" TEXT="CQRS"/>
+<node CREATED="1785164976878" ID="ID_1298818054" MODIFIED="1785164980212" TEXT="Placement-concept"/>
+<node CREATED="1785165921915" ID="ID_565064247" MODIFIED="1785165926192" TEXT="symbolic representation"/>
+</node>
+<node CREATED="1785163539722" ID="ID_978840415" MODIFIED="1785163552412" TEXT="Claude hat den &#xbb;Editing&#xab;-Kontext &#xfc;berhaupt nicht erfa&#xdf;t/erkannt"/>
+<node CREATED="1785163630878" ID="ID_1820631596" MODIFIED="1785167822714" TEXT="einige Editing-Themen tauchen f&#xe4;lschlich unter Grouping auf"/>
+<node CREATED="1785165888841" ID="ID_678479670" MODIFIED="1785165919329" TEXT="das &#xbb;Gestures&#xab;-Thema sollte nicht in das Keybindings-Thema includiert werden"/>
+<node CREATED="1785166087559" ID="ID_1778229648" MODIFIED="1785166096960" TEXT="Frage: sollte &#xbb;Flow&#xab; ein eigenes Thema sein?"/>
+<node CREATED="1785166445779" ID="ID_1996956655" MODIFIED="1785166459318" TEXT="abgesehen davon: die vorgeschlagenen Themen sind vollst&#xe4;ndig"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1785166462559" ID="ID_1214882184" MODIFIED="1785183428224" TEXT="Gliederung kl&#xe4;ren">
+<icon BUILTIN="yes"/>
+<node CREATED="1785166548719" ID="ID_679190219" MODIFIED="1785166570593" TEXT="Claude auch noch das IRC-Log geben (Workflow-Diskussion am 2025-04-16)"/>
+<node CREATED="1785166478773" ID="ID_844498104" MODIFIED="1785166485774" TEXT="Vorschl&#xe4;ge an Claude">
+<node CREATED="1785166487971" ID="ID_598710491" MODIFIED="1785166495179" TEXT="die Randthemen am Anfang b&#xfc;ndeln"/>
+<node CREATED="1785166495847" ID="ID_3521430" MODIFIED="1785166510038" TEXT="dort auch einen Thread zur konzeptionellen Einf&#xfc;hrung"/>
+<node CREATED="1785166523484" ID="ID_365106760" MODIFIED="1785166534487" TEXT="ggfs dort auch einen Thread zu &#xbb;Flow&#xab; (und Personas)"/>
+<node CREATED="1785166576069" ID="ID_1551205053" MODIFIED="1785166583752" TEXT="Anordnung der Hauptthemen">
+<node CREATED="1785166586164" ID="ID_1644580747" MODIFIED="1785166587944" TEXT="Control"/>
+<node CREATED="1785166589552" ID="ID_690472843" MODIFIED="1785166592652" TEXT="Routing"/>
+<node CREATED="1785166593539" ID="ID_934270313" MODIFIED="1785166595881" TEXT="Grouping"/>
+<node CREATED="1785166596524" ID="ID_883159890" MODIFIED="1785166598694" TEXT="Editing"/>
+</node>
+<node CREATED="1785166615472" ID="ID_1789628217" MODIFIED="1785166622945" TEXT="fragen: m&#xf6;glich?">
+<node CREATED="1785166623823" ID="ID_680447298" MODIFIED="1785166635329" TEXT="Gestures als eigenen Thread?"/>
+<node CREATED="1785166636669" ID="ID_730244544" MODIFIED="1785166641583" TEXT="ebenso f&#xfc;r Flow?"/>
+<node CREATED="1785166671888" ID="ID_714848963" MODIFIED="1785166685059" TEXT="ripple und add-clip sind die Editing-Themen"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1785183429685" ID="ID_871974373" MODIFIED="1785183497931" STYLE="fork" TEXT="Text generieren lassen....">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<arrowlink COLOR="#1dc1cf" DESTINATION="ID_266454438" ENDARROW="Default" ENDINCLINATION="23;-34;" ID="Arrow_ID_638679615" STARTARROW="None" STARTINCLINATION="-95;-9;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+<node CREATED="1785183456379" ID="ID_266454438" MODIFIED="1785183497931" TEXT="Zusammenfassungstext durchsehen / revidieren">
+<linktarget COLOR="#1dc1cf" DESTINATION="ID_266454438" ENDARROW="Default" ENDINCLINATION="23;-34;" ID="Arrow_ID_638679615" SOURCE="ID_871974373" STARTARROW="None" STARTINCLINATION="-95;-9;"/>
+<node COLOR="#338800" CREATED="1785183560996" ID="ID_1448661888" MODIFIED="1785207334249" TEXT="KI-generierte Version einchecken">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ja doch .... in dem Fall sollte das v&#246;llig transparent sein
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1785207320832" ID="ID_821159130" MODIFIED="1785354902902" TEXT="gesamten Text durchk&#xe4;mmen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1785207338420" ID="ID_1293073547" MODIFIED="1785207354648" TEXT="manche Zusammenfassungen sind unscharf"/>
+<node CREATED="1785207355369" ID="ID_881337342" MODIFIED="1785207364614" TEXT="stellenweise sollte besser das Original zitiert werden"/>
+<node CREATED="1785207382008" ID="ID_671140285" MODIFIED="1785207448886" TEXT="an einigen Stellen wurde nicht das beste Zitat ausgew&#xe4;hlt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      d.h. Claude w&#228;hlt meistens eine Stelle mit &#187;knackiger Formulierung&#171; &#8212; erkennt aber nicht, was inhaltlich die Essenz ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785207468017" ID="ID_1019224216" MODIFIED="1785207485750" TEXT="die Ergebnis-Boxen sind oft unvollst&#xe4;ndig und falsch fokussiert"/>
+</node>
+<node CREATED="1785354903579" ID="ID_1697542319" MODIFIED="1785354912750" TEXT="Einsichten">
+<icon BUILTIN="back"/>
+<node CREATED="1785354914690" ID="ID_529487594" MODIFIED="1785354928004" TEXT="verschiedene Themen sind w&#xe4;hrend der Diskussion verwoben"/>
+<node CREATED="1785354928799" ID="ID_1077981512" MODIFIED="1785354956168" TEXT="Claude hat diese querverkn&#xfc;pft und dabei praktisch immer &#xbb;interpoliert&#xab;"/>
+<node CREATED="1785354959475" ID="ID_1771479042" MODIFIED="1785355067836" TEXT="ich selber w&#xe4;re daf&#xfc;r nicht dreist genug gewesen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich h&#228;tte vermutlich lediglich ein Verzeichnis angelegt, und letztlich die Original-Mails publiziert; ich kann nun nicht einmal sagen, ob das &#8222;besser&#8220; gewesen w&#228;re, denn die thematische Umordnung hat f&#252;r jedes der Themen ein &#187;Narrativ&#171; geschaffen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1785355070605" ID="ID_409751641" MODIFIED="1785355090163" TEXT="ist ist immer wieder deutlich da&#xdf; diese Tools den Text nicht verstehen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1785355095441" ID="ID_928839152" MODIFIED="1785355109787" TEXT="die sich ergebende Richtung halte ich aber f&#xfc;r f&#xf6;rderlich f&#xfc;r die Diskussion"/>
+<node CREATED="1785355259147" ID="ID_31049345" MODIFIED="1785355360139" TEXT="diese Interaktion zeigt mir sehr deutlich wie &#xbb;AI Brainfog&#xab; entsteht">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...wenn ich mich jetzt nicht mehrere Tage hingesetzt h&#228;tte, und durch alles im Einzelnen durchgegangen w&#228;re, sondern einfach die Agenda-Punkte aufgegriffen h&#228;tte, dann h&#228;tte ich bereits den Zugang zu meinen eigenen Gedanken verloren und w&#252;rde einem Trigger folgen. Wenn man das ein paar Runden lang macht, hat man keinen Plan mehr, was geschieht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1785355153761" ID="ID_1749659026" MODIFIED="1785355258224" TEXT="Claude hat auch eine Agenda extrahiert &#x2014; die lasse ich zun&#xe4;chst stehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was er da gemacht hat, ist komplett logisch aus der Sicht eines &#187;Chefs&#171;; ich empfinde diesen Agenda-Text, so wie er nun dasteht, <i>als dreist.</i>&#160;Allerdings k&#246;nnte eine solche Sammlung von Punkten auch hilfreich sein und die weitere Diskussion fokussieren. M&#246;glicherweise solle man das Dokument stehen lassen und lediglich anders framen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1785355115462" ID="ID_1822661570" MODIFIED="1785355122173" TEXT="brauche nun Feedback">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1757603663080" ID="ID_551584183" MODIFIED="1757603948022" TEXT="Ziel: eine Workflow-Spezifikation detailliert ausarbeiten">
 <richcontent TYPE="NOTE"><html>
@@ -194191,8 +194768,8 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1664632012297" ID="ID_241631213" MODIFIED="1664632016491" TEXT="Interaction Design">
 <node CREATED="1756651058214" ID="ID_1179963093" MODIFIED="1756651062249" TEXT="Workflow">
-<node CREATED="1756651063357" ID="ID_1976063610" MODIFIED="1757603655131" TEXT="Diskussion mit Wouter Verwijlen">
-<arrowlink COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="150;7;" ID="Arrow_ID_549406601" STARTARROW="None" STARTINCLINATION="350;33;"/>
+<node CREATED="1756651063357" ID="ID_1976063610" MODIFIED="1785114994990" TEXT="Diskussion mit Wouter Verwijlen">
+<arrowlink COLOR="#804261" DESTINATION="ID_52631420" ENDARROW="Default" ENDINCLINATION="129;6;" ID="Arrow_ID_549406601" STARTARROW="None" STARTINCLINATION="350;33;"/>
 </node>
 </node>
 </node>
