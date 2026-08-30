@@ -170,6 +170,15 @@ namespace test{
       
       /** @test base function to access the contents of an opaque buffer
        *        with known type, and convert into another target type.
+       *      - the base interface #Domain represents an opaque type
+       *      - it exposes #TypeHandler interfaces for a fixed selection
+       *        of common elementary #BaseTypes
+       *      - here we use a `BaseDomain<int>` as actual implementation,
+       *        yet knowledge regarding the type `int` is erased and any
+       *        access is based solely on a `Domain&`
+       *      - an opaque source ValBuf is passed explicitly
+       * @remark this covers the value access capability of a
+       *  type handler interface, working on external storage.
        */
       void
       verify_valueAccess()
@@ -204,6 +213,10 @@ namespace test{
       
       /** @test base function to assign a directly given data value
        *        into an opaque buffer with known (yet different) type.
+       * @remark since the type handler interface covers both reading
+       *  and writing, here the roles are reversed here, so that the
+       *  target of the assignment is the opaque buffer, whose actual
+       *  type remains hidden behind the #Domain interface.
        */
       void
       verify_valueSetting()

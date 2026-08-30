@@ -1,5 +1,5 @@
 /*
-  PARAM-TYPE.hpp  -  parameter scale and type descriptor
+  PARAM-TYPE.hpp  -  parameter type record including domain and scale
 
    Copyright (C)
      2026             Hermann Vosseler <Ichthyostega@web.de>
@@ -37,7 +37,8 @@ namespace par {
   /**
    * Interface: represent a specific configuration of parameter value type,
    * range and scale. Every ParamType descriptor is also a _prototype_ and has
-   * an unique identity, ensured by registration, so that it acts as a type identifier. 
+   * an unique identity, ensured by registration, so that it acts as a type identifier.
+   * @todo RLY? registration??
    * Furthermore, the interface exposes allowed conversion and conforming operations.
    */
   class ParamType

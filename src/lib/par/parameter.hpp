@@ -13,7 +13,13 @@
 
 
 /** @file parameter.hpp
- ** A generic type value that can be discovered and automated.
+ ** A generic typed value that can be discovered and automated.
+ ** The actual data type of the parameter is an opaque implementation detail,
+ ** yet value ranges and conversions are handled automatically. It is thus
+ ** both a descriptor and an opaque container. Parameter elements can be copied,
+ ** yet the presence of some specific parameter at a given point in the model
+ ** constitutes an identity -- and the parameter descriptor can be tagged
+ ** with that identity.
  ** 
  ** @todo this is a draft and placeholder, as of 2026
  */

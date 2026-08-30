@@ -81495,7 +81495,7 @@
 </node>
 </node>
 <node CREATED="1782835522766" ID="ID_354667146" LINK="https://issues.lumiera.org/ticket/1328#comment:4" MODIFIED="1782838004841" TEXT="2024 im &#xbb;Playback Slice&#xab; zusammenh&#xe4;ngend skizziert">
-<arrowlink COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" STARTARROW="None" STARTINCLINATION="1670;84;"/>
+<arrowlink COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" STARTARROW="None" STARTINCLINATION="1653;85;"/>
 <node CREATED="1782835676763" HGAP="34" ID="ID_450919195" MODIFIED="1782835960190" TEXT="der Ansatz ist mir schon sehr lange klar" VSHIFT="-10">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -81679,6 +81679,8 @@
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1784672159561" ID="ID_1607967603" MODIFIED="1784672179337" TEXT="Unterscheidung &#xbb;Basiswerte&#xab; &#x2014; &#xbb;komplexe Parameter&#xab;?">
 <icon BUILTIN="help"/>
+<node CREATED="1787697421789" ID="ID_1670546028" MODIFIED="1787697449759" TEXT="denn es zeigt sich auch &#x27f5; &#x201e;Platz sparen&#x201c; ist wichtig"/>
+<node CREATED="1787697391820" ID="ID_1319898998" MODIFIED="1787697403198" TEXT="Herbst 2026: neige immer mehr diesem Ansatz zu"/>
 </node>
 </node>
 <node CREATED="1782923626958" ID="ID_386912733" MODIFIED="1782923647319" TEXT="Gefordert ist also: ein halb-dynamischer safety-Check">
@@ -82020,6 +82022,26 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1787699000197" HGAP="61" ID="ID_1003372108" MODIFIED="1787699185445" STYLE="bubble" VSHIFT="2">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist ein <b>essentielles Requirement</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nachfolgende Reflexion und die Formulierung des &#187;Routing&#171;-Konzepts hat das deutlich gemacht: Aus Sicht des Users(Film-Editors) w&#252;rde das einen immer wiederkehrenden Problemfall im Workflow entsch&#228;rfen; hinzu kommt, da&#223; ein solches Design sauberer kaskadiert und faktorisiert: wir wollen nicht den &#187;globalen Automaten&#171; oben drauf setzen
+    </p>
+  </body>
+</html></richcontent>
+<edge COLOR="#a50c0c"/>
+<icon BUILTIN="idea"/>
+</node>
 </node>
 <node CREATED="1784474736440" ID="ID_560655168" MODIFIED="1784474782036" TEXT="aber Vorsicht &#x27f9; das f&#xfc;hrt mehrere Dimensionen von &#xbb;Deskriptoren&#xab; ein">
 <richcontent TYPE="NOTE"><html>
@@ -82046,7 +82068,8 @@
 <node CREATED="1782934330022" ID="ID_1491698936" MODIFIED="1782934348327" TEXT="die direkten Zugriffe (per full-Domain-Basistyp)"/>
 </node>
 </node>
-<node CREATED="1782934352981" ID="ID_203751727" MODIFIED="1782934383379" TEXT="Konsequenz  &#x27f9; Typ-Deskriptor Prototypen verwenden">
+<node CREATED="1782934352981" ID="ID_203751727" MODIFIED="1788124752033" TEXT="Konsequenz  &#x27f9; Typ-Deskriptor Prototypen verwenden">
+<linktarget COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1433;77;" ID="Arrow_ID_433092199" SOURCE="ID_775970800" STARTARROW="None" STARTINCLINATION="-344;26;"/>
 <node CREATED="1782934397802" ID="ID_364715036" MODIFIED="1782934416572" TEXT="es ist zu erwarten, da&#xdf; diese in den Metadaten die Rolle eines &#xbb;Typs&#xab; spielen"/>
 <node CREATED="1782934417938" ID="ID_1609165510" MODIFIED="1782934439659" TEXT="jeder konkrete Typ kann auch als Prototyp verwendet werden (&#x27f6; mu&#xdf; immutable sein)"/>
 <node CREATED="1782934443840" ID="ID_1929146954" MODIFIED="1782934464080" TEXT="sinnvollerweise eine separate statische Registry f&#xfc;r die full-Domain-Basistypen">
@@ -82068,7 +82091,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782934933721" ID="ID_344093674" MODIFIED="1782934945323" TEXT="und wenn ich keinen Prototyp habe??">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782934933721" ID="ID_344093674" MODIFIED="1788124730438" TEXT="und wenn ich keinen Prototyp habe??">
 <icon BUILTIN="help"/>
 <node CREATED="1782934977094" ID="ID_1175382535" MODIFIED="1782934985417" TEXT="man k&#xf6;nnte das Problem einfach ignorieren"/>
 <node CREATED="1782934995033" ID="ID_147900097" MODIFIED="1782935015541" TEXT="dann mu&#xdf; man halt beim Erzeugen einer neuen Skala die lineare Suche in Kauf nehmen"/>
@@ -82136,6 +82159,44 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1787702240063" ID="ID_1633678427" MODIFIED="1787703006299" TEXT="Zwischenstand (im Juli 26) : das System der IDs als Konstruktionsprinzip">
+<arrowlink COLOR="#e0120b" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" STARTARROW="None" STARTINCLINATION="-473;625;"/>
+<linktarget COLOR="#722852" DESTINATION="ID_1633678427" ENDARROW="Default" ENDINCLINATION="-768;701;" ID="Arrow_ID_1908201312" SOURCE="ID_1595484083" STARTARROW="None" STARTINCLINATION="-237;17;"/>
+<icon BUILTIN="help"/>
+<node CREATED="1787702348085" ID="ID_1499806467" MODIFIED="1787702551905" TEXT="stelle fest: damals habe ich zun&#xe4;chst komplett die eine Linie verfolgt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bis zu dem Punkt war ich geleitet von der <i>effizienten Verwendung</i>&#160; der Parameter im Code, und hatte eigentlich nur den Value-Zugriff (und die Zuweisungen) im Blick. Dem entsprechend stand im Vordergund, einen Code-Pfad zu erm&#246;glichen, in dem das ganze Typ-System <i>links liegen bleibt</i>&#160;und der Code auf einem direkt gegebenen Value arbeitet. Die Typ-IDs waren vor allem von Bedeutung, wenn man Parameter als einen Interface-Deskriptor deutet, also um z.B. dann im GUI korrekt zu rendern.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787702365850" ID="ID_524779176" MODIFIED="1787702705302" TEXT="der erste Code-Prototyp marschiert dann aber Richtung &#xbb;polymorphic value&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      In dem Moment aber, wo ich angefangen habe, eine Parameter-Klasse zu konzipieren, ist mir die Festlegung auf einen Inline-Buffer in den Vordergrund ger&#252;ckt. Ich habe dann Angst bekommen, da&#223; ein aufgebl&#228;hter Parameter-Typ sich pervasiv ausbreitet. Das wurde verst&#228;rkt durch die Einsicht, da&#223; <b>Parameter eine 2.Ebene im low-Level-Modell </b>darstellen. (Diese Einsicht &#187;d&#228;mmert&#171; mir zunehmend, und ich finde das gar nicht so toll, weil sich damit das ganze Konzept mit den Pipelines und Segmenten aufl&#246;sen k&#246;nnte)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787702724354" ID="ID_2965106" MODIFIED="1788124721439" TEXT="Problem: sobald IDs strukturiert werden, wird der Zugriff dann absurd-indirekt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sobald man sich tats&#228;chlich <i>alle konkreten low-level-Operationen</i>&#160;anschaut, und im Besonderen auch an die Cache-locality denkt. Und ja, mir ist komplett klar, da&#223; ich hier im &#187;Abw&#228;gungen im lufleeren Raum&#171; mache
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787702873122" ID="ID_987841029" MODIFIED="1787702909028" TEXT="da steh ich nun....">
+<icon BUILTIN="smiley-angry"/>
 </node>
 </node>
 <node CREATED="1782948636452" ID="ID_758265146" MODIFIED="1782948640740" TEXT="Ordnung der Begriffe">
@@ -82243,7 +82304,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1783012426948" ID="ID_618035658" MODIFIED="1783013523710" TEXT="Struktur-Aufbau (experimenteller Entwurf)">
+<node CREATED="1783012426948" ID="ID_618035658" MODIFIED="1787783397317" TEXT="Struktur-Aufbau (experimenteller Entwurf)">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -82252,10 +82313,11 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#b9fee2" DESTINATION="ID_618035658" ENDARROW="Default" ENDINCLINATION="-1739;116;" ID="Arrow_ID_568004595" SOURCE="ID_325266754" STARTARROW="None" STARTINCLINATION="1348;60;"/>
 <node CREATED="1783013534719" ID="ID_1275296715" MODIFIED="1783013563112" TEXT="Anordnung nach dem PImpl-Pattern">
 <node CREATED="1783013564573" ID="ID_635500547" MODIFIED="1783013580724" TEXT="par::Parameter ist eine &#xe4;u&#xdf;ere H&#xfc;lle"/>
 <node CREATED="1783013581680" ID="ID_1888909252" MODIFIED="1783013602869" TEXT="die Disposition ist ein virtuelles Interface"/>
-<node CREATED="1783013603761" ID="ID_61165666" MODIFIED="1783013658186" TEXT="eine konkrete Disposition liegt direkt im Parameter-Buffer"/>
+<node CREATED="1783013603761" ID="ID_61165666" MODIFIED="1787699679266" TEXT="eine konkrete Provision liegt direkt im Parameter-Buffer"/>
 <node BACKGROUND_COLOR="#e5cbab" CREATED="1783096207982" ID="ID_1654446767" MODIFIED="1783096252653">
 <richcontent TYPE="NODE"><html>
   <head/>
@@ -82460,6 +82522,16 @@
 <node CREATED="1783038656630" ID="ID_121238495" MODIFIED="1783038665409" TEXT="entsprechend auch jedwede Skalen-Konfiguration"/>
 <node CREATED="1783038680348" ID="ID_121314162" MODIFIED="1783038709336" TEXT="&#x27f9; Deduplikation &#xfc;berhaupt nur per zus&#xe4;tzlicher Indirektion m&#xf6;glich"/>
 <node CREATED="1783038717460" ID="ID_321664353" MODIFIED="1783038736924" TEXT="aber jede weitere Indirektion profitiert nicht mehr von der Inline-Anordnung"/>
+<node CREATED="1788123936197" ID="ID_1811445933" MODIFIED="1788124657737" TEXT="das l&#xe4;&#xdf;t sich &#xbb;abfedern&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Erscheint als guter Kompromi&#223;: die Scale wird nicht so h&#228;ufig gebraucht, n&#228;mlich nur beim akzeptieren neuer Werte; zudem k&#246;nnte man einen entsprechenden Limiter generieren und in die Kette der Provisions (Datenquellen) einschleifen
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -82486,7 +82558,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#be1294" CREATED="1783040255151" ID="ID_1595484083" MODIFIED="1783040312603" TEXT="damit wieder &#xbb;back to square one&#xab;">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#be1294" CREATED="1783040255151" ID="ID_1595484083" MODIFIED="1787702336884" TEXT="damit wieder &#xbb;back to square one&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -82495,6 +82567,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#722852" DESTINATION="ID_1633678427" ENDARROW="Default" ENDINCLINATION="-768;701;" ID="Arrow_ID_1908201312" STARTARROW="None" STARTINCLINATION="-237;17;"/>
 <icon BUILTIN="smily_bad"/>
 <node CREATED="1783040349995" ID="ID_1865443974" MODIFIED="1783040366820" TEXT="es ist nun weiterhin unklar wie der Typ strukturiert wird"/>
 <node CREATED="1783040367840" ID="ID_910738575" MODIFIED="1783040393515" TEXT="und wie die Provision platzsparend dargestellt werden kann"/>
@@ -82506,7 +82579,7 @@
       nochmal zur Erinnerung: bin in dieses ganze Riesen-Thema nur reingeschlittert, weil ich den processKey als Job-Parameter aufgeben mu&#223;te (und der war eine so &#187;sch&#246;ne L&#246;sung&#171;, die das Thema markiert und auf sp&#228;ter verschiebt). Dann habe ich gesagt, einen Zacken nachlegen und mal eben ein Design f&#252;r Parameter machen. Ich wei&#223; aber noch gar nicht, wo genau die Parameter sonst noch eingesetzt werden sollen. Ich wei&#223; nur, da&#223; ich sie universell einsetzen m&#246;chte.
     </p>
     <p>
-      Im Besonderen ist die ganze <i>Auswertung von Parametern</i>&#160;komplett ungekl&#228;rt. Diese Auswertung passiert irgendwie in Response auf Interaktionen im GUI (vor allem: &#228;ndern der Playback-Position, aber nat&#252;rlich auch direkte Wert-Tweaks). Es ist klar, da&#223; die Auswertung nicht im GUI selber stattfinden wird, denn daf&#252;r haben wir die Trennung (die Commands, den UI-Bus und das Event-Sourcing). Wahrscheinlich wird eine Auswertung in einer Projektion der Events passieren, entweder nach einem Builder-Lauf, oder in vielen F&#228;llen anstelle eines Solchen (wenn gar nichts neu gebaut werden mu&#223;). Auch der Builder ist ja konzeptionell eine Projektion. Dann aber ist andererseits auch klar, da&#223; Parameter irgendwie in der Render-Engine ausgewerter werden, und zwar dort verpackt in einen Automations-Funktor. M&#246;glicherweise wird diese Auswertung aber auch eine Art <i>compilierte Variante</i>&#160;sein.
+      Im Besonderen ist die ganze <i>Auswertung von Parametern</i>&#160;komplett ungekl&#228;rt. Diese Auswertung passiert irgendwie in Response auf Interaktionen im GUI (vor allem: &#228;ndern der Playback-Position, aber nat&#252;rlich auch direkte Wert-Tweaks). Es ist klar, da&#223; die Auswertung nicht im GUI selber stattfinden wird, denn daf&#252;r haben wir die Trennung (die Commands, den UI-Bus und das Event-Sourcing). Wahrscheinlich wird eine Auswertung in einer Projektion der Events passieren, entweder nach einem Builder-Lauf, oder in vielen F&#228;llen anstelle eines Solchen (wenn gar nichts neu gebaut werden mu&#223;). Auch der Builder ist ja konzeptionell eine Projektion. Dann aber ist andererseits auch klar, da&#223; Parameter irgendwie in der Render-Engine ausgewertet werden, und zwar dort verpackt in einen Automations-Funktor. M&#246;glicherweise wird diese Auswertung aber auch eine Art <i>compilierte Variante</i>&#160;sein.
     </p>
     <p>
       
@@ -82517,9 +82590,21 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1787702002175" ID="ID_57306278" MODIFIED="1787702230410" TEXT="Bauchgef&#xfc;hl &#x27f9; sollte auf Storage-Size achtgeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....ich halte selbst den Versuch f&#252;r gef&#228;hrlich, mich erst mal nicht um Optimierung zu k&#252;mmern, sondern die Eigenschaften des Parameters &#187;generisch&#171; zu repr&#228;sentieren. Der Grund ist: es dauert Jahre, bis ich da im Stande bin, eine R&#252;ckmeldung zu bekommen &#8212; und dann hat sich ein m&#246;gliches Design bereits <i>festgesetzt</i>&#160;und hat <i>sekund&#228;re Konsequenzen hervorgebracht.</i>&#160;Wie man es auch dreht und wendet: es gibt <b>keine Metode wie man's &#187;richtig&#171; macht</b>...
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#770118" DESTINATION="ID_544097121" ENDARROW="Default" ENDINCLINATION="-106;-400;" ID="Arrow_ID_827394719" STARTARROW="None" STARTINCLINATION="-620;35;"/>
 </node>
 </node>
-<node CREATED="1783041075841" ID="ID_544097121" MODIFIED="1783041092743" TEXT="wenn also &#xbb;Platz sparen&#xab; h&#xf6;chste Priorit&#xe4;t h&#xe4;tte...">
+</node>
+<node CREATED="1783041075841" ID="ID_544097121" MODIFIED="1787702230410" TEXT="wenn also &#xbb;Platz sparen&#xab; h&#xf6;chste Priorit&#xe4;t h&#xe4;tte...">
+<linktarget COLOR="#770118" DESTINATION="ID_544097121" ENDARROW="Default" ENDINCLINATION="-106;-400;" ID="Arrow_ID_827394719" SOURCE="ID_57306278" STARTARROW="None" STARTINCLINATION="-620;35;"/>
 <node CREATED="1783041117246" ID="ID_1209348964" MODIFIED="1783041135606" TEXT="dann w&#xe4;re die Disposition ein PImpl &#x2014; gerne in Inline-Anordnung"/>
 <node CREATED="1783041140116" ID="ID_1294364897" MODIFIED="1783041200335" TEXT="m&#xfc;&#xdf;te aber ansonsten sehr knapp gehalten sein">
 <node CREATED="1783041202439" ID="ID_1566675889" MODIFIED="1783041717493" TEXT="in einem Funktor oder der VTable steckt das Thema &#xbb;Provision&#xab;">
@@ -82561,8 +82646,9 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#5f0f69" CREATED="1783087011755" ID="ID_522578531" MODIFIED="1783090291858" TEXT="stelle die Frage: ist das angemessen?">
 <icon BUILTIN="help"/>
 <node CREATED="1783087038084" ID="ID_192113507" MODIFIED="1783087050833" TEXT="ein Parameter ist nicht unbedingt ein &#xbb;Value&#xab;"/>
-<node CREATED="1783087061644" ID="ID_529127857" MODIFIED="1783091373689" TEXT="Einsicht: Symbolische Repr&#xe4;sentationen liegen oft in einem Zwischenfeld">
-<linktarget COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2603;104;" ID="Arrow_ID_1457907870" SOURCE="ID_936945076" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
+<node CREATED="1783087061644" ID="ID_529127857" MODIFIED="1788013904753" TEXT="Einsicht: Symbolische Repr&#xe4;sentationen liegen oft in einem Zwischenfeld">
+<linktarget COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2605;103;" ID="Arrow_ID_1457907870" SOURCE="ID_936945076" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
+<linktarget COLOR="#3367d0" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-692;29;" ID="Arrow_ID_1675730537" SOURCE="ID_1229358137" STARTARROW="None" STARTINCLINATION="-183;13;"/>
 <node CREATED="1783087081345" ID="ID_909620394" MODIFIED="1783087087812" TEXT="Beispiel: eine M&#xfc;nze">
 <node CREATED="1783087094301" ID="ID_1763897712" MODIFIED="1783087102346" TEXT="wir behandeln sie zwar als fungibel"/>
 <node CREATED="1783087105729" ID="ID_167575054" MODIFIED="1783090315462">
@@ -82686,7 +82772,16 @@
   </body>
 </html></richcontent>
 <node CREATED="1784480390644" ID="ID_1402184236" MODIFIED="1784480408676" TEXT="ein &#xab;Slot&#xbb; &#x2259; 8 Byte"/>
-<node CREATED="1784480433845" ID="ID_705502812" MODIFIED="1784480445354" TEXT="bereits ein double-Wert braucht einen weiteren Slot"/>
+<node CREATED="1784480433845" ID="ID_705502812" MODIFIED="1787695788548" TEXT="wegen der VTable haben wir stets mindestens einen (weiteren) Slot">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da die VTable in der Regel als Pointer implementiert wird, also 64bit belegt &#8212; somit bricht der Datenpuffer immer schon mal einen weiteren Slot an (selbst wenn man die Datentypen weiter limitieren w&#252;rde)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1784480464257" ID="ID_1171181752" MODIFIED="1784480955078" TEXT="f&#xfc;r einen halbwegs &#xbb;generischen&#xab; Parameter sind wir in der Gr&#xf6;&#xdf;enordnung eines std::string">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -82739,12 +82834,20 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1784481135575" ID="ID_611313643" MODIFIED="1784481165217">
+<node CREATED="1784481135575" ID="ID_611313643" MODIFIED="1784481135575">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
       vielmehr wurde sie per <b>Template-Metaprogramming</b>&#160;generiert
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      und somit ist das gesamte (abstrahierte, virtuelle) Verhalten dennoch bereits zur Compile-Zeit festgelegt, und die Laufzeit-Gr&#246;&#223;e einer Instanz betr&#228;gt nur 1 &#171;slot&#187; (f&#252;r die VTable); dennoch gibt es verschiedene (zur Compile-time generierte) Implementierungen, d.h. das virtuelle Interface abstrahiert tats&#228;chlich etwas, das allerdings bereits statisch (zur compile-time) komplett ausformuliert wurde
     </p>
   </body>
 </html></richcontent>
@@ -82759,12 +82862,12 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784481228034" ID="ID_742661193" MODIFIED="1784481677627" TEXT="Preis: kombinatorische Explosion im Code-Segment">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784481228034" ID="ID_742661193" MODIFIED="1784481228034" TEXT="Preis: kombinatorische Explosion im Code-Segment">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      Jede, wirklich jede Auspr&#228;gungs-Variante schl&#228;gt sich nieder in Form einiter (deduplizierter) Datenfelder in einem Daten-Segment (private static), sowie einem <b>kompletten</b>&#160;Satz an Methoden-Implementierungen im Code-Segment, und einer VTable mit Zeigern auf diese. Mu&#223; man eine weitere Methode ins Interface aufnehmen, entsteht sofort ein starker Hebel...
+      Jede, wirklich jede Auspr&#228;gungs-Variante schl&#228;gt sich nieder in Form einiger (deduplizierter) Datenfelder in einem Daten-Segment (private static), sowie einem <b>kompletten</b>&#160;Satz an Methoden-Implementierungen im Code-Segment, und einer VTable mit Zeigern auf diese. Mu&#223; man eine weitere Methode ins Interface aufnehmen, entsteht sofort ein starker Hebel...
     </p>
     <p>
       
@@ -82892,7 +82995,7 @@
 <node BACKGROUND_COLOR="#c8c0b6" CREATED="1784489444352" ID="ID_1412623970" MODIFIED="1784489521150" TEXT="doch! das funktioniert weiterhin">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1784502126671">
+<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1787695360380">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -82911,19 +83014,19 @@
       Experimente mit Varianten
     </h2>
     <p>
-      Es zeigt sich, da&#223; dieses Konstrukt den Compiler in eine komplexe Situation bringt, in der wirklich jedes Detail stimmig sein mu&#223;. Im Besonderen kann die Diagnostik komplett irref&#252;hrend sein; wenn etwas mit der Sichtbarkeit nicht stimmt, kommt es zu einer (verdeckten) Ambiguit&#228;t, die u.U. (abh&#228;ngig vom konkreten Typ) automatisch vom Compiler &#8222;repariert&#8220; wird (ich meine diese problematischen Regeln, da&#223; z.B. ein unsigned an vielen Stellen ger&#228;uschlos auf einen Signed zugewiesen werden kann). Au&#223;erdem ist es wichtig, das Pragma zum Unterdr&#252;cken von <font color="#6a3728" face="Monospaced">-Woverloaded-virtual</font>&#160;bereits <i>vor</i>&#160;&#160;dem Template stehen mu&#223;, in dem das Shaddowing auftritt (nicht etwa, wie man intuitiv erwarten w&#252;rde, vor der Verwendung).
+      Es zeigt sich, da&#223; dieses Konstrukt den Compiler in eine komplexe Situation bringt, in der wirklich jedes Detail stimmig sein mu&#223;. Im Besonderen kann die Diagnostik komplett irref&#252;hrend sein; wenn etwas mit der Sichtbarkeit nicht stimmt, kommt es zu einer (verdeckten) Ambiguit&#228;t, die u.U. (abh&#228;ngig vom konkreten Typ) automatisch vom Compiler &#8222;repariert&#8220; wird (ich meine diese problematischen Regeln, da&#223; z.B. ein unsigned an vielen Stellen ger&#228;uschlos auf einen Signed zugewiesen werden kann). Au&#223;erdem ist es wichtig, das Pragma zum Unterdr&#252;cken von <font color="#6a3728" face="Monospaced">-Woverloaded-virtual</font>&#160;bereits <i>vor</i>&#160;dem Template stehen mu&#223;, in dem das Shaddowing auftritt (nicht etwa, wie man intuitiv erwarten w&#252;rde, vor der Verwendung).
     </p>
     <p>
-      In diesen Experimenten erscheint dann doch das urspr&#252;ngliche Baumuster von Alexandrescu die stabilste L&#246;sung zu sein. Also ein multiple-mix-in f&#252;r das Interface, aber eine Kette f&#252;r die Implementierung. Das liegt daran, da&#223; dann eine eventuelle Ambiguit&#228;t beim Aufruf wirklich direkt im Interface passiert, nicht irgendwo in einer Kette; hinzu kommt, da&#223; wir in einer Kette die Sichtbarkeit explizit wieder herstellen m&#252;ssen durch ein <font face="Monospaced">using </font><font color="#921717" face="Monospaced">BAS</font><font color="#5f4e4e" face="Monospaced">::functionname</font><font face="Monospaced">;</font>&#160;&#8212; und das kann weitere Ambiguit&#228;ten erzeugen, und erfordert vor allem irgendwo eine catch-all-Definition (z.B. mit leerer Argumentliste). Das ist verwirrend und kann weitere Ambiguit&#228;ten erzeugen.
+      In diesen Experimenten erscheint dann doch das urspr&#252;ngliche Baumuster von Alexandrescu die stabilste L&#246;sung zu sein. Also ein multiple-mix-in f&#252;r das Interface, aber eine Kette f&#252;r die Implementierung. Das liegt daran, da&#223; dann eine eventuelle Ambiguit&#228;t beim Aufruf wirklich direkt im Interface passiert, nicht irgendwo in einer Kette; hinzu kommt, da&#223; wir in einer Kette die Sichtbarkeit explizit wieder herstellen m&#252;ssen durch ein <font face="Monospaced">using </font><font color="#921717" face="Monospaced">BAS</font><font color="#5f4e4e" face="Monospaced">::functionname</font><font face="Monospaced">;</font>&#160;&#8212; und das erfordert vor allem irgendwo eine catch-all-Definition (z.B. mit leerer Argumentliste). Das w&#228;re noch verwirrender und kann weitere Ambiguit&#228;ten erzeugen.
     </p>
     <p>
-      Wenn der Compiler irgendwo automatisch (falsch) konvertiert, kann es dann zu v&#246;llig verwirrenden anderen Problemen kommen, wie z.B. der Zugriff &#252;ber eine Referenz auf ein Objekt anderen Typs (was nur mit einer const-Referenz erlaubt ist).
+      Wenn der Compiler irgendwo automatisch (falsch) konvertiert, kann es dann zu v&#246;llig irref&#252;hrenden sekund&#228;ren Problemen kommen, wie z.B. der Zugriff &#252;ber eine Referenz auf ein Objekt anderen Typs (was nur mit einer const-Referenz erlaubt ist).
     </p>
     <p>
       
     </p>
     <p>
-      <i>Insofern verstehe ich durchaus die Motivation, warum </i><font face="Monospaced" color="#692727">-Woverloaded-virtual</font><i>&#160; eingef&#252;hrt wurde; hier gibt es viele Fallen, die einen unerfahren Programmierer vor unl&#246;sbare Probleme stellen k&#246;nnen</i>
+      <i>Insofern verstehe ich durchaus die Motivation, warum </i><font color="#692727" face="Monospaced">-Woverloaded-virtual</font><i>&#160; eingef&#252;hrt wurde; hier gibt es viele Fallen, die einen unerfahren Programmierer vor unl&#246;sbare Probleme stellen k&#246;nnen</i>
     </p>
   </body>
 </html></richcontent>
@@ -82973,12 +83076,12 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1784489714610" ID="ID_626901816" MODIFIED="1784490126318" TEXT="interessanterweise ist nichteinmal ein using BASE::extractAs notwendig">
+<node CREATED="1784489714610" ID="ID_626901816" MODIFIED="1787695461645" TEXT="interessanterweise ist nichteinmal ein using BASE::extractAs notwendig">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...denn an der Stelle spielt Sichtbarkeit gar keine Rolle mehr, es wird nur eine schon vorhandene Interface-Methode in der VTable auf eine konkrete Implementierung gebunden. Allerdings <b>nur</b>, wenn man tats&#228;chlich das Interface als multiple-mix-in generiert &#8212; denn das <i>umgeht das Sichtbarkeits-Problem</i>
+      ...denn an dieser Stelle in der Hierarchie spielt Sichtbarkeit gar keine Rolle mehr, es wird nur eine schon vorhandene Interface-Methode in der VTable auf eine konkrete Implementierung gebunden. Allerdings <b>nur</b>, wenn man tats&#228;chlich das Interface als multiple-mix-in generiert &#8212; denn das <i>umgeht das Sichtbarkeits-Problem</i>&#160;(&#10230; das urspr&#252;ngliche Design von Alexandrescu ist ziemlich clever)
     </p>
   </body>
 </html></richcontent>
@@ -83425,7 +83528,7 @@
 <node CREATED="1784753898316" ID="ID_1214113459" MODIFIED="1784753906114" TEXT="integers von verschiedenem Rank"/>
 <node CREATED="1784753908650" ID="ID_350184416" MODIFIED="1784753916276" TEXT="aber auch der gleiche Rank auf beiden Seiten"/>
 </node>
-<node CREATED="1784753940609" ID="ID_1656941400" MODIFIED="1784753975081" TEXT="Limitieren auch in extracAs&lt;TY&gt;() demonstrieren">
+<node CREATED="1784753940609" ID="ID_1656941400" MODIFIED="1784753940609" TEXT="Limitieren auch in extracAs&lt;TY&gt;() demonstrieren">
 <linktarget COLOR="#4da5bd" DESTINATION="ID_1656941400" ENDARROW="Default" ENDINCLINATION="-128;80;" ID="Arrow_ID_543303907" SOURCE="ID_1748150865" STARTARROW="None" STARTINCLINATION="803;34;"/>
 </node>
 </node>
@@ -83466,7 +83569,7 @@
 </node>
 <node COLOR="#338800" CREATED="1784588917160" ID="ID_174389664" MODIFIED="1785008698199" TEXT="Zuweisungs-Operationen auf die Basis-Operationen aufsetzen">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784753983595" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
+<node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784589831498" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -83693,6 +83796,483 @@
 </node>
 <node COLOR="#338800" CREATED="1785006078479" ID="ID_770448079" MODIFIED="1785008635920" TEXT="Testabdeckung: beide Basis-Zugriffe sowie die opaque-Zuweisung">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1787702938694" ID="ID_946786974" MODIFIED="1787703006299" TEXT="Zwischenstand-2 (August 26)">
+<linktarget COLOR="#e0120b" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" SOURCE="ID_1633678427" STARTARROW="None" STARTINCLINATION="-473;625;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1787703029258" ID="ID_1647611085" MODIFIED="1787703144522" TEXT="nach der FrOSCon-26....">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Thema mit den Parametern hatte ich aufgemacht zwischen &#187;Maynooth&#171; und der FrOSCon ... und w&#228;hrend dem die Recherche zu IO_URING und die Vorbereitung auf das Worflow-Meeting mit Wouter komplett im Vordergrund stand
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787706642542" ID="ID_316670152" MODIFIED="1787706725311" TEXT="sollte nun zun&#xe4;chst dem Entwurf (polymorphic value) folgen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ohne an jeder Stelle wieder in Reflexionen zu verfallen; der Entwurf sollte das Thema soweit aufschlie&#223;en, da&#223; man dann, im Anschlu&#223;, konkretere &#220;berlegungen zur Performance anstellen k&#246;nnen wird...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787706805296" ID="ID_1205481403" MODIFIED="1787784159945" TEXT="Im Besonderen zu den Scales werde ich erst wesentlich sp&#xe4;ter Genaueres wissen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...vorl&#228;ufig gen&#252;gt die Beobachtung, da&#223; eine Scale aus einer BaseDomain hervorgeht; und die Wirkung der Scale beschr&#228;nkt sich auf das Setzen/&#196;ndern von Werten (unter der wichtigen <b>Invariante</b>&#160;da&#223; vorliegende Werte &#187;konform&#171; sein m&#252;ssen). M&#246;glicherweise wird man die Wirkung einer Scale auch direkt in einen Automations-Funktor mit integrieren k&#246;nnen. (&#220;berlegung am Rande: mehrere Indirektionen hintereinander profitieren ebenfalls von der Zusammenfassung in eine VTable, selbst ohne monomorphic optimisation &#8212; unter der Annahme da&#223; der Cache hei&#223; bleibt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787759996035" ID="ID_1779718376" LINK="#ID_1804668463" MODIFIED="1787784256666">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      k&#246;nnte nun vom <i>vorl&#228;ufigen Interface</i>&#160;ausgehend skizzieren
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1787784298904" ID="ID_616332093" MODIFIED="1787784308711" TEXT="was derzeit bereits feststeht...">
+<node CREATED="1787784319071" ID="ID_121649298" MODIFIED="1787784439020" TEXT="Parameter sind generische kopierbare Deskriptoren"/>
+<node CREATED="1787784482815" ID="ID_1229358137" MODIFIED="1788013904753" TEXT="die Semantik ist &#xbb;symbollisch-attributiv&#xab;">
+<arrowlink COLOR="#3367d0" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-692;29;" ID="Arrow_ID_1675730537" STARTARROW="None" STARTINCLINATION="-183;13;"/>
+<node CREATED="1787784520442" ID="ID_605944275" MODIFIED="1787784525451" TEXT="neue Begriffspr&#xe4;gung"/>
+<node CREATED="1787784526194" ID="ID_1684089220" MODIFIED="1787785618911" TEXT="liegt zwischen Value- und Referenz-Semantik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der Deskriptor ist kopierbar und allein durch seine manifesten Eigenschaften bestimmt (was auf Wert-Semantik hindeutet), jedoch enth&#228;lt ein Parameter manipulierbaren Zustand und bestimmte Instanzen werden per ID referenziert (was auf Referenz-Semantik hindeutet)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787784562162" ID="ID_1983280945" MODIFIED="1787784876613" TEXT="die Rolle und Umgebung bestimmt, ob eine Instanz eine Identit&#xe4;t hat">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        f&#252;r sich genommen hat ein solcher Deskriptor Value-Semantik, wobei allerdings einige seiner Eigenschaften aus Verweisen auf Datenquellen besteht (welche f&#252;r sich eine Identit&#228;t besitzen).
+      </li>
+      <li>
+        wenn ein solcher Deskriptor aber in einem speziell ausgezeichneten Model als Attribution verwendet wird, nimmt der den Charakter einer Instanz an
+      </li>
+      <li>
+        innerhalb dieses beschreibenden Modell-Kontextes, ist diese Instanz eindeutig (und kann mit einer ID adressiert werden)
+      </li>
+      <li>
+        allerdings gibt es mehrere Kopien dieses Modell-Kontextes als Projektionen, da sich das Modell weiterentwickelt, und au&#223;erdem zur Ausf&#252;hrung &#252;bersetzt wird
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1787785644013" ID="ID_1479977901" MODIFIED="1787785673078" TEXT="das Zugriffs-Interface ist generisch &#x2014; intern hat ein Parameter jedoch einen Typ"/>
+<node CREATED="1787785680973" ID="ID_1403817356" MODIFIED="1787785719687" TEXT="es gibt eine feste Auswahl von BaseDomains, in die jeder Parameter konvertiert werden kann"/>
+<node CREATED="1787785724288" ID="ID_1843076704" MODIFIED="1787785930787" TEXT="zudem beschreibt der eingebettete Typ eine Scale und Wertbereichs-Limitierung"/>
+<node CREATED="1787785996478" ID="ID_1315318686" MODIFIED="1787786006665" TEXT="es gibt zwei Zugriffs-Arten">
+<node CREATED="1787786008344" ID="ID_1482950206" MODIFIED="1787786026779" TEXT="unqualifiziert/global">
+<node CREATED="1787786040601" ID="ID_1647461132" MODIFIED="1787786047069" TEXT="das liefert einen intrinsischen Wert"/>
+<node CREATED="1787786047788" ID="ID_1322699347" MODIFIED="1787786057963" TEXT="konvertiert in den Typ der beim Zugriff vorgegeben wird"/>
+</node>
+<node CREATED="1787786027591" ID="ID_860637071" MODIFIED="1787786033461" TEXT="per nominal-time">
+<node CREATED="1787786060638" ID="ID_1536847255" MODIFIED="1787786079199" TEXT="hier erfolgt u.U zus&#xe4;tzlich eine Automations-Auswertung"/>
+<node CREATED="1787786089746" ID="ID_189806902" MODIFIED="1787786106396" TEXT="geliefert wird ebenfalls der beim Zugriff vorgegebene Typ"/>
+</node>
+</node>
+</node>
+<node CREATED="1787788954761" ID="ID_1680099011" MODIFIED="1787788962565" TEXT="was daf&#xfc;r gebraucht wird...">
+<node CREATED="1787788982375" ID="ID_305230207" MODIFIED="1787788991772" TEXT="der Container (PolymorphicValue)"/>
+<node CREATED="1788013024334" ID="ID_1765558042" MODIFIED="1788013030050" TEXT="im Container...">
+<node CREATED="1788013034593" ID="ID_1225110265" MODIFIED="1788013038934" TEXT="eine Provision"/>
+<node CREATED="1788014082405" ID="ID_100431217" MODIFIED="1788014088031" TEXT="das ParamType-Interace"/>
+<node CREATED="1788014092867" ID="ID_1527036015" MODIFIED="1788017590529" TEXT="polyvalue::CopySupport - Marker">
+<node CREATED="1788017597647" ID="ID_1451113864" LINK="https://issues.lumiera.org/ticket/1197" MODIFIED="1788020032021" TEXT="stelle fest: PolymorphicValue ist schon recht verwirrend implementiert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bekanntlich war das mal ein &#187;Experiment nebenbei&#171; aus der Anfangzeit ... das sich dann bei mir im Kopf festgesetzt hat.
+    </p>
+    <ul>
+      <li>
+        es wrid ein &#187;ad hoc&#171; erfundenes Marker-Interface verwendet (obwohl man inzwischen in C++ automatisch feststellen k&#246;nnte, ob etwas kopierbar / klonbar ist)
+      </li>
+      <li>
+        dann wurde aber wegen diesem Marker-Interface die totale Flexibilit&#228;t eingef&#252;hrt, so da&#223; man es letztlich nur optional einsetzen kann (daf&#252;r dann aber mit einem dynamic-cast &#8222;bezahlt&#8220;)
+      </li>
+      <li>
+        dabei habe ich den Verdacht, da&#223; diese ganze Idee mit dem Marker-Interface <i>frei drehend ist,</i>&#160;denn letztlich implementiert ja doch bereits der Adapter alles, und delegiert an die Standard-Copy-Operationen
+      </li>
+      <li>
+        zudem ist die Anordnung der verschiedenen Bausteine im Code selber durchaus verwirrend; man hat keine rechte Linie, der man folgen kann
+      </li>
+      <li>
+        abgesehen davon: die Fallunterscheidung ist unvollst&#228;ndig, es gibt gen&#252;gend F&#228;lle, bei denen wir dann doch in eine nicht-implementierte Operation laufen
+      </li>
+      <li>
+        und sp&#228;ter dann hatte ich die gleiche Idee nochmal isoliert als VirtualCopySupport implementiert, und in lib::Variant verwendet
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788017707090" ID="ID_308578833" MODIFIED="1788018098862" TEXT="man mu&#xdf; nur ein Marker-Interface implementieren (um beim Kopieren zu kooperieren)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dabei geht es aber letztlich <i>nur</i>&#160;darum, wie der Copy-Support <i>eingeschleift</i>&#160;wird. Denn die eigentliche Implementierung erledigt der PolymorphicValue::Adapter &#8212; die Frage der &#8222;Kooperation&#8220; l&#228;uft darauf hinaus, ob das CopySupport-API direkt auf der Vererbungs-Linie des Implementierungs-Typs gefunden wird, oder ob es &#252;ber einen Mix-In dazugebaut wird; dem entsprechend ist auch der Adapter anders aufgeh&#228;ngt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788017830099" ID="ID_1598313786" MODIFIED="1788017847940" TEXT="letztlich wird an copy-Ctor bzw. Assignment des Implementierungs-Typs delegiert"/>
+<node CREATED="1788017850607" ID="ID_1152900201" MODIFIED="1788017910538" TEXT="siehe PolymorphicValue_test::verifyBasics()">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      da mal mit dem Debugger durchsteppen... dann sieht man was passiert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1788020075343" ID="ID_1141636956" MODIFIED="1788046263248" TEXT="alles das zusammen w&#xe4;re die &#xbb;Disposition&#xab;">
+<node CREATED="1788020109497" ID="ID_926841045" MODIFIED="1788020120122" TEXT="wobei diese wohl auf ein Baukasten-System hinausl&#xe4;uft"/>
+<node CREATED="1788020121415" ID="ID_913695297" MODIFIED="1788020180771" TEXT="auch noch nicht v&#xf6;llig klar: welche Interfaces braucht das front-End eigentlich?"/>
+<node CREATED="1788196912882" ID="ID_990547784" MODIFIED="1788196941273" TEXT="welche Interfaces m&#xfc;ssen separiert und eigenst&#xe4;ndig herausgef&#xfc;hrt werden?"/>
+<node CREATED="1788196942096" ID="ID_97985230" MODIFIED="1788197050345" TEXT="und wie wird letztlich alles in einen Deskriptor-Record zusammengebunden?">
+<arrowlink COLOR="#4a3c9d" DESTINATION="ID_832309415" ENDARROW="Default" ENDINCLINATION="-1088;45;" ID="Arrow_ID_331072636" STARTARROW="None" STARTINCLINATION="-455;17;"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788020186954" ID="ID_563253424" MODIFIED="1788020192598" TEXT="Interfaces...?">
+<icon BUILTIN="help"/>
+<node CREATED="1788020250782" ID="ID_726206772" MODIFIED="1788020252329" TEXT="Domain">
+<node CREATED="1788020256597" ID="ID_1943514908" MODIFIED="1788020278702" TEXT="applyLimit(valBuff&amp;) &#x27f5; vmtl intern ben&#xf6;tigt"/>
+<node CREATED="1788020280703" ID="ID_1717784207" MODIFIED="1788020294892" TEXT="transferTo &#x27f5; generische Zuweisung"/>
+<node CREATED="1788020295960" ID="ID_903585085" MODIFIED="1788020320225" TEXT="TypeHandler&lt;TY&gt; &#x27f5; direkter Zugriff bei bekanntem Buffer_Typ"/>
+</node>
+<node CREATED="1788043980576" ID="ID_243895279" MODIFIED="1788190760691" TEXT="ParamType">
+<node CREATED="1788044046040" ID="ID_896168495" MODIFIED="1788044070032" TEXT="&#x2014;&#x25b7; Domain"/>
+<node CREATED="1788044087874" ID="ID_987680334" MODIFIED="1788044125817" TEXT="baut auf einer konkreten BaseDomain auf"/>
+<node CREATED="1788044313324" ID="ID_1559271369" MODIFIED="1788044418772" TEXT="tr&#xe4;gt den ID-Record">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist ein 64bit-Wort, das in sub-Felder aufgeteilt wurde, um alle Typ/Registrierungs-IDs kompakt unterzubringen; jede sub-ID ist Index in eine global-statische Registrierungstabelle
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788044440539" ID="ID_502620590" MODIFIED="1788044462236" TEXT="bietet Accessoren f&#xfc;r die Scale">
+<node CREATED="1788045165291" ID="ID_683197300" MODIFIED="1788045168614" TEXT="max()"/>
+<node CREATED="1788045169306" ID="ID_1539559822" MODIFIED="1788045172369" TEXT="min()"/>
+<node CREATED="1788045279891" ID="ID_1393283991" MODIFIED="1788045319373" TEXT="log() &#x27f6; enum {LIN, BIN, NAT, DEC}"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788045365202" ID="ID_1760165048" MODIFIED="1788192733814" TEXT="k&#xf6;nnte Mappiing-Funktionen f&#xfc;r Nominal-Skala bieten">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+</node>
+<node CREATED="1788020349498" ID="ID_122675161" MODIFIED="1788020352349" TEXT="Provision">
+<node CREATED="1788020355638" ID="ID_228366486" MODIFIED="1788020731969" TEXT="Anforderungen...">
+<node COLOR="#5b280f" CREATED="1788020735356" ID="ID_1509066214" MODIFIED="1788044943124" TEXT="will man &#xfc;berhaupt einen &#xbb;Buffer&#xab; exponieren?">
+<icon BUILTIN="help"/>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1788020758945" ID="ID_1136842518" MODIFIED="1788020764530" TEXT="das w&#xe4;re dann eine Festlegung"/>
+<node CREATED="1788020766049" ID="ID_1168022993" MODIFIED="1788020778691" TEXT="theoretisch k&#xf6;nnte die Provision ja auch rein-funktional implemenitert sein"/>
+<node CREATED="1788020791950" ID="ID_1511082224" MODIFIED="1788020868690" TEXT="au&#xdf;erdem ist nicht klar, ob man einen &#xbb;Wert setzen&#xab; kann...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bei einer rein-funktionalen Provision wird das nicht m&#246;glich sein; wenn dagegen irgendwo ein &#187;Buffer&#171; w&#228;re, dann k&#246;nnte man dem auch einen Wert zuweisen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788044944834" ID="ID_221273343" MODIFIED="1788045089795" TEXT="Antwort: Nein &#x27f6; ausgedr&#xfc;ckt durch kaskadierte Provision">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das hei&#223;t....
+    </p>
+    <ul>
+      <li>
+        konzeptionell <i>gibt es immer einen Buffer</i>
+      </li>
+      <li>
+        der liegt aber im Allgemeinen irgendwo in der Kette
+      </li>
+      <li>
+        wenn man auf eine andere Provision referenziert, und lokal keinen Buffer hat, dann wird der pull() durchgereicht, und das setVal() wirkt auf den Buffer &#187;upstream&#171;
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788020869700" ID="ID_57699637" MODIFIED="1788020888892" TEXT="klar ist: wenn es einen &#xbb;Buffer&#xab; gibt, dann residiert er hier, in der Provision"/>
+<node CREATED="1788021229355" ID="ID_1822130411" MODIFIED="1788021252164" TEXT="Provision&amp; k&#xf6;nnte eine Dekorator-Kette bilden">
+<node CREATED="1788022402071" ID="ID_37196039" MODIFIED="1788022413073" TEXT="damit k&#xf6;nnte auch das &#xbb;Setzen&#xab; delegiert werden"/>
+<node CREATED="1788022413763" ID="ID_241754503" MODIFIED="1788022585515" TEXT="aber unklar: wie wird der Typ ausgedr&#xfc;ckt?"/>
+<node CREATED="1788040403062" ID="ID_1118263415" MODIFIED="1788040458102" TEXT="sinnvollerweise vom API fernhalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      weil man sonst f&#252;r jeden Aufruf einen double-Dispatch bekommt
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1788040459445" ID="ID_527995746" MODIFIED="1788040474449" TEXT="&#x27f9; demnach mu&#xdf; der Typ beim Verdrahten geregelt werden"/>
+</node>
+</node>
+<node CREATED="1788040488945" ID="ID_1825580704" MODIFIED="1788040494211" TEXT="Operationen festlegen">
+<node CREATED="1788042653125" ID="ID_1425035280" MODIFIED="1788042668767" TEXT="getVal (valBuff&amp;)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788043456461" HGAP="96" ID="ID_372503637" MODIFIED="1788043610829" TEXT="liefert grunds&#xe4;tzlich Daten mit passendem Typ f&#xfc;r diesen Parameter" VSHIFT="-2">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1788042670269" ID="ID_1893105013" MODIFIED="1788042680738" TEXT="setVal (valBuff const&amp;)">
+<node CREATED="1788043620561" HGAP="61" ID="ID_767948094" MODIFIED="1788043697653" TEXT="&#xbb;Val&#xab; meint den Ankerwert" VSHIFT="3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dieser gilt global als der &#187;Wert&#171; des Parameter; eine eventuelle Automations-Anwendung wird immer auf diesen Ankerwert draufgesetzt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788042682309" ID="ID_1652700935" MODIFIED="1788042723833" TEXT="pullAt (Time, valBuff&amp;) ">
+<node CREATED="1788043583590" HGAP="53" ID="ID_1222624811" MODIFIED="1788043602032" TEXT="wertet zeitbasierte Datenquelle aus" VSHIFT="2"/>
+</node>
+<node CREATED="1788043898418" ID="ID_689257489" MODIFIED="1788043954080" TEXT="connect (Provision&amp;)"/>
+<node CREATED="1788043962843" ID="ID_518209677" MODIFIED="1788043966310" TEXT="disconnnect();"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1788122609755" ID="ID_1685273750" MODIFIED="1788122613258" TEXT="Aufbau">
+<node CREATED="1788122630198" ID="ID_1427651051" MODIFIED="1788122650894" TEXT="Type liegt &#xfc;ber der Domain und unter der Provision"/>
+<node CREATED="1788122695056" ID="ID_1113056635" MODIFIED="1788122712676" TEXT="der Typ mu&#xdf; ggfs. Registrierungen vornehmen">
+<node CREATED="1788122773470" ID="ID_1416488019" MODIFIED="1788122818753" TEXT="f&#xfc;r die Scale &#x27f5; liegt dedupliziert in Registry"/>
+<node CREATED="1788122983739" ID="ID_1706667186" MODIFIED="1788123065305" TEXT="BaseDomain ist per Datentyp differenziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist eine parametrisierte Subklasse der Domain; daher gibt es nur N BaseDomains (kleine Anzahl), welche allesamt lediglich eine andere VTable definieren, und daher direkt eingeschleift werden k&#246;nnen.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1788123756658" HGAP="31" ID="ID_1426033062" MODIFIED="1788123771818" TEXT="die BaseDomain-ID kann statisch liegen" VSHIFT="1">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node CREATED="1788124658818" ID="ID_775970800" MODIFIED="1788124752033" TEXT="Rolle der (Scale)Prototypen bedenken">
+<arrowlink COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1433;77;" ID="Arrow_ID_433092199" STARTARROW="None" STARTINCLINATION="-344;26;"/>
+<node CREATED="1788124774594" ID="ID_1701050119" MODIFIED="1788124792900" TEXT="&#x27f9; Scale- und Typdefinitionen m&#xfc;ssen immutable sein"/>
+<node CREATED="1788124793826" ID="ID_1129246210" MODIFIED="1788124987078" TEXT="dadurch l&#xf6;sen sich die meisten Probleme mit der Typ-Registrierung von selber">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn sich die Praxis etablieren l&#228;&#223;t, die meisten Parameter von einem Prototypen zu erstellen, dann kann man die meiste <i>elaborierte Registrierungs-Logik einfach weglassen!</i>&#160;F&#252;r einen von grund auf neu definierten Typ wird einfach ein neuer Registry-Eintrag hinzugef&#252;gt, wohingegen ein vom Prototypen erstellter Parameter die bestehende Registrierung einfach &#252;bernimmt. Scale-&#196;nderungen werden dann CoW.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788127790887" ID="ID_85520564" MODIFIED="1788127827446" TEXT="Scales/Typen werden einfach definiert und nie freigegeben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wodurch viel zustandsbehaftete Logik wegf&#228;llt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1788125003779" ID="ID_1750350767" MODIFIED="1788125413347" TEXT="(dynamische) Provision">
+<node CREATED="1788125418166" ID="ID_1175365111" MODIFIED="1788125431416" TEXT="erfordert weiteren &#xbb;Slot&#xab; f&#xfc;r ein Delegate"/>
+<node CREATED="1788125433044" ID="ID_1645927982" MODIFIED="1788125584627" TEXT="das k&#xf6;nnte man per Lookup-via-Index-ID einsparen">
+<icon BUILTIN="idea"/>
+<node CREATED="1788125453234" ID="ID_1226887995" MODIFIED="1788125754749" TEXT="im ID-Wort ist gewi&#xdf; noch Platz">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      selbst im Extermfall erwarte ich nicht mehr als ein paar tausend Scales (vermutlich ehr ein paar hundert); mithin w&#228;re locker Platz f&#252;r tausende verschiedener Automations-Quellen gegeben
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788125756726" ID="ID_1322874999" MODIFIED="1788126669568" TEXT="Allokations/Lifecycle-Management ist ohnehin n&#xf6;tig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar, weil wir es nicht wollen, da&#223; die Engine auf aktuelle Definitionen im Model &#187;durchgreift&#171;. Im Sinne moderner Architekturen und zunehmender Parallelisierung w&#228;re das nicht (mehr) w&#252;nschenswert; stattdessen wird jede &#196;nderung durch den Builder propagiert und als eine neue Provision-Instanz realisiert. Das hat zur Konsequenz, da&#223; fortlaufend die nicht mehr ben&#246;tigten Eintr&#228;ge aufger&#228;umt werden m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788126827253" ID="ID_413737202" MODIFIED="1788126833733" TEXT="hier sind viele Fragen offen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1788126836356" ID="ID_543248543" MODIFIED="1788127747207" TEXT="Grad der Deduplikation (vermutlich gering)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Meine erste Einsch&#228;tzung ist, da&#223; eine Automation typischerweise f&#252;r genau einen Parameter zum Einsatz kommt; es k&#246;nnten allerdings mehrere Automationen zusammengef&#252;hrt werden zu einem Gesamtresultat. Insofern h&#228;ngt die Zahl der Mehrfachverwendung nur daran, wie h&#228;ufig Parameter-Deskriptoren im Zuge der normalen Verarbeitung einfach kopiert werden; da sie <i>prinzipiell kopierbar sind,</i>&#160;ist ja der springende Punkt da&#223; man darauf gar nicht achten mu&#223;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788127855920" ID="ID_399246450" MODIFIED="1788127867170" TEXT="hier wird dann eine Art usage-Tracking notwendig"/>
+<node CREATED="1788128267997" ID="ID_1120706977" MODIFIED="1788129171221" TEXT="sehr wahrscheinlich Segment-&#xfc;bergreifend">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das ist eigentlich eine grunds&#228;tzliche Frage: inwiefern k&#246;nnen wir uns die Replikation per Segment der Timeline eigentlich &#187;leisten&#171;? Bei den Render-Nodes erscheint das zun&#228;chst plausibel, da sich ja (meistens) die Topologie &#228;ndert; grunds&#228;tzlich w&#228;re aber auch bei Render-Nodes eine deduplikation denkbar. F&#252;r Parameter gilt das umso mehr, da hier i.d.R eine die ganze Nutzdauer &#252;bergreifende Automation eingesetzt wird. Man k&#246;nnte nun auch diese einfach per Segment replizieren &#8212; oder, falls man deduplizieren m&#246;chte/mu&#223;, dann w&#228;re die Lebensdauer-Steuerung per Segment insgesamt hinf&#228;llig, oder es w&#228;re zumindest eine Mapping-Tabelle notwendig, die dann wieder das Problem mit den Locks aufwirft. Und zu allem &#220;berflu&#223; ist das ganze Thema mit der Lebensdauer von Rendervorg&#228;ngen f&#252;r mich im aktuellen Entwicklungsstand &#252;berhaupt nicht recht greifbar &#8212; ich kann nur spekulieren
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#87495d" DESTINATION="ID_443010014" ENDARROW="Default" ENDINCLINATION="45;0;" ID="Arrow_ID_686248831" STARTARROW="None" STARTINCLINATION="49;3;"/>
+</node>
+</node>
+</node>
+<node CREATED="1788128657297" ID="ID_58158724" MODIFIED="1788128677324" TEXT="die Abw&#xe4;rung bez&#xfc;glich des &#xbb;Slot&#xab; ist schwierig">
+<node CREATED="1788128678895" ID="ID_1724037566" MODIFIED="1788128932437" TEXT="es ist n&#xe4;mlich so: meistens haben wir den &#xbb;&#xfc;ber&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich gehe derzeit davon aus, 4 &#187;Slots&#171; f&#252;r den Param-Deskriptor zu reservieren: einer f&#252;r die VTable, einer f&#252;r das ID-Wort, und zwei f&#252;r die Daten. Allerdings reicht f&#252;r <i>alle einfachen Datenwerte</i>&#160; tat&#228;chlich ein einziger 64bit-Slot aus. Zwei &#187;Slots&#171; w&#252;rden h&#246;chstens sowas wie ein Datentupel erm&#246;glichen (und ich wei&#223; nicht recht, wof&#252;r das gut sein soll, komplexe Zahlen? oder ein 128bit-Float?); ein einfacher Farbwert allerdings w&#252;rde dann schon drei &#187;Slots&#171; verlangen..
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788128936413" ID="ID_443010014" MODIFIED="1788129715097" TEXT="Wegem dem Lebensdauer-Problem m&#xfc;&#xdf;te jede Provision trotzdem noch registriert sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...die einzige L&#246;sung, die mir einf&#228;lt, und die dann <i>nicht doch wieder</i>&#160;auf ein Lock hinausl&#228;uft, ist ein &#187;Water-Level&#171;. Also so &#228;hnlich wie die Deadline-basierte Freigabe im Block-Flow (f&#252;r den Scheduler). Und das Beispiel zeigt auch schon die T&#252;cken, das macht nur Sinn, wenn es f&#252;r jeden Eintrag eine garantierte Obsoleszenz gibt &#8212; andernfalls hat man dann am Ende doch wieder eine Garbage-Collection
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#87495d" DESTINATION="ID_443010014" ENDARROW="Default" ENDINCLINATION="45;0;" ID="Arrow_ID_686248831" SOURCE="ID_1120706977" STARTARROW="None" STARTINCLINATION="49;3;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788129716764" ID="ID_343414538" MODIFIED="1788129730565" TEXT="und das Thema &#xbb;Live-Updates&#xab; ist auch noch nicht gel&#xf6;st">
+<node CREATED="1788129761040" ID="ID_1696845372" MODIFIED="1788129773312" TEXT="welche &#xc4;nderung macht einen vollen re-Build notwendig?"/>
+<node CREATED="1788129885357" ID="ID_1434392437" MODIFIED="1788130018339" TEXT="wie erkennt man &#xbb;Parameter-Tweaking&#xab; auf einer Automationskurve?">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es ist durchaus &#252;blich, einen Abschnitt auf der Kurve zu markieren, und dann wie einen Regler zu verschieben; dabei erwartet man sich einen &#187;fliegenden Feedback&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788130099629" ID="ID_1121769984" MODIFIED="1788130118456" TEXT="demnach w&#xe4;re doch eine Art &#xbb;Update-Link&#xab; notwendig">
+<node CREATED="1788130156784" ID="ID_1232376846" MODIFIED="1788130365560" TEXT="entweder per &#xbb;push&#xab; via Builder">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      insofern der Builder eine <i>Projektion</i>&#160;darstellt im Sinne von CQRS, m&#252;&#223;te dieser beim Verarbeiten eines &#196;nderungs-Events &#187;irgendwie&#171; wissen, wohin er die &#196;nderungen in das bestehende low-level-Model propagieren soll; wir br&#228;uchten sowas wie Patch-Tables
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788130167140" ID="ID_1041001" MODIFIED="1788130696470" TEXT="oder ein pull-Link zur Quelle mit Gate">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hierzu m&#252;&#223;te man in die Automationsquelle einen Update-Mechanismus einbauen, der jeweils an einer Gate-Flag erkennt, ob er die Automations-Definition aktualisieren soll, bevor er sie auswertet; das Gate w&#228;re dann letztlich wieder ein atomic-Lock (aber insofern akzeptabel, da es ja einfach ein Update sperrt, wenn die Quelle grade ge&#228;ndert wird, was kein sequentially-consistent erfordert)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788134593358" ID="ID_1016556321" MODIFIED="1788134673400" TEXT="oder ein double-buffer-Flip">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wenn ein Update beginnt, wird der alte Wert erhalten, und der neue Wert im alternativen Segment modifiziert; nach Abschlu&#223; der Modifikation wechseln beide Segmente ihre Rolle, wof&#252;r eine automic-Flag umgeschaltet wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788134814041" ID="ID_1710427131" MODIFIED="1788134854822" TEXT="damit entsteht jedoch eine Abh&#xe4;ngigkeit zur Storage einer Model-Projektion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und das verletzt die eigentlich beabsichtigte Segregation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788134710727" ID="ID_1291927782" MODIFIED="1788134735237" TEXT="je nach Umst&#xe4;nden m&#xfc;&#xdf;te der Builder einen Snapshot verwenden &#x2014; oder eine Live-Quelle"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1788134498338" ID="ID_1724790941" MODIFIED="1788134506949" TEXT="diesen Knoten durchhauen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1788134510146" ID="ID_963983986" MODIFIED="1788134518948" TEXT="wir speichern einen direkten Pointer und gut is"/>
+<node CREATED="1788134546116" ID="ID_815336392" MODIFIED="1788134558311" TEXT="die Quell-Provision wird nicht vom Konsumenten gemanaged"/>
+<node CREATED="1788134521733" ID="ID_842811959" MODIFIED="1788134537999" TEXT="das Thema Lifecycle und Updates wird vertagt"/>
+</node>
+</node>
+<node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">
+<node CREATED="1788134893182" ID="ID_1219540786" MODIFIED="1788134948392" TEXT="naheliegend: statischer Einsteieg vom Parameter-Frontend">
+<node CREATED="1788134968239" ID="ID_217011834" MODIFIED="1788134998930" TEXT="Parameter::from(prototype).build()"/>
+<node CREATED="1788135001263" ID="ID_1167839145" MODIFIED="1788135020288" TEXT="Parameter::forType&lt;T&gt;(). ... .build()"/>
+</node>
+<node CREATED="1788135032731" ID="ID_639767157" MODIFIED="1788135045733" TEXT="das bedeutet: einen transienten ParamBuilder">
+<node CREATED="1788135048120" ID="ID_1497630712" MODIFIED="1788135141162" TEXT="hier klar definiertes build()-Terminal sinnvoll">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      in C++ kann man auch eine Builder-Notation per Typ-Konversion realisieren, was oft elegant ist, aber auch zweideutig; in vielen F&#228;llen ist es letztlich doch besser, eine klare Klammer-Struktur zu erzeugen, mit einer terminal-Instruktion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788196981983" ID="ID_832309415" MODIFIED="1788197050345" TEXT="erst dort kann &#xfc;ber den konkreten Typ-Aufbau entschieden werden">
+<linktarget COLOR="#4a3c9d" DESTINATION="ID_832309415" ENDARROW="Default" ENDINCLINATION="-1088;45;" ID="Arrow_ID_331072636" SOURCE="ID_97985230" STARTARROW="None" STARTINCLINATION="-455;17;"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -84955,7 +85535,7 @@
           
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/&ast;* </font><font color="#b76746">@internal</font><font color="#b88b63">&#160;extension point</font>
+          <font color="#b88b63">/&#42;* </font><font color="#b76746">@internal</font><font color="#b88b63">&#160;extension point</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#b88b63">* Create the environment for rendering a connected and related set of output streams.</font>
@@ -93738,6 +94318,16 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
   </body>
 </html></richcontent>
 </node>
+</node>
+<node CREATED="1787782196830" ID="ID_1882254369" MODIFIED="1787782680346" TEXT="Stand 2026: Konvergenz auf Model-3">
+<arrowlink COLOR="#263ebf" DESTINATION="ID_783680177" ENDARROW="Default" ENDINCLINATION="-298;-1485;" ID="Arrow_ID_924644255" STARTARROW="None" STARTINCLINATION="-1971;151;"/>
+<node CREATED="1787782211788" ID="ID_1456395675" MODIFIED="1787782238986" TEXT="es werden aber die gut treffenden Aspekte aus allen Modellen zusammengenommen"/>
+<node CREATED="1787782247191" ID="ID_566078078" MODIFIED="1787782275324" TEXT="die Differenzierung von OutputDesignation &#x27fc; ModelPort passiert bereits im Build-Vorgang"/>
+<node CREATED="1787782283346" ID="ID_1613206497" MODIFIED="1787782312902" TEXT="es gibt nur die aktuell tats&#xe4;chlich spielbaren ModelPorts (die aber differenziert sind)"/>
+<node CREATED="1787782334875" ID="ID_75413520" MODIFIED="1787782358805" TEXT="die ModelViewActivation &#x27f6; und damit der Play-Proze&#xdf; legt die Differenzierung fest"/>
+<node CREATED="1787782360764" ID="ID_1324426658" MODIFIED="1787782423428" TEXT="f&#xfc;r jeden ModelPort gibt es pro Segment eine Exit-Node und ein JobTicket"/>
+<node CREATED="1787782437437" ID="ID_359895895" MODIFIED="1787782454887" TEXT="der konkrete Job tr&#xe4;gt die Differenzierung &#x27f6; ExitNode &#x27f6; NodePort"/>
+<node CREATED="1787782482356" ID="ID_1027802568" MODIFIED="1787782509976" TEXT="zum Play-Prozess gibt es einen OutputContext &#x2014; mit Parameter-Binding"/>
 </node>
 </node>
 <node CREATED="1718840198722" ID="ID_821758494" MODIFIED="1782318901343" TEXT="Fazit (1:N)">
@@ -114966,7 +115556,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <linktarget COLOR="#0d72c9" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="-305;1295;" ID="Arrow_ID_1179454576" SOURCE="ID_570229743" STARTARROW="None" STARTINCLINATION="-2295;138;"/>
 <icon BUILTIN="smily_bad"/>
 <node COLOR="#338800" CREATED="1733082597960" FOLDED="true" ID="ID_51687123" MODIFIED="1736113113105" TEXT="Skizze ins Unreine">
-<linktarget COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" SOURCE="ID_354667146" STARTARROW="None" STARTINCLINATION="1670;84;"/>
+<linktarget COLOR="#e3fdb6" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="906;-2726;" ID="Arrow_ID_919544052" SOURCE="ID_354667146" STARTARROW="None" STARTINCLINATION="1653;85;"/>
 <linktarget COLOR="#fddab2" DESTINATION="ID_51687123" ENDARROW="Default" ENDINCLINATION="-264;821;" ID="Arrow_ID_117441899" SOURCE="ID_1596041137" STARTARROW="None" STARTINCLINATION="672;-66;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1733084053391" ID="ID_903308136" MODIFIED="1733084076106" TEXT="Parameter">
@@ -115509,6 +116099,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node COLOR="#275d45" CREATED="1736112959549" ID="ID_1587917628" MODIFIED="1736113101911" TEXT="Konsequenzen in den bestehenden Code einarbeiten">
 <arrowlink COLOR="#37577e" DESTINATION="ID_1845131159" ENDARROW="Default" ENDINCLINATION="-694;683;" ID="Arrow_ID_231835575" STARTARROW="None" STARTINCLINATION="-793;-1343;"/>
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#3a637f" CREATED="1787783277029" ID="ID_325266754" MODIFIED="1787783397317" TEXT="Sommer 26: Implementierungs-Skizze: Parameter(Deskriptor)">
+<arrowlink COLOR="#b9fee2" DESTINATION="ID_618035658" ENDARROW="Default" ENDINCLINATION="-1739;116;" ID="Arrow_ID_568004595" STARTARROW="None" STARTINCLINATION="1348;60;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1733430901935" ID="ID_1092181172" MODIFIED="1736090979216" TEXT="brauche Parameter-Darstellung f&#xfc;r den Level-2-Builder">
@@ -119675,7 +120269,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </html></richcontent>
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1782597147062" ID="ID_861330220" MODIFIED="1782597356575">
+<node CREATED="1782597147062" ID="ID_861330220" MODIFIED="1782597147062">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -119688,7 +120282,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   <head/>
   <body>
     <p>
-      Denn die Gefahr w&#228;re zu gro&#223;, da&#223; irgendjemand das dann als General-Koordinate f&#252;r alles hernimmt &#8212; und den Unterschied zwischen Ausgabe-Grid und Source-Koordinaten per Machtspruch unter den Teppich kehrt. Man darf den all den Schwachmaten dieser Welt auch keinen kleinen Finger geben....
+      Denn die Gefahr w&#228;re zu gro&#223;, da&#223; irgendjemand das dann als General-Koordinate f&#252;r alles hernimmt &#8212; und den Unterschied zwischen Ausgabe-Grid und Source-Koordinaten per Machtspruch unter den Teppich kehrt. Man darf all den Schwachmaten dieser Welt auch keinen kleinen Finger geben....
     </p>
   </body>
 </html></richcontent>
@@ -119823,7 +120417,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782662062990" ID="ID_1868130509" MODIFIED="1782662161072">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1782662062990" ID="ID_1868130509" MODIFIED="1782662062990">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -119975,8 +120569,18 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <node CREATED="1782675147049" ID="ID_1241119008" MODIFIED="1782675167162" TEXT="Prinzip mu&#xdf; sein: so fr&#xfc;h wie m&#xf6;glich regeln"/>
 <node CREATED="1782675168522" ID="ID_1018162340" MODIFIED="1782675225039" TEXT="somit verbleibt die essentielle Flexibilit&#xe4;t zur Laufzeit">
 <node CREATED="1782675237725" ID="ID_910424543" MODIFIED="1782675240084" TEXT="Cache"/>
-<node CREATED="1782675241021" ID="ID_436947091" MODIFIED="1782675252478" TEXT="IO + Deaslines"/>
+<node CREATED="1782675241021" ID="ID_436947091" MODIFIED="1782675241021" TEXT="IO + Deadlines"/>
 <node CREATED="1782675253462" ID="ID_60833418" MODIFIED="1782675258149" TEXT="dynamischer Playback"/>
+<node CREATED="1787763302819" ID="ID_1286446563" MODIFIED="1787763330135" TEXT="dynamisch steuerbare Parameter">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Mute/Solo, Probe-Points, Automation
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1782675189763" ID="ID_31553364" MODIFIED="1782675205332" TEXT="Services veringern Komplexit&#xe4;t, solange sie generisch bleiben"/>
 </node>
@@ -120060,7 +120664,8 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 </node>
-<node CREATED="1782696193706" ID="ID_783680177" MODIFIED="1782696201795" TEXT="Struktur und Zusammenhang der Parameter">
+<node CREATED="1782696193706" ID="ID_783680177" MODIFIED="1787782680347" TEXT="Struktur und Zusammenhang der Parameter">
+<linktarget COLOR="#263ebf" DESTINATION="ID_783680177" ENDARROW="Default" ENDINCLINATION="-298;-1485;" ID="Arrow_ID_924644255" SOURCE="ID_1882254369" STARTARROW="None" STARTINCLINATION="-1971;151;"/>
 <node CREATED="1782696206345" ID="ID_965994105" MODIFIED="1782696233649" TEXT="JobFunktor und nominal-time sind explizit"/>
 <node CREATED="1782696274560" ID="ID_328444825" MODIFIED="1782696294224" TEXT="ModelPort wird vom Dispatcher aufgel&#xf6;st">
 <node CREATED="1782696452527" ID="ID_1043505521" LINK="#ID_495533677" MODIFIED="1782696496821" TEXT="folge Struktur-L&#xf6;sung-3">
@@ -120095,7 +120700,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1782697045785" ID="ID_744539376" MODIFIED="1782697083037" TEXT="f&#xfc;r jeden ModelPort gibt es eine ExitNode">
+<node CREATED="1782697045785" ID="ID_744539376" MODIFIED="1782697045785" TEXT="f&#xfc;r jeden ModelPort gibt es eine ExitNode">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -120202,7 +120807,31 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 </node>
 <node CREATED="1782750562197" ID="ID_873040349" MODIFIED="1782750586341" TEXT="enth&#xe4;lt die Spielart des ModelPort als freier Parameter"/>
-<node CREATED="1782750588371" ID="ID_1804668463" MODIFIED="1782750614762" TEXT="kann eine Map mit weiteren Parametern enthalten"/>
+<node CREATED="1782750588371" ID="ID_1804668463" MODIFIED="1782750614762" TEXT="kann eine Map mit weiteren Parametern enthalten">
+<node CREATED="1787782793830" ID="ID_805920893" MODIFIED="1787782835264" TEXT="diese werden via Turnout-System gebunden">
+<arrowlink COLOR="#cee4fd" DESTINATION="ID_570229743" ENDARROW="Default" ENDINCLINATION="254;-18;" ID="Arrow_ID_871042637" STARTARROW="None" STARTINCLINATION="370;24;"/>
+</node>
+<node CREATED="1787782849269" ID="ID_1682058036" MODIFIED="1787783147385" TEXT="Parameter sind Funktoren (Pull-Prinzip)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das erm&#246;glicht es, Parameter zu kopieren (shallow-copy), aber auch eine bestimmte Version der Funktion f&#252;r einen Build-Zustand festzulegen (d.h. Zugriff ist ein DAG), w&#228;hrend eine andere Version im GUI bereits weiter ver&#228;ndert wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1787782862181" HGAP="60" ID="ID_1037016655" MODIFIED="1787782957258" TEXT="enthalten aber auch einen Basis-Wert" VSHIFT="-3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...dieser Wert gilt, wenn keine Qualifikation per nominal-time erfolgt; das bedeutet, die Automation <i>beaufschlagt</i>&#160;diesen Basis-Wert mit einer zeitabh&#228;ngigken Modifikation
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1782750617909" ID="ID_1929677175" MODIFIED="1782750628775" TEXT="im Gegenzug w&#xe4;re dann keine Proze&#xdf;-ID mehr notwendig">
 <node CREATED="1782751339818" ID="ID_337291090" MODIFIED="1782751952404" TEXT="damit wird die InvocationInstanceID letztlich &#xfc;berfl&#xfc;ssig">
@@ -120270,6 +120899,10 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
   </body>
 </html></richcontent>
 <arrowlink COLOR="#0d72c9" DESTINATION="ID_14036913" ENDARROW="Default" ENDINCLINATION="-305;1295;" ID="Arrow_ID_1179454576" STARTARROW="None" STARTINCLINATION="-2295;138;"/>
+<linktarget COLOR="#cee4fd" DESTINATION="ID_570229743" ENDARROW="Default" ENDINCLINATION="254;-18;" ID="Arrow_ID_871042637" SOURCE="ID_805920893" STARTARROW="None" STARTINCLINATION="370;24;"/>
+<node COLOR="#31677c" CREATED="1787784066855" HGAP="36" ID="ID_384932628" LINK="#ID_1779718376" MODIFIED="1787784131254" TEXT="Design-Skizze" VSHIFT="8">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 </node>
 </node>
@@ -181796,7 +182429,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   <head/>
   <body>
     <p>
-      /&ast;
+      /&#42;
     </p>
     <p>
       &#160;* Gadgets are 'next-generation widgets' - they combine a CSS node
@@ -186566,7 +187199,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
   <head/>
   <body>
     <p>
-      also keine &quot;Banner&quot; aus Sternen.<br />Abhilfe: /*********************//&ast;*
+      also keine &quot;Banner&quot; aus Sternen.<br />Abhilfe: /*********************//&#42;*
     </p>
   </body>
 </html></richcontent>
@@ -187577,7 +188210,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
       <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;filter out files when building tarballs </font>
     </p>
     <p>
-      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(defaults to: -I*.a -I*.la -I*.o -I*.so -I.*.sw? -I&ast;/&ast;~ -I,,* -I.[#~]* -I.arch-ids -I.arch-inventory -I.be -I.bzr -I.bzr.backup -I.bzr.tags -I.bzrignore -I.cvsignore -I.deps -I.git -I.gitattributes -I.gitignore -I.gitmodules -I.gitreview -I.hg -I.hgignore -I.hgsigs -I.hgtags -I.mailmap -I.mtn-ignore -I.shelf -I.svn -ICVS -IDEADJOE -IRCS -I_MTN -I_darcs -I{arch}). </font>
+      <font face="Monospaced" size="2" color="#32177f">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(defaults to: -I*.a -I*.la -I*.o -I*.so -I.*.sw? -I&#42;/&#42;~ -I,,* -I.[#~]* -I.arch-ids -I.arch-inventory -I.be -I.bzr -I.bzr.backup -I.bzr.tags -I.bzrignore -I.cvsignore -I.deps -I.git -I.gitattributes -I.gitignore -I.gitmodules -I.gitreview -I.hg -I.hgignore -I.hgsigs -I.hgtags -I.mailmap -I.mtn-ignore -I.shelf -I.svn -ICVS -IDEADJOE -IRCS -I_MTN -I_darcs -I{arch}). </font>
     </p>
   </body>
 </html></richcontent>
@@ -188074,8 +188707,8 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 </html></richcontent>
 </node>
 <node CREATED="1783091204417" ID="ID_497644225" MODIFIED="1783091237042" TEXT="Werte dagegen sind sch&#xf6;n &#xbb;sauber&#xab; aber implizieren ein externalisiertes Deutungsschema"/>
-<node CREATED="1783091263541" ID="ID_936945076" MODIFIED="1783091373689" TEXT="symbolische Repr&#xe4;sentation liegt zwischen diesen beiden Extremen">
-<arrowlink COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2603;104;" ID="Arrow_ID_1457907870" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
+<node CREATED="1783091263541" ID="ID_936945076" MODIFIED="1788013855576" TEXT="symbolische Repr&#xe4;sentation liegt zwischen diesen beiden Extremen">
+<arrowlink COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2605;103;" ID="Arrow_ID_1457907870" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
 </node>
 </node>
 </node>
@@ -215758,7 +216391,7 @@ Since then others have made contributions, see the log for the history.</font></
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/&ast;* derive total ordering from base class &ast;/</font>
+          <font color="#b88b63">/&#42;* derive total ordering from base class &#42;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#535773">std</font><font color="#65533c">::</font><font color="#59253b">strong_ordering</font><font color="#3a1f18">&#160;</font><font color="#632d2d"><b>operator&lt;=&gt;</b></font><font color="#11123a">(</font><font color="#635e96"><b>FrameRate</b></font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#11123a">)</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>default</b></font><font color="#65533c">;</font>
@@ -216591,7 +217224,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#4a2626">src/vault/gear/work-force.cpp:69:43: warning: '++' expression of 'volatile'-qualified type is deprecated [-Wvolatile]</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#4a2626">69 | for (</font><font color="#d5054c">volatile size_t</font><font color="#4a2626">&#160;i=0; i&lt;degree; ++i) {/&ast;SPIN&ast;/}</font>
+          <font color="#4a2626">69 | for (</font><font color="#d5054c">volatile size_t</font><font color="#4a2626">&#160;i=0; i&lt;degree; ++i) {/&#42;SPIN&#42;/}</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           
@@ -216976,7 +217609,7 @@ Since then others have made contributions, see the log for the history.</font></
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/&ast;*</font>
+          <font color="#b88b63">/&#42;*</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#b88b63">* Identification tuple for addressing frames unambiguously.</font>
@@ -216997,7 +217630,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#b88b63">* be replaced by a combined C/C++ header</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">&ast;/</font>
+          <font color="#b88b63">&#42;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>FrameID</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">:</font><font color="#3a1f18">&#160;</font><font color="#535773">boost</font><font color="#65533c">::</font><font color="#635e96"><b>totally_ordered</b></font><font color="#65533c">&lt;</font><font color="#635e96"><b>FrameID</b></font><font color="#65533c">&gt;</font><font color="#3a1f18">&#160; </font><font color="#ab815c">////////////</font><font color="#7f9fbf"><b>TODO</b></font><font color="#ab815c">&#160;it seems we don't need total ordering, only comparison. Clarify this!</font>
@@ -217747,7 +218380,7 @@ Since then others have made contributions, see the log for the history.</font></
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: Bitstream Vera Sans Mono; font-size: 9pt; white-space: pre">
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">/&ast;*</font>
+          <font color="#b88b63">/&#42;*</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#b88b63">* copy-initialise (or convert) from the given Mutator instance.</font>
@@ -217783,7 +218416,7 @@ Since then others have made contributions, see the log for the history.</font></
           <font color="#b88b63">* which in turn becomes the only child of the new Record.</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
-          <font color="#b88b63">&ast;/</font>
+          <font color="#b88b63">&#42;/</font>
         </p>
         <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
           <font color="#632d2d"><b>Record</b></font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#635e96"><b>Mutator</b></font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>const</b></font><font color="#65533c">&amp;</font><font color="#3a1f18">&#160; mut</font><font color="#11123a">)</font>
@@ -218680,7 +219313,7 @@ Since then others have made contributions, see the log for the history.</font></
   <head/>
   <body>
     <p>
-      env.GuiResource(f) for f in env.Glob('stage/&ast;.css')
+      env.GuiResource(f) for f in env.Glob('stage/&#42;.css')
     </p>
   </body>
 </html></richcontent>
@@ -220758,7 +221391,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
   <head/>
   <body>
     <p>
-      <font face="Monospaced">/&ast; </font>
+      <font face="Monospaced">/&#42; </font>
     </p>
     <p>
       <font face="Monospaced">&#160;&#160;INDEX-ITER.hpp&#160;&#160;-&#160;&#160;iterator with indexed random-access to referred container </font>
@@ -220791,7 +221424,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
       
     </p>
     <p>
-      <font face="Monospaced">&ast;/ </font>
+      <font face="Monospaced">&#42;/ </font>
     </p>
   </body>
 </html></richcontent>
