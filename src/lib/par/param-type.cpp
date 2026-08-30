@@ -1,5 +1,5 @@
 /*
-  ParamType  -  parameter scale and type descriptor
+  ParamType  -  parameter type record including domain and scale
 
    Copyright (C)
      2026             Hermann Vosseler <Ichthyostega@web.de>
