@@ -171,7 +171,7 @@ namespace test{
         }
       
       
-      /** @test various ways to build an populate the container
+      /** @test various ways to build and populate the container
        *      - with a defined interface type \a I, instances of arbitrary subclasses
        *        can be added, assuming there is sufficient pre-allocated buffer space;
        *        all these subclass instances are accessed through the common interface.

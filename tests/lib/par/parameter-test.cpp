@@ -76,6 +76,14 @@ namespace test{
       void
       simpleUsage()
         {
+          Parameter par = Parameter::forType<int>().build();
+          CHECK (0 == par.getVal<int>());
+          
+          par.setVal (12.3);
+          CHECK (12 == par.getVal<int>());
+          CHECK (12u == par.getVal<uint64_t>());
+          CHECK (12.0 == par.getVal<double>());
+          CHECK (true == par.getVal<bool>());
         }
       
       

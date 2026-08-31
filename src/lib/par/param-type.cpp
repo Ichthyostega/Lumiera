@@ -21,6 +21,7 @@
 
 #include "lib/error.hpp"
 #include "lib/par/parameter.hpp"
+#include "lib/par/provision.hpp"
 #include "lib/par/param-type.hpp"
 
 namespace lib {
@@ -28,8 +29,7 @@ namespace par {
   
   
   /* emit VTables in this translation unit... */
-  
-  ParamType::~ParamType() { }
+  Provision::~Provision() { }
   Domain::~Domain() { }
   
   

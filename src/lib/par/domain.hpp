@@ -37,6 +37,7 @@
 #include "lib/meta/typelist.hpp"
 //#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/par/provision.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
@@ -53,7 +54,6 @@ namespace par {
   using std::numeric_limits;
   
   
-  struct ValBuff { /*placeholder*/ };
   
   template<typename X>
   constexpr inline ValBuff&
@@ -109,7 +109,7 @@ namespace par {
                                ,bool
                                >;
   /** build a generic visitor interface for all types in list */
-  using TypeHandlerInterface = meta::InstantiateForEach<BaseTypes::List, TypeHandler>;
+  using TypeHandlerInterface = meta::InstantiateForEach<BaseTypes::List, TypeHandler, Provision>;
   
   
   /**

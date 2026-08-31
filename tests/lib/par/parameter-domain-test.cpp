@@ -184,6 +184,7 @@ namespace test{
       verify_valueAccess()
         {
           BaseDomain<int> domInt;
+SHOW_EXPR(sizeof(BaseDomain<int>)) ///////////////////////////////////////TODO this should be only one »slot«, but is actually quite large, due to using multiple inheritance in the Domain interface. /////OOO fix that!
           Domain& dom{domInt};
           
           int val = 1 + rani (1000);

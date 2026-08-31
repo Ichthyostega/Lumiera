@@ -25,12 +25,15 @@
 #define LIB_PAR_PROVISION_H
 
 
-#include "lib/par/param-type.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 namespace lib {
 namespace par {
   
+  using time::Time;
+  
+  struct ValBuff { /*placeholder*/ };
   
   
   /**
@@ -40,11 +43,22 @@ namespace par {
    * and assigned, while the current time-based value is the result of evaluation.
    * Any parameter value is associated to a ParamType that defines the underlying
    * value domain and possibly a scale with range limits and metric constraints.
+   * @remark the value access and manipulation works _backwards_ from an implicit
+   *         value that is conceptually located _within_ this provision towards
+   *         an ValBuff for external access. The reason for this indirect
+   *         formulation is that the »value« is assumed to comply to some data type,
+   *         which however remains an opaque internal detail and is not disclosed.
    */
   class Provision
     {
     public:
       virtual ~Provision();  ///< this is an interface
+      
+      virtual void retrieveInto (ValBuff&)  const { /*NOP*/ }
+      virtual void pullAt (Time, ValBuff&)  const { /*NOP*/ }
+      virtual void setValFrom (ValBuff const&)    { /*NOP*/ }
+      virtual void connect (Provision&)           { /*NOP*/ }
+      virtual void disconnnect()                  { /*NOP*/ }
     };
   
   

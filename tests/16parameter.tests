@@ -7,6 +7,11 @@ return: 0
 END
 
 
-PLANNED "Parameter Domain Type" ParameterDomain_test << END
+TEST "Parameter Domain Type" ParameterDomain_test << END
+return: 0
+END
+
+
+PLANNED "Parameter Provision" ParameterProvision_test << END
 return: 0
 END
