@@ -50,7 +50,7 @@ namespace test{
   
   
   /**************************************************************************//**
-   * @test document behaviour of paramter value provision and automation.
+   * @test document behaviour of parameter value provision and automation.
    */
   class ParameterProvision_test : public Test
     {

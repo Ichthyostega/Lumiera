@@ -43,13 +43,57 @@ namespace par {
   class Parameter
     {
     public:
+      class Builder;
+      
       template<typename VAL>
-      VAL get();
+      VAL getVal();
+      
+      template<typename VAL>
+      void setVal (VAL&&);
+      
+      /* === Builder API === */
+      
+      template<typename VAL>
+      static Builder forType();
       
     protected:
       
     };
   
+  
+  class Parameter::Builder
+    {
+    public:
+      Parameter
+      build()
+        {
+          UNIMPLEMENTED ("terminal builder operation: package a disposition into the Parameter");
+        }
+    };
+  
+  
+  template<typename VAL>
+  Parameter::Builder
+  Parameter::forType()
+    {
+      UNIMPLEMENTED ("how to setup the base type configuration? do we need a type parameter in the Builder class?");
+    }
+  
+  
+  template<typename VAL>
+  VAL
+  Parameter::getVal()
+    {
+      UNIMPLEMENTED ("extract the »value«, possibly applying suitable type conversions");
+    }
+  
+  
+  template<typename VAL>
+  void
+  Parameter::setVal (VAL&& changedVal)
+    {
+      UNIMPLEMENTED ("apply suitable type conversions and clamping, then transfer the new value into the Provision interface");
+    }
   
   
 }} // namespace lib::par

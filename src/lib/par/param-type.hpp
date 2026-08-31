@@ -42,9 +42,9 @@ namespace par {
    * Furthermore, the interface exposes allowed conversion and conforming operations.
    */
   class ParamType
+    : public Domain
     {
     public:
-      virtual ~ParamType();  ///< this is an interface
     };
   
   

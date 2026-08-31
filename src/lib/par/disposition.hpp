@@ -26,8 +26,8 @@
 #define LIB_PAR_DISPOSITION_H
 
 
-#include "lib/par/domain.hpp"
 #include "lib/par/provision.hpp"
+#include "lib/par/param-type.hpp"
 
 
 namespace lib {
@@ -41,6 +41,7 @@ namespace par {
    * notation and stored within the Parameter object (as a container).
    */
   class Disposition
+    : public ParamType
     {
     public:
     };

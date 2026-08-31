@@ -82647,8 +82647,8 @@
 <icon BUILTIN="help"/>
 <node CREATED="1783087038084" ID="ID_192113507" MODIFIED="1783087050833" TEXT="ein Parameter ist nicht unbedingt ein &#xbb;Value&#xab;"/>
 <node CREATED="1783087061644" ID="ID_529127857" MODIFIED="1788013904753" TEXT="Einsicht: Symbolische Repr&#xe4;sentationen liegen oft in einem Zwischenfeld">
-<linktarget COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2605;103;" ID="Arrow_ID_1457907870" SOURCE="ID_936945076" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
 <linktarget COLOR="#3367d0" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-692;29;" ID="Arrow_ID_1675730537" SOURCE="ID_1229358137" STARTARROW="None" STARTINCLINATION="-183;13;"/>
+<linktarget COLOR="#3780d5" DESTINATION="ID_529127857" ENDARROW="Default" ENDINCLINATION="-2605;103;" ID="Arrow_ID_1457907870" SOURCE="ID_936945076" STARTARROW="Default" STARTINCLINATION="-1651;72;"/>
 <node CREATED="1783087081345" ID="ID_909620394" MODIFIED="1783087087812" TEXT="Beispiel: eine M&#xfc;nze">
 <node CREATED="1783087094301" ID="ID_1763897712" MODIFIED="1783087102346" TEXT="wir behandeln sie zwar als fungibel"/>
 <node CREATED="1783087105729" ID="ID_167575054" MODIFIED="1783090315462">
@@ -83116,6 +83116,58 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788209315295" ID="ID_279904556" MODIFIED="1788210268056" TEXT="VTables bl&#xe4;hen sich auf">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1788209326125" ID="ID_1531181426" MODIFIED="1788209343878" TEXT="Mix-in &#x27f9; schlie&#xdf;t jedes Sub-Objekt komplett mit ein">
+<node CREATED="1788210282924" ID="ID_1520344652" MODIFIED="1788210493326" TEXT="zwar gibt C++ keinerlei Garantien zum Daten-Layout (au&#xdf;er f&#xfc;r PODs)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das hei&#223;t, meine ganzen Argumente bzgl &#187;Slots&#171; f&#252;r die VTable sind eigentlich nicht durch den Standard gedeckt; sie sind aber insofern fundiert, da C++ keine <i>Penalty f&#252;r nicht verwendete Features</i>&#160; erlaubt &#8212; und insofern kann es keine Layout-&#187;Optimierung&#171; geben, die die VTable <i>schlechter implementiert</i>&#160;als durch einen einzigen Pointer
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788210305934" ID="ID_1202028335" MODIFIED="1788211052497" TEXT="jedoch kann man aus der &#xbb;Sub-Objekt&#xab;-Mechanik durchaus Schl&#xfc;sse ziehen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Im Einzelnen ausgef&#252;hrt:
+    </p>
+    <ul>
+      <li>
+        C++ - Code wird auch auf ABI-Ebene strukturiert und zusammengef&#252;gt
+      </li>
+      <li>
+        Eine Basisklasse ist self-contained und wird als Ganzes eingef&#252;gt und referenziert, einschlie&#223;lich ihres Implementierungs-Codes (Ausnahmen k&#246;nnen gelten unter Optimierung, aber nur wenn der Compiler v&#246;llige &#196;quivalenz garantieren kann
+      </li>
+      <li>
+        das bedeutet: der Code der Basis-Klasse bezieht sich auf sein eigenes Layout
+      </li>
+      <li>
+        die virtuellen Methoden werden nicht per ID aufgel&#246;st, sondern komplett in &#187;Slot-Offsets&#171; &#252;bersetzt.
+      </li>
+      <li>
+        wenn also Code einer Basisklasse eine virtuelle Methode aufruft, dann holt er sich seine VTable (die irgendwo im Objekt per Referenz materialisiert sein mu&#223;, was aber auch ein Funktionspointer leisten w&#252;rde). Auf diese VTable wendet der Code einen festen Offset an, und springt durch den resultierenden Funktionspointer.
+      </li>
+      <li>
+        dieser Code wird nicht umgeschrieben, wenn er in ein abgeleitetes Objekt eingebunden ist (abgesehen von Optimierungen, die jedoch niemals garantiert sind)
+      </li>
+    </ul>
+    <p>
+      <u>Schlu&#223;folgerung</u>: der Code einer Methode der Basisklasse mu&#223; immer das komplette Layout dieser Basisklasse in gleicher Weise vorfinden. Insofern ist es generell nicht m&#246;glich, VTables mehrerer eingemischter Basisklassen zusammenzulegen, ohne auch den kompletten Code der Basisklasse neu generieren zu m&#252;ssen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788211053578" ID="ID_1121107125" MODIFIED="1788214912904" TEXT="Also &#x27f9; mu&#xdf; doch umstellen auf eine lineare Kette &#x2014; auch f&#xfc;r die Interfaces">
+<linktarget COLOR="#f91755" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" SOURCE="ID_1738529643" STARTARROW="None" STARTINCLINATION="-304;11;"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 </node>
 </node>
@@ -84252,6 +84304,124 @@
 <node CREATED="1788134521733" ID="ID_842811959" MODIFIED="1788134537999" TEXT="das Thema Lifecycle und Updates wird vertagt"/>
 </node>
 </node>
+<node CREATED="1788206198399" ID="ID_1847444820" MODIFIED="1788206207841" TEXT="Interfaces und Implementierung ordnen">
+<node CREATED="1788206230916" ID="ID_1359008095" MODIFIED="1788206243716" TEXT="das Parameter-front-End st&#xfc;tzt sich auf die Disposition ab">
+<node CREATED="1788206245531" ID="ID_69324827" MODIFIED="1788206249932" TEXT="auch das ist noch ein Interface"/>
+<node CREATED="1788206250703" ID="ID_1870838756" MODIFIED="1788206739527" TEXT="allerdings eine Mischung aus Generics/OO">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was hier allerdings nur meint, da&#223; auch zus&#228;tzliche normale Funktionen mit Basis-Implementierung bereits da sind, und da&#223; es fest vorgegebene Datenstrukturen gibt, f&#252;r die der Zugriff <i>inline</i>&#160; ist. An der Stelle k&#246;nnte auch die Fallunterscheidung ansetzen f&#252;r einfache Parameter vs. Komplexe Parameter. Dennoch mu&#223; der Disposition-Typ letztlich finit und explizit definiert sein, denn er wird als &#187;Interface&#171;-Typ in einen PolymorphicValue gepackt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788206814932" ID="ID_1738529643" MODIFIED="1788214912904">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      es mu&#223; <i>zwingend </i>eine lineare Interface-Kette sein mit <i>einer </i>VTable
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das macht den Aufbau tricky, und nicht leicht zu entscheiden, denn alle wichtigen Interfaces m&#252;ssen direkt explizit aufeinander aufbauen; es gibt keine M&#246;glichkeit, variable Aspekte sp&#228;ter <i>einzumischen. </i>
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f91755" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" STARTARROW="None" STARTINCLINATION="-304;11;"/>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788207092440" ID="ID_1489003663" MODIFIED="1788214784231" TEXT="Typ und BaseDomain werden zum Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1788207114186" ID="ID_1160746668" MODIFIED="1788207125545" TEXT="BaseDomain ist bereits ein (generisches) Implementierungs-Objekt"/>
+<node CREATED="1788207143449" ID="ID_1569730697" MODIFIED="1788217785702" TEXT="das bedeutet: die Provision kann nicht davon erben, sondern nur vom Domain-Interface">
+<arrowlink COLOR="#ff001d" DESTINATION="ID_214321685" ENDARROW="Default" ENDINCLINATION="4;-14;" ID="Arrow_ID_1991058182" STARTARROW="None" STARTINCLINATION="-120;4;"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788216306876" ID="ID_1088562291" MODIFIED="1788217074557" TEXT="logischer &#x2b4d; : ein Typ m&#xfc;&#xdf;te damit auch eine Provision sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...unter der Vorgabe, da&#223; wir nur eine einzige lineare Vererbungskette haben k&#246;nnen &#10233; da Domain unter Provision liegen mu&#223;, und BaseDomain &#252;ber allen Interfaces, und der Typ von BaseDomain abgeleitet sein soll.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1788207233069" ID="ID_403725711" MODIFIED="1788207254569" TEXT="aber die konkrete Scale mu&#xdf; darauf aufbauen (da sie Werte beschr&#xe4;nkt)"/>
+<node CREATED="1788215170120" ID="ID_1317810371" MODIFIED="1788215194280" TEXT="Typ mu&#xdf; konkret sein, schlie&#xdf;t BaseDomain ein und verweist auf Scale"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788215427662" ID="ID_214321685" MODIFIED="1788217785702" TEXT="Das Povision-Interface mu&#xdf; anders angeordnet werden">
+<linktarget COLOR="#ff001d" DESTINATION="ID_214321685" ENDARROW="Default" ENDINCLINATION="4;-14;" ID="Arrow_ID_1991058182" SOURCE="ID_1569730697" STARTARROW="None" STARTINCLINATION="-120;4;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1788215544358" ID="ID_622102416" MODIFIED="1788215569419">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich m&#246;chte da&#223; jeder <i>Parameter </i>auch eine Provision <i>sein kann</i>
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1788215575560" ID="ID_690071422" MODIFIED="1788215606429" TEXT="das ist das front-End"/>
+<node CREATED="1788215613679" ID="ID_200801579" MODIFIED="1788215624951" TEXT="somit wird hier auch eine Interface-Kette eingemischt"/>
+<node CREATED="1788215708763" ID="ID_907924223" MODIFIED="1788215727096" TEXT="oder man w&#xfc;rde Zugang zu einer Provision bieten"/>
+</node>
+<node CREATED="1788215737795" ID="ID_516807030" MODIFIED="1788215749277" TEXT="Provision wird damit ein eigenst&#xe4;ndiges Interface">
+<node CREATED="1788215750841" ID="ID_374789197" MODIFIED="1788215911279" TEXT="sie ist nur implizit getypt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet: es wird Kenntnis eines (opaquen) Typs in der Implementierung unterstellt, so da&#223; man Provisions verkn&#252;pfen kann, und sich diese automatisch adaptieren. <i>Aber das Interface selber</i>&#160;bietet keinerlei M&#246;glichkeit, diese implizite Information zu extrahieren (und wenn, dann nur durch ein neutrales Analyse-Pr&#228;dikat, oder Zugang zu einer Domain-Referenz)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788217133940" ID="ID_1963209378" MODIFIED="1788217153881" TEXT="das k&#xf6;nnte das Basis-Interface f&#xfc;r alles werden">
+<icon BUILTIN="idea"/>
+<node CREATED="1788217155932" ID="ID_1701900965" MODIFIED="1788217167793" TEXT="es ist &#xbb;a parameter in a nutshell&#xab;">
+<node CREATED="1788217177034" ID="ID_63305825" MODIFIED="1788217183394" TEXT="kann Wert lesen / setzen"/>
+<node CREATED="1788217184038" ID="ID_1219385660" MODIFIED="1788217193683" TEXT="kann per Zeit auswerten"/>
+<node CREATED="1788217194571" ID="ID_798704416" MODIFIED="1788217205237" TEXT="kann auf Quelle connecten / disconnecten"/>
+</node>
+<node CREATED="1788217258149" ID="ID_1205932945" MODIFIED="1788217358954" TEXT="(k&#xf6;nnte bei Bedarf ein Domain&amp; hervorzaubern)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das w&#252;rde ausnutzen, da&#223; die Implementierung immer oben auf der ganzen Interface-Kette sitzen mu&#223;; somit k&#246;nnte man von jeder konkreten Instanz, die Provision&amp; implementiert, auch schlu&#223;folgern da&#223; sie sich auf eine Domain&amp; downcasten l&#228;&#223;t
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788221594093" ID="ID_579519208" MODIFIED="1788221708229" TEXT="es mu&#xdf; aber per default als NOP implementiert sein">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...sonst wird es schwierig mit dem Zusammenstellen der Interface-Kette; tats&#228;chlich lassen sich alle f&#252;r dieses Interface vorgesehenen Operationen &#187;leer&#171; Implementieren &#8212; es passiert dann einfach gar nichts, keine Zuweisung, keine Verbindung
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788222498625" ID="ID_1110945916" MODIFIED="1788222611950" TEXT="Disposition wird dann der Knotenpunkt auf dem die Implementierung aufbaut">
+<icon BUILTIN="idea"/>
+<node CREATED="1788222535392" ID="ID_1282201343" MODIFIED="1788222543419" TEXT="Disposition ist immer noch ein Interface"/>
+<node CREATED="1788222544142" ID="ID_1947215779" MODIFIED="1788222568288" TEXT="es wird per PolymorphicValue auf das Parameter-Objekt exponiert"/>
+<node CREATED="1788222571539" ID="ID_1256386409" MODIFIED="1788222603029" TEXT="die ganze konkrete Implementierung setzt darauf auf (und bleibt damit opaque, und variierbar)"/>
+</node>
+</node>
 <node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">
 <node CREATED="1788134893182" ID="ID_1219540786" MODIFIED="1788134948392" TEXT="naheliegend: statischer Einsteieg vom Parameter-Frontend">
 <node CREATED="1788134968239" ID="ID_217011834" MODIFIED="1788134998930" TEXT="Parameter::from(prototype).build()"/>
@@ -84272,6 +84442,34 @@
 <linktarget COLOR="#4a3c9d" DESTINATION="ID_832309415" ENDARROW="Default" ENDINCLINATION="-1088;45;" ID="Arrow_ID_331072636" SOURCE="ID_97985230" STARTARROW="None" STARTINCLINATION="-455;17;"/>
 </node>
 </node>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1788203329439" ID="ID_1991597342" MODIFIED="1788203340179" TEXT="Parameter-Basisfunktionen">
+<node CREATED="1788203369397" ID="ID_1275080112" MODIFIED="1788203381813" TEXT="treibe den Struktur-Aufbau">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203394319" ID="ID_1002785268" MODIFIED="1788203455329" TEXT="Disposition festlegen">
+<icon BUILTIN="full-1"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203400185" ID="ID_900611719" MODIFIED="1788203458783" TEXT="Builder-Notation schaffen">
+<icon BUILTIN="full-2"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">
+<icon BUILTIN="full-3"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203353588" ID="ID_810940322" MODIFIED="1788203359142" TEXT="entwicklen per Parameter_test">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203485528" ID="ID_1524876130" MODIFIED="1788203551838" TEXT="simpleUsage">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203491453" ID="ID_1148834637" MODIFIED="1788203559585" TEXT="einfachen unlimitierten int-Parameter erzeugen">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203508251" ID="ID_1482426242" MODIFIED="1788203559586" TEXT="diesem einen (typisierten) Wert zuweisen">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203517810" ID="ID_473781313" MODIFIED="1788203559587" TEXT="den Wert in verschiedene Typen extrahieren">
+<icon BUILTIN="flag-pink"/>
 </node>
 </node>
 </node>
