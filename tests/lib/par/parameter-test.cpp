@@ -20,6 +20,7 @@
 //#include "test/test-helper.hpp"
 #include "lib/par/parameter.hpp"
 //#include "lib/format-cout.hpp"
+#include "test/diagnostic-output.hpp"/////////////TODO
 
 //#include <utility>
 //#include <string>
@@ -76,6 +77,7 @@ namespace test{
       void
       simpleUsage()
         {
+SHOW_EXPR(sizeof(Parameter))
           Parameter par = Parameter::forType<int>().build();
           CHECK (0 == par.getVal<int>());
           
