@@ -32,7 +32,19 @@
 
 namespace lib {
 namespace par {
+
   
+  /**
+   * Implementation-Service: complete Parameter functionality.
+   * Includes the ability to access / set a »value«, attach automation,
+   * identify and convert underlying value data types and handle
+   * trait- and identity tags and the specifics of the value scale.
+   */
+  class Disposition
+    : public Domain
+    {
+    public:
+    };
   
   
   /**
@@ -40,9 +52,13 @@ namespace par {
    * with domain and scale, and a value provision. Can be generated through a builder
    * notation and stored within the Parameter object (as a container).
    */
-  class Disposition
-    : public ParamType
+  template<typename V>
+  class ParamData
+    : public TypedEntity<V, Disposition>
     {
+      V val_{};
+      Provision* src_{nullptr};
+      
     public:
     };
   
