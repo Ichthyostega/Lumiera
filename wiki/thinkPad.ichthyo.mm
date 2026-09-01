@@ -84451,6 +84451,11 @@
 <node CREATED="1788222535392" ID="ID_1282201343" MODIFIED="1788222543419" TEXT="Disposition ist immer noch ein Interface"/>
 <node CREATED="1788222544142" ID="ID_1947215779" MODIFIED="1788222568288" TEXT="es wird per PolymorphicValue auf das Parameter-Objekt exponiert"/>
 <node CREATED="1788222571539" ID="ID_1256386409" MODIFIED="1788222603029" TEXT="die ganze konkrete Implementierung setzt darauf auf (und bleibt damit opaque, und variierbar)"/>
+<node CREATED="1788293527789" ID="ID_1979935695" MODIFIED="1788293563082" TEXT="Konsequenz &#x27f9; mu&#xdf; dieses Interface generisch zusammenstellen">
+<icon BUILTIN="yes"/>
+<node CREATED="1788293568866" ID="ID_131380857" MODIFIED="1788293583910" TEXT="es mu&#xdf; zwingend oberhalb der getypten Implementierung liegen"/>
+<node CREATED="1788293586698" ID="ID_1746668987" MODIFIED="1788293628728" TEXT="Inhaltlich geh&#xf6;rt es aber n&#xe4;her zum ParamData-Record"/>
+</node>
 </node>
 <node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788279480380" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
 <node CREATED="1788279482831" ID="ID_1252818882" MODIFIED="1788279536466" TEXT="wir gehen vom Kontrakt zum Service">
@@ -84466,9 +84471,10 @@
 <node CREATED="1788279539424" ID="ID_1639736337" MODIFIED="1788279543780" TEXT="Bedeutung der Stufen">
 <node CREATED="1788279549319" ID="ID_120197629" MODIFIED="1788279575207" TEXT="Provision: die Grundidee eines Parameters wie hier konzeptionalisiert"/>
 <node CREATED="1788279579772" ID="ID_1387667429" MODIFIED="1788279619787" TEXT="Domain: Zusicherung einer Typ-konformen Handhabung"/>
+<node CREATED="1788280039452" ID="ID_1355845527" MODIFIED="1788295973732" TEXT="Disposition: der vollst&#xe4;ndige Parameter-Implementierungs-Service"/>
 <node CREATED="1788279649921" ID="ID_829245549" MODIFIED="1788279664995" TEXT="BaseDomain: Festlegung der Eigenschaften der Datenbasis"/>
 <node CREATED="1788279667230" ID="ID_1645392786" MODIFIED="1788279840724" TEXT="TypedEntity: Konformit&#xe4;t und Darstelluns-F&#xe4;higkeiten"/>
-<node CREATED="1788280039452" ID="ID_1355845527" MODIFIED="1788280070438" TEXT="Disposition: der komplette Parameter-Service"/>
+<node CREATED="1788295927324" ID="ID_53887849" MODIFIED="1788295946230" TEXT="ParamData: der komplette Implementierungs-Record"/>
 </node>
 </node>
 </node>

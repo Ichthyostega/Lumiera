@@ -19,6 +19,7 @@
 #include "test/run.hpp"
 //#include "test/test-helper.hpp"
 #include "lib/par/domain.hpp"
+#include "lib/par/param-type.hpp"
 #include "test/diagnostic-output.hpp"////////////TODO
 
 //#include <utility>
@@ -168,6 +169,9 @@ namespace test{
       
       
       
+      template<typename X>
+      using FullDomain = BaseDomain<X, Domain>;
+      
       /** @test base function to access the contents of an opaque buffer
        *        with known type, and convert into another target type.
        *      - the base interface #Domain represents an opaque type
@@ -183,8 +187,8 @@ namespace test{
       void
       verify_valueAccess()
         {
-          BaseDomain<int> domInt;
-          CHECK (sizeof(BaseDomain<int>) <= sizeof(void*)); // only the VTable
+          FullDomain<int> domInt;
+          CHECK (sizeof(FullDomain<int>) <= sizeof(void*)); // only the VTable
           
           // use the generic interface for access...
           Domain& dom{domInt};
@@ -221,7 +225,7 @@ namespace test{
       void
       verify_valueSetting()
         {
-          BaseDomain<int> domInt;
+          FullDomain<int> domInt;
           Domain& dom{domInt};
           
           int val_in_buff = 0;
@@ -259,9 +263,9 @@ namespace test{
           int64_t i64_val{0};
           bool boo{false};
           
-          BaseDomain<double> ddom;
-          BaseDomain<int64_t> idom;
-          BaseDomain<bool> bdom;
+          FullDomain<double> ddom;
+          FullDomain<int64_t> idom;
+          FullDomain<bool> bdom;
           
           Domain& d1{ddom};
           Domain& d3{bdom};
