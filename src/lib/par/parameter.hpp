@@ -32,6 +32,7 @@
 #include "lib/par/disposition.hpp"
 #include "lib/polymorphic-value.hpp"
 #include "lib/meta/typelist-util.hpp"
+#include "lib/util.hpp"
 
 #include <utility>
 
@@ -45,6 +46,8 @@ namespace par {
     using CopySupportMarker = polyvalue::CopySupport<ParameterImplAPI>;
     using ParamContainer = PolymorphicValue<ParameterImplAPI, BUFF_SIZ, CopySupportMarker>;
   }
+  
+  using util::unConst;
   
   
   
@@ -60,7 +63,7 @@ namespace par {
       class Builder;
       
       template<typename VAL>
-      VAL getVal();
+      VAL getVal() const;
       
       template<typename VAL>
       void setVal (VAL&&);
@@ -119,9 +122,9 @@ namespace par {
   
   template<typename VAL>
   VAL
-  Parameter::getVal()
+  Parameter::getVal()  const
     {
-      UNIMPLEMENTED ("extract the »value«, possibly applying suitable type conversions");
+      return unConst(this)->getPayload().extract<VAL>();
     }
   
   
@@ -129,7 +132,7 @@ namespace par {
   void
   Parameter::setVal (VAL&& changedVal)
     {
-      UNIMPLEMENTED ("apply suitable type conversions and clamping, then transfer the new value into the Provision interface");
+      getPayload().setVal (changedVal);
     }
   
   

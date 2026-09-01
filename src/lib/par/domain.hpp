@@ -108,7 +108,7 @@ namespace par {
       virtual ~Domain();  ///< this is an interface
       
       virtual void applyLimit (ValBuff&)  =0;
-      virtual void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target) =0;
+      virtual void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)  const  =0;
       
     protected:
     };

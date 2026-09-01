@@ -44,6 +44,15 @@ namespace par {
     : public Domain
     {
     public:
+      template<typename X>
+      X extract()  const;
+      
+      template<typename X>
+      void setVal (X);
+      
+    private:
+      template<typename X>
+      bool isBaseDomainMatch()  const;
     };
   
   
@@ -66,6 +75,58 @@ namespace par {
         { }
     };
   
+  template<typename X>
+  using FullDomain = BaseDomain<X, Disposition>;
+  
+  
+  
+  template<typename X>
+  X
+  Disposition::extract()  const
+  {
+    X result; // RVO
+    
+    if (isBaseDomainMatch<X>())
+      { // short-circuit by direct force-cast
+        retrieveInto (asValBuff (result));
+      }
+    else
+      { // run full type-conversion double-dispatch
+        uint64_t valueBuffer; /////////////////////////////////////////////////OOO need a way to get a suitably sized intermediary buffer (without heap-allocation)
+        this->retrieveInto (asValBuff(valueBuffer));
+        
+        FullDomain<X> targetDomain;
+        this->transferTo (asValBuff(valueBuffer), targetDomain, asValBuff(result));
+      }
+    return result;
+  }
+  
+  
+  template<typename X>
+  void
+  Disposition::setVal (X changedVal)
+  {
+    if (isBaseDomainMatch<X>())
+      { // short-circuit by direct force-cast
+        setValFrom (asValBuff (changedVal));
+      }
+    else
+      { // run full type-conversion double-dispatch
+        uint64_t valueBuffer; /////////////////////////////////////////////////OOO need a way to get a suitably sized intermediary buffer (without heap-allocation)
+        FullDomain<X> targetDomain;
+        
+        targetDomain.transferTo (asValBuff(changedVal), *this, asValBuff(valueBuffer));
+        this->setValFrom (asValBuff(valueBuffer));
+      }
+  }
+  
+  
+  template<typename X>
+  bool
+  Disposition::isBaseDomainMatch()  const
+  {
+    return false; /////////////////////////OOO running into a dead end here? how can we possibly access a type tag marker without indirection??
+  }
   
   
 }} // namespace lib::par
