@@ -82955,7 +82955,7 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1783092344401" ID="ID_723247866" MODIFIED="1783092356166" TEXT="ParamType">
+<node CREATED="1783092344401" ID="ID_723247866" MODIFIED="1788306366293" TEXT="Provision">
 <node CREATED="1783092477119" ID="ID_1734714581" MODIFIED="1783092481906" TEXT="Interfaface">
 <node CREATED="1783092482966" ID="ID_1196126403" MODIFIED="1783092486026" TEXT="virtuell"/>
 <node CREATED="1783092486716" ID="ID_1507254773" MODIFIED="1783092489572" TEXT="generisch">
@@ -82987,8 +82987,17 @@
 </node>
 </node>
 </node>
-<node CREATED="1783101507062" ID="ID_1298955481" MODIFIED="1783101521840" TEXT="Header: lib/par/param-type.hpp|cpp">
-<node CREATED="1783101523306" ID="ID_1764325281" MODIFIED="1783172855177" TEXT="hier auch die Type-Registry"/>
+<node CREATED="1783101507062" ID="ID_1298955481" MODIFIED="1788306389082" TEXT="Header....">
+<node CREATED="1788306396605" ID="ID_1497186410" MODIFIED="1788306410252" TEXT="lib/par/provision.hpp">
+<node CREATED="1788306414146" HGAP="71" ID="ID_833702080" MODIFIED="1788306467320" TEXT="Buffer-Zugriffs-Mechanik" VSHIFT="2">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1788306390020" ID="ID_1994320454" MODIFIED="1788306392775" TEXT="lib/par/param-type.hpp|cpp">
+<node CREATED="1783101523306" HGAP="29" ID="ID_1764325281" MODIFIED="1788306464746" TEXT="hier auch die Type-Registry" VSHIFT="2">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1783097554556" ID="ID_1339731751" MODIFIED="1783097566222" TEXT="Domain">
@@ -84487,7 +84496,8 @@
 <node CREATED="1788293586698" ID="ID_1746668987" MODIFIED="1788293628728" TEXT="Inhaltlich geh&#xf6;rt es aber n&#xe4;her zum ParamData-Record"/>
 </node>
 </node>
-<node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788296935023" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
+<node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788307762955" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
+<linktarget COLOR="#4d65b9" DESTINATION="ID_511934631" ENDARROW="Default" ENDINCLINATION="-379;20;" ID="Arrow_ID_927557846" SOURCE="ID_1002785268" STARTARROW="None" STARTINCLINATION="119;14;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1788279482831" ID="ID_1252818882" MODIFIED="1788279536466" TEXT="wir gehen vom Kontrakt zum Service">
 <richcontent TYPE="NOTE"><html>
@@ -84512,6 +84522,33 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788296987347" ID="ID_1409086602" MODIFIED="1788297005246" TEXT="kann nun die Implementierung konstruieren">
 <icon BUILTIN="pencil"/>
+<node CREATED="1788307857528" ID="ID_412964688" MODIFIED="1788307872683" TEXT="Value-Init &#x27f6; direkt vom Builder in den Konstruktor"/>
+<node CREATED="1788307874399" ID="ID_195138202" MODIFIED="1788307912949" TEXT="Get mit Typ-Konversion &#x27f6; generisches front-End auf dem Disposition-Interface">
+<node CREATED="1788307916543" ID="ID_877977052" MODIFIED="1788307932499" TEXT="so mu&#xdf; es sein &#x2014; daf&#xfc;r haben wir ein Interface"/>
+<node CREATED="1788307933286" ID="ID_67518693" MODIFIED="1788307948939" TEXT="die Implementierung baut dann auf den Basis-Interfaces auf"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788308358560" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788309793594" TEXT="Alarm: das Design geht hier nicht auf">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1788309801877" ID="ID_1982340657" MODIFIED="1788309820758" TEXT="auf der Interface-Ebene fehlen mir relevante Informationen"/>
+<node CREATED="1788309821442" ID="ID_1283728464" MODIFIED="1788309832720" TEXT="aber per Voraussetzung will ich keine Indirektion"/>
+<node CREATED="1788309836170" ID="ID_1386925847" MODIFIED="1788309890528" TEXT="und das Implementation-Layout sollte komplett frei konfigurierbar bleiben">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch im Hinblick darauf, da&#223; ich sp&#228;ter mal (m&#246;glichst mit dem gleichen generischen Code) auch komplexe Parameter-Typen handhaben m&#246;chte, wie Vektoren, Farb-Tripel und ganze Masken-Parameters&#228;tze...
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -84590,10 +84627,11 @@
 </node>
 <node CREATED="1788203329439" ID="ID_1991597342" MODIFIED="1788203340179" TEXT="Parameter-Basisfunktionen">
 <node CREATED="1788203369397" ID="ID_1275080112" MODIFIED="1788203381813" TEXT="treibe den Struktur-Aufbau">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203394319" ID="ID_1002785268" MODIFIED="1788203455329" TEXT="Disposition festlegen">
+<node COLOR="#435e98" CREATED="1788203394319" ID="ID_1002785268" MODIFIED="1788307769571" TEXT="Disposition festlegen">
+<arrowlink COLOR="#4d65b9" DESTINATION="ID_511934631" ENDARROW="Default" ENDINCLINATION="-379;20;" ID="Arrow_ID_927557846" STARTARROW="None" STARTINCLINATION="119;14;"/>
 <icon BUILTIN="full-1"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203400185" ID="ID_900611719" MODIFIED="1788203458783" TEXT="Builder-Notation schaffen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203400185" ID="ID_900611719" MODIFIED="1788307794257" TEXT="Builder-Notation schaffen">
 <icon BUILTIN="full-2"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">

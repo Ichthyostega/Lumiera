@@ -74,7 +74,7 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     {
     public:
       void applyLimit (ValBuff&)  override;
-      void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target) override;
+      void transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)  const override;
     };
   
   
@@ -207,7 +207,7 @@ _Pragma("GCC diagnostic pop")
   
   template<typename VAL, class IFA>
   inline void
-  BaseDomain<VAL,IFA>::transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)
+  BaseDomain<VAL,IFA>::transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)  const
   {
     targetDomain.conform (target, asValue<VAL> (source));
     targetDomain.applyLimit (target);
