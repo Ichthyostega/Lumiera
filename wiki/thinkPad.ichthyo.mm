@@ -64126,7 +64126,8 @@
 <linktarget COLOR="#313bd5" DESTINATION="ID_297232550" ENDARROW="Default" ENDINCLINATION="147;-4;" ID="Arrow_ID_604220325" SOURCE="ID_1658923821" STARTARROW="None" STARTINCLINATION="117;8;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751872730" ID="ID_106564309" MODIFIED="1775770628001" TEXT="damit den bestehenden PolymorphicValue modernisieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751872730" ID="ID_106564309" MODIFIED="1788302308822" TEXT="damit den bestehenden PolymorphicValue modernisieren">
+<linktarget COLOR="#fef1ad" DESTINATION="ID_106564309" ENDARROW="Default" ENDINCLINATION="377;18;" ID="Arrow_ID_1956727109" SOURCE="ID_1296566156" STARTARROW="None" STARTINCLINATION="297;11;"/>
 <icon BUILTIN="flag-yellow"/>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775751886640" ID="ID_635074732" MODIFIED="1775770630422" TEXT="und auf dieser Basis die FunInline redefinieren">
@@ -64805,7 +64806,8 @@
 <node CREATED="1775752824541" ID="ID_1199118483" MODIFIED="1775752834819" TEXT="der Code ist ziemlich schwer zu verstehen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775752853151" ID="ID_87627416" MODIFIED="1775752859037" TEXT="Re-Implementierung">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1775752853151" ID="ID_87627416" MODIFIED="1788301725468" TEXT="Re-Implementierung">
+<linktarget COLOR="#931557" DESTINATION="ID_87627416" ENDARROW="Default" ENDINCLINATION="-273;3165;" ID="Arrow_ID_867915966" SOURCE="ID_1451113864" STARTARROW="None" STARTINCLINATION="289;-1009;"/>
 <icon BUILTIN="hourglass"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775752860084" ID="ID_1520505813" MODIFIED="1775769457487" TEXT="Idee: ein Instance-Manager-Interface schaffen">
 <linktarget COLOR="#feefb5" DESTINATION="ID_1520505813" ENDARROW="Default" ENDINCLINATION="22;-857;" ID="Arrow_ID_960733347" SOURCE="ID_297232550" STARTARROW="None" STARTINCLINATION="-127;7;"/>
@@ -64821,6 +64823,17 @@
 </html></richcontent>
 <node CREATED="1775752933506" ID="ID_868304108" MODIFIED="1775752972169" TEXT="w&#xe4;re direkt implementierbar als Komponente, ohne Virtualisierung"/>
 <node CREATED="1775752903046" ID="ID_1216439634" MODIFIED="1775752913919" TEXT="man k&#xf6;nnte den VirtualCopySupport direkt darauf aufsetzen"/>
+<node CREATED="1788302260005" ID="ID_1296566156" MODIFIED="1788302573075" TEXT="auch bei der Idee &#xbb;FunInline&#xab; hatte ich PolymorphicValue in Erw&#xe4;gung gezogen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...war mir aber letztlich nicht schl&#252;ssig, in welche Richtung meine Abw&#228;gung geht; die C++-STDLIB verwendet ja <i>zwei Funktionspointer</i>, von denen einer auf einen generischen Instance-Manager zeigt. Meine eigenen &#187;Freihand-Abw&#228;gungen&#171; bez&#252;glich generierter Assembly und Runtime-Overhead weisen aber immer wieder in die Richtung, da&#223; eine VTable effizienter ist, als mehrere Funktionspointer, wobei im Fall von lediglich zwei Pointern vermutlich immer noch nahezu &#196;quivalenz besteht. Das Problem bei solchen Abw&#228;gungen im Kontext von LIbrary-Design ist, da&#223; man die Frage eigentlich nicht empirisch entscheiden kann; Microbenchmarks sind immer nur Momentaufnahmen, und der globale Impact einer solchen Entscheidung ist extrem schwer zu fassen (und aufwendig zu untersuchen)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#fef1ad" DESTINATION="ID_106564309" ENDARROW="Default" ENDINCLINATION="377;18;" ID="Arrow_ID_1956727109" STARTARROW="None" STARTINCLINATION="297;11;"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769404408" ID="ID_862372565" LINK="https://issues.lumiera.org/ticket/1421" MODIFIED="1775769417192" TEXT="#1421 define Instance-Manager interface">
 <icon BUILTIN="flag-yellow"/>
@@ -64828,6 +64841,13 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1775769220570" ID="ID_572028635" LINK="https://issues.lumiera.org/ticket/1197" MODIFIED="1775769238759" TEXT="#1197 rationalise copy support in PolymorphicValue">
 <icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788302637488" HGAP="32" ID="ID_335130787" LINK="#ID_1782676400" MODIFIED="1788302782855" TEXT="....und der generische Copy-Support sollte auf copy-and-swap aufbauen" VSHIFT="2">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1788302603281" ID="ID_324413890" MODIFIED="1788302793158" TEXT="ebenso wichtig: Payload mu&#xdf; &#xbb;in-place&#xab; konstruierbar sein">
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 </node>
 </node>
@@ -83964,7 +83984,7 @@
 <node CREATED="1788013034593" ID="ID_1225110265" MODIFIED="1788013038934" TEXT="eine Provision"/>
 <node CREATED="1788014082405" ID="ID_100431217" MODIFIED="1788014088031" TEXT="das ParamType-Interace"/>
 <node CREATED="1788014092867" ID="ID_1527036015" MODIFIED="1788017590529" TEXT="polyvalue::CopySupport - Marker">
-<node CREATED="1788017597647" ID="ID_1451113864" LINK="https://issues.lumiera.org/ticket/1197" MODIFIED="1788020032021" TEXT="stelle fest: PolymorphicValue ist schon recht verwirrend implementiert">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788017597647" ID="ID_1451113864" LINK="https://issues.lumiera.org/ticket/1197" MODIFIED="1788301852253" TEXT="stelle fest: PolymorphicValue ist schon recht verwirrend implementiert">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -83993,6 +84013,16 @@
     </ul>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#931557" DESTINATION="ID_87627416" ENDARROW="Default" ENDINCLINATION="-273;3165;" ID="Arrow_ID_867915966" STARTARROW="None" STARTINCLINATION="289;-1009;"/>
+<icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af020b" CREATED="1788301729827" ID="ID_18695637" MODIFIED="1788301843036" TEXT="erscheint zunehmend dringend...">
+<linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_635472113" SOURCE="ID_1100385220" STARTARROW="None" STARTINCLINATION="373;14;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788301751355" ID="ID_1968045723" MODIFIED="1788301772221" TEXT="in diesem (oder dem n&#xe4;chsten) VerticalSlice angehen">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1788017707090" ID="ID_308578833" MODIFIED="1788018098862" TEXT="man mu&#xdf; nur ein Marker-Interface implementieren (um beim Kopieren zu kooperieren)">
 <richcontent TYPE="NOTE"><html>
@@ -84503,6 +84533,55 @@
 </node>
 <node CREATED="1788196981983" ID="ID_832309415" MODIFIED="1788197050345" TEXT="erst dort kann &#xfc;ber den konkreten Typ-Aufbau entschieden werden">
 <linktarget COLOR="#4a3c9d" DESTINATION="ID_832309415" ENDARROW="Default" ENDINCLINATION="-1088;45;" ID="Arrow_ID_331072636" SOURCE="ID_97985230" STARTARROW="None" STARTINCLINATION="-455;17;"/>
+<node CREATED="1788299705092" ID="ID_1154522601" MODIFIED="1788299716551" TEXT="den Basis-Typ m&#xfc;ssen wir sofort in einen Template-Parameter nehmen"/>
+<node CREATED="1788299717240" ID="ID_114328645" MODIFIED="1788299730333" TEXT="aber der Rest (vor allem die Scale) mu&#xdf; noch offen bleiben"/>
+</node>
+<node CREATED="1788300649206" ID="ID_932127060" MODIFIED="1788304361422" TEXT="sollte Resultat m&#xf6;glichst in-place konstruieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1788301071029" ID="ID_1356800089" MODIFIED="1788301322838" TEXT="dem steht die bestehende Implementierung von PolymorphicValue im Wege">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....diese erscheint heutzutage in mehrfacher Hinsicht als <i>unbeholfen</i>&#160; &#8212; wobei allerdings die Wurzeln noch in die Zeit vor C++11 zur&#252;ckreichen. Im Besonderen gibt es keinen direkt nutzbaren Konstruktor, und auch keine effizienten move-Assignments (copy-and-swap-Idiom). Demzufolge w&#252;rde bereits eine direkte per-Value-Initialisierung der Basisklasse sofort einen Aufruf des virtuellen-Copy-APIs nach sich ziehen....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788301325125" ID="ID_1100385220" MODIFIED="1788301843036" TEXT="PolymorphicValue mu&#xdf; definitiv demn&#xe4;chst umfasend modernisiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da ich dieses Konstrukt zunehmend f&#252;r bedeutsam halte, und in viel gr&#246;&#223;erem Umfang zu verwenden gedenke &#8212; es k&#246;nnte sogar das bisherige ref-count-basiderte Memory-Management im high-level-Model abl&#246;sen....
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_635472113" STARTARROW="None" STARTINCLINATION="373;14;"/>
+</node>
+<node CREATED="1788303471915" ID="ID_1786592729" MODIFIED="1788303488329" TEXT="mu&#xdf; dann wohl direkt den protected-Base-ctor verwenden">
+<node CREATED="1788303498632" ID="ID_1722801672" MODIFIED="1788303511627" TEXT="das ist definitiv m&#xf6;glich (und vorgesehen)...."/>
+<node CREATED="1788303512343" ID="ID_1972587310" MODIFIED="1788303683341" TEXT="verwendet trickreiches Argument-Matching">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....der proctcted-ctor bekommt ein marker-Tag, das definiert ist als IMP* &#8212; dadurch wird der Typ IMP kommuniziert und in einen TypeSelector&lt;IMP&gt; verwandelt ... der dann allerdings erneut indirekt an den eigentlichen Arbeits-ctor weitergetgeben wird. Oh (Herr)mann!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788304299541" ID="ID_1086678671" MODIFIED="1788304357788" TEXT="Builder::build() verl&#xe4;&#xdf;t sich dann auf die RVO">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit <i>sollte laut Standard</i>&#160;der initiale Parameter-Value tats&#228;chlich in-place konstruiert werden, ohne Aufruf des virtuellen copy-support
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>

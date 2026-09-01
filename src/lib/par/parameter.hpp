@@ -32,6 +32,8 @@
 #include "lib/par/disposition.hpp"
 #include "lib/polymorphic-value.hpp"
 
+#include <utility>
+
 
 namespace lib {
 namespace par {
@@ -44,6 +46,7 @@ namespace par {
   }
   
   
+  
   /**
    * Descriptor and container to hold a generic parameter.
    * The value can be fixed or supplied by an automation function.
@@ -52,6 +55,7 @@ namespace par {
     : protected ParamContainer
     {
     public:
+      template<typename VAL>
       class Builder;
       
       template<typename VAL>
@@ -63,30 +67,32 @@ namespace par {
       /* === Builder API === */
       
       template<typename VAL>
-      static Builder forType();
+      static Builder<VAL>
+      forType() { return {}; }
       
     protected:
-      
-    };
-  
-  
-  class Parameter::Builder
-    {
-    public:
-      Parameter
-      build()
-        {
-          UNIMPLEMENTED ("terminal builder operation: package a disposition into the Parameter");
-        }
+      template<class IMP, typename...ARGS>
+      Parameter (IMP* typeTag, ARGS&&... args)
+        : PolymorphicValue (typeTag, std::forward<ARGS>(args)...)
+        { }
     };
   
   
   template<typename VAL>
-  Parameter::Builder
-  Parameter::forType()
+  class Parameter::Builder
     {
-      UNIMPLEMENTED ("how to setup the base type configuration? do we need a type parameter in the Builder class?");
-    }
+      VAL initVal_{};
+      
+    public:
+      Parameter
+      build()
+        {
+          using ImplPackage = ParamData<VAL>;
+          ImplPackage* typeTag{nullptr};
+          Parameter resParam{typeTag, std::move (initVal_)};
+          return resParam;
+        }
+    };
   
   
   template<typename VAL>
