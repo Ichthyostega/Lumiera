@@ -84522,13 +84522,14 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788296987347" ID="ID_1409086602" MODIFIED="1788297005246" TEXT="kann nun die Implementierung konstruieren">
 <icon BUILTIN="pencil"/>
-<node CREATED="1788307857528" ID="ID_412964688" MODIFIED="1788307872683" TEXT="Value-Init &#x27f6; direkt vom Builder in den Konstruktor"/>
+<node COLOR="#435e98" CREATED="1788307857528" ID="ID_412964688" MODIFIED="1788313299843" TEXT="Value-Init &#x27f6; direkt vom Builder in den Konstruktor"/>
 <node CREATED="1788307874399" ID="ID_195138202" MODIFIED="1788307912949" TEXT="Get mit Typ-Konversion &#x27f6; generisches front-End auf dem Disposition-Interface">
 <node CREATED="1788307916543" ID="ID_877977052" MODIFIED="1788307932499" TEXT="so mu&#xdf; es sein &#x2014; daf&#xfc;r haben wir ein Interface"/>
 <node CREATED="1788307933286" ID="ID_67518693" MODIFIED="1788307948939" TEXT="die Implementierung baut dann auf den Basis-Interfaces auf"/>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788308358560" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788309793594" TEXT="Alarm: das Design geht hier nicht auf">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788313357254" TEXT="Alarm: das Design geht hier nicht auf">
+<linktarget COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" SOURCE="ID_1271224230" STARTARROW="None" STARTINCLINATION="2071;0;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1788309801877" ID="ID_1982340657" MODIFIED="1788309820758" TEXT="auf der Interface-Ebene fehlen mir relevante Informationen"/>
 <node CREATED="1788309821442" ID="ID_1283728464" MODIFIED="1788309832720" TEXT="aber per Voraussetzung will ich keine Indirektion"/>
@@ -84549,6 +84550,8 @@
 </node>
 </node>
 </node>
+<node CREATED="1788313220539" ID="ID_1678152846" MODIFIED="1788313251138" TEXT="Set mit Typ-Konversion &#x27f6;  spiegelblidlich auf dem Disposition-Inteface"/>
+<node COLOR="#435e98" CREATED="1788313267301" ID="ID_697595338" MODIFIED="1788313294222" TEXT="Provision: Zugriff auf den Value-Buffer  &#x27f6; cast und Assignment"/>
 </node>
 </node>
 </node>
@@ -84636,21 +84639,31 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">
 <icon BUILTIN="full-3"/>
+<node COLOR="#338800" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788313026101" TEXT="generisch per double-dispatch">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788313027713" ID="ID_1271224230" MODIFIED="1788313367997" TEXT="short-circuit bei direkt passendem Typ">
+<arrowlink COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" STARTARROW="None" STARTINCLINATION="2071;0;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203353588" ID="ID_810940322" MODIFIED="1788203359142" TEXT="entwicklen per Parameter_test">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203485528" ID="ID_1524876130" MODIFIED="1788203551838" TEXT="simpleUsage">
-<icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203491453" ID="ID_1148834637" MODIFIED="1788203559585" TEXT="einfachen unlimitierten int-Parameter erzeugen">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1788203485528" ID="ID_1524876130" MODIFIED="1788313089197" TEXT="simpleUsage">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1788203491453" ID="ID_1148834637" MODIFIED="1788313002273" TEXT="einfachen unlimitierten int-Parameter erzeugen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203508251" ID="ID_1482426242" MODIFIED="1788203559586" TEXT="diesem einen (typisierten) Wert zuweisen">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1788203508251" ID="ID_1482426242" MODIFIED="1788313007743" TEXT="diesem einen (typisierten) Wert zuweisen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788203517810" ID="ID_473781313" MODIFIED="1788203559587" TEXT="den Wert in verschiedene Typen extrahieren">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1788203517810" ID="ID_473781313" MODIFIED="1788313011048" TEXT="den Wert in verschiedene Typen extrahieren">
+<icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1788313090668" ID="ID_684424843" MODIFIED="1788313179645" STYLE="bubble" TEXT="erster einfachster Testfall GR&#xdc;N">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
 </node>
 </node>

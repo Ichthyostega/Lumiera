@@ -77,7 +77,8 @@ namespace test{
       void
       simpleUsage()
         {
-SHOW_EXPR(sizeof(Parameter))
+          CHECK (sizeof(Parameter) <= 4 * sizeof(void*));
+          
           Parameter par = Parameter::forType<int>().build();
           CHECK (0 == par.getVal<int>());
           
