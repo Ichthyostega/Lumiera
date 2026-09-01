@@ -68,6 +68,10 @@ namespace par {
       VAL val_;
       Provision* src_;
       
+      /* === Provision Interface === */
+      void retrieveInto (ValBuff&)  const override;
+      void setValFrom (ValBuff const&)    override;
+      
     public:
       ParamData (VAL initVal)
         : val_{std::move (initVal)}
@@ -77,6 +81,22 @@ namespace par {
   
   template<typename X>
   using FullDomain = BaseDomain<X, Disposition>;
+  
+  
+  
+  template<typename VAL>
+  void
+  ParamData<VAL>::retrieveInto (ValBuff& target)  const
+  {
+    asValue<VAL>(target) = val_;
+  }
+  
+  template<typename VAL>
+  void
+  ParamData<VAL>::setValFrom (ValBuff const& newVal)
+  {
+    val_ = asValue<VAL>(newVal);
+  }
   
   
   
