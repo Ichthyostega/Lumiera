@@ -29,11 +29,19 @@
 #define LIB_PAR_PARAMETER_H
 
 
+#include "lib/par/disposition.hpp"
+#include "lib/polymorphic-value.hpp"
 
 
 namespace lib {
 namespace par {
   
+  namespace {
+    static constexpr size_t BUFF_SIZ = sizeof(ParamData<double>);
+    using ParameterImplAPI = Disposition;
+    using CopySupportMarker = polyvalue::CopySupport<ParameterImplAPI>;
+    using ParamContainer = PolymorphicValue<ParameterImplAPI, BUFF_SIZ, CopySupportMarker>;
+  }
   
   
   /**
@@ -41,6 +49,7 @@ namespace par {
    * The value can be fixed or supplied by an automation function.
    */
   class Parameter
+    : protected ParamContainer
     {
     public:
       class Builder;

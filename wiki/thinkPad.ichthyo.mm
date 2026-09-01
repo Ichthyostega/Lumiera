@@ -84451,13 +84451,14 @@
 <node CREATED="1788222535392" ID="ID_1282201343" MODIFIED="1788222543419" TEXT="Disposition ist immer noch ein Interface"/>
 <node CREATED="1788222544142" ID="ID_1947215779" MODIFIED="1788222568288" TEXT="es wird per PolymorphicValue auf das Parameter-Objekt exponiert"/>
 <node CREATED="1788222571539" ID="ID_1256386409" MODIFIED="1788222603029" TEXT="die ganze konkrete Implementierung setzt darauf auf (und bleibt damit opaque, und variierbar)"/>
-<node CREATED="1788293527789" ID="ID_1979935695" MODIFIED="1788293563082" TEXT="Konsequenz &#x27f9; mu&#xdf; dieses Interface generisch zusammenstellen">
+<node BACKGROUND_COLOR="#c8bed8" COLOR="#3e3976" CREATED="1788293527789" ID="ID_1979935695" MODIFIED="1788296915688" TEXT="Konsequenz &#x27f9; mu&#xdf; dieses Interface generisch zusammenstellen">
 <icon BUILTIN="yes"/>
 <node CREATED="1788293568866" ID="ID_131380857" MODIFIED="1788293583910" TEXT="es mu&#xdf; zwingend oberhalb der getypten Implementierung liegen"/>
 <node CREATED="1788293586698" ID="ID_1746668987" MODIFIED="1788293628728" TEXT="Inhaltlich geh&#xf6;rt es aber n&#xe4;her zum ParamData-Record"/>
 </node>
 </node>
-<node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788279480380" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
+<node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788296935023" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
+<icon BUILTIN="forward"/>
 <node CREATED="1788279482831" ID="ID_1252818882" MODIFIED="1788279536466" TEXT="wir gehen vom Kontrakt zum Service">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -84475,6 +84476,12 @@
 <node CREATED="1788279649921" ID="ID_829245549" MODIFIED="1788279664995" TEXT="BaseDomain: Festlegung der Eigenschaften der Datenbasis"/>
 <node CREATED="1788279667230" ID="ID_1645392786" MODIFIED="1788279840724" TEXT="TypedEntity: Konformit&#xe4;t und Darstelluns-F&#xe4;higkeiten"/>
 <node CREATED="1788295927324" ID="ID_53887849" MODIFIED="1788295946230" TEXT="ParamData: der komplette Implementierungs-Record"/>
+</node>
+<node COLOR="#338800" CREATED="1788296967307" ID="ID_1067952271" MODIFIED="1788296982864" TEXT="damit ist f&#xfc;r jeden Belang eine Ebene festgelegt">
+<icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788296987347" ID="ID_1409086602" MODIFIED="1788297005246" TEXT="kann nun die Implementierung konstruieren">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 </node>
