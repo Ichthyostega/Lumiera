@@ -31,6 +31,7 @@
 
 #include "lib/par/disposition.hpp"
 #include "lib/polymorphic-value.hpp"
+#include "lib/meta/typelist-util.hpp"
 
 #include <utility>
 
@@ -70,6 +71,16 @@ namespace par {
       static Builder<VAL>
       forType() { return {}; }
       
+      template<typename VAL>
+      static Builder<std::decay_t<VAL>>
+      forValue (VAL&& initVal)
+        {
+          using PayloadType = std::decay_t<VAL>;
+          return forType<PayloadType>()
+                  .withValue (std::forward<VAL> (initVal));
+        }
+      
+      
     protected:
       template<class IMP, typename...ARGS>
       Parameter (IMP* typeTag, ARGS&&... args)
@@ -81,6 +92,9 @@ namespace par {
   template<typename VAL>
   class Parameter::Builder
     {
+      static_assert (meta::isInList<VAL, BaseTypes::List>()
+                    ,"Only some fixed base data types are supported as Parameter value type.");
+      
       VAL initVal_{};
       
     public:
@@ -91,6 +105,14 @@ namespace par {
           ImplPackage* typeTag{nullptr};
           Parameter resParam{typeTag, std::move (initVal_)};
           return resParam;
+        }
+      
+      template<typename X>
+      Builder&&
+      withValue (X&& initVal)
+        {
+          initVal_ = std::forward<X> (initVal);
+          return std::move(this);
         }
     };
   
