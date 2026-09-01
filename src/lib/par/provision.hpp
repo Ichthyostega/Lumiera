@@ -33,7 +33,44 @@ namespace par {
   
   using time::Time;
   
+  /** Marker for an opaque value buffer with
+   *  undisclosed size and content type */
   struct ValBuff { /*placeholder*/ };
+  
+  
+  template<typename X>
+  constexpr inline ValBuff&
+  asValBuff (X& something)
+  {
+    void* rawMem{& something};
+    return * static_cast<ValBuff*> (rawMem);
+  }
+  
+  template<typename X>
+  constexpr inline ValBuff const&
+  asValBuff (X const& something)
+  {
+    void const * rawMem{& something};
+    return * static_cast<ValBuff const *> (rawMem);
+  }
+  
+  template<typename X>
+  constexpr inline X&
+  asValue (ValBuff& storage)
+  {
+    void* rawMem{& storage};
+    return * static_cast<X*> (rawMem);
+  }
+  
+  template<typename X>
+  constexpr inline X const&
+  asValue (ValBuff const& storage)
+  {
+    void const * rawMem{& storage};
+    return * static_cast<X const *> (rawMem);
+  }
+  
+  
   
   
   /**
@@ -41,8 +78,9 @@ namespace par {
    * Conceptually, the value is decomposed into a _base value_ and possibly a
    * time-controlled adjustment (automation). The base value can be retrieved
    * and assigned, while the current time-based value is the result of evaluation.
-   * Any parameter value is associated to a ParamType that defines the underlying
-   * value domain and possibly a scale with range limits and metric constraints.
+   * Any parameter value is implicitly associated with a Type that defines the
+   * underlying [value domain](\ref Domain) and possibly a \ref Scale that
+   * defines range limits and metric constraints.
    * @remark the value access and manipulation works _backwards_ from an implicit
    *         value that is conceptually located _within_ this provision towards
    *         an ValBuff for external access. The reason for this indirect

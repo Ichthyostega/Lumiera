@@ -184,7 +184,9 @@ namespace test{
       verify_valueAccess()
         {
           BaseDomain<int> domInt;
-SHOW_EXPR(sizeof(BaseDomain<int>)) ///////////////////////////////////////TODO this should be only one »slot«, but is actually quite large, due to using multiple inheritance in the Domain interface. /////OOO fix that!
+          CHECK (sizeof(BaseDomain<int>) <= sizeof(void*)); // only the VTable
+          
+          // use the generic interface for access...
           Domain& dom{domInt};
           
           int val = 1 + rani (1000);
@@ -193,21 +195,18 @@ SHOW_EXPR(sizeof(BaseDomain<int>)) ///////////////////////////////////////TODO t
           uint target1{0};
           CHECK (not target1);
           
-          TypeHandler<uint>& hu{dom};
-          hu.extractAs (target1, src);
+          dom.extractAs (target1, src);
           CHECK (target1 == uint(val));
           
           float target2{0};
           
-          TypeHandler<float>& hf{dom};
-          hf.extractAs (target2, src);
+          dom.extractAs (target2, src);
           CHECK (target2 == float(val));
           
           // value clamped to target domain...
           val = _MIN<int>;
           uint64_t target3{55};
-          TypeHandler<uint64_t>& hu64{dom};
-          hu64.extractAs (target3, src);
+          dom.extractAs (target3, src);
           CHECK (target3 == _MIN<uint64_t>);
         }
       
@@ -229,20 +228,17 @@ SHOW_EXPR(sizeof(BaseDomain<int>)) ///////////////////////////////////////TODO t
           ValBuff& target = asValBuff (val_in_buff);
           
           uint src1 = 1 + rani (1000);
-          TypeHandler<uint>& hu{dom};
-          hu.conform (target, src1);
+          dom.conform (target, src1);
           CHECK (val_in_buff == int(src1));
           
           double src2 = ranRange (1,100);
           CHECK (1 <= src2 and src2 < 100);
-          TypeHandler<double>& hd{dom};
-          hd.conform (target, src2);
+          dom.conform (target, src2);
           CHECK (val_in_buff == int(floor (src2)));
           
           // value clamped to target domain...
           auto mini = _MIN<int64_t>;
-          TypeHandler<int64_t>& h64{dom};
-          h64.conform (target, mini);
+          dom.conform (target, mini);
           CHECK (val_in_buff == _MIN<int>);
         }
       

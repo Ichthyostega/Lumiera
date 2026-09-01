@@ -82995,7 +82995,7 @@
 <node BACKGROUND_COLOR="#c8c0b6" CREATED="1784489444352" ID="ID_1412623970" MODIFIED="1784489521150" TEXT="doch! das funktioniert weiterhin">
 <icon BUILTIN="idea"/>
 </node>
-<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1787695360380">
+<node CREATED="1784489483382" ID="ID_617432070" MODIFIED="1788284693233">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -83030,7 +83030,7 @@
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="236;9;" ID="Arrow_ID_1412212027" SOURCE="ID_711986937" STARTARROW="None" STARTINCLINATION="236;9;"/>
+<linktarget COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="184;7;" ID="Arrow_ID_1412212027" SOURCE="ID_711986937" STARTARROW="None" STARTINCLINATION="162;6;"/>
 <linktarget COLOR="#fe8953" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="368;0;" ID="Arrow_ID_1535827259" SOURCE="ID_1219008003" STARTARROW="None" STARTINCLINATION="463;38;"/>
 </node>
 </node>
@@ -83090,11 +83090,11 @@
 <node COLOR="#352c84" CREATED="1784491298401" ID="ID_427305032" MODIFIED="1784491298401" TEXT="Fazit {generiertes Multi-TypeHandler-OO-Interface}">
 <font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="forward"/>
-<node CREATED="1784491360016" ID="ID_711986937" MODIFIED="1784491537887" TEXT="das Original-Baumuster von Alexandrescu ist immer noch die beste L&#xf6;sung">
-<arrowlink COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="236;9;" ID="Arrow_ID_1412212027" STARTARROW="None" STARTINCLINATION="236;9;"/>
+<node CREATED="1784491360016" ID="ID_711986937" MODIFIED="1788284693233" TEXT="das Original-Baumuster von Alexandrescu ist immer noch eine elegante L&#xf6;sung">
+<arrowlink COLOR="#ffe99c" DESTINATION="ID_617432070" ENDARROW="Default" ENDINCLINATION="184;7;" ID="Arrow_ID_1412212027" STARTARROW="None" STARTINCLINATION="162;6;"/>
 </node>
 <node CREATED="1784491373675" ID="ID_1952132123" MODIFIED="1784491392120" TEXT="die Implementierung per Chain braucht keine Sichtbarkeit der anderen Overloads"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784491392987" ID="ID_1626670078" MODIFIED="1784491428279" TEXT="auf Ambiguit&#xe4;ten in den Typ-Signaturen achten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784491392987" ID="ID_1626670078" MODIFIED="1788284654454" TEXT="auf Ambiguit&#xe4;ten in den Typ-Signaturen achten">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -83103,6 +83103,7 @@
     </p>
   </body>
 </html></richcontent>
+<linktarget COLOR="#474ebe" DESTINATION="ID_1626670078" ENDARROW="Default" ENDINCLINATION="317;19;" ID="Arrow_ID_1833189754" SOURCE="ID_35862304" STARTARROW="None" STARTINCLINATION="396;16;"/>
 <icon BUILTIN="clanbomber"/>
 </node>
 </node>
@@ -83117,7 +83118,7 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788209315295" ID="ID_279904556" MODIFIED="1788210268056" TEXT="VTables bl&#xe4;hen sich auf">
+<node COLOR="#435e98" CREATED="1788209315295" ID="ID_279904556" MODIFIED="1788284583155" TEXT="VTables bl&#xe4;hen sich auf">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1788209326125" ID="ID_1531181426" MODIFIED="1788209343878" TEXT="Mix-in &#x27f9; schlie&#xdf;t jedes Sub-Objekt komplett mit ein">
 <node CREATED="1788210282924" ID="ID_1520344652" MODIFIED="1788210493326" TEXT="zwar gibt C++ keinerlei Garantien zum Daten-Layout (au&#xdf;er f&#xfc;r PODs)">
@@ -83164,9 +83165,22 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788211053578" ID="ID_1121107125" MODIFIED="1788214912904" TEXT="Also &#x27f9; mu&#xdf; doch umstellen auf eine lineare Kette &#x2014; auch f&#xfc;r die Interfaces">
-<linktarget COLOR="#f91755" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" SOURCE="ID_1738529643" STARTARROW="None" STARTINCLINATION="-304;11;"/>
+<node COLOR="#435e98" CREATED="1788211053578" ID="ID_1121107125" MODIFIED="1788284625243" TEXT="Also &#x27f9; mu&#xdf; doch umstellen auf eine lineare Kette &#x2014; auch f&#xfc;r die Interfaces">
+<linktarget COLOR="#a81651" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" SOURCE="ID_1738529643" STARTARROW="None" STARTINCLINATION="-297;13;"/>
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#0c5669" CREATED="1788284754476" ID="ID_653345776" MODIFIED="1788284851663" TEXT="nun Assert im Test auf Gr&#xf6;&#xdf;e des Basis-Interfaces">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...was nicht komplett durch den C++ - Standard gedeckt ist, jedoch aufgrund der Alignment-Contstraints und der Pflicht zur zero-overhead-Implementierung praktisch immer gegeben sein d&#252;rfte
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788284591681" ID="ID_35862304" MODIFIED="1788284660301" TEXT="Fazit: etwas kniffligere Definition &#x2014; aber weniger Ambituit&#xe4;ts-Probleme">
+<arrowlink COLOR="#474ebe" DESTINATION="ID_1626670078" ENDARROW="Default" ENDINCLINATION="317;19;" ID="Arrow_ID_1833189754" STARTARROW="None" STARTINCLINATION="396;16;"/>
 </node>
 </node>
 </node>
@@ -84335,7 +84349,7 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#f91755" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" STARTARROW="None" STARTINCLINATION="-304;11;"/>
+<arrowlink COLOR="#a81651" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" STARTARROW="None" STARTINCLINATION="-297;13;"/>
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788207092440" ID="ID_1489003663" MODIFIED="1788214784231" TEXT="Typ und BaseDomain werden zum Problem">
 <icon BUILTIN="messagebox_warning"/>
@@ -84354,8 +84368,16 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node CREATED="1788207233069" ID="ID_403725711" MODIFIED="1788207254569" TEXT="aber die konkrete Scale mu&#xdf; darauf aufbauen (da sie Werte beschr&#xe4;nkt)"/>
-<node CREATED="1788215170120" ID="ID_1317810371" MODIFIED="1788215194280" TEXT="Typ mu&#xdf; konkret sein, schlie&#xdf;t BaseDomain ein und verweist auf Scale"/>
+<node CREATED="1788207233069" ID="ID_403725711" MODIFIED="1788207254569" TEXT="aber die konkrete Scale mu&#xdf; darauf aufbauen (da sie Werte beschr&#xe4;nkt)">
+<node CREATED="1788277709450" HGAP="60" ID="ID_1575437557" MODIFIED="1788277762386" TEXT="&#x201e;aufbauen&#x201c; hei&#xdf;t nicht zwangsl&#xe4;ufig auch &#x201e;erweitern&#x201c;" VSHIFT="1">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1788215170120" ID="ID_1317810371" MODIFIED="1788215194280" TEXT="Typ mu&#xdf; konkret sein, schlie&#xdf;t BaseDomain ein und verweist auf Scale">
+<node CREATED="1788279901620" HGAP="78" ID="ID_1647252878" MODIFIED="1788279934225" TEXT="umbenennen in &#x27fc; TypedEntity" VSHIFT="1">
+<icon BUILTIN="yes"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788215427662" ID="ID_214321685" MODIFIED="1788217785702" TEXT="Das Povision-Interface mu&#xdf; anders angeordnet werden">
 <linktarget COLOR="#ff001d" DESTINATION="ID_214321685" ENDARROW="Default" ENDINCLINATION="4;-14;" ID="Arrow_ID_1991058182" SOURCE="ID_1569730697" STARTARROW="None" STARTINCLINATION="-120;4;"/>
@@ -84371,7 +84393,16 @@
 </html></richcontent>
 <node CREATED="1788215575560" ID="ID_690071422" MODIFIED="1788215606429" TEXT="das ist das front-End"/>
 <node CREATED="1788215613679" ID="ID_200801579" MODIFIED="1788215624951" TEXT="somit wird hier auch eine Interface-Kette eingemischt"/>
-<node CREATED="1788215708763" ID="ID_907924223" MODIFIED="1788215727096" TEXT="oder man w&#xfc;rde Zugang zu einer Provision bieten"/>
+<node CREATED="1788215708763" ID="ID_907924223" MODIFIED="1788277831015" TEXT="oder man w&#xfc;rde Zugang zu einer Provision bieten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bedeutet, es gibt eine Methode um eine Provision&amp; zu bekommen, welche konsequenterweise dann &#252;ber das Implementierungs-Interface erreichbar sein mu&#223; (da wir uns auf eine einfache Vererbungskette einschr&#228;nken m&#252;ssen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 <node CREATED="1788215737795" ID="ID_516807030" MODIFIED="1788215749277" TEXT="Provision wird damit ein eigenst&#xe4;ndiges Interface">
 <node CREATED="1788215750841" ID="ID_374789197" MODIFIED="1788215911279" TEXT="sie ist nur implizit getypt">
@@ -84402,12 +84433,12 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1788221594093" ID="ID_579519208" MODIFIED="1788221708229" TEXT="es mu&#xdf; aber per default als NOP implementiert sein">
+<node CREATED="1788221594093" ID="ID_579519208" MODIFIED="1788279294776" TEXT="es mu&#xdf; aber per default als NOP implementiert sein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...sonst wird es schwierig mit dem Zusammenstellen der Interface-Kette; tats&#228;chlich lassen sich alle f&#252;r dieses Interface vorgesehenen Operationen &#187;leer&#171; Implementieren &#8212; es passiert dann einfach gar nichts, keine Zuweisung, keine Verbindung
+      ...sonst wird es schwierig mit dem Zusammenstellen der Interface-Kette; tats&#228;chlich lassen sich alle f&#252;r dieses Interface vorgesehenen Operationen &#187;leer&#171; Implementieren&#160;&#8212; es passiert dann einfach gar nichts, keine Zuweisung, keine Verbindung &#8212; was inhaltlich-logisch sogar korrekt ist, ein NICHTS-Parameter...
     </p>
   </body>
 </html></richcontent>
@@ -84420,6 +84451,25 @@
 <node CREATED="1788222535392" ID="ID_1282201343" MODIFIED="1788222543419" TEXT="Disposition ist immer noch ein Interface"/>
 <node CREATED="1788222544142" ID="ID_1947215779" MODIFIED="1788222568288" TEXT="es wird per PolymorphicValue auf das Parameter-Objekt exponiert"/>
 <node CREATED="1788222571539" ID="ID_1256386409" MODIFIED="1788222603029" TEXT="die ganze konkrete Implementierung setzt darauf auf (und bleibt damit opaque, und variierbar)"/>
+</node>
+<node CREATED="1788279465992" ID="ID_511934631" MODIFIED="1788279480380" TEXT="Insgesamt entsteht hier eine Konkretisierungs-Kette">
+<node CREATED="1788279482831" ID="ID_1252818882" MODIFIED="1788279536466" TEXT="wir gehen vom Kontrakt zum Service">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      es handelt sich dabei durchgehend um Abstraktionen, wobei sich jedoch der Charakter der Abstraktion &#228;ndert von einer Zusicherung zu etwas, auf dem wir konkret aufbauen k&#246;nnen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788279539424" ID="ID_1639736337" MODIFIED="1788279543780" TEXT="Bedeutung der Stufen">
+<node CREATED="1788279549319" ID="ID_120197629" MODIFIED="1788279575207" TEXT="Provision: die Grundidee eines Parameters wie hier konzeptionalisiert"/>
+<node CREATED="1788279579772" ID="ID_1387667429" MODIFIED="1788279619787" TEXT="Domain: Zusicherung einer Typ-konformen Handhabung"/>
+<node CREATED="1788279649921" ID="ID_829245549" MODIFIED="1788279664995" TEXT="BaseDomain: Festlegung der Eigenschaften der Datenbasis"/>
+<node CREATED="1788279667230" ID="ID_1645392786" MODIFIED="1788279840724" TEXT="TypedEntity: Konformit&#xe4;t und Darstelluns-F&#xe4;higkeiten"/>
+<node CREATED="1788280039452" ID="ID_1355845527" MODIFIED="1788280070438" TEXT="Disposition: der komplette Parameter-Service"/>
+</node>
 </node>
 </node>
 <node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">

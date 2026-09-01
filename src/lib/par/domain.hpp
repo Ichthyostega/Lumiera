@@ -35,7 +35,6 @@
 
 
 #include "lib/meta/typelist.hpp"
-//#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/par/provision.hpp"
 #include "lib/meta/trait.hpp"
@@ -54,52 +53,32 @@ namespace par {
   using std::numeric_limits;
   
   
+  /* ===== Type Handler Interface for generic parameter value access ===== */
   
-  template<typename X>
-  constexpr inline ValBuff&
-  asValBuff (X& something)
-  {
-    void* rawMem{& something};
-    return * static_cast<ValBuff*> (rawMem);
-  }
+  class HandlerBase
+    : public Provision
+    {
+    public:
+      void extractAs();
+      void conform();
+    };
   
-  template<typename X>
-  constexpr inline ValBuff const&
-  asValBuff (X const& something)
-  {
-    void const * rawMem{& something};
-    return * static_cast<ValBuff const *> (rawMem);
-  }
-  
-  template<typename X>
-  constexpr inline X&
-  asValue (ValBuff& storage)
-  {
-    void* rawMem{& storage};
-    return * static_cast<X*> (rawMem);
-  }
-  
-  template<typename X>
-  constexpr inline X const&
-  asValue (ValBuff const& storage)
-  {
-    void const * rawMem{& storage};
-    return * static_cast<X const *> (rawMem);
-  }
-  
-  
-  template<typename X>
+  template<typename X, class PAR>
   class TypeHandler
+    : public PAR
     {
       public:
         virtual void extractAs (X& targetVal, ValBuff const& valBuff)  =0;
         virtual void conform (ValBuff& targetBuff, X const& srcVal)    =0;
-
+        
+        using PAR::extractAs;
+        using PAR::conform;
     };
   
-//  using lib::meta::typeseq;
   
-  
+  /**
+   * Fixed collection of elementary types supported in parameters
+   */
   using BaseTypes = meta::Types<int
                                ,int64_t
                                ,uint
@@ -109,7 +88,7 @@ namespace par {
                                ,bool
                                >;
   /** build a generic visitor interface for all types in list */
-  using TypeHandlerInterface = meta::InstantiateForEach<BaseTypes::List, TypeHandler, Provision>;
+  using TypeHandlerInterface = meta::InstantiateChained<BaseTypes::List, TypeHandler, HandlerBase>;
   
   
   /**
@@ -302,8 +281,7 @@ _Pragma("GCC diagnostic pop")
   inline void
   BaseDomain<V>::transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)
   {
-    TypeHandler<V>& typeHandler{targetDomain};
-    typeHandler.conform (target, asValue<V> (source));
+    targetDomain.conform (target, asValue<V> (source));
     targetDomain.applyLimit (target);
   }
   
