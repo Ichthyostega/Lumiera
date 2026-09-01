@@ -52,14 +52,18 @@ namespace par {
    * with domain and scale, and a value provision. Can be generated through a builder
    * notation and stored within the Parameter object (as a container).
    */
-  template<typename V>
+  template<typename VAL>
   class ParamData
-    : public TypedEntity<V, Disposition>
+    : public TypedEntity<VAL, Disposition>
     {
-      V val_{};
-      Provision* src_{nullptr};
+      VAL val_;
+      Provision* src_;
       
     public:
+      ParamData (VAL initVal)
+        : val_{std::move (initVal)}
+        , src_{nullptr}
+        { }
     };
   
   

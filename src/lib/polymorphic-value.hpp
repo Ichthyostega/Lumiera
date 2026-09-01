@@ -516,7 +516,7 @@ namespace lib {
       static PolymorphicValue
       build (ARGS&&... args)
         {
-          Adapter<IMP>* type_to_build_in_buffer(0);
+          IMP* type_to_build_in_buffer;
           return PolymorphicValue (type_to_build_in_buffer, std::forward<ARGS>(args)...);
         }
       
