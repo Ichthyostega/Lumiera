@@ -64,9 +64,9 @@ namespace par {
    * with domain and scale, and a value provision. Can be generated through a builder
    * notation and stored within the Parameter object (as a container).
    */
-  template<typename VAL>
+  template<typename VAL, class IFA =Disposition>        /////////////////////////////////////////////////////TICKET #1197 : the second template argument is quite confusing and became necessary due to the limitations of PolymorphicValue
   class ParamData
-    : public TypedEntity<VAL, Disposition>
+    : public TypedEntity<VAL, IFA>
     {
       VAL val_;
       Provision* src_;
@@ -87,16 +87,16 @@ namespace par {
   
   
   
-  template<typename VAL>
+  template<typename VAL, class IFA>
   void
-  ParamData<VAL>::retrieveInto (ValBuff& target)  const
+  ParamData<VAL, IFA>::retrieveInto (ValBuff& target)  const
   {
     asValue<VAL>(target) = val_;
   }
   
-  template<typename VAL>
+  template<typename VAL, class IFA>
   void
-  ParamData<VAL>::setValFrom (ValBuff const& newVal)
+  ParamData<VAL, IFA>::setValFrom (ValBuff const& newVal)
   {
     val_ = asValue<VAL>(newVal);
   }

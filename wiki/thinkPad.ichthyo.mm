@@ -84071,9 +84071,9 @@
 </html></richcontent>
 <arrowlink COLOR="#931557" DESTINATION="ID_87627416" ENDARROW="Default" ENDINCLINATION="-273;3165;" ID="Arrow_ID_867915966" STARTARROW="None" STARTINCLINATION="289;-1009;"/>
 <icon BUILTIN="clanbomber"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af020b" CREATED="1788301729827" ID="ID_18695637" MODIFIED="1788382908281" TEXT="erscheint zunehmend dringend...">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af020b" CREATED="1788301729827" ID="ID_18695637" MODIFIED="1788386325808" TEXT="erscheint zunehmend dringend...">
+<linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" SOURCE="ID_1978220833" STARTARROW="None" STARTINCLINATION="349;18;"/>
 <linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_635472113" SOURCE="ID_1100385220" STARTARROW="None" STARTINCLINATION="373;14;"/>
-<linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" SOURCE="ID_1978220833" STARTARROW="None" STARTINCLINATION="343;20;"/>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788301751355" ID="ID_1968045723" MODIFIED="1788301772221" TEXT="in diesem (oder dem n&#xe4;chsten) VerticalSlice angehen">
@@ -84655,9 +84655,10 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788380577746" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788382780349" ID="ID_552546860" MODIFIED="1788382805575" TEXT="PolymorphicValue nicht optimal definiert">
+<node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" ID="ID_552546860" MODIFIED="1788386239896" TEXT="PolymorphicValue nicht optimal definiert">
 <icon BUILTIN="broken-line"/>
-<node CREATED="1788301325125" ID="ID_1978220833" MODIFIED="1788383057351" TEXT="das mit dem CopySupport ist ein echtes Problem ">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1788301325125" ID="ID_1978220833" MODIFIED="1788386325808" TEXT="das mit dem CopySupport ist ein echtes Problem ">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -84669,9 +84670,65 @@
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" STARTARROW="None" STARTINCLINATION="343;20;"/>
+<arrowlink COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" STARTARROW="None" STARTINCLINATION="349;18;"/>
+<icon BUILTIN="smiley-angry"/>
 </node>
-<node CREATED="1788383059641" ID="ID_1688642617" MODIFIED="1788383077961" TEXT="das Marker-Template mu&#xdf; wirklich in der Kette liegen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788383059641" ID="ID_1688642617" MODIFIED="1788386316028" TEXT="das Marker-Template mu&#xdf; wirklich in der Kette liegen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...ich hatte es zwar definiert und im Container-Typ angegeben &#8212; aber dann im konkreten API-Aufbau doch nicht eingeschleift (weil es da thematisch ja auch nicht hingeh&#246;rt, Grrrr)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1788384797381" ID="ID_1232714334" MODIFIED="1788386029574" TEXT="stimmt garnicht &#x27f6; es w&#xe4;hlt die optimale Variante">
+<icon BUILTIN="idea"/>
+<node CREATED="1788384925999" ID="ID_906034232" MODIFIED="1788384956844" TEXT="aber es schl&#xe4;gt den &quot;admin overhead&quot; blindlings oben drauf"/>
+<node CREATED="1788384957654" ID="ID_799415187" MODIFIED="1788384990688" TEXT="aber wir verwenden einen sizeof &#x27f6; da ist die VTable bereits mit eingerechnet"/>
+<node CREATED="1788384992694" ID="ID_1687522773" MODIFIED="1788385063843" TEXT="also ist auch das Konzept &#xbb;admin-overhead&#xab; in sich verworren (und &#xfc;berfl&#xfc;ssig)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      insofern dieses ganze clevere seitw&#228;rige Attachment &#252;berfl&#252;ssig ist;&#160; die einzige zwingende Voraussetzung ist, da&#223; wir eine VTable haben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788386034754" ID="ID_1268627911" MODIFIED="1788386341107" TEXT="L&#xf6;sung">
+<icon BUILTIN="idea"/>
+<node CREATED="1788386039641" ID="ID_477009340" MODIFIED="1788386053499" TEXT="zweites Template-Argument in ParamData">
+<node CREATED="1788386057747" ID="ID_904631655" MODIFIED="1788386082344" TEXT="damit kann dann der Parameter (Container) hier das CopySupport-API injizieren"/>
+<node CREATED="1788386085851" ID="ID_1295285894" MODIFIED="1788386098957" TEXT="und wir halten die Komplexit&#xe4;t nur an einer stelle"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788386101665" ID="ID_93545182" MODIFIED="1788386217575" TEXT="mu&#xdf; die PAYLOAD_SIZE so definieren, da&#xdf; die VTable-size abgezogen wird">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      weil PolymorphicValue da blindlings seinen ADMIN_OVERHEAD draufschl&#228;gt. Das ist ein sekund&#228;res Problem im API-Design &#8212; wenn das Marker-API und der &#187;workaround&#171; mit dem Mix-in nicht mehr gebraucht werden, dann f&#228;llt auch diese ganze Verwirrung hier weg (die mich jetzt viele Stunden gekostet hat)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1788386354314" ID="ID_1688624687" MODIFIED="1788386399854" TEXT="jetzt pa&#xdf;ts: sizeof(Parameter) &#x2261; 4 &#xab;slot&#xbb;">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
 </node>
 </node>
 </node>
