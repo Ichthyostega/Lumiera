@@ -63,9 +63,30 @@ namespace par {
   using BaseTypeID = meta::TypeIdxID<T, BaseTypes::List>;
   
   
+  
+  /* ===== setup of ID space ===== */
+  
+  namespace {
+    auto _bit_fit = [](uint bits){ return (1u << bits) - 1; };
+  }
+  
+  static constexpr uint _BASE_TYPE_BITS = 4;
+  static constexpr uint    _SCALES_BITS = 10;
+  static constexpr uint  _PARAM_ID_BITS = 18;
+  
+  static constexpr uint MAX_BASETYPES = _bit_fit(_BASE_TYPE_BITS); ///< max number of parameter base types that can be configured
+  static constexpr uint MAX_SCALES    = _bit_fit(_SCALES_BITS);    ///< max number of distinct scales that can be defined at runtime
+  static constexpr uint MAX_PARAM_ID  = _bit_fit(_PARAM_ID_BITS);  ///< max number of distinct param identities that can be created
+  
+  static_assert (BASETYPE_CNT <= MAX_BASETYPES);
+  
+  
+  
   struct IDRecord
     {
-      
+      uint baseTypeID :_BASE_TYPE_BITS  = 0;
+      uint scaleID    :_SCALES_BITS     = 0;
+      uint paramIDID  :_PARAM_ID_BITS   = 0;
     };
   
   
