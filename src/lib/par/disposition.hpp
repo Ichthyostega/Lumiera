@@ -26,6 +26,7 @@
 #define LIB_PAR_DISPOSITION_H
 
 
+#include "lib/par/spec.hpp"
 #include "lib/par/provision.hpp"
 #include "lib/par/param-type.hpp"
 
@@ -43,6 +44,8 @@ namespace par {
   class Disposition
     : public Domain
     {
+      IDRecord idr_;
+      
     public:
       template<typename X>
       X extract()  const;

@@ -34,6 +34,7 @@
 #define LIB_PAR_DOMAIN_H
 
 
+#include "lib/par/spec.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/par/provision.hpp"
@@ -76,17 +77,6 @@ namespace par {
     };
   
   
-  /**
-   * Fixed collection of elementary types supported in parameters
-   */
-  using BaseTypes = meta::Types<int
-                               ,int64_t
-                               ,uint
-                               ,uint64_t
-                               ,double
-                               ,float
-                               ,bool
-                               >;
   /** build a generic visitor interface for all types in list */
   using TypeHandlerInterface = meta::InstantiateChained<BaseTypes::List, TypeHandler, HandlerBase>;
   

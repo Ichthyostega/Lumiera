@@ -31,7 +31,6 @@
 
 #include "lib/par/disposition.hpp"
 #include "lib/polymorphic-value.hpp"
-#include "lib/meta/typelist-util.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -92,12 +91,9 @@ namespace par {
     };
   
   
-  template<typename VAL>
+  template<typename VAL>   requires par_basetype<VAL>
   class Parameter::Builder
     {
-      static_assert (meta::isInList<VAL, BaseTypes::List>()
-                    ,"Only some fixed base data types are supported as Parameter value type.");
-      
       VAL initVal_{};
       
     public:

@@ -77,7 +77,12 @@ namespace test{
       void
       simpleUsage()
         {
+SHOW_EXPR(BUFF_SIZ);
           CHECK (sizeof(Parameter) <= 4 * sizeof(void*));
+SHOW_EXPR(BaseTypeID<float>::value)
+SHOW_EXPR(BaseTypeID<float*>::value)
+          ParamData<int> dip(55);
+SHOW_EXPR(sizeof(dip))
           
           Parameter par = Parameter::forType<int>().build();
           CHECK (0 == par.getVal<int>());

@@ -61468,6 +61468,20 @@
 </html></richcontent>
 </node>
 </node>
+<node CREATED="1788380815777" ID="ID_339381268" MODIFIED="1788380998740" TEXT="Typlisten-Hilfsmittel">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788380823618" ID="ID_763137476" MODIFIED="1788380836976" TEXT="geh&#xf6;rt l&#xe4;ngerfristig etwas konsolidiert...">
+<icon BUILTIN="hourglass"/>
+</node>
+<node CREATED="1788380842279" ID="ID_1993085663" MODIFIED="1788380927706" TEXT="Typlisten und Typ-Sequenzen sind nun voll ineinander &#xfc;berf&#xfc;hrbar">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Bindeglied steckt in typeseq-util.hpp &#10230; es wurde einfach m&#246;glich durch die Umstellung auf variadische Typ-Sequenzen (beim &#220;bergang auf C++20)
+    </p>
+  </body>
+</html></richcontent>
+</node>
 <node CREATED="1540682674455" ID="ID_1625152878" MODIFIED="1557498707236" TEXT="Typliste filtern">
 <node CREATED="1540682680286" ID="ID_1172485112" MODIFIED="1557498707236" TEXT="nach canConvert">
 <node CREATED="1540682731631" ID="ID_1059841081" MODIFIED="1557498707236" TEXT="die Typen, in die man umwandeln kann">
@@ -61488,6 +61502,39 @@
     </p>
   </body>
 </html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1788380932335" ID="ID_550975867" MODIFIED="1788381357392" TEXT="TypeIdxID">
+<linktarget COLOR="#80969f" DESTINATION="ID_550975867" ENDARROW="Default" ENDINCLINATION="-1482;411;" ID="Arrow_ID_1821706956" SOURCE="ID_659200917" STARTARROW="None" STARTINCLINATION="434;28;"/>
+<node CREATED="1788381017736" ID="ID_1220983692" MODIFIED="1788381171239" TEXT="die reine Suche gab es schon f&#xfc;r Type-Sequenzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      constexpr <font color="#000000" face="DejaVu Sans Mono"><b>indexOfType</b></font>&lt;<font color="#870505">T,TS...</font>&gt;()
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      bisher wenig verwendet, wenn aber, dann f&#252;r einen Index-basierten Zugriff &#10233; es <b>mu&#223;</b>&#160;eine static-Assertion geben, da&#223; der gesuchte Typ auch wirklich in der Liste ist (es w&#228;re brandgef&#228;hrlich, im sonst-Fall ein Sentinel zur&#252;ckzugeben, z.B. -1)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788381173379" ID="ID_611234338" MODIFIED="1788381193909" TEXT="konzipiere es damit explizit als Typ-ID">
+<node CREATED="1788381195458" ID="ID_1625105480" MODIFIED="1788381212466" TEXT="soll 0 sein f&#xfc;r &#xbb;alle anderen&#xab;"/>
+<node COLOR="#17155b" CREATED="1788381224205" ID="ID_1878301364" MODIFIED="1788381344411" TEXT="verdammt kniffelig ... letztlich aber geknackt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      der Trick war, den gefundenen Index in einem zus&#228;tzlichen non-type-Argument hochzuz&#228;hlen, und bei Match von dort zu entnehmen. Warum? nur so kann man <i>einen ganz anderen Wert</i>&#160;liefern, wenn man &#252;ber das Ende der Liste hinausl&#228;uft; die naive Implementierung mit Tail-Rekursion addiert ja den Index <i>auf dem R&#252;ckweg hoch</i>&#160;und erlaubt daher keinen alternativen Ausgang
+    </p>
+  </body>
+</html></richcontent>
+</node>
 </node>
 </node>
 </node>
@@ -84024,8 +84071,9 @@
 </html></richcontent>
 <arrowlink COLOR="#931557" DESTINATION="ID_87627416" ENDARROW="Default" ENDINCLINATION="-273;3165;" ID="Arrow_ID_867915966" STARTARROW="None" STARTINCLINATION="289;-1009;"/>
 <icon BUILTIN="clanbomber"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af020b" CREATED="1788301729827" ID="ID_18695637" MODIFIED="1788301843036" TEXT="erscheint zunehmend dringend...">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#af020b" CREATED="1788301729827" ID="ID_18695637" MODIFIED="1788382908281" TEXT="erscheint zunehmend dringend...">
 <linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_635472113" SOURCE="ID_1100385220" STARTARROW="None" STARTINCLINATION="373;14;"/>
+<linktarget COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" SOURCE="ID_1978220833" STARTARROW="None" STARTINCLINATION="343;20;"/>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788301751355" ID="ID_1968045723" MODIFIED="1788301772221" TEXT="in diesem (oder dem n&#xe4;chsten) VerticalSlice angehen">
@@ -84133,7 +84181,20 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1788020869700" ID="ID_57699637" MODIFIED="1788020888892" TEXT="klar ist: wenn es einen &#xbb;Buffer&#xab; gibt, dann residiert er hier, in der Provision"/>
+<node COLOR="#5b280f" CREATED="1788020869700" ID="ID_57699637" MODIFIED="1788380239674" TEXT="klar ist: wenn es einen &#xbb;Buffer&#xab; gibt, dann residiert er hier, in der Provision">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1788380241393" ID="ID_258414787" MODIFIED="1788380272992" TEXT="Nein! definitiv nicht &#x27f6; das bricht die Abstraktion (&#xbb;Datenquelle&#xab;)"/>
+<node CREATED="1788380280763" ID="ID_1135171473" MODIFIED="1788380317432" TEXT="der &#xbb;Buffer&#xab; geh&#xf6;rt in einen (opaquen) Implementierungs-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich will mich ja <i>grade nicht darauf festlegen</i>, da&#223; es einen &#187;Buffer&#171; gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 <node CREATED="1788021229355" ID="ID_1822130411" MODIFIED="1788021252164" TEXT="Provision&amp; k&#xf6;nnte eine Dekorator-Kette bilden">
 <node CREATED="1788022402071" ID="ID_37196039" MODIFIED="1788022413073" TEXT="damit k&#xf6;nnte auch das &#xbb;Setzen&#xab; delegiert werden"/>
 <node CREATED="1788022413763" ID="ID_241754503" MODIFIED="1788022585515" TEXT="aber unklar: wie wird der Typ ausgedr&#xfc;ckt?"/>
@@ -84492,7 +84553,12 @@
 <node CREATED="1788222571539" ID="ID_1256386409" MODIFIED="1788222603029" TEXT="die ganze konkrete Implementierung setzt darauf auf (und bleibt damit opaque, und variierbar)"/>
 <node BACKGROUND_COLOR="#c8bed8" COLOR="#3e3976" CREATED="1788293527789" ID="ID_1979935695" MODIFIED="1788296915688" TEXT="Konsequenz &#x27f9; mu&#xdf; dieses Interface generisch zusammenstellen">
 <icon BUILTIN="yes"/>
-<node CREATED="1788293568866" ID="ID_131380857" MODIFIED="1788293583910" TEXT="es mu&#xdf; zwingend oberhalb der getypten Implementierung liegen"/>
+<node CREATED="1788293568866" ID="ID_131380857" MODIFIED="1788380416055" TEXT="es mu&#xdf; noch unterhalb der getypten Implementierung liegen"/>
+<node CREATED="1788380418977" ID="ID_626646433" MODIFIED="1788380435831" TEXT="es mu&#xdf; bereits einen ID-Record bieten">
+<node CREATED="1788380437998" ID="ID_1881580962" MODIFIED="1788380488048" TEXT="sonst ist kein &#xbb;short-circuit&#xab; m&#xf6;glich">
+<arrowlink COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" STARTARROW="None" STARTINCLINATION="220;17;"/>
+</node>
+</node>
 <node CREATED="1788293586698" ID="ID_1746668987" MODIFIED="1788293628728" TEXT="Inhaltlich geh&#xf6;rt es aber n&#xe4;her zum ParamData-Record"/>
 </node>
 </node>
@@ -84525,33 +84591,230 @@
 <node COLOR="#435e98" CREATED="1788307857528" ID="ID_412964688" MODIFIED="1788313299843" TEXT="Value-Init &#x27f6; direkt vom Builder in den Konstruktor"/>
 <node CREATED="1788307874399" ID="ID_195138202" MODIFIED="1788307912949" TEXT="Get mit Typ-Konversion &#x27f6; generisches front-End auf dem Disposition-Interface">
 <node CREATED="1788307916543" ID="ID_877977052" MODIFIED="1788307932499" TEXT="so mu&#xdf; es sein &#x2014; daf&#xfc;r haben wir ein Interface"/>
-<node CREATED="1788307933286" ID="ID_67518693" MODIFIED="1788307948939" TEXT="die Implementierung baut dann auf den Basis-Interfaces auf"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788308358560" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<node CREATED="1788307933286" ID="ID_67518693" MODIFIED="1788307948939" TEXT="die Implementierung baut dann auf den Basis-Interfaces auf">
+<node CREATED="1788366990200" ID="ID_1939303972" MODIFIED="1788367012596" TEXT="sch&#xf6;n w&#xe4;rs...">
+<icon BUILTIN="smiley-angry"/>
+</node>
+<node CREATED="1788366994118" ID="ID_143088929" MODIFIED="1788367004585" TEXT="dann l&#xe4;uft aber alles per Indirektion">
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788380480854" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<linktarget COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" SOURCE="ID_1881580962" STARTARROW="None" STARTINCLINATION="220;17;"/>
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788313357254" TEXT="Alarm: das Design geht hier nicht auf">
+<node CREATED="1788362693945" ID="ID_1951653761" MODIFIED="1788362711453" TEXT="sonst &#xbb;relativiert&#xab; sich der Direkt-Zugriff">
+<node CREATED="1788366366118" ID="ID_295761416" MODIFIED="1788366874928" TEXT="tats&#xe4;chlich brauche ich h&#xf6;chstens eine Indirektion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...denn hier habe ich ja (per Template-Parameter) schon einen Typ in der Hand, mu&#223; also nur noch den zugeh&#246;rigen TypeHandler aufrufen (eine Indirektion)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788366386901" ID="ID_303065066" MODIFIED="1788366439089" TEXT="der double-Dispatch w&#xe4;re gar nicht notwendig hier">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...der deckt nur den (theoretischen) Fall ab, da&#223; wir eine Zuweisung zwischen <i>zwei Parametern</i>&#160;machen (f&#252;r die beide der Datentyp opaque ist).
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788366876053" ID="ID_871895427" MODIFIED="1788366988849" TEXT="und eine Indirektion um dann per force-Cast zuzugreifen w&#xe4;re Unsinn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zumal ich dann auch noch per force-downcast auf den Buffer zugreifen m&#252;&#223;te
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fed199" COLOR="#b90040" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788380092658" TEXT="Alarm: das Design geht hier nicht auf">
+<arrowlink COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" STARTARROW="None" STARTINCLINATION="-740;0;"/>
 <linktarget COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" SOURCE="ID_1271224230" STARTARROW="None" STARTINCLINATION="2071;0;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1788309801877" ID="ID_1982340657" MODIFIED="1788309820758" TEXT="auf der Interface-Ebene fehlen mir relevante Informationen"/>
 <node CREATED="1788309821442" ID="ID_1283728464" MODIFIED="1788309832720" TEXT="aber per Voraussetzung will ich keine Indirektion"/>
 <node CREATED="1788309836170" ID="ID_1386925847" MODIFIED="1788309890528" TEXT="und das Implementation-Layout sollte komplett frei konfigurierbar bleiben">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       auch im Hinblick darauf, da&#223; ich sp&#228;ter mal (m&#246;glichst mit dem gleichen generischen Code) auch komplexe Parameter-Typen handhaben m&#246;chte, wie Vektoren, Farb-Tripel und ganze Masken-Parameters&#228;tze...
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788380577746" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788382780349" ID="ID_552546860" MODIFIED="1788382805575" TEXT="PolymorphicValue nicht optimal definiert">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1788301325125" ID="ID_1978220833" MODIFIED="1788383057351" TEXT="das mit dem CopySupport ist ein echtes Problem ">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Umstand, da&#223; man da so ein Marker-Template inmischen mu&#223;, und dann die Fallunterscheidung, wann der PolymorphicValue-Container tats&#228;chlich die schlanke lineare Vererbungskette nutzen kann, und wo der Copy-Adapter aufgesetzt wird....
+    </p>
+    <p>
+      Ich hab das Zeug gebaut, und schon ein paar mal verwendet, aber <i>ich blick' da einfach nicht mehr durch</i>&#160;&#8212; jedes mal mu&#223; man sich wieder durch die ganzen Templates durchfressen (und das f&#252;r etwas, was es eigentlich mit modernem C++ gar nicht mehr br&#228;uchte)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ff2137" DESTINATION="ID_18695637" ENDARROW="Default" ENDINCLINATION="1165;103;" ID="Arrow_ID_1244208579" STARTARROW="None" STARTINCLINATION="343;20;"/>
+</node>
+<node CREATED="1788383059641" ID="ID_1688642617" MODIFIED="1788383077961" TEXT="das Marker-Template mu&#xdf; wirklich in der Kette liegen"/>
 </node>
 </node>
 </node>
 </node>
 <node CREATED="1788313220539" ID="ID_1678152846" MODIFIED="1788313251138" TEXT="Set mit Typ-Konversion &#x27f6;  spiegelblidlich auf dem Disposition-Inteface"/>
 <node COLOR="#435e98" CREATED="1788313267301" ID="ID_697595338" MODIFIED="1788313294222" TEXT="Provision: Zugriff auf den Value-Buffer  &#x27f6; cast und Assignment"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788369873156" TEXT="innere Widerspr&#xfc;che werden deutlich">
+<linktarget COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" SOURCE="ID_137382885" STARTARROW="None" STARTINCLINATION="-740;0;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1788367171639" ID="ID_632634612" MODIFIED="1788367181733" TEXT="ich will zugleich zwei Extreme">
+<node CREATED="1788367184127" ID="ID_1812755681" MODIFIED="1788367214110" TEXT="ich will einen einfachen Datenwert (&#x27f9;Effizienz)"/>
+<node CREATED="1788367215173" ID="ID_1024391215" MODIFIED="1788367223797" TEXT="aber getypt soll der auch sein...."/>
+<node CREATED="1788367226489" ID="ID_334299039" MODIFIED="1788367596873" TEXT="und au&#xdf;erdem m&#xf6;chte ich mich JETZT nicht festlegen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...zumal ich einen weiteren gewaltigen Zielkonflikt schon &#187;riechen&#171; kann: die Anspr&#252;che komplexer Datentypen sind mit einem <i>leichtgewichtigen Standardfall</i>&#160;schwer vereinbar.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788367600886" ID="ID_661068668" MODIFIED="1788369878699" TEXT="vermutlich steckt da eine tiefere Problemlage dahinter....">
+<linktarget COLOR="#b781a4" DESTINATION="ID_661068668" ENDARROW="Default" ENDINCLINATION="128;148;" ID="Arrow_ID_1562138790" SOURCE="ID_134775037" STARTARROW="None" STARTINCLINATION="-493;26;"/>
+<node CREATED="1788367626408" ID="ID_729798008" MODIFIED="1788367646292" TEXT="denn eigentlich ist mir das ganze &#xbb;Paramter&#xab;-Thema im Moment zu viel"/>
+<node CREATED="1788367647365" ID="ID_1045440705" MODIFIED="1788367666198">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      ich <b>mu&#223;</b>&#160;es aber anfassen
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1788367668144" ID="ID_361160202" MODIFIED="1788367953743" TEXT="weil sich hier eine ganze weitere Dimension im Konzept auftut">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich habe gesagt: alles was sich vorher regeln l&#228;&#223;t, wird in einer Art Compiler <i>optimal konfiguriert</i>. Und alles &#220;brige sucht mich jetzt als &#187;Parameter&#171; (oder gar Konfiguration und Regelwerk) heim.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788367686902" ID="ID_1051533158" MODIFIED="1788367849769" TEXT="weil es ganz gef&#xe4;hrlich mit dem Thema Instanz-Managmenet verkn&#xfc;pft ist">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....an den Parameter wird deutlich, da&#223; m&#246;glicherweise meine &#187;L&#246;sung&#171; mit den Segmenten (die ohnehin mehr eine Ausrede ist) so ohne Weiteres gar nicht tragf&#228;hig sein k&#246;nnte &#8212; und wenn sich das realisieren sollte, dann stehe ich unter Handlungszwang (hei&#223;t, ich kann die Architektur nicht l&#228;nger so offen halten, wie ich es gerne h&#228;tte, um den weiterreichenden Ideen die notwendige Luft zu verschaffen)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788367954838" ID="ID_542541550" MODIFIED="1788368220121" TEXT="weil ich diesen Pflock einschlagen mu&#xdf; (sonst werden die Pragmatiker das verpfuschen)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das Thema &#187;Automation&#171; ist eines der wichtigsten Themen, die bestehende Applikationen immer wieder vers&#228;umen. F&#252;r mich ist die L&#246;sung so offensichtlich klar, da&#223; ich es immer in die Zukunft verschoben habe. Nun l&#228;uft mir aber die Zeit davon, dieses Projekt hat keine endlose Zukunft (wenn es sie je gehabt h&#228;tte....). Ich brauche also <i>f&#252;r alle wirklich wichtigen Themen</i>&#160;eine <b>Architektur-L&#246;sung</b>&#160; &#8212; also eine gepr&#228;gte Struktur, die man ohne Zerst&#246;rung nicht &#252;bergehen kann.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1788368252238" ID="ID_1087603902" MODIFIED="1788368268125" TEXT="rational betrachtet: die Offenheit des Design ist derzeit das Wichtigste">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1788368277962" ID="ID_422312977" MODIFIED="1788368313545" TEXT="&#x27f9; ich k&#xf6;nnte h&#xf6;chstens einen Ansatzpunkt f&#xfc;r die Effizienz aufzeigen">
+<node CREATED="1788368321899" ID="ID_1218702512" MODIFIED="1788368357857" TEXT="dazu m&#xfc;&#xdf;te die Flag-Storage bereits in der Disposition direkt zug&#xe4;nglich sein">
+<icon BUILTIN="idea"/>
+<node CREATED="1788368361587" ID="ID_1908291843" MODIFIED="1788369980901" TEXT="also ohne Indirektion &#x2014; aber nutzbar f&#xfc;r Subklassen"/>
+<node CREATED="1788368368524" ID="ID_1488167235" MODIFIED="1788368381846" TEXT="ich m&#xfc;&#xdf;te mich zwingend auf ein Flag-Datenwort festlegen"/>
+<node CREATED="1788368414264" ID="ID_318537304" MODIFIED="1788369253534" TEXT="das ist jedoch die einzige denkbare Alternative zur VTable">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier mache ich ein ganz grunds&#228;tzliches Argument...
+    </p>
+    <ul>
+      <li>
+        Parameter sollen universell sein &#10233; also m&#252;ssen sie laufzeit-dynamisch flexibel gemacht werden
+      </li>
+      <li>
+        eine Konfiguration zur Laufzeit erfordert stets eine Storage (auch die VTable)
+      </li>
+      <li>
+        wenn ich unter der Schwelle eines Funktionspointer-Dispatches bleiben m&#246;chte, kann ich nur in von Vornherein festgelegte Code-Alternativen verzweigen, per Flag (oder Compile-Time-Branch)
+      </li>
+    </ul>
+    <p>
+      <i>Theoretisch</i>&#160;lie&#223;en sich beide Indirektionsmechanismen &#252;ber eine Dispatch-Tabelle verbinden; das w&#228;re aber eine <i>durchaus fragw&#252;rdige</i>&#160;Storage-Optimierung (die ganz sicher unter das Verdikt &#187;premature&#171; f&#228;llt, sofern nicht anders aufgezeigt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788369259126" ID="ID_773542973" MODIFIED="1788369325763" TEXT="Einsch&#xe4;tzung: ein zweiter &#xbb;Slot&#xab; ist praktisch immer vertretbar...">
+<node CREATED="1788369328598" ID="ID_757945751" MODIFIED="1788369847883" TEXT="dann habe ich eben vier &#xbb;Slots&#xab; &#x2014; wtf">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      unter uns&#228;glichen Schmerzen k&#246;nnte ich daraus drei &#187;Slots&#171; machen ... und was bringt mir das? Wenn ich ultimative Effizienz brauche, sollte ich kein universelles Konstrukt wie einen Parameter verwenden. Siehe die Activity-Language im Scheduler, wo ich durch geeignete Speicher-Anordnung die durchaus massiv vorhandene Indirektion auf aktzeptable Cache-Koh&#228;renz gebracht habe.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788369351058" ID="ID_134775037" MODIFIED="1788369878698" TEXT="im Moment leide ich wirklich am &#xbb;Phantomschmerz&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      also echt jetzt! warum bei&#223;e ich mich an der Hinsicht derma&#223;en fest? alle anderen Hinsichten, die ich durchdacht (und bereits gel&#246;st) habe, sind viel wichtiger (z.B. die Automation). Irgendwie versuche ich, hier einen Sieg vor mir selber zu erringen, wobei es doch im Moment gar nichts zu gewinnen gibt.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#b781a4" DESTINATION="ID_661068668" ENDARROW="Default" ENDINCLINATION="128;148;" ID="Arrow_ID_1562138790" STARTARROW="None" STARTINCLINATION="-493;26;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1788380545906" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
+<icon BUILTIN="pencil"/>
+<node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380631272" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition"/>
+<node CREATED="1788380657233" ID="ID_659200917" MODIFIED="1788381357392" TEXT="Neben-Thema: brauche nun eine Basis-Typ-ID">
+<arrowlink COLOR="#80969f" DESTINATION="ID_550975867" ENDARROW="Default" ENDINCLINATION="-1482;411;" ID="Arrow_ID_1821706956" STARTARROW="None" STARTINCLINATION="434;28;"/>
+<node CREATED="1788381363706" HGAP="31" ID="ID_1985934952" MODIFIED="1788381457346" TEXT="die kann unmittelbar statisch und eindeutig zugewiesen werden" VSHIFT="6">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zun&#228;chst dachte ich noch, ich m&#252;&#223;te eine statische Registrierungs-Tabelle aufbauen, ggfs. mit einem Class-Lock. Da ich mich nun aber darauf festgelegt habe, die Basis-Typen statisch festzulegen, in einer Typsequenz, wandert das alles in die Metaprogramming-Ecke
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -84639,8 +84902,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">
 <icon BUILTIN="full-3"/>
-<node COLOR="#338800" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788313026101" TEXT="generisch per double-dispatch">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788380140474" TEXT="generisch per Indirektion">
+<icon BUILTIN="pencil"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788313027713" ID="ID_1271224230" MODIFIED="1788313367997" TEXT="short-circuit bei direkt passendem Typ">
 <arrowlink COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" STARTARROW="None" STARTINCLINATION="2071;0;"/>
@@ -185996,12 +186259,12 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 </node>
 </node>
 <node CREATED="1686439783608" ID="ID_25677654" MODIFIED="1686439786528" TEXT="Concepts">
-<node CREATED="1686438949795" ID="ID_197491932" LINK="https://stackoverflow.com/a/68238680" MODIFIED="1686439911618" TEXT="Concepts f&#xfc;r Templates">
+<node CREATED="1686438949795" ID="ID_197491932" LINK="https://stackoverflow.com/a/68238680" MODIFIED="1686438949795" TEXT="Concepts f&#xfc;r Templates">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
     <p>
-      ...also f&#252;r template templtate parameter;
+      ...also f&#252;r template template parameter;
     </p>
     <p>
       f&#252;r diese mu&#223; man allerdings stets die umst&#228;ndlichere <i>requires</i>-Syntax verwenden
