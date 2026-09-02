@@ -40,10 +40,10 @@ namespace lib {
 namespace par {
   
   namespace {
-    static constexpr size_t BUFF_SIZ = sizeof(ParamData<double>);
+    static constexpr size_t PAYLOAD_SIZ = sizeof(ParamData<double>) - sizeof(void*); ////////////////////////TICKET #1197 : this is a mess! PolymorphicValue adds the ADMIN_OVERHEAD (but our payload has already a VTable)
     using ParameterImplAPI = Disposition;
     using CopySupportMarker = polyvalue::CopySupport<ParameterImplAPI>;
-    using ParamContainer = PolymorphicValue<ParameterImplAPI, BUFF_SIZ, CopySupportMarker>;
+    using ParamContainer = PolymorphicValue<ParameterImplAPI, PAYLOAD_SIZ, CopySupportMarker>;
   }
   
   using util::unConst;
@@ -100,7 +100,7 @@ namespace par {
       Parameter
       build()
         {
-          using ImplPackage = ParamData<VAL>;
+          using ImplPackage = ParamData<VAL, CopySupportMarker>;   //////////////////////////////////////////TICKET #1197 : remove the necessity to inject the CopySupportMarker
           ImplPackage* typeTag{nullptr};
           Parameter resParam{typeTag, std::move (initVal_)};
           return resParam;
