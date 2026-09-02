@@ -171,7 +171,7 @@ namespace util {
    * @todo 3/2024 seems we have solved this problem several times meanwhile /////////////////////////////////TICKET #1360 sort out floating-point rounding and precision
    */
   inline constexpr bool
-  almostEqual (double d1, double d2, unsigned int ulp =2)  noexcept
+  almostEqual (double d1, double d2, uint ulp =2)  noexcept
   {
     using std::fabs;
     return fabs (d1-d2) < DBL_EPSILON * fabs (d1+d2) * ulp
@@ -223,6 +223,10 @@ namespace util {
     
     return logB;
   }
+  
+  static_assert (-1 == ilog2(-5));
+  static_assert ( 0 == ilog2( 1));
+  static_assert ( 5 == ilog2(42));
   
   
 } // namespace util

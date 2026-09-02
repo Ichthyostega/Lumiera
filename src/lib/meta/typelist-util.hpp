@@ -115,6 +115,26 @@ namespace meta {
       { };
     
     
+    /**
+     * Metafunction: build an ID-Type based on the position in the list
+     * @remark when the type is not in the list, TypeIdxID ≔ 0
+     */
+    template<typename TY, typename TYPES, uint idx=1>
+    struct TypeIdxID
+      : std::integral_constant<uint, 0>
+      { };
+    
+    template<typename TY, typename TYPES, uint idx>
+    struct TypeIdxID<TY, Node<TY,TYPES>, idx>             ///< @return 1-based position in case of match
+      : std::integral_constant<uint, idx>
+      { };
+    
+    template<typename X, typename TY, typename TYPES, uint idx>
+    struct TypeIdxID<X, Node<TY,TYPES>, idx>              ///< else recurse to check next element
+      : TypeIdxID<X, TYPES, idx+1>
+      { };
+    
+    
     
     /**
      * Build a list of const types from a given typelist.
