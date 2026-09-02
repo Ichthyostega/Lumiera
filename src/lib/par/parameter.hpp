@@ -120,6 +120,8 @@ namespace par {
   VAL
   Parameter::getVal()  const
     {
+      static_assert (isBaseType<VAL>, "only preconfigured parameter BaseTypes are supported");
+      
       return unConst(this)->getPayload().extract<VAL>();
     }
   
@@ -128,6 +130,8 @@ namespace par {
   void
   Parameter::setVal (VAL&& changedVal)
     {
+      static_assert (isBaseType<VAL>, "only preconfigured parameter BaseTypes are supported");
+      
       getPayload().setVal (changedVal);
     }
   

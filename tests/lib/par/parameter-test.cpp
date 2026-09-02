@@ -78,6 +78,7 @@ namespace test{
       simpleUsage()
         {
           CHECK (sizeof(Parameter) <= 4 * sizeof(void*));
+          CHECK (BASETYPE_MAX_SIZ <= sizeof(ValStorage));
           
           Parameter par = Parameter::forType<int>().build();
           CHECK (0 == par.getVal<int>());

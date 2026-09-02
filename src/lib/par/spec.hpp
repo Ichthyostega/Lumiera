@@ -31,7 +31,6 @@
 #include "lib/symbol.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
-#include "lib/meta/typeseq-util.hpp"
 
 
 
@@ -50,7 +49,8 @@ namespace par {
                                ,bool
                                >;
   
-  static constexpr uint BASETYPE_CNT = meta::count<BaseTypes>();
+  static constexpr uint BASETYPE_CNT     = meta::count<BaseTypes::List>();
+  static constexpr uint BASETYPE_MAX_SIZ = meta::maxSize<BaseTypes::List>();
   
   template<typename T>
   static constexpr bool isBaseType = meta::isInList<T, BaseTypes::List>::value;

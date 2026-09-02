@@ -71,6 +71,14 @@ namespace par {
   }
   
   
+  template<size_t bytes>
+  struct ValBuffStorage
+    : ValBuff
+    {
+      std::byte data[bytes];
+    };
+  
+  
   
   
   /**
