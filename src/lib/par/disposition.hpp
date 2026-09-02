@@ -34,6 +34,8 @@
 namespace lib {
 namespace par {
 
+  using ValStorage = ValBuffStorage<BASETYPE_MAX_SIZ>;
+  
   
   /**
    * Implementation-Service: complete Parameter functionality.
@@ -114,12 +116,10 @@ namespace par {
         retrieveInto (asValBuff (result));
       }
     else
-      { // run full type-conversion double-dispatch
-        uint64_t valueBuffer; /////////////////////////////////////////////////OOO need a way to get a suitably sized intermediary buffer (without heap-allocation)
-        this->retrieveInto (asValBuff(valueBuffer));
-        
-        FullDomain<X> targetDomain;
-        this->transferTo (asValBuff(valueBuffer), targetDomain, asValBuff(result));
+      { // run full type-conversion dispatch
+        ValStorage valueBuffer;
+        this->retrieveInto (valueBuffer);
+        this->extractAs (result, valueBuffer);
       }
     return result;
   }
@@ -134,12 +134,10 @@ namespace par {
         setValFrom (asValBuff (changedVal));
       }
     else
-      { // run full type-conversion double-dispatch
-        uint64_t valueBuffer; /////////////////////////////////////////////////OOO need a way to get a suitably sized intermediary buffer (without heap-allocation)
-        FullDomain<X> targetDomain;
-        
-        targetDomain.transferTo (asValBuff(changedVal), *this, asValBuff(valueBuffer));
-        this->setValFrom (asValBuff(valueBuffer));
+      { // run full type-conversion dispatch
+        ValStorage valueBuffer;
+        this->conform (valueBuffer, changedVal);
+        this->setValFrom (valueBuffer);
       }
   }
   

@@ -69,8 +69,8 @@ namespace par {
     : public PAR
     {
       public:
-        virtual void extractAs (X& targetVal, ValBuff const& valBuff)  =0;
-        virtual void conform (ValBuff& targetBuff, X const& srcVal)    =0;
+        virtual void extractAs (X& targetVal, ValBuff const& valBuff) const =0;
+        virtual void conform (ValBuff& targetBuff, X const& srcVal)         =0;
         
         using PAR::extractAs;
         using PAR::conform;

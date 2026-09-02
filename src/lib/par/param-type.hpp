@@ -59,8 +59,8 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
       class TypeHandlerImpl
         : public PAR
         {
-          void extractAs (X& targetVal, ValBuff const& valBuff)  override;
-          void conform (ValBuff& targetBuff, X const& srcVal)    override;
+          void extractAs (X& targetVal, ValBuff const& valBuff) const override;
+          void conform (ValBuff& targetBuff, X const& srcVal)         override;
         };
       
       using TypeHandlerChain = meta::InstantiateChained<BaseTypes::List, TypeHandlerImpl, IFA>;
@@ -179,7 +179,7 @@ _Pragma("GCC diagnostic pop")
   template<typename VAL, class IFA>
   template<typename X, class PAR>
   inline void
-  DomainSetup<VAL,IFA>::TypeHandlerImpl<X,PAR>::extractAs (X& targetVal, ValBuff const& valBuff)
+  DomainSetup<VAL,IFA>::TypeHandlerImpl<X,PAR>::extractAs (X& targetVal, ValBuff const& valBuff)  const
   {
     VAL const& srcVal = asValue<VAL> (valBuff);
     assignConverted (targetVal, srcVal);

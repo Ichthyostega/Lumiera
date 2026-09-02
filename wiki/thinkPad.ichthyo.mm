@@ -84280,6 +84280,11 @@
 </html></richcontent>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788403986153" ID="ID_1976191283" MODIFIED="1788404065349" TEXT="&#xbb;Typ&#xab; hei&#xdf;t nun &#x27fc; TypedEntity&lt;VAL&gt;">
+<icon BUILTIN="yes"/>
+<node CREATED="1788404020598" ID="ID_1755481124" MODIFIED="1788404034549" TEXT="das bedeutet: es ist nun ein Implementierungs-Service"/>
+<node CREATED="1788404035161" ID="ID_470583685" MODIFIED="1788404044976" TEXT="und wird auf den Parameter-Basis-Typ getemplated"/>
+</node>
 </node>
 <node CREATED="1788125003779" ID="ID_1750350767" MODIFIED="1788125413347" TEXT="(dynamische) Provision">
 <node CREATED="1788125418166" ID="ID_1175365111" MODIFIED="1788125431416" TEXT="erfordert weiteren &#xbb;Slot&#xab; f&#xfc;r ein Delegate"/>
@@ -84655,7 +84660,7 @@
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788380577746" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" ID="ID_552546860" MODIFIED="1788386239896" TEXT="PolymorphicValue nicht optimal definiert">
+<node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" FOLDED="true" ID="ID_552546860" MODIFIED="1788397901695" TEXT="PolymorphicValue nicht optimal definiert">
 <icon BUILTIN="broken-line"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1788301325125" ID="ID_1978220833" MODIFIED="1788386325808" TEXT="das mit dem CopySupport ist ein echtes Problem ">
@@ -84735,6 +84740,26 @@
 </node>
 <node CREATED="1788313220539" ID="ID_1678152846" MODIFIED="1788313251138" TEXT="Set mit Typ-Konversion &#x27f6;  spiegelblidlich auf dem Disposition-Inteface"/>
 <node COLOR="#435e98" CREATED="1788313267301" ID="ID_697595338" MODIFIED="1788313294222" TEXT="Provision: Zugriff auf den Value-Buffer  &#x27f6; cast und Assignment"/>
+<node CREATED="1788404121292" ID="ID_630136540" MODIFIED="1788404194186">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      <font color="#8c505c" face="DejaVu Sans Mono" size="9pt"><b>ValStorage</b></font>&#160;&#160;: ein konkreter ValBuff mit ausreichender Storage-size
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788404196803" ID="ID_569414817" MODIFIED="1788404269415" TEXT="baue statische Type-Spec auf">
+<arrowlink COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" STARTARROW="None" STARTINCLINATION="-29;106;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1788404287935" ID="ID_959512138" MODIFIED="1788404297298" TEXT="Basis-Typ-ID wird generisch erzeugt"/>
+<node CREATED="1788404298134" ID="ID_770813391" MODIFIED="1788404312059" TEXT="Storage-Buffer-Size wird automatisch begrenzt"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788369873156" TEXT="innere Widerspr&#xfc;che werden deutlich">
@@ -84855,7 +84880,8 @@
 <arrowlink COLOR="#b781a4" DESTINATION="ID_661068668" ENDARROW="Default" ENDINCLINATION="128;148;" ID="Arrow_ID_1562138790" STARTARROW="None" STARTINCLINATION="-493;26;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1788380545906" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1788404265183" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
+<linktarget COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" SOURCE="ID_569414817" STARTARROW="None" STARTINCLINATION="-29;106;"/>
 <icon BUILTIN="pencil"/>
 <node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380631272" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition"/>
 <node CREATED="1788380657233" ID="ID_659200917" MODIFIED="1788381357392" TEXT="Neben-Thema: brauche nun eine Basis-Typ-ID">
@@ -84870,6 +84896,9 @@
   </body>
 </html></richcontent>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1788403805224" ID="ID_35022947" MODIFIED="1788403822452" TEXT="generisches Schema um die Bits im ID-Record zu belegen">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -84959,8 +84988,8 @@
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">
 <icon BUILTIN="full-3"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788380140474" TEXT="generisch per Indirektion">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788403892705" TEXT="generisch per Indirektion">
+<icon BUILTIN="button_ok"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788313027713" ID="ID_1271224230" MODIFIED="1788313367997" TEXT="short-circuit bei direkt passendem Typ">
 <arrowlink COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" STARTARROW="None" STARTINCLINATION="2071;0;"/>
