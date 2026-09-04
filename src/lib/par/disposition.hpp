@@ -55,10 +55,22 @@ namespace par {
       template<typename X>
       void setVal (X);
       
-    private:
+    protected:
       template<typename X>
-      bool isBaseDomainMatch()  const;
+      bool
+      isBaseDomainMatch()  const
+        {
+          return idr_.baseTypeID == BaseTypeID<X>();
+        }
+      
+      template<typename X>
+      void
+      markBaseDomain()
+        {
+          idr_.baseTypeID = BaseTypeID<X>();
+        }
     };
+  
   
   
   /**
@@ -73,19 +85,24 @@ namespace par {
       VAL val_;
       Provision* src_;
       
-      /* === Provision Interface === */
-      void retrieveInto (ValBuff&)  const override;
-      void setValFrom (ValBuff const&)    override;
-      
     public:
       ParamData (VAL initVal)
         : val_{std::move (initVal)}
         , src_{nullptr}
-        { }
+        {
+          Disposition::markBaseDomain<VAL>();
+        }
+      
+      /* === Provision Interface === */
+      void retrieveInto (ValBuff&)  const override final;    ///< @note is sometimes invoked non-virtually for sake of optimisation 
+      void setValFrom (ValBuff const&)    override final;
     };
   
   template<typename X>
   using FullDomain = BaseDomain<X, Disposition>;
+  
+  template<typename X>
+  using SimpleData = ParamData<X, Disposition>;
   
   
   
@@ -105,6 +122,15 @@ namespace par {
   
   
   
+  /**
+   * @warning optimisation to a direct access will be applied
+   *   when the baseTypeID in the IDRecord matches the type \a X.
+   *   It is assumed in this case that the actual implementation of
+   *   the Disposition interface is a ParamData<X>, allowing to side-step
+   *   any virtual dispatch; since the implementation of #retrieveInto and
+   *   #setValFrom is defined in the same source file, the optimiser will
+   *   inline the call, resulting in a direct value access.
+   */
   template<typename X>
   X
   Disposition::extract()  const
@@ -112,8 +138,9 @@ namespace par {
     X result; // RVO
     
     if (isBaseDomainMatch<X>())
-      { // short-circuit by direct force-cast
-        retrieveInto (asValBuff (result));
+      { // short-circuit by direct force-cast, bypassing virtual dispatch
+        auto& paramData = * static_cast<SimpleData<X> const *> (this);
+        paramData.SimpleData<X>::retrieveInto (asValBuff (result));
       }
     else
       { // run full type-conversion dispatch
@@ -130,8 +157,9 @@ namespace par {
   Disposition::setVal (X changedVal)
   {
     if (isBaseDomainMatch<X>())
-      { // short-circuit by direct force-cast
-        setValFrom (asValBuff (changedVal));
+      { // short-circuit by direct force-cast, bypassing virtual dispatch
+        auto& paramData = * static_cast<SimpleData<X>*> (this);
+        paramData.SimpleData<X>::setValFrom (asValBuff (changedVal));
       }
     else
       { // run full type-conversion dispatch
@@ -139,14 +167,6 @@ namespace par {
         this->conform (valueBuffer, changedVal);
         this->setValFrom (valueBuffer);
       }
-  }
-  
-  
-  template<typename X>
-  bool
-  Disposition::isBaseDomainMatch()  const
-  {
-    return false; /////////////////////////OOO running into a dead end here? how can we possibly access a type tag marker without indirection??
   }
   
   

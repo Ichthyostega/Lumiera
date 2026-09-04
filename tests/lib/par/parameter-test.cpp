@@ -19,7 +19,6 @@
 #include "test/run.hpp"
 //#include "test/test-helper.hpp"
 #include "lib/par/parameter.hpp"
-//#include "lib/format-cout.hpp"
 #include "test/diagnostic-output.hpp"/////////////TODO
 
 //#include <utility>
@@ -38,17 +37,6 @@ namespace test{
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   namespace {//Test fixture....
-    
-    class Thing
-      { };
-    
-    template<typename X>
-    struct Some
-      {
-        X x;
-      };
-    
-    typedef Some<Thing> SomeThing;
     
   }//(End)Test fixture
   
