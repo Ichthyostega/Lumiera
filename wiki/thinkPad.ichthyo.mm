@@ -82228,8 +82228,8 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1787702240063" ID="ID_1633678427" MODIFIED="1787703006299" TEXT="Zwischenstand (im Juli 26) : das System der IDs als Konstruktionsprinzip">
-<arrowlink COLOR="#e0120b" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" STARTARROW="None" STARTINCLINATION="-473;625;"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1787702240063" ID="ID_1633678427" MODIFIED="1788570627647" TEXT="Zwischenstand (im Juli 26) : das System der IDs als Konstruktionsprinzip">
+<arrowlink COLOR="#7f0501" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" STARTARROW="None" STARTINCLINATION="-473;625;"/>
 <linktarget COLOR="#722852" DESTINATION="ID_1633678427" ENDARROW="Default" ENDINCLINATION="-768;701;" ID="Arrow_ID_1908201312" SOURCE="ID_1595484083" STARTARROW="None" STARTINCLINATION="-237;17;"/>
 <icon BUILTIN="help"/>
 <node CREATED="1787702348085" ID="ID_1499806467" MODIFIED="1787702551905" TEXT="stelle fest: damals habe ich zun&#xe4;chst komplett die eine Linie verfolgt">
@@ -83941,9 +83941,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1787702938694" ID="ID_946786974" MODIFIED="1787703006299" TEXT="Zwischenstand-2 (August 26)">
-<linktarget COLOR="#e0120b" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" SOURCE="ID_1633678427" STARTARROW="None" STARTINCLINATION="-473;625;"/>
-<icon BUILTIN="pencil"/>
+<node COLOR="#435e98" CREATED="1787702938694" ID="ID_946786974" MODIFIED="1788570620891" TEXT="Zwischenstand-2 (August 26)">
+<linktarget COLOR="#7f0501" DESTINATION="ID_946786974" ENDARROW="Default" ENDINCLINATION="-902;82;" ID="Arrow_ID_160693348" SOURCE="ID_1633678427" STARTARROW="None" STARTINCLINATION="-473;625;"/>
+<icon BUILTIN="info"/>
 <node CREATED="1787703029258" ID="ID_1647611085" MODIFIED="1787703144522" TEXT="nach der FrOSCon-26....">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -84456,12 +84456,12 @@
 </html></richcontent>
 <arrowlink COLOR="#a81651" DESTINATION="ID_1121107125" ENDARROW="Default" ENDINCLINATION="-1456;53;" ID="Arrow_ID_1757832686" STARTARROW="None" STARTINCLINATION="-297;13;"/>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788207092440" ID="ID_1489003663" MODIFIED="1788214784231" TEXT="Typ und BaseDomain werden zum Problem">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788207092440" ID="ID_1489003663" MODIFIED="1788570343153" TEXT="Typ und BaseDomain werden zum Problem">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1788207114186" ID="ID_1160746668" MODIFIED="1788207125545" TEXT="BaseDomain ist bereits ein (generisches) Implementierungs-Objekt"/>
 <node CREATED="1788207143449" ID="ID_1569730697" MODIFIED="1788217785702" TEXT="das bedeutet: die Provision kann nicht davon erben, sondern nur vom Domain-Interface">
 <arrowlink COLOR="#ff001d" DESTINATION="ID_214321685" ENDARROW="Default" ENDINCLINATION="4;-14;" ID="Arrow_ID_1991058182" STARTARROW="None" STARTINCLINATION="-120;4;"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788216306876" ID="ID_1088562291" MODIFIED="1788217074557" TEXT="logischer &#x2b4d; : ein Typ m&#xfc;&#xdf;te damit auch eine Provision sein">
+<node BACKGROUND_COLOR="#e0bea7" COLOR="#990033" CREATED="1788216306876" ID="ID_1088562291" MODIFIED="1788570359331" TEXT="logischer &#x2b4d; : ein Typ m&#xfc;&#xdf;te damit auch eine Provision sein">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -84484,7 +84484,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788215427662" ID="ID_214321685" MODIFIED="1788217785702" TEXT="Das Povision-Interface mu&#xdf; anders angeordnet werden">
+<node COLOR="#435e98" CREATED="1788215427662" ID="ID_214321685" MODIFIED="1788570338813" TEXT="Das Povision-Interface mu&#xdf; anders angeordnet werden">
 <linktarget COLOR="#ff001d" DESTINATION="ID_214321685" ENDARROW="Default" ENDINCLINATION="4;-14;" ID="Arrow_ID_1991058182" SOURCE="ID_1569730697" STARTARROW="None" STARTINCLINATION="-120;4;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1788215544358" ID="ID_622102416" MODIFIED="1788215569419">
@@ -84551,7 +84551,7 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788222498625" ID="ID_1110945916" MODIFIED="1788222611950" TEXT="Disposition wird dann der Knotenpunkt auf dem die Implementierung aufbaut">
+<node COLOR="#435e98" CREATED="1788222498625" ID="ID_1110945916" MODIFIED="1788570368541" TEXT="Disposition wird dann der Knotenpunkt auf dem die Implementierung aufbaut">
 <icon BUILTIN="idea"/>
 <node CREATED="1788222535392" ID="ID_1282201343" MODIFIED="1788222543419" TEXT="Disposition ist immer noch ein Interface"/>
 <node CREATED="1788222544142" ID="ID_1947215779" MODIFIED="1788222568288" TEXT="es wird per PolymorphicValue auf das Parameter-Objekt exponiert"/>
@@ -84604,7 +84604,18 @@
 <icon BUILTIN="smily_bad"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788380480854" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<node COLOR="#066138" CREATED="1788446008900" ID="ID_72188841" MODIFIED="1788570133981" TEXT="versuche nun einen optimierten Code-Pfad zu realisieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...und zwar unter der Vorgabe, da&#223; es keine zu starken &#187;Verrenkungen&#171; erfordert und sich sicher im Rahmen des Standards bewegt (&#10230; das ist letztlich gelungen; ich kann tats&#228;chlich die zwei virtuellen Implementierungs-Medoden non-virtual aufrufen; habe sie nun auch als <font face="Monospaced" color="#4c3030">final</font>&#160; markiert, um auf die latente Gefahr hinzuweisen)
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ffd5f2" DESTINATION="ID_632634612" ENDARROW="Default" ENDINCLINATION="140;-422;" ID="Arrow_ID_423990415" STARTARROW="None" STARTINCLINATION="-499;24;"/>
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788446452242" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
 <linktarget COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" SOURCE="ID_1881580962" STARTARROW="None" STARTINCLINATION="220;17;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1788362693945" ID="ID_1951653761" MODIFIED="1788362711453" TEXT="sonst &#xbb;relativiert&#xab; sich der Direkt-Zugriff">
@@ -84642,7 +84653,7 @@
 </node>
 <node BACKGROUND_COLOR="#fed199" COLOR="#b90040" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788380092658" TEXT="Alarm: das Design geht hier nicht auf">
 <arrowlink COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" STARTARROW="None" STARTINCLINATION="-740;0;"/>
-<linktarget COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" SOURCE="ID_1271224230" STARTARROW="None" STARTINCLINATION="2071;0;"/>
+<linktarget COLOR="#3b3577" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" SOURCE="ID_1271224230" STARTARROW="None" STARTINCLINATION="2071;0;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1788309801877" ID="ID_1982340657" MODIFIED="1788309820758" TEXT="auf der Interface-Ebene fehlen mir relevante Informationen"/>
 <node CREATED="1788309821442" ID="ID_1283728464" MODIFIED="1788309832720" TEXT="aber per Voraussetzung will ich keine Indirektion"/>
@@ -84658,8 +84669,8 @@
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788380577746" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788570018729" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" FOLDED="true" ID="ID_552546860" MODIFIED="1788397901695" TEXT="PolymorphicValue nicht optimal definiert">
 <icon BUILTIN="broken-line"/>
 <icon BUILTIN="button_cancel"/>
@@ -84680,16 +84691,13 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788383059641" ID="ID_1688642617" MODIFIED="1788386316028" TEXT="das Marker-Template mu&#xdf; wirklich in der Kette liegen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...ich hatte es zwar definiert und im Container-Typ angegeben &#8212; aber dann im konkreten API-Aufbau doch nicht eingeschleift (weil es da thematisch ja auch nicht hingeh&#246;rt, Grrrr)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="broken-line"/>
 </node>
 <node CREATED="1788384797381" ID="ID_1232714334" MODIFIED="1788386029574" TEXT="stimmt garnicht &#x27f6; es w&#xe4;hlt die optimale Variante">
@@ -84698,16 +84706,13 @@
 <node CREATED="1788384957654" ID="ID_799415187" MODIFIED="1788384990688" TEXT="aber wir verwenden einen sizeof &#x27f6; da ist die VTable bereits mit eingerechnet"/>
 <node CREATED="1788384992694" ID="ID_1687522773" MODIFIED="1788385063843" TEXT="also ist auch das Konzept &#xbb;admin-overhead&#xab; in sich verworren (und &#xfc;berfl&#xfc;ssig)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       insofern dieses ganze clevere seitw&#228;rige Attachment &#252;berfl&#252;ssig ist;&#160; die einzige zwingende Voraussetzung ist, da&#223; wir eine VTable haben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788386034754" ID="ID_1268627911" MODIFIED="1788386341107" TEXT="L&#xf6;sung">
@@ -84718,21 +84723,231 @@
 </node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788386101665" ID="ID_93545182" MODIFIED="1788386217575" TEXT="mu&#xdf; die PAYLOAD_SIZE so definieren, da&#xdf; die VTable-size abgezogen wird">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       weil PolymorphicValue da blindlings seinen ADMIN_OVERHEAD draufschl&#228;gt. Das ist ein sekund&#228;res Problem im API-Design &#8212; wenn das Marker-API und der &#187;workaround&#171; mit dem Mix-in nicht mehr gebraucht werden, dann f&#228;llt auch diese ganze Verwirrung hier weg (die mich jetzt viele Stunden gekostet hat)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1788386354314" ID="ID_1688624687" MODIFIED="1788386399854" TEXT="jetzt pa&#xdf;ts: sizeof(Parameter) &#x2261; 4 &#xab;slot&#xbb;">
 <font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788445950116" ID="ID_222287114" MODIFIED="1788446162059" TEXT="kann nun zuverl&#xe4;ssig in den optimierten Codepfad verzweigen">
+<linktarget COLOR="#f7feb9" DESTINATION="ID_222287114" ENDARROW="Default" ENDINCLINATION="-232;11;" ID="Arrow_ID_1266292991" SOURCE="ID_1985934952" STARTARROW="None" STARTINCLINATION="201;9;"/>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1788446454529" ID="ID_76117206" MODIFIED="1788569958698" TEXT="Problem: will direkt auf den Storage-Puffer zugreifen">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788446483907" ID="ID_1788714028" MODIFIED="1788569974144" TEXT="das ist auf mehreren Ebenen problematisch">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1788446496040" ID="ID_239095745" MODIFIED="1788446624492" TEXT="es bricht die Encapsulation">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ....und dieser Code hier ist bereits jetzt verdammt komplex; ich bin unzufrieden mit der Anordnung der Typen &#8212; und so habe ich Sorge, da&#223; eine solche &#187;Hintert&#252;r&#171; sp&#228;ter zum Wartungsproblem wird
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788446505208" ID="ID_1432208866" MODIFIED="1788446672192" TEXT="es untergr&#xe4;bt die sp&#xe4;ter zu implementierende Automations-Logik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Man m&#252;&#223;te dann permanent bedenken, da&#223; <i>sonst noch &#187;jemand&#171;</i>&#160;von au&#223;en hereinpfuscht &#8212; das ist <i>nicht</i>&#160; wie man gute Software baut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788446535739" ID="ID_661561125" MODIFIED="1788446854563" TEXT="es g&#xe4;be bereits ein ad&#xe4;quates virtuelles Interface &#x2014; aber eben mit Indirektion">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Dieser Zugriff &#8212; unter korrekter Ber&#252;cksichtigung der Automation &#8212; ist <i>ausgesprochen der Kern meines Parameter-Konzepts,</i>&#160;und daher dargestellt im Basis-Interface <font face="Monospaced" color="#5c4949">Provision::<b>retrieveInto</b>(ValBuff&amp;) </font>und <font face="Monospaced" color="#5c4949">Provision::<b>setValFrom</b>(ValBuff const&amp;)</font>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#2b1e6c" CREATED="1788569980146" ID="ID_1666944435" MODIFIED="1788570004192" TEXT="mit der nun gefundenen L&#xf6;sung: grenzwertig akzeptabel">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788446860503" ID="ID_646912360" MODIFIED="1788569902609" TEXT="Idee: kann man den Compiler zur &#xbb;monomorphic optimisation&#xab; zwingen/verlocken?">
+<icon BUILTIN="idea"/>
+<node CREATED="1788447857322" ID="ID_1172598261" MODIFIED="1788447869500" TEXT="Normale Regeln: es wird immer dynamisch dispatched"/>
+<node CREATED="1788447871124" ID="ID_1082916894" MODIFIED="1788447905296" TEXT="selbst eine Methoden-Referenz ist noch ein Member-Pointer &#x27f6; ruft einen &quot;thunk&quot; auf"/>
+<node CREATED="1788447931272" ID="ID_1893918681" MODIFIED="1788447985770">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      der Optimiser <i>kann</i>&#160;ggfs devirtualisieren &#8212; <font face="Monospaced" color="#5c3939">final</font>&#160; hilft dabei
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#550f69" CREATED="1788447990960" ID="ID_688012580" MODIFIED="1788566452322" TEXT="Experimente mit Godbolt machen....">
+<icon BUILTIN="edit"/>
+<node CREATED="1788448012363" ID="ID_238524903" MODIFIED="1788448019144" TEXT="alles in einem File ... naja">
+<node CREATED="1788448157458" ID="ID_313047522" MODIFIED="1788448172356" TEXT="selbst ohne Optimierung sieht der Compiler was aufgerufen wird"/>
+<node CREATED="1788448178859" ID="ID_418304927" MODIFIED="1788448202029" TEXT="der Optimierer inlined beide Methoden-Calls"/>
+</node>
+<node CREATED="1788564026640" ID="ID_277007750" MODIFIED="1788564033253" TEXT="nur den Aufruf">
+<node CREATED="1788564036666" ID="ID_1299984843" MODIFIED="1788564232205" TEXT="mu&#xdf; noch das Generieren der VTable provozieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie &#252;blich, eine non-inline Funtkion definieren, also &#252;blicherweise nimmt man daf&#252;r den dtor
+    </p>
+    <p>
+      &#10233; sehe da&#223; die VTable 3 &#171;slots&#187; bekommt (in Clang und Gcc), einen &quot;base object destructor&quot; und einen &quot;deleting destructor&quot;, und schlie&#223;lich meine virtuelle test-funktion
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788564233811" ID="ID_1213941051" LINK="#ID_871603004" MODIFIED="1788564463483" TEXT="jetzt sehe ich tats&#xe4;chlich nur noch einen Dispatch durch die VTable">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Nachdem ich es geschafft habe, mich wieder etwas in x64-Assembler einzulesen....
+    </p>
+    <ul>
+      <li>
+        die Referenz kommt als Pointer in einem Register
+      </li>
+      <li>
+        diese wird in den Methoden-Stackframe gespeichert
+      </li>
+      <li>
+        dann einmal dereferenziert &#10233; zeigt jetzt in das Objekt, und zwar dorthin wo der VTable-Pointer steht
+      </li>
+      <li>
+        diesen +16 (also den dritteh &#171;slot&#187;) und dereferenzieren &#10233; gibt einen direkten Funktionspointer
+      </li>
+      <li>
+        dieser wird dann aufgerufen, nachdem die Funktionsargumente und der R&#252;ckgabewert arrangiert wurden
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788564249492" ID="ID_27729992" MODIFIED="1788564487184" TEXT="und das sogar unter O3 &#x27f6; wie erwartet"/>
+</node>
+<node CREATED="1788564506085" ID="ID_1423264250" MODIFIED="1788564526093" TEXT="suchen ... suchen ... graben ...">
+<node CREATED="1788564529469" ID="ID_441489865" MODIFIED="1788564545080" TEXT="finde immer nur &#x201e;Du sollst nicht t&#xf6;ten&#x201c;"/>
+<node CREATED="1788564546892" ID="ID_862681589" MODIFIED="1788564574988" TEXT="auch die AI sagt mir wortreich immer wieder das Gleiche"/>
+<node CREATED="1788564583471" ID="ID_1691982899" MODIFIED="1788564612183" TEXT="Ha! Stackoverflow.AI verweist auf einen Post, in dem es um Methoden-Referenzen geht"/>
+<node CREATED="1788564614387" ID="ID_770342045" MODIFIED="1788564649418" TEXT="da f&#xe4;llt nebenbei das Stichwort &quot;qualified-id&quot;">
+<node CREATED="1788564682905" ID="ID_1740126688" MODIFIED="1788564727227" TEXT="da f&#xe4;llt bei mir der &#x201e;Groschen&#x201c; ...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ich WU&#223;TE doch das es da irgend was gab, das sogar durch den Standard gedeckt ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1788564728195" ID="ID_950076351" MODIFIED="1788564749285" TEXT="nun Aufruf mit downcast und qualified-id">
+<node CREATED="1788564750874" ID="ID_1790517886" MODIFIED="1788564776265" TEXT="&#x27f9; jetzt codieren alle Compiler einen direkten Methoden-Call auf die Subklasse"/>
+<node CREATED="1788564777253" ID="ID_1702972987" MODIFIED="1788566427743">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      und unter O3: diese wird <b>ge-inlined</b>!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node CREATED="1788564831550" ID="ID_1437057915" MODIFIED="1788569949894" TEXT="dieses Verhalten ist standardkonform">
+<arrowlink COLOR="#353f89" DESTINATION="ID_1196783017" ENDARROW="Default" ENDINCLINATION="8;-85;" ID="Arrow_ID_1914017347" STARTARROW="None" STARTINCLINATION="-73;5;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1788565762820" ID="ID_1792083394" LINK="https://en.cppreference.com/cpp/language/qualified_lookup#Class_members" MODIFIED="1788565840614" TEXT="Cppreference: &quot;qualified lookup&quot; &gt; #Class_members">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    Qualified name lookup can be used to access a class member that is hidden by a nested declaration or by a derived class. A call to a qualified member function is never virtual
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788565848877" ID="ID_1504012142" LINK="https://isocpp.org/files/papers/N4860.pdf#subsubsection.7.6.1.2" MODIFIED="1788565904918" TEXT="Standard C++20 : &#xa7;7.6.1.2 Function Call  [expr.call]">
+<node CREATED="1788565936289" ID="ID_565873050" MODIFIED="1788565951330" TEXT="siehe Punkt 3">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      If the selected function is non-virtual, or if the id-expression in the class member access expression is a
+    </p>
+    <p>
+      qualified-id, that function is called. Otherwise, its final overrider (11.7.2) in the dynamic type of the object
+    </p>
+    <p>
+      expression is called; such a call is referred to as a virtual function call. [Note: The dynamic type is the type of
+    </p>
+    <p>
+      the object referred to by the current value of the object expression. 11.10.4 describes the behavior of virtual
+    </p>
+    <p>
+      function calls when the object expression refers to an object under construction or destruction. &#8212; end note
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788565992649" ID="ID_1382914133" MODIFIED="1788566011747" TEXT="if the id-expression .... is a qualified-id, that function is called. Otherwise, its final overrider"/>
+</node>
+<node CREATED="1788566060589" ID="ID_1929785862" LINK="https://stackoverflow.com/a/16253369/444796" MODIFIED="1788566077856" TEXT="Wird in einer Stackoverflow-Antwort erw&#xe4;hnt">
+<node CREATED="1788566316318" ID="ID_272011620" MODIFIED="1788566326697" TEXT="die fragt sogar direkt nach meinem Use-case hier"/>
+<node CREATED="1788566359369" ID="ID_601832104" MODIFIED="1788566437736" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code data-highlighted="yes" class="hljs language-cpp"><font size="2">void hun(T* obj, class C* c)
+{
+    //do some checking on c
+    if (some conditions from c are true)
+    {
+        //call fun from T ignoring it's virtual
+        obj-&gt;</font><font size="2" color="#7d3838">T::fun</font><font size="2">(); // T::fun is a </font><font size="2" color="#8a4848"><b>qualified-id</b></font><font size="2">    }
+}</font></code></pre>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c2bdfe" COLOR="#2d256f" CREATED="1788566462291" ID="ID_895486813" MODIFIED="1788569891167">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <u>Fazit</u>: keine Optimisation sondern man kann das direkt instruieren
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
+<node CREATED="1788566479768" ID="ID_1196783017" MODIFIED="1788569943952" TEXT="C++ bietet daf&#xfc;r den Mechanismus der &quot;qualfied-id&quot;">
+<linktarget COLOR="#353f89" DESTINATION="ID_1196783017" ENDARROW="Default" ENDINCLINATION="8;-85;" ID="Arrow_ID_1914017347" SOURCE="ID_1437057915" STARTARROW="None" STARTINCLINATION="-73;5;"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3f0f69" CREATED="1788566492766" ID="ID_33466770" MODIFIED="1788566546719" STYLE="bubble" TEXT="ein qualifizierter Methoden-Dispatch ist niemals virtuell">
+<icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
@@ -84742,16 +84957,13 @@
 <node COLOR="#435e98" CREATED="1788313267301" ID="ID_697595338" MODIFIED="1788313294222" TEXT="Provision: Zugriff auf den Value-Buffer  &#x27f6; cast und Assignment"/>
 <node CREATED="1788404121292" ID="ID_630136540" MODIFIED="1788404194186">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       <font color="#8c505c" face="DejaVu Sans Mono" size="9pt"><b>ValStorage</b></font>&#160;&#160;: ein konkreter ValBuff mit ausreichender Storage-size
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788404196803" ID="ID_569414817" MODIFIED="1788404269415" TEXT="baue statische Type-Spec auf">
 <arrowlink COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" STARTARROW="None" STARTINCLINATION="-29;106;"/>
@@ -84762,10 +84974,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788369873156" TEXT="innere Widerspr&#xfc;che werden deutlich">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788570752166" TEXT="innere Widerspr&#xfc;che werden deutlich">
 <linktarget COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" SOURCE="ID_137382885" STARTARROW="None" STARTINCLINATION="-740;0;"/>
+<linktarget COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-150;153;" ID="Arrow_ID_1196555634" SOURCE="ID_1620190650" STARTARROW="None" STARTINCLINATION="76;8;"/>
 <icon BUILTIN="broken-line"/>
-<node CREATED="1788367171639" ID="ID_632634612" MODIFIED="1788367181733" TEXT="ich will zugleich zwei Extreme">
+<node CREATED="1788367171639" ID="ID_632634612" MODIFIED="1788446239784" TEXT="ich will zugleich zwei Extreme">
+<linktarget COLOR="#ffd5f2" DESTINATION="ID_632634612" ENDARROW="Default" ENDINCLINATION="140;-422;" ID="Arrow_ID_423990415" SOURCE="ID_72188841" STARTARROW="None" STARTINCLINATION="-499;24;"/>
 <node CREATED="1788367184127" ID="ID_1812755681" MODIFIED="1788367214110" TEXT="ich will einen einfachen Datenwert (&#x27f9;Effizienz)"/>
 <node CREATED="1788367215173" ID="ID_1024391215" MODIFIED="1788367223797" TEXT="aber getypt soll der auch sein...."/>
 <node CREATED="1788367226489" ID="ID_334299039" MODIFIED="1788367596873" TEXT="und au&#xdf;erdem m&#xf6;chte ich mich JETZT nicht festlegen">
@@ -84886,7 +85100,7 @@
 <node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380631272" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition"/>
 <node CREATED="1788380657233" ID="ID_659200917" MODIFIED="1788381357392" TEXT="Neben-Thema: brauche nun eine Basis-Typ-ID">
 <arrowlink COLOR="#80969f" DESTINATION="ID_550975867" ENDARROW="Default" ENDINCLINATION="-1482;411;" ID="Arrow_ID_1821706956" STARTARROW="None" STARTINCLINATION="434;28;"/>
-<node CREATED="1788381363706" HGAP="31" ID="ID_1985934952" MODIFIED="1788381457346" TEXT="die kann unmittelbar statisch und eindeutig zugewiesen werden" VSHIFT="6">
+<node CREATED="1788381363706" HGAP="31" ID="ID_1985934952" MODIFIED="1788381363706" TEXT="die kann unmittelbar statisch und eindeutig zugewiesen werden" VSHIFT="6">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -84895,11 +85109,15 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#f7feb9" DESTINATION="ID_222287114" ENDARROW="Default" ENDINCLINATION="-232;11;" ID="Arrow_ID_1266292991" STARTARROW="None" STARTINCLINATION="201;9;"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1788403805224" ID="ID_35022947" MODIFIED="1788403822452" TEXT="generisches Schema um die Bits im ID-Record zu belegen">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node COLOR="#435e98" CREATED="1788570165030" ID="ID_1256124092" MODIFIED="1788570223974" TEXT="konnte die Offenheit des Design erhalten &#x2014; und trotzdem den optimierten Codepfad realisieren">
+<icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
@@ -84976,6 +85194,20 @@
 </node>
 </node>
 </node>
+<node COLOR="#435e98" CREATED="1788570650278" ID="ID_942631376" MODIFIED="1788570721560" TEXT="(das hat den Durchbruch gebracht)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      hab mich an der Stelle festgebissen und ganz stur reingebohrt, bis ich eine komplette Implementierungs-Skizze hatte, die alle erwarteten Elemente demonstriert
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b4010b" CREATED="1788570724013" ID="ID_1620190650" MODIFIED="1788570761069" TEXT="(Grenzen werden deutlich)">
+<arrowlink COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-150;153;" ID="Arrow_ID_1196555634" STARTARROW="None" STARTINCLINATION="76;8;"/>
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 </node>
 <node CREATED="1788203329439" ID="ID_1991597342" MODIFIED="1788203340179" TEXT="Parameter-Basisfunktionen">
 <node CREATED="1788203369397" ID="ID_1275080112" MODIFIED="1788203381813" TEXT="treibe den Struktur-Aufbau">
@@ -84986,14 +85218,14 @@
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203400185" ID="ID_900611719" MODIFIED="1788307794257" TEXT="Builder-Notation schaffen">
 <icon BUILTIN="full-2"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788203462519" TEXT="Valure-Konversionen einbinden">
+<node COLOR="#435e98" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788570267353" TEXT="Valure-Konversionen einbinden">
 <icon BUILTIN="full-3"/>
 <node COLOR="#338800" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788403892705" TEXT="generisch per Indirektion">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788313027713" ID="ID_1271224230" MODIFIED="1788313367997" TEXT="short-circuit bei direkt passendem Typ">
-<arrowlink COLOR="#b25193" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" STARTARROW="None" STARTINCLINATION="2071;0;"/>
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1788313027713" ID="ID_1271224230" MODIFIED="1788570251182" TEXT="short-circuit bei direkt passendem Typ">
+<arrowlink COLOR="#3b3577" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" STARTARROW="None" STARTINCLINATION="2071;0;"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -85026,6 +85258,9 @@
 <node CREATED="1783093767301" ID="ID_1335018454" MODIFIED="1783093803789" TEXT="Param::build&lt;TY&gt;(val=TY{})"/>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783093472793" ID="ID_1689475149" MODIFIED="1783093761099" TEXT="adjust (Control&lt;X&gt;)">
 <icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788570496914" HGAP="48" ID="ID_1707877834" MODIFIED="1788570548906" TEXT="was hab ich damit gemeint?? wohl einen Manipulator?" VSHIFT="4">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1783093751636" ID="ID_1739226245" MODIFIED="1783093759439" TEXT="connect(...)">
 <icon BUILTIN="hourglass"/>
@@ -186688,14 +186923,127 @@ class Something
 </node>
 </node>
 <node CREATED="1636143147825" ID="ID_224980157" MODIFIED="1636143159589" TEXT="Assembly">
+<node CREATED="1788486253624" ID="ID_520112663" MODIFIED="1788486268098" TEXT="Doku/Anleitungen">
+<node CREATED="1788472191018" ID="ID_559326099" LINK="https://os.inf.tu-dresden.de/Studium/OSC/SS2022/tasks/task4/assembler.php" MODIFIED="1788474682320" TEXT="Assembly Crash Course">
+<icon BUILTIN="idea"/>
+<node CREATED="1788474690091" ID="ID_1029522014" LINK="https://web.archive.org/web/20250203142347/https://os.inf.tu-dresden.de/Studium/OSC/SS2022/tasks/task4/assembler.php" MODIFIED="1788474693162" TEXT="A"/>
+<node CREATED="1788474695099" ID="ID_840519968" LINK="https://sys.cs.fau.de/lehre/ss23/bst/uebung/asm/extern/assembler.html" MODIFIED="1788474791938" TEXT="alternative Version(fau)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sprachlich sauberer formuliert, aber auch etwas umst&#228;ndlicher, daf&#252;r stellenweise auch genauer.
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1788474720772" ID="ID_1015247302" LINK="https://web.archive.org/web/20250521143355/https://sys.cs.fau.de/lehre/ss23/bst/uebung/asm/extern/assembler.html" MODIFIED="1788474726197" TEXT="A"/>
+</node>
+</node>
+<node CREATED="1788486271789" ID="ID_842879078" LINK="https://en.wikibooks.org/wiki/X86_Assembly" MODIFIED="1788486280979" TEXT="Wiki-Book: Assembly"/>
+</node>
+<node CREATED="1788471172500" ID="ID_1791420596" MODIFIED="1788471183543" TEXT="Register">
 <node CREATED="1636143161969" ID="ID_1119605136" MODIFIED="1636143179445" TEXT="r?x : 64-Bit-Register"/>
 <node CREATED="1636143180154" ID="ID_858272401" MODIFIED="1636143194684" TEXT="e?x : 32-Bit-Sicht auf die gleichen Register">
 <node CREATED="1636143276893" ID="ID_594751359" MODIFIED="1636143297151" TEXT="Zuweisungen/Laden f&#xfc;llt die oberen 32bit mit Nullen"/>
 </node>
-<node CREATED="1636143195465" ID="ID_1616965661" MODIFIED="1636143201882" TEXT="AT&amp;T-Syntax">
+<node CREATED="1788471194073" ID="ID_1810623338" MODIFIED="1788471199357" TEXT="rsp : stack pointer"/>
+<node CREATED="1788471199892" ID="ID_1852467554" MODIFIED="1788471204492" TEXT="rbp : frame pointer">
+<node CREATED="1788471245131" ID="ID_1040580935" MODIFIED="1788472189813" TEXT="zeigt auf die Basis des aktuellen Stack-Frame zu Methodenbeginn">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      fr&#252;her, f&#252;r 8086 war das zwingend, da nur esp und ebp f&#252;r relative Addressierung verwendet werden konnten. Seit 80386 k&#246;nnen alle Register f&#252;r relative Addressierung verwendet werden. Daher ist ebp (und rbp f&#252;r 64bit) meist nur ein weiteres Register, das man nutzen kann. Allerdings generieren die meisten Compiler immer noch Code, der den &#187;Funktions-Frame&#171; in rbp halten (also das, wohin der Stack-Pointer zu Beginn der Funktion gezeigt hat). Code wird dadurch viel leichter lesbar, da alle lokalen Variablen einen festen Offset haben. Allerdings kann man rbp wegoptimieren und (fast) alles mit rsp allein machen &#8212; nur &#228;ndern sich dann auch die Offsets fortw&#228;hrend. Es gibt allerdings eineige Speziallf&#228;lle, wo das schwierig bis unm&#246;glich wird (hier werden immer wieder die &#187;flexiblen Arrays&#171; von C genannt)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788471206726" ID="ID_1856853816" MODIFIED="1788471243383" TEXT="-fomit-frame-pointer : instruiert den Compiler alles per ?sp auszudr&#xfc;cken"/>
+</node>
+</node>
+<node CREATED="1636143195465" ID="ID_1616965661" MODIFIED="1788475220528" TEXT="AT&amp;T-Syntax (gas)">
 <node CREATED="1636143203026" ID="ID_933207767" MODIFIED="1636143220340" TEXT="% vor den Registern"/>
-<node CREATED="1636143221216" ID="ID_641364971" MODIFIED="1636143234231" TEXT="runde Klammer f&#xfc;r Dereferenzierung"/>
 <node CREATED="1636143235054" ID="ID_1739317797" MODIFIED="1636143243374" TEXT="Zuweisung (mov) von links nach rechts"/>
+<node CREATED="1636143221216" ID="ID_641364971" MODIFIED="1788470818610" TEXT="runde Klammer f&#xfc;r Dereferenzierung">
+<node CREATED="1788470820703" ID="ID_1704172592" MODIFIED="1788470843897" TEXT="-48(%rbp)">
+<arrowlink COLOR="#778da8" DESTINATION="ID_1044261471" ENDARROW="Default" ENDINCLINATION="38;-63;" ID="Arrow_ID_1574728847" STARTARROW="None" STARTINCLINATION="228;6;"/>
+</node>
+</node>
+<node CREATED="1788475225187" ID="ID_980139735" MODIFIED="1788475258810" TEXT="erfordert Suffix um die Wortl&#xe4;nge anzuzeigen">
+<node CREATED="1788475260537" ID="ID_1775531719" MODIFIED="1788475301686" TEXT="b byte (8bit)"/>
+<node CREATED="1788475282483" ID="ID_805934617" MODIFIED="1788475287335" TEXT="w word (16bit)"/>
+<node CREATED="1788475292469" ID="ID_741118963" MODIFIED="1788475297623" TEXT="l long (32bit)"/>
+<node CREATED="1788475305776" ID="ID_809020469" MODIFIED="1788475312571" TEXT="q quad (64bit)"/>
+</node>
+</node>
+<node CREATED="1788470483968" ID="ID_871603004" MODIFIED="1788474614506" TEXT="Intel Syntax (nasm)">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788470494518" ID="ID_1769324872" MODIFIED="1788470861999" TEXT="Godbolt zieigt per Default Intel Syntax">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1788470524642" ID="ID_341505876" MODIFIED="1788470537117" TEXT="Regiser ohne Pr&#xe4;fix"/>
+<node CREATED="1788470544984" ID="ID_1216119713" MODIFIED="1788470576623" TEXT="Zuweisung (mov) von rechts nach links">
+<node CREATED="1788470577690" ID="ID_1861951597" MODIFIED="1788470578711" TEXT="target &#x27f5; source"/>
+</node>
+<node CREATED="1788470710706" ID="ID_145553709" MODIFIED="1788470723316" TEXT="eckige Klammer f&#xfc;r Dereferenzierung">
+<node CREATED="1788470746791" ID="ID_288749307" MODIFIED="1788475975042" TEXT="[rbp-48]"/>
+<node CREATED="1788470798989" ID="ID_1044261471" MODIFIED="1788470838126" TEXT="bedeutet Inhalt rbp - 48 bytes derefferenziert">
+<linktarget COLOR="#778da8" DESTINATION="ID_1044261471" ENDARROW="Default" ENDINCLINATION="38;-63;" ID="Arrow_ID_1574728847" SOURCE="ID_1704172592" STARTARROW="None" STARTINCLINATION="228;6;"/>
+</node>
+<node CREATED="1788475978238" ID="ID_52491988" MODIFIED="1788476855704" TEXT="QWORD PTR [rbp-48]">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      QWORD PTR&#160;&#160;ist insgesamt einfach historisch gewachsene Intel-Syntax; das &quot;PTR&quot; tr&#228;gt selber keine Semantik, es macht die Instruktion nur besser lesbar. Da&#223; es sich um eine Indirektion / Dereferenzierung handelt, geht aus den [...] hervor
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1788476447249" ID="ID_437020661" MODIFIED="1788476489133" TEXT="Beispiele(Varianten)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <font face="Monospaced">mov BYTE PTR&#160;&#160;[rbp-48], al&#160;&#160;&#160;&#160;; 1 byte </font>
+    </p>
+    <p>
+      <font face="Monospaced">mov WORD PTR&#160;&#160;[rbp-48], ax&#160;&#160;&#160;&#160;; 2 bytes </font>
+    </p>
+    <p>
+      <font face="Monospaced">mov DWORD PTR [rbp-48], eax&#160;&#160;&#160;; 4 bytes </font>
+    </p>
+    <p>
+      <font face="Monospaced">mov QWORD PTR [rbp-48], rax&#160;&#160;&#160;; 8 bytes </font>
+    </p>
+    <p>
+      
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1788475996435" ID="ID_908280384" MODIFIED="1788476446089" TEXT="legt zus&#xe4;tzlich die L&#xe4;nge des Operanden fest">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      (hier ein quad &#8793; 64 bit)
+    </p>
+    <p>
+      Erl&#228;uterung: die Dereferenzierung von [rbp - 48] liefert nur eine Speicheraddresse, sagt aber nicht, wie viele Bytes ab dieser Adresse als Operand genommen werden sollen.
+    </p>
+    <p>
+      Beispiel: mov QWORD PTR [rbp-48], rax
+    </p>
+    <p>
+      nimm den Inhalt von eax und speichere ihn an die indirekt gegebene Adresse in die dort folgenden 8byte
+    </p>
+    <p>
+      Anmerkung: viele Assembler mit Intel-Syntax k&#246;nnen diese Operanden-L&#228;ngen auomatisch inferieren (z.B. NASM kann das); im gezeigten Beispiel geht ja aus dem quell-Operanden &quot;rax&quot; schon hervor, da&#223; 64bit bewegt werden sollen. Andererseits, in AT&amp;T-Syntax wird meistens ein Suffix an den Opcode angeh&#228;ngt, um die Operanden-L&#228;nge anzuzeigen. Das Beispiel w&#252;rde dann also lauten (AT&amp;T-Syntax): movq %rax, -48(%rbp)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1636143494277" ID="ID_1080108853" MODIFIED="1636143500226" TEXT="Anweisungen">
 <node CREATED="1636143501180" ID="ID_1211472193" MODIFIED="1636143506273" TEXT="mov : Zuweisung"/>
