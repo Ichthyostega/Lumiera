@@ -82,12 +82,22 @@ namespace test{
         }
       
       
-      /** @test
+      /** @test explore ways to define a parameter...
        * @todo WIP 9/26 🔁 define ⟶ implement
        */
       void
       verify_Builder()
         {
+          Parameter p1 = Parameter::forValue(123.45f).build();
+          CHECK (123.45f == p1.getVal<float>());
+          
+          p1.setVal (12u);
+          CHECK (12.0 == p1.getVal<double>());
+          
+          Parameter p2 = Parameter::from(p1)
+                                   .maxVal (sqrt(2))
+                                   .build();
+SHOW_EXPR(p2.getVal<float>());
         }
       
       

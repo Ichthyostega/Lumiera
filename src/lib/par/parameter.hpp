@@ -59,15 +59,15 @@ namespace par {
     {
     public:
       template<typename VAL>
-      class Builder;
-      
-      template<typename VAL>
       VAL getVal() const;
       
       template<typename VAL>
       void setVal (VAL&&);
       
       /* === Builder API === */
+      
+      template<typename VAL>
+      class Builder;
       
       template<typename VAL>
       static Builder<VAL>
@@ -82,6 +82,8 @@ namespace par {
                   .withValue (std::forward<VAL> (initVal));
         }
       
+      class ProtoBuilder;
+      static ProtoBuilder from (Parameter const& prototype);
       
     protected:
       template<class IMP, typename...ARGS>
@@ -111,13 +113,45 @@ namespace par {
       withValue (X&& initVal)
         {
           initVal_ = std::forward<X> (initVal);
-          return std::move(this);
+          return std::move(*this);
         }
     };
   
   
+  class Parameter::ProtoBuilder
+    {
+      Parameter ref_;
+      
+    public:
+      ProtoBuilder (Parameter const& prototype)
+        : ref_{prototype}
+        { }
+        
+      Parameter
+      build()
+        {
+          return ref_;
+        }
+      
+      template<typename X>
+      ProtoBuilder&&
+      maxVal (X&& upperBound)
+        {
+          /////////////////////////////////////////////OOO how to remould a scale?
+          return std::move(*this);
+        }
+    };
+  
+  inline Parameter::ProtoBuilder
+  Parameter::from (Parameter const& prototype)
+  {
+    return ProtoBuilder{prototype};
+  }
+
+  
+  
   template<typename VAL>
-  VAL
+  inline VAL
   Parameter::getVal()  const
     {
       static_assert (isBaseType<VAL>, "only preconfigured parameter BaseTypes are supported");
@@ -127,7 +161,7 @@ namespace par {
   
   
   template<typename VAL>
-  void
+  inline void
   Parameter::setVal (VAL&& changedVal)
     {
       static_assert (isBaseType<VAL>, "only preconfigured parameter BaseTypes are supported");
