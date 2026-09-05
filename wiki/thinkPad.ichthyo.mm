@@ -81589,26 +81589,37 @@
 </node>
 </node>
 <node CREATED="1782838037103" ID="ID_1131404515" MODIFIED="1782838041367" TEXT="Komponenten">
-<node CREATED="1782838049957" ID="ID_599946886" MODIFIED="1782838068604">
+<node CREATED="1782838049957" ID="ID_599946886" MODIFIED="1788649233561">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      Paket: <font face="Monospaced" color="#341ac2">lib/auto</font>
+      Paket: <font color="#341ac2" face="Monospaced">lib/par</font>
     </p>
   </body>
 </html></richcontent>
 </node>
 <node CREATED="1782843117967" ID="ID_94587283" MODIFIED="1782843122127" TEXT="Parameter">
-<node CREATED="1782843127457" ID="ID_868934457" MODIFIED="1782843155574" TEXT="lege ich erst mal als Platzhalter an">
+<node CREATED="1782843127457" ID="ID_868934457" MODIFIED="1788649365183" TEXT="lege ich erst mal als Platzhalter an">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p>
-      damit man bereits die Stellen markieren kann, an denen ein Parameter erwartet wird
-    </p>
+    <ul>
+      <li>
+        damit man bereits die Stellen markieren kann, an denen ein Parameter erwartet wird
+      </li>
+      <li>
+        damit bereits die Kategorien geschaffen sind, nach denen das Thema Automation strukturiert wird
+      </li>
+      <li>
+        damit man bereits einfache Werte als opaque Parameter speichern und weitergeben kann
+      </li>
+    </ul>
   </body>
 </html></richcontent>
+<icon BUILTIN="yes"/>
+<node CREATED="1788649248076" ID="ID_1930774042" MODIFIED="1788649262682" TEXT="darunter wird nun auch bereits eine Design-Skizze entwickelt"/>
+<node CREATED="1788649263402" ID="ID_825881492" MODIFIED="1788649290834" TEXT="so da&#xdf; die M&#xf6;glichkeiten grunds&#xe4;tzlich abgesteckt sind"/>
 </node>
 <node CREATED="1782844096458" ID="ID_1581419592" MODIFIED="1782844101528" TEXT="Design-Ansatz">
 <node COLOR="#4f4398" CREATED="1782844103236" ID="ID_1999191485" MODIFIED="1782923146717" TEXT="ist es ein opaque-Value oder ist es ein inline-funktor?">
@@ -81822,7 +81833,7 @@
 </node>
 <node CREATED="1782926068242" ID="ID_1536827233" MODIFIED="1782926075039" TEXT="Entwurf">
 <node CREATED="1782926076214" ID="ID_613339645" MODIFIED="1782926117524" TEXT="isCompatible&lt;TY&gt; (typeID)"/>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782927060642" ID="ID_1480682856" MODIFIED="1782927073169" TEXT="Frage: Struktur des ID-Space?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782927060642" FOLDED="true" ID="ID_1480682856" MODIFIED="1788648740788" TEXT="Frage: Struktur des ID-Space?">
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="help"/>
 <node CREATED="1782927075864" ID="ID_396730348" MODIFIED="1782927083019" TEXT="Variante-1 : flach">
@@ -81888,7 +81899,7 @@
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1782928075567" ID="ID_1846915137" MODIFIED="1782928092732" TEXT="Neben-Frage: Repr&#xe4;sentation der ID?">
+<node COLOR="#435e98" CREATED="1782928075567" ID="ID_1846915137" MODIFIED="1788648583401" TEXT="Neben-Frage: Repr&#xe4;sentation der ID?">
 <icon BUILTIN="help"/>
 <node CREATED="1782928104550" ID="ID_1571983028" MODIFIED="1782928116118" TEXT="Pointer w&#xe4;ren denkbar">
 <node CREATED="1782928158347" ID="ID_1287231519" MODIFIED="1782928169310" TEXT="Vorteil: direkt dereferenzierbar"/>
@@ -82025,7 +82036,9 @@
 <node CREATED="1782930467363" ID="ID_1657509582" MODIFIED="1782930478866" TEXT="Update der Hashtable erfordert stets ein hartes Lock"/>
 </node>
 <node CREATED="1782928138443" ID="ID_1966486898" MODIFIED="1782928148651" TEXT="Index-Tabelle">
-<node CREATED="1782930068409" ID="ID_1281751146" MODIFIED="1782930078630" TEXT="ist stets &#xbb;wasserdicht&#xab;"/>
+<node CREATED="1782930068409" ID="ID_1281751146" MODIFIED="1788648636362" TEXT="ist stets &#xbb;wasserdicht&#xab;">
+<icon BUILTIN="yes"/>
+</node>
 <node CREATED="1782930079439" ID="ID_832708104" MODIFIED="1782930450150" TEXT="man k&#xf6;nnte trotzdem zwei Komponenten in einen 64bit packen">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -82060,6 +82073,17 @@
 <node CREATED="1782931362534" ID="ID_1063964465" MODIFIED="1782931378475" TEXT="dann ist n&#xe4;mlich trotzdem keine Barriere beim Zugriff notwendig"/>
 <node CREATED="1782931396816" ID="ID_846450673" MODIFIED="1782931413129" TEXT="und die neu-Registrierung sollte in eine Index-Tabelle erfolgen"/>
 <node CREATED="1782931426981" ID="ID_530242349" MODIFIED="1782931443565" TEXT="zudem sollte man niemals de-Registrieren (&#x27f9; Vereinfachung)"/>
+</node>
+<node CREATED="1788648600244" ID="ID_1146977942" MODIFIED="1788648723112" TEXT="als L&#xf6;sung wurde aber letztlich gew&#xe4;hlt: Index-Tabelle plus mehrere ID-Komponenten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Weg dorthin ging &#252;ber die Einsicht, da&#223; die Daten-Storage eine sehr knappe Resource ist, und da&#223; ein Prototyp-Ansatz Bedeutung einer Registry herabsetzt (sie dient vor allem als Storage back-End)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="forward"/>
 </node>
 </node>
 </node>
@@ -82122,7 +82146,11 @@
 </node>
 </node>
 </node>
-<node CREATED="1782934059019" ID="ID_749549250" MODIFIED="1782934107302" TEXT="der Deskriptor wird registriert und dann durch seinen Pointer repr&#xe4;sentiert"/>
+<node COLOR="#5b280f" CREATED="1782934059019" ID="ID_749549250" MODIFIED="1788648925474" TEXT="der Deskriptor wird registriert und dann durch seinen Pointer repr&#xe4;sentiert">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1788648944284" ID="ID_220165166" MODIFIED="1788648953241" TEXT="nein: einzelne Skalen werden registriert"/>
+<node CREATED="1788648953934" ID="ID_512405000" MODIFIED="1788648966711" TEXT="aber dargestellt wird ein Prototyp &#x2014; und zwar im Modell verankert"/>
+</node>
 <node CREATED="1782934126020" ID="ID_309124327" MODIFIED="1782934137620" TEXT="Problem / Aufgabe: Reproduzierbarkeit">
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782934176291" ID="ID_1012097809" MODIFIED="1782934951544" TEXT="inwiefern ist das &#xfc;berhaupt ein Problem?">
 <icon BUILTIN="help"/>
@@ -82135,14 +82163,15 @@
 <node CREATED="1782934330022" ID="ID_1491698936" MODIFIED="1782934348327" TEXT="die direkten Zugriffe (per full-Domain-Basistyp)"/>
 </node>
 </node>
-<node CREATED="1782934352981" ID="ID_203751727" MODIFIED="1788124752033" TEXT="Konsequenz  &#x27f9; Typ-Deskriptor Prototypen verwenden">
-<linktarget COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1433;77;" ID="Arrow_ID_433092199" SOURCE="ID_775970800" STARTARROW="None" STARTINCLINATION="-344;26;"/>
+<node COLOR="#41185d" CREATED="1782934352981" ID="ID_203751727" MODIFIED="1788649023220" TEXT="Konsequenz  &#x27f9; Typ-Deskriptor Prototypen verwenden">
+<linktarget COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1438;69;" ID="Arrow_ID_433092199" SOURCE="ID_775970800" STARTARROW="None" STARTINCLINATION="-344;26;"/>
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
 <node CREATED="1782934397802" ID="ID_364715036" MODIFIED="1782934416572" TEXT="es ist zu erwarten, da&#xdf; diese in den Metadaten die Rolle eines &#xbb;Typs&#xab; spielen"/>
 <node CREATED="1782934417938" ID="ID_1609165510" MODIFIED="1782934439659" TEXT="jeder konkrete Typ kann auch als Prototyp verwendet werden (&#x27f6; mu&#xdf; immutable sein)"/>
 <node CREATED="1782934443840" ID="ID_1929146954" MODIFIED="1782934464080" TEXT="sinnvollerweise eine separate statische Registry f&#xfc;r die full-Domain-Basistypen">
 <node CREATED="1782934489300" ID="ID_1753645320" MODIFIED="1782934494347" TEXT="das mu&#xdf; eine Hashtable sein"/>
 <node CREATED="1782934535498" ID="ID_1516590429" MODIFIED="1782934546327" TEXT="mit einem systematisch generierbaren Hash"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1782934585387" ID="ID_836781666" MODIFIED="1783098443001" TEXT="&#x27f9; sinnvollerweise diese Basis-Typ-Registry final vorgenerieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1782934585387" ID="ID_836781666" MODIFIED="1788649041665" TEXT="&#x27f9; sinnvollerweise diese Basis-Typ-Registry final vorgenerieren">
 <arrowlink COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" STARTARROW="None" STARTINCLINATION="133;501;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1782934627813" ID="ID_231478597" MODIFIED="1783094142508" TEXT="denn sonst wird&apos;s &#xbb;schw&#xfc;l&#xab; wenn die DSOs auftreten"/>
@@ -82184,15 +82213,16 @@
 </node>
 </node>
 </node>
-<node CREATED="1782935176769" ID="ID_415184310" MODIFIED="1782935198386">
+<node CREATED="1782935176769" ID="ID_415184310" MODIFIED="1788648783462">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
     <p>
-      <i>pragmatisch betrachtet</i>&#160;ist das Problem vermutlich nicht relevant
+      <i>pragmatisch betrachtet</i>&#160;ist das Problem nicht (besonders) relevant
     </p>
   </body>
 </html></richcontent>
+<icon BUILTIN="yes"/>
 <node CREATED="1782935199568" ID="ID_1528659744" MODIFIED="1782935224325" TEXT="es geht somit nur darum, den Speicherbedarf f&#xfc;r Typ-Deskriptoren zu begrenzen"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1782935238541" ID="ID_1016393562" MODIFIED="1782935326983" TEXT="man sollte daran denken, da&#xdf; (unbeabsichtigt) eine &#xc4;quivalenz entstehen k&#xf6;nnte">
 <richcontent TYPE="NOTE"><html>
@@ -82221,6 +82251,16 @@
   <body>
     <p>
       und daf&#252;r sorgt bereits std::numeric_limiits
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1788648797069" ID="ID_1018707171" MODIFIED="1788648867028" TEXT="f&#xfc;r die Praxis ist es wichitger, Prototypen zu unterst&#xfc;tzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...das hei&#223;t, Koh&#228;renz wird dann eine Ebene h&#246;her gelagert, n&#228;mlich im konkreten Modell &#8212; und k&#246;nnte mit den Konfig-Regeln zusammenspielen
     </p>
   </body>
 </html></richcontent>
@@ -82266,7 +82306,15 @@
 <icon BUILTIN="smiley-angry"/>
 </node>
 </node>
-<node CREATED="1782948636452" ID="ID_758265146" MODIFIED="1782948640740" TEXT="Ordnung der Begriffe">
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1788649181393" ID="ID_1565751294" MODIFIED="1788649204898" TEXT="Fazit: gel&#xf6;st per TypeHandler bzw.. komplett generisch per double-Dispatch">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#3c0f69" CREATED="1782948636452" ID="ID_758265146" MODIFIED="1788649107719" TEXT="Ordnung der Begriffe">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
 <node CREATED="1782951139307" ID="ID_204578379" MODIFIED="1782951157090" TEXT="Problem: Begriffe sind nicht offensichtlich klar">
 <node CREATED="1782951161550" ID="ID_836568019" MODIFIED="1782951174050" TEXT="wir brauchen mehr als einen &#xbb;Typ&#xab;"/>
 <node CREATED="1782951193252" ID="ID_341984997" MODIFIED="1782951209813" TEXT="Skala / Scale tritt auf zwei Bedeutungsebenen auf">
@@ -82364,9 +82412,6 @@
     </p>
   </body>
 </html></richcontent>
-</node>
-</node>
-</node>
 </node>
 </node>
 </node>
@@ -83002,7 +83047,8 @@
 </html></richcontent>
 </node>
 </node>
-<node CREATED="1783092344401" ID="ID_723247866" MODIFIED="1788306366293" TEXT="Provision">
+<node COLOR="#5b280f" CREATED="1783092344401" FOLDED="true" ID="ID_723247866" MODIFIED="1788648523828" TEXT="Provision">
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1783092477119" ID="ID_1734714581" MODIFIED="1783092481906" TEXT="Interfaface">
 <node CREATED="1783092482966" ID="ID_1196126403" MODIFIED="1783092486026" TEXT="virtuell"/>
 <node CREATED="1783092486716" ID="ID_1507254773" MODIFIED="1783092489572" TEXT="generisch">
@@ -83022,7 +83068,7 @@
 </node>
 </node>
 <node CREATED="1783096649826" ID="ID_635617915" MODIFIED="1783096656736" TEXT="Fall-2 : convertible">
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1783096668611" ID="ID_1774686345" MODIFIED="1783096682092" TEXT="Aufgabe: das feststellen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783096668611" ID="ID_1774686345" MODIFIED="1788647962034" TEXT="Aufgabe: das feststellen">
 <icon BUILTIN="yes"/>
 <node CREATED="1783097503131" ID="ID_483426018" MODIFIED="1783097518253" TEXT="gegeben: eine Domain (Interface) + ein konkreter Typ"/>
 <node CREATED="1783098286033" ID="ID_624769242" MODIFIED="1783178792544" TEXT="Aufruf-Trick zum Lesen: der Ergebnis-Wert ist der &#xbb;Buffer&#xab; + RVO"/>
@@ -83044,6 +83090,22 @@
 <node CREATED="1783101523306" HGAP="29" ID="ID_1764325281" MODIFIED="1788306464746" TEXT="hier auch die Type-Registry" VSHIFT="2">
 <font NAME="SansSerif" SIZE="10"/>
 </node>
+</node>
+</node>
+<node COLOR="#600404" CREATED="1788647967297" ID="ID_1305009774" MODIFIED="1788647994866" TEXT="Urteil im R&#xfc;ckblick">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1788648004697" ID="ID_927755243" MODIFIED="1788648051801" TEXT="schon zu Beginn hat sich abgezeichnet da&#xdf; &#xbb;Provision&#xab; &#x2259; &#xbb;Grundkonzept&#xab;"/>
+<node CREATED="1788648053926" ID="ID_543037586" MODIFIED="1788648072799" TEXT="aber die Interfaces konnte ich zun&#xe4;chst (Sommer 26) nicht fassen"/>
+<node CREATED="1788648103436" ID="ID_1674639985" MODIFIED="1788648108794" TEXT="was aus diesen Ideen wurde....">
+<node CREATED="1788648112734" ID="ID_1980269992" MODIFIED="1788648151271" TEXT="getypt &#x27f7; Buffer &#x27f9; das wurden die TypeHandler (im Domain-Interface)"/>
+<node CREATED="1788648451429" ID="ID_1313344721" MODIFIED="1788648476677" TEXT="die generische getVal&lt;TY&gt; ist nun auf dem Parameter front-End">
+<node CREATED="1788648483168" ID="ID_1677063473" MODIFIED="1788648497542" TEXT="Domain-Match implementiert das Disposition-Interface"/>
+<node CREATED="1788648498646" ID="ID_377005098" MODIFIED="1788648520285" TEXT="...und greift dann per short-circuit zu / oder geht &#xfc;ber den TypeHandler-Dispatch"/>
+</node>
+<node CREATED="1788648164991" ID="ID_905673527" MODIFIED="1788648187809" TEXT="&quot;convertible&quot; &#x27f9; kann nun festgestellt werden da die Anzahl der Base-Typen fixiert wurde"/>
+<node CREATED="1788648200132" ID="ID_1556066485" MODIFIED="1788648238874" TEXT="die &quot;Buffer-Zugriffs-Mechanik&quot; ist nun tats&#xe4;chlich unter dem Titel &quot;Disposition&quot; implementiert"/>
+<node CREATED="1788648252665" ID="ID_1281488307" MODIFIED="1788648272755" TEXT="das &#xbb;virtuelle&#xab; Interface macht den Buffer-Typ komplett opaque"/>
 </node>
 </node>
 </node>
@@ -84256,8 +84318,8 @@
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
-<node CREATED="1788124658818" ID="ID_775970800" MODIFIED="1788124752033" TEXT="Rolle der (Scale)Prototypen bedenken">
-<arrowlink COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1433;77;" ID="Arrow_ID_433092199" STARTARROW="None" STARTINCLINATION="-344;26;"/>
+<node CREATED="1788124658818" ID="ID_775970800" MODIFIED="1788124658818" TEXT="Rolle der (Scale)Prototypen bedenken">
+<arrowlink COLOR="#332ab5" DESTINATION="ID_203751727" ENDARROW="Default" ENDINCLINATION="-1438;69;" ID="Arrow_ID_433092199" STARTARROW="None" STARTINCLINATION="-344;26;"/>
 <node CREATED="1788124774594" ID="ID_1701050119" MODIFIED="1788124792900" TEXT="&#x27f9; Scale- und Typdefinitionen m&#xfc;ssen immutable sein"/>
 <node CREATED="1788124793826" ID="ID_1129246210" MODIFIED="1788124987078" TEXT="dadurch l&#xf6;sen sich die meisten Probleme mit der Typ-Registrierung von selber">
 <richcontent TYPE="NOTE"><html>
@@ -85191,6 +85253,39 @@
 </node>
 </node>
 </node>
+<node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
+<linktarget COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" SOURCE="ID_1439464964" STARTARROW="None" STARTINCLINATION="176;0;"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788654157480" ID="ID_180727420" MODIFIED="1788654167767" TEXT="Problem: statische vs. dynamische Typisierung">
+<icon BUILTIN="broken-line"/>
+<node COLOR="#5b280f" CREATED="1788654460183" ID="ID_1493548979" MODIFIED="1788654476434" TEXT="mit dem bestehenden Builder-System nicht m&#xf6;glich">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1788654478721" ID="ID_1074229525" MODIFIED="1788654494518" TEXT="aber inhaltlich klar definiert"/>
+<node CREATED="1788654483595" ID="ID_1047793900" MODIFIED="1788654491462" TEXT="und nicht ersichtlich warum es nicht gehen sollte"/>
+</node>
+<node CREATED="1788654532382" ID="ID_1873037243" MODIFIED="1788654667438" TEXT="so etwas w&#xe4;re aber gradezu die auszeichnende F&#xe4;higkeit des Builder-Ansatzes">
+<icon BUILTIN="yes"/>
+<node CREATED="1788655291159" ID="ID_843134849" MODIFIED="1788655306463" TEXT="wir haben dann eben mehrere Builder-Klassen"/>
+<node CREATED="1788655317266" ID="ID_54539066" MODIFIED="1788655344253" TEXT="Builder&lt;TY&gt; sowie ProtoBuilder"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788654668731" ID="ID_429473344" MODIFIED="1788657066747" TEXT="die Schwierigkeit besteht ehr darin, wie man das &#xbb;Rekonfigurieren&#xab; mit dem API verbindet">
+<icon BUILTIN="yes"/>
+<node CREATED="1788655193044" ID="ID_137199832" MODIFIED="1788655224153" TEXT="Component / Composit-Design">
+<node CREATED="1788655225447" ID="ID_955239990" MODIFIED="1788655240601" TEXT="die Immutability steckt dann erst im ParamType"/>
+<node CREATED="1788655242557" ID="ID_166693318" MODIFIED="1788655258767" TEXT="das hei&#xdf;t: Scale ist die reine Spezifikations-Mechanik"/>
+<node CREATED="1788655265170" ID="ID_1017749160" MODIFIED="1788655286597" TEXT="erst wenn eine Scale registriert wird, ist sie immutable">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788656839242" ID="ID_392888721" MODIFIED="1788656854065" TEXT="bleibt aber das Problem: der Typ ist opaque">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#5b280f" CREATED="1788656871646" ID="ID_1325131915" MODIFIED="1788656955176" TEXT="generisch-getypter Code kann nicht von runtime-dynamischen Typ aufgerufen werden">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1788657034330" ID="ID_60370643" MODIFIED="1788657050967" TEXT="&#x27f9; mu&#xdf; zwingend irgendwo eine Delegate haben..."/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -85246,8 +85341,23 @@
 <node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1788313090668" ID="ID_684424843" MODIFIED="1788313179645" STYLE="bubble" TEXT="erster einfachster Testfall GR&#xdc;N">
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832213" ID="ID_820925379" MODIFIED="1788651847845" TEXT="verify_Builder">
-<icon BUILTIN="hourglass"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788651832213" ID="ID_820925379" MODIFIED="1788653981264" TEXT="verify_Builder">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1788653988590" ID="ID_1096230694" MODIFIED="1788654069986" TEXT="Parameter von Wert ausgehend definieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      einfach &#8212; ist praktisch schon implementiert...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788654074330" ID="ID_1439464964" MODIFIED="1788654198587" TEXT="von Prototyp bauen">
+<arrowlink COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" STARTARROW="None" STARTINCLINATION="176;0;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_613414026" MODIFIED="1788651847846" TEXT="verify_Identity">
 <icon BUILTIN="hourglass"/>
@@ -85372,6 +85482,9 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788649529792" ID="ID_1643494812" MODIFIED="1788649536408" TEXT="Automations-Funktion">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 <node CREATED="1783088795196" ID="ID_1506122335" MODIFIED="1783088801007" TEXT="Einsichten">
