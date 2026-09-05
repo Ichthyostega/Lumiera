@@ -1,5 +1,5 @@
 /*
-  Parameter(Test)  -  verify generic parameter values
+  ParameterScale(Test)  -  verify parameter value scales
 
    Copyright (C)
      2026,            Hermann Vosseler <Ichthyostega@web.de>
@@ -12,7 +12,7 @@
 * *****************************************************************/
 
 /** @file parameter-test.cpp
- ** unit test \ref Parameter_test
+ ** unit test \ref ParameterScale_test
  */
 
 
@@ -51,34 +51,21 @@ namespace test{
   /**************************************************************************//**
    * @test cover properties of generic parameter containers.
    */
-  class Parameter_test : public Test
+  class ParameterScale_test : public Test
     {
       
       virtual void
       run (Arg)
         {
           simpleUsage();
-          verify_Builder();
-          verify_Identity();
-          verify_ParamType();
-          verify_Automation();
+          verify_typeMarker();
         }
       
       
       void
       simpleUsage()
         {
-          CHECK (sizeof(Parameter) <= 4 * sizeof(void*));
-          CHECK (BASETYPE_MAX_SIZ <= sizeof(ValStorage));
-          
-          Parameter par = Parameter::forType<int>().build();
-          CHECK (0 == par.getVal<int>());
-          
-          par.setVal (12.3);
-          CHECK (12 == par.getVal<int>());
-          CHECK (12u == par.getVal<uint64_t>());
-          CHECK (12.0 == par.getVal<double>());
-          CHECK (true == par.getVal<bool>());
+          UNIMPLEMENTED ("nebbich");
         }
       
       
@@ -86,41 +73,14 @@ namespace test{
        * @todo WIP 9/26 🔁 define ⟶ implement
        */
       void
-      verify_Builder()
-        {
-        }
-      
-      
-      /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
-       */
-      void
-      verify_Identity()
-        {
-        }
-      
-      
-      /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
-       */
-      void
-      verify_ParamType()
-        {
-        }
-      
-      
-      /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
-       */
-      void
-      verify_Automation()
+      verify_typeMarker()
         {
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (Parameter_test, "unit lib");
+  LAUNCHER (ParameterScale_test, "unit lib");
   
   
   
