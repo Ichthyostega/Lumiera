@@ -1,5 +1,5 @@
 /*
-  SCALE.hpp  -  value scale to use for parameters
+  NOM-SET.hpp  -  nominal scale domain
 
    Copyright (C)
      2026             Hermann Vosseler <Ichthyostega@web.de>
@@ -12,8 +12,8 @@
 */
 
 
-/** @file scale.hpp
- ** Specification of the allowed value scale of a parameter, including range and metric.
+/** @file nom-set.hpp
+ ** Collection of identifiers to constitute the domain for a nominal or ordinal scale.
  ** The scale descriptor is used as delegate from the ParamType descriptor and maintained
  ** within a global registry for sake of deduplication. It is expected that a lot of parameters
  ** will share some common scales, like e.g. percentage values or decibels. The setup of a scale
@@ -24,11 +24,11 @@
  */
 
 
-#ifndef LIB_PAR_SCALE_H
-#define LIB_PAR_SCALE_H
+#ifndef LIB_PAR_NOM_SET_H
+#define LIB_PAR_NOM_SET_H
 
 
-#include "lib/par/domain.hpp"
+#include "lib/par/spec.hpp"
 
 
 namespace lib {
@@ -42,13 +42,12 @@ namespace par {
    * is to conform a value to this specific scale.
    * @todo not clear if we want a virtual interface here....?
    */
-  class Scale
+  class NomSet
     {
     public:
-      virtual ~Scale();  ///< this is an interface
     };
   
   
   
 }} // namespace lib::par
-#endif /*LIB_PAR_SCALE_H*/
+#endif /*LIB_PAR_NOM_SET_H*/
