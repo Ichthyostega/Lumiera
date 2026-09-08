@@ -20,3 +20,8 @@ END
 PLANNED "Parameter value scales" ParameterScale_test << END
 return: 0
 END
+
+
+PLANNED "Enumeration domains" NomSet_test << END
+return: 0
+END

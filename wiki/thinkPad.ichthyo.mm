@@ -82322,7 +82322,144 @@
 <node CREATED="1782951217451" ID="ID_1034096179" LINK="https://en.wikipedia.org/wiki/Level_of_measurement" MODIFIED="1782951247913" TEXT="Level of Measurement (Skalen-Niveau)">
 <node CREATED="1782951249606" ID="ID_286885318" MODIFIED="1782951257983" TEXT="oha ... da gib es so einige Untiefen!!"/>
 <node CREATED="1782951258983" ID="ID_1297628279" MODIFIED="1782951278292" TEXT="die Skalen-Niveus nach Stevens sind zwar weitverbreitet"/>
-<node CREATED="1782951279208" ID="ID_854829576" LINK="https://en.wikipedia.org/wiki/Level_of_measurement#Chrisman&apos;s_typology_(1998)" MODIFIED="1782951313007" TEXT="aber offensichtlich nicht ausreichend und ersch&#xf6;pfend"/>
+<node CREATED="1782951279208" ID="ID_854829576" LINK="https://en.wikipedia.org/wiki/Level_of_measurement#Chrisman&apos;s_typology_(1998)" MODIFIED="1782951313007" TEXT="aber offensichtlich nicht ausreichend und ersch&#xf6;pfend">
+<node CREATED="1788900130316" ID="ID_1794400222" LINK="https://www.researchgate.net/profile/Nicholas-Chrisman/publication/250016043_Rethinking_Levels_of_Measurement_for_Cartography/links/5a6a06e2a6fdccf88497c090/Rethinking-Levels-of-Measurement-for-Cartography.pdf?_tp=eyJjb250ZXh0Ijp7ImZpcnN0UGFnZSI6InB1YmxpY2F0aW9uIiwicGFnZSI6InB1YmxpY2F0aW9uIn19" MODIFIED="1788906073584" TEXT="Chrisman&apos;s Topology enth&#xe4;lt hier relevante Skalen-Arten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <h2>
+      Expanded list of levels of measurement
+    </h2>
+    <p>
+      Source: <a href="https://www.researchgate.net/publication/250016043_Rethinking_Levels_of_Measurement_for_Cartography">Nicholas C. Chrisman: Rethinking Levels of Measurement for Cartography (1998)</a><br />file:///Lager/Halde/Infoschrott/Texte/notiert/Rethinking levels of measurement for cartography | Nicholas R.Chrisman - Cartography and GIS, vol-25 p-231.1998.pdf
+    </p>
+    <table>
+      <tr>
+        <th>
+          Level of measurement
+        </th>
+        <th>
+          Information required
+        </th>
+      </tr>
+      <tr>
+        <td>
+          Nominal
+        </td>
+        <td>
+          definitions of categories
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Graded membership
+        </td>
+        <td>
+          <ul>
+            <li>
+              definition of categories
+            </li>
+            <li>
+              plus degree of membership
+            </li>
+            <li>
+              or distance from prototype
+            </li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Ordinal
+        </td>
+        <td>
+          definitions of categories plus ordering
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Interval
+        </td>
+        <td>
+          unit of measure plus zero point
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Log-interval
+        </td>
+        <td>
+          exponent to define intervals
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Extensive
+        </td>
+        <td>
+          ratio unit of measure<br /><i>(additive rule applies)</i>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Cyclic
+        </td>
+        <td>
+          ratio unit of measure plus length of cycle
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Derived
+        </td>
+        <td>
+          ratio unit of measures<br /><i>(formula of combination)</i>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Counts
+        </td>
+        <td>
+          definition of objects counted
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Absolute
+        </td>
+        <td>
+          type<br /><i>(probability, proportion, etc.)</i>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788900156701" ID="ID_58657220" MODIFIED="1788900170890" TEXT="im Besonderen: die zyklische Skala">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1788900178434" ID="ID_792919762" MODIFIED="1788900555619" TEXT="dennoch nicht zielf&#xfc;hrend">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      alle diese Skalen-Arten sind auf die Perspektive einer Messung / Beobachtung und wissenschaftlichen Deskription festgelegt; diesen Ansatz halte ich f&#252;r zu eng &#8212; einen entscheidenden Hinweis gibt mir hier die Existenz Verktor-wertiger Funktionen &#10233; generell k&#246;nnen wir mehr als nur ein &#187;zahlenwert-artiges&#171; Objekt haben &#10233; ich weite sofort auf die dahinter liegende Domain-Ontology aus. Jeder Ansatz einer universellen Klassifikation aller Parameter-Typen ist von Vornherein zum Scheitern verurteilt, denn man mu&#223; immer etwas &#252;ber die dahinterliegende Bedeutung wissen...
+    </p>
+    <p>
+      Was wir hier h&#246;chstens erzielen k&#246;nnen ist eine Standard-Codierung strukturierter Daten, deren Interpretation dann Hilfestellung ben&#246;tigt durch Domain-spezifische Erweiterungen.
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#cb051e" DESTINATION="ID_1110588547" ENDARROW="Default" ENDINCLINATION="-864;32;" ID="Arrow_ID_1562316330" STARTARROW="None" STARTINCLINATION="506;47;"/>
+</node>
+</node>
 <node CREATED="1782951618754" ID="ID_138669286" LINK="https://en.wikipedia.org/wiki/Level_of_measurement#Scale_types_and_Stevens&apos;s_%22operational_theory_of_measurement%22" MODIFIED="1782951638340" TEXT="Beachte: Steven&apos;s operational theory of measurement">
 <icon BUILTIN="messagebox_warning"/>
 </node>
@@ -82394,8 +82531,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#ffcea1" CREATED="1782948792629" ID="ID_1623866120" MODIFIED="1784583297397" TEXT="a Parameter has...">
+<node BACKGROUND_COLOR="#ffcea1" CREATED="1782948792629" ID="ID_1623866120" MODIFIED="1788902387436" TEXT="a Parameter has...">
 <cloud COLOR="#e8ceb0"/>
+<linktarget COLOR="#911122" DESTINATION="ID_1623866120" ENDARROW="Default" ENDINCLINATION="-2555;330;" ID="Arrow_ID_354302725" SOURCE="ID_631494622" STARTARROW="None" STARTINCLINATION="-1060;48;"/>
 <icon BUILTIN="forward"/>
 <node CREATED="1782948801636" ID="ID_224051194" MODIFIED="1783012188400" TEXT=" a Disposition"/>
 <node CREATED="1783012199995" ID="ID_1245050792" MODIFIED="1783012219836" TEXT="which comprises">
@@ -84175,10 +84313,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788020186954" ID="ID_563253424" MODIFIED="1788020192598" TEXT="Interfaces...?">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788020186954" ID="ID_563253424" MODIFIED="1788897140024" TEXT="Interfaces...?">
 <icon BUILTIN="help"/>
 <node CREATED="1788020250782" ID="ID_726206772" MODIFIED="1788020252329" TEXT="Domain">
-<node CREATED="1788020256597" ID="ID_1943514908" MODIFIED="1788020278702" TEXT="applyLimit(valBuff&amp;) &#x27f5; vmtl intern ben&#xf6;tigt"/>
+<node CREATED="1788020256597" ID="ID_1943514908" MODIFIED="1788915158752" TEXT="applyLimit(valBuff&amp;) &#x27f5; zentral zur Anwendung der Scale">
+<arrowlink COLOR="#66299e" DESTINATION="ID_1913361537" ENDARROW="Default" ENDINCLINATION="-1137;-2314;" ID="Arrow_ID_1874303468" STARTARROW="None" STARTINCLINATION="-226;-24;"/>
+</node>
 <node CREATED="1788020280703" ID="ID_1717784207" MODIFIED="1788020294892" TEXT="transferTo &#x27f5; generische Zuweisung"/>
 <node CREATED="1788020295960" ID="ID_903585085" MODIFIED="1788020320225" TEXT="TypeHandler&lt;TY&gt; &#x27f5; direkter Zugriff bei bekanntem Buffer_Typ"/>
 </node>
@@ -84297,6 +84437,10 @@
 </node>
 <node CREATED="1788043898418" ID="ID_689257489" MODIFIED="1788043954080" TEXT="connect (Provision&amp;)"/>
 <node CREATED="1788043962843" ID="ID_518209677" MODIFIED="1788043966310" TEXT="disconnnect();"/>
+</node>
+<node CREATED="1788897053027" ID="ID_1066486545" MODIFIED="1788897128624" TEXT="Einsicht: das ist das &#xbb;elementare Konzept&#xab; eines Parameters">
+<arrowlink COLOR="#fdfdbe" DESTINATION="ID_1963209378" ENDARROW="Default" ENDINCLINATION="-519;-30;" ID="Arrow_ID_1285406437" STARTARROW="None" STARTINCLINATION="1049;46;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
@@ -84582,7 +84726,8 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1788217133940" ID="ID_1963209378" MODIFIED="1788217153881" TEXT="das k&#xf6;nnte das Basis-Interface f&#xfc;r alles werden">
+<node CREATED="1788217133940" ID="ID_1963209378" MODIFIED="1788897121624" TEXT="das k&#xf6;nnte das Basis-Interface f&#xfc;r alles werden">
+<linktarget COLOR="#fdfdbe" DESTINATION="ID_1963209378" ENDARROW="Default" ENDINCLINATION="-519;-30;" ID="Arrow_ID_1285406437" SOURCE="ID_1066486545" STARTARROW="None" STARTINCLINATION="1049;46;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1788217155932" ID="ID_1701900965" MODIFIED="1788217167793" TEXT="es ist &#xbb;a parameter in a nutshell&#xab;">
 <node CREATED="1788217177034" ID="ID_63305825" MODIFIED="1788217183394" TEXT="kann Wert lesen / setzen"/>
@@ -84677,7 +84822,7 @@
 </html></richcontent>
 <arrowlink COLOR="#ffd5f2" DESTINATION="ID_632634612" ENDARROW="Default" ENDINCLINATION="140;-422;" ID="Arrow_ID_423990415" STARTARROW="None" STARTINCLINATION="-499;24;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788308332698" ID="ID_1468282295" MODIFIED="1788446452242" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788308332698" FOLDED="true" ID="ID_1468282295" MODIFIED="1788896870129" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
 <linktarget COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" SOURCE="ID_1881580962" STARTARROW="None" STARTINCLINATION="220;17;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1788362693945" ID="ID_1951653761" MODIFIED="1788362711453" TEXT="sonst &#xbb;relativiert&#xab; sich der Direkt-Zugriff">
@@ -84805,7 +84950,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#435e98" CREATED="1788446454529" ID="ID_76117206" MODIFIED="1788569958698" TEXT="Problem: will direkt auf den Storage-Puffer zugreifen">
+<node COLOR="#435e98" CREATED="1788446454529" FOLDED="true" ID="ID_76117206" MODIFIED="1788896868112" TEXT="Problem: will direkt auf den Storage-Puffer zugreifen">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788446483907" ID="ID_1788714028" MODIFIED="1788569974144" TEXT="das ist auf mehreren Ebenen problematisch">
 <icon BUILTIN="messagebox_warning"/>
@@ -85036,9 +85181,9 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788570752166" TEXT="innere Widerspr&#xfc;che werden deutlich">
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788367103969" ID="ID_1551239755" MODIFIED="1788913727622" TEXT="innere Widerspr&#xfc;che werden deutlich">
 <linktarget COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" SOURCE="ID_137382885" STARTARROW="None" STARTINCLINATION="-740;0;"/>
-<linktarget COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-150;153;" ID="Arrow_ID_1196555634" SOURCE="ID_1620190650" STARTARROW="None" STARTINCLINATION="76;8;"/>
+<linktarget COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-213;222;" ID="Arrow_ID_1196555634" SOURCE="ID_1620190650" STARTARROW="None" STARTINCLINATION="76;8;"/>
 <icon BUILTIN="broken-line"/>
 <node CREATED="1788367171639" ID="ID_632634612" MODIFIED="1788446239784" TEXT="ich will zugleich zwei Extreme">
 <linktarget COLOR="#ffd5f2" DESTINATION="ID_632634612" ENDARROW="Default" ENDINCLINATION="140;-422;" ID="Arrow_ID_423990415" SOURCE="ID_72188841" STARTARROW="None" STARTINCLINATION="-499;24;"/>
@@ -85184,6 +85329,308 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788897224786" HGAP="33" ID="ID_394337664" MODIFIED="1788897243128" TEXT="Erweiterung anlegen: Scale-Konfiguration" VSHIFT="4">
+<icon BUILTIN="pencil"/>
+<node CREATED="1788897245579" ID="ID_435216261" MODIFIED="1788897700193" TEXT="erwarte hier in Zukunft erhebliche Komplexit&#xe4;ten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Und zwar weil ich im Sinne flexibler Domain-Ontologien denke &#10230; wir brauchen &#187;strukturierte Typen&#171; (algebraische Datentypen) sowie diskrete symbolische Skalen, Summen- und Produkttypen. Die <i>erheblichen Komplexit&#228;ten</i>&#160;entstehen erwartungsgem&#228;&#223; dadurch, da&#223; man das System dieser Skalen nicht a priori festlegen kann (denn dann h&#228;tte man sich implizit auf eine Domain-Ontologie festgelegt). Die Konsequenz ist, da&#223; wir Skalen- und Strukturdefinitionen dynamisch, zur Laufzeit hinzuf&#252;gen bzw. auf Projekt-Ebene festlegen m&#252;ssen....
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1788897701794" ID="ID_425709094" MODIFIED="1788898085454" TEXT="es wird so etwas wie ein &#xbb;Schema&#xab; geben m&#xfc;ssen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das hei&#223;t, eine ebenfalls durch strukturierte Daten vorgegebene Konfiguration m&#246;glicher Strukturen, einschlie&#223;lich der Typ-IDs.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788897715361" ID="ID_908037710" MODIFIED="1788898031718" TEXT="welches dann die M&#xf6;glichkeit einer Codierung er&#xf6;ffnet">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...letztlich werden diese strukturierten Parameter und Daten immer in Form eines algebraischen Datentyps darstellbar sein, wobei allerdings die &#187;Bedeutung&#171; aus dem Schema mit herangezogen werden mu&#223;; genauer gesagt, die Semantik kann nur innerhalb einer im Hintergrund vorausgesetzten Domain-Ontologie formal definiert werden und dann in eine Codierung &#252;bersetzt &#8212; insofern die Domain-Ontologien <i>offen bleiben m&#252;ssen,</i>&#160;sehe ich nur den Weg, bestimmte Arten von Anfragen jeweils in die Implementierung auf Basis einer Domain-Ontologie zu delegieren (konkret: in ein Plug-in, welches auf der Domain-Ontology aufbaut). Die insgesamt m&#246;glichen Arten von Anfragen, zusammen mit der jeweiligen Codierungs-Regel, ergibt zusammen das effektive Schema, welches formale Transformationen und manipulationen der Daten erm&#246;glicht
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788900478144" ID="ID_1110588547" MODIFIED="1788900555619" TEXT="hier tut sich wieder das Problem der vorschnellen Univeral-Klassifikation auf">
+<linktarget COLOR="#cb051e" DESTINATION="ID_1110588547" ENDARROW="Default" ENDINCLINATION="-864;32;" ID="Arrow_ID_1562316330" SOURCE="ID_792919762" STARTARROW="None" STARTINCLINATION="506;47;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1788897260383" ID="ID_806222537" MODIFIED="1788914749127" TEXT="im ersten Schritt jedoch &#xbb;einfach&#xab;">
+<icon BUILTIN="yes"/>
+<node CREATED="1788897268719" ID="ID_1742479107" MODIFIED="1788898332115" TEXT="Einschr&#xe4;nkung des Wertebereichs innerhalb der Domain">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Die Domain selber gibt den Basis-Datentyp vor; innerhalb dessen gibt es einen minimalen und maximalen Wert
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788897282565" ID="ID_340739677" MODIFIED="1788898377781" TEXT="einen Marker/Tag f&#xfc;r die Metrik">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Im Grunde geht es hier um die Unterscheidung ob &#187;linear&#171;, &#187;logarithmisch&#171; oder &#187;diskret&#171;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788903390090" ID="ID_539998292" MODIFIED="1788903396165" TEXT="die Frage ist: wie einfach?">
+<icon BUILTIN="help"/>
+<node CREATED="1788903398641" ID="ID_222998203" MODIFIED="1788903455511" TEXT="beachte hier die Abgrenzung zum ParamSet">
+<arrowlink COLOR="#565978" DESTINATION="ID_788143596" ENDARROW="Default" ENDINCLINATION="446;-1047;" ID="Arrow_ID_1753071560" STARTARROW="None" STARTINCLINATION="-558;35;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1788903458209" ID="ID_960483578" MODIFIED="1788903482194" TEXT="alles was mehr als &#xbb;zahlenwert-haft&#xab; ist w&#xe4;re demnach ein ParamSet"/>
+<node CREATED="1788903496028" ID="ID_976954101" MODIFIED="1788903521237" TEXT="denn &#xbb;praktisch immer&#xab; ist eine Codierung als &#xbb;strukturierte Daten&#xab; m&#xf6;glich"/>
+<node CREATED="1788903661878" ID="ID_810674144" MODIFIED="1788903696013" TEXT="allerdings f&#xfc;r einige sehr relevante F&#xe4;lle w&#xe4;re das &#xbb;Overkill&#xab;"/>
+</node>
+<node CREATED="1788903780764" ID="ID_1847778801" MODIFIED="1788903792040" TEXT="das Problem der &#xbb;Sentinel&#xab;-Werte">
+<node CREATED="1788903795004" ID="ID_667777780" MODIFIED="1788903809284" TEXT="Randf&#xe4;lle werden gemeinhin als spezielle Zahlenwerte markiert"/>
+<node CREATED="1788903812798" ID="ID_1558113120" MODIFIED="1788903856765" TEXT="klassisches Beispiel ist der IEEE-Float (NaN, &#xb1;Inf, Denormal)"/>
+<node CREATED="1788903901070" ID="ID_33994468" MODIFIED="1788904064699" TEXT="effektiv bedeutet das: eine integrierte Nominal-Skala mit Fallunterscheidung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wenn man dieses Muster streng nach den Regeln modelliert, dann w&#228;re das ein algebraischer Datentyp mit einem Spezialfall-ENUM (Nominalskala), plus dem eigentlichen Zahlenwert, der aber nur bei bestimmten Nominal-Markern &#252;berhaupt betrachtet werden darf &#8212; also auch noch das Verhalten eines Summentyps
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788904066159" ID="ID_1394892717" MODIFIED="1788904309527">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      die prinzipiell-korrekte Modellierung w&#228;re aber eine <i>Verfehlung der Aufgabe</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Denn letztlich geht es darum, ein Zahlenwert-artiges, einfaches, unstrukturietes Objekt weiterzugeben und zu manipulieren &#8212; und zwar hinreichend effizient f&#252;r den Rahmen von High-Performance-Code (hei&#223;t: nicht in der innersten Schleife, aber direkt daneben). Weder ist die Programmiersprache daf&#252;r ger&#252;stet, algebraische Datentypen in diesem Kontext zu verarbeiten, noch sind die entsprechenden Mechanismen performant genug, um mit dem einfachen Normalfall einer &#187;Zahl&#171; mithalten zu k&#246;nnen. Eine Modellierung dieses Musters als algebraischer Datentyp w&#252;rde als unangemessene Prinzipienreiterei gewertet; das hei&#223;t, man mu&#223; schon verstehen, worauf es ankommt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1788904412352" ID="ID_1436845505" MODIFIED="1788904424447" TEXT="ein &#xe4;hnliches Verdikt gilt f&#xfc;r zyklische Werte"/>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1788912980176" ID="ID_320664672" MODIFIED="1788913437098" TEXT="Beschlu&#xdf;: gel&#xe4;ufige Sonderf&#xe4;lle explizit mit aufnehmen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1788913085119" ID="ID_321653591" MODIFIED="1788913092162" TEXT="Zahlenwert-artige Skalen"/>
+<node CREATED="1788913092842" ID="ID_183664407" MODIFIED="1788913099119" TEXT="Nominal- und Ordinalskalen"/>
+<node CREATED="1788913108257" ID="ID_1978508484" MODIFIED="1788913129045" TEXT="sinnvolle Typisierung der Dom&#xe4;ne"/>
+<node CREATED="1788913235538" ID="ID_1938858556" MODIFIED="1788913242333" TEXT="Klassifikation der Metrik"/>
+<node CREATED="1788918860534" ID="ID_1509977565" MODIFIED="1788918873592" TEXT="optionale Quantisierung">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788919824772" HGAP="50" ID="ID_1304551002" MODIFIED="1788920186012" TEXT="ein sehr komplexes Thema &#x2014; Zusammenhang mit Zeit-Entit&#xe4;ten unklar" VSHIFT="1">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das hier ist wirklich eine partielle thematische &#220;berschneidung; denn Quantisierung ist auch unabh&#228;ngig von Zeitangaben sehr relevant f&#252;r Parameter, denn es kann alle m&#246;glichen Arten von Grids geben, und auch der Rundungs- bzw. Quantisierungsmechanismus k&#246;nnte variabel sein. Die <i>eigentliche Design-Frage</i>&#160;jedoch ist, ob das auf dieser Ebene dargestellt werden mu&#223;, oder ob man das Thema komplett in die Automations-Provision hineinnimmt. Daf&#252;r, das Thema hier mit einer generischen Schnittstelle zu bedenken, w&#252;rde eine Betrachtung sprechen, welche die &#187;Parameter&#171; als eine Codierungs-Basis versteht, deren Bedeutung durch ein Schema und eine dahinter liegende Ontologie festgelegt wird
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#ea5e5f" DESTINATION="ID_768555857" ENDARROW="Default" ENDINCLINATION="2799;0;" ID="Arrow_ID_1670650996" STARTARROW="None" STARTINCLINATION="980;41;"/>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1788913390558" ID="ID_1918141314" MODIFIED="1788913424326" TEXT="optionale Wertgrenzen"/>
+<node CREATED="1788913268654" ID="ID_743833460" MODIFIED="1788913275425" TEXT="optionaler Neutralwert"/>
+<node CREATED="1788913312056" ID="ID_919694201" MODIFIED="1788913316917" TEXT="optionaler Defaultwert"/>
+<node CREATED="1788913243384" ID="ID_217085587" MODIFIED="1788913345205" TEXT="optionale &#xbb;Sentinels&#xab;"/>
+<node CREATED="1788913324214" ID="ID_1114697487" MODIFIED="1788913329534" TEXT="optionale Zyklizit&#xe4;t"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788914733259" ID="ID_1024480560" MODIFIED="1788914744874" TEXT="Funktionalit&#xe4;t definieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1788914766575" ID="ID_1913361537" MODIFIED="1788915158752" TEXT="Unterst&#xfc;tzung der Domain-Operationen">
+<linktarget COLOR="#66299e" DESTINATION="ID_1913361537" ENDARROW="Default" ENDINCLINATION="-1137;-2314;" ID="Arrow_ID_1874303468" SOURCE="ID_1943514908" STARTARROW="None" STARTINCLINATION="-226;-24;"/>
+<node CREATED="1788915235881" ID="ID_1781182087" MODIFIED="1788915260680" TEXT="hier mu&#xdf; die Domain::applyLimit() speziell (delegierend) implementiert werden"/>
+<node CREATED="1788915261413" ID="ID_13399317" MODIFIED="1788915458135">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      zudem: mu&#223; sicherstellen da&#223; <b>jede zuweisende Operation</b>&#160; diese Methode anwendet
+    </p>
+  </body>
+</html>
+</richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Der Knackpunkt dabei sind die TypeHandler-Implementierungen, denn diese verwenden zun&#228;chst (nur) das lokal implementierte generische preClamp (was die Grenzen der BaseDomain durchsetzt und Bool-werte per Schwelle bildet)
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1788915458123" ID="ID_257415193" MODIFIED="1788915772087" TEXT="TypeHandler kann man direkt anwenden (per Domain-Interface)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      TypeHandler bezieht sich aber auf einen explizit und separat gegebenen Buffer, und konditioniert diesen nur im Hinblick auf den direkt spezifizierten Basis-Typ &#8212; wiewohl hier durchaus eine Unsch&#228;rfe im Aufbau der Interfaces vorliegt, da ja in der <font face="Monospaced">conform()</font>&#160;- Operation schon ein impliziter &#187;Typ&#171; angewendet wird, dessen Bedeutung nicht zweifelsfrei klar ist (man k&#246;nnte geneigt sein, hier schon den vollst&#228;ndigen Parameter-Typ zu vermuten)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788915466090" ID="ID_704868487" MODIFIED="1788915846239" TEXT="aber relevant sind nur Operationen die den Parameter-Buffer ber&#xfc;hren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn es geht um die Durchsetzung einer Invariante f&#252;r alle Werte &#187;im&#171; Parameter: sie m&#252;ssen stets zum Parameter-Typ konform sein
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788915850279" ID="ID_66483155" MODIFIED="1788915926006" TEXT="&#x27f9; das betrifft also die Anwendung des Provision-Interfaces (auch dynamisch)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...also jeweils wenn man sich <i>einen Wert holt,</i>&#160;was auch den &#187;pull&#171; der Automationsfunktion einschlie&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node CREATED="1788915959367" ID="ID_1848292303" MODIFIED="1788915969243" TEXT="Anforderung">
+<icon BUILTIN="yes"/>
+<node CREATED="1788915971055" ID="ID_1166449203" MODIFIED="1788915983438" TEXT="gegeben ein beliebiger Wert der Base-Domain"/>
+<node CREATED="1788915984439" ID="ID_1687814760" MODIFIED="1788915994071" TEXT="diesen mit der Scale konform machen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788916016718" ID="ID_423001819" MODIFIED="1788917735339" TEXT="grunds&#xe4;tzlich kann das scheitern">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...was aber als ein seltener Grenzfall zu betrachten ist, und normalerweise durch die &#252;bergeordnete Konfiguration ausgeschlossen werden soll. F&#252;r die gel&#228;ufigen Szenarien gibt es zudem stets eine Regel, nach der konditioniert werden kann...
+    </p>
+    <ul>
+      <li>
+        wenn es sich zumindest um eine Intervallskala handelt, dann wird auf Maximum / Minimum gekappt
+      </li>
+      <li>
+        wenn es sich um eine Nominal / Ordinalskala handelt, und es einen Default-Wert gibt, dann wird dieser genommen
+      </li>
+      <li>
+        wenn es ein &#187;INVALID&#171; - Sentinel gibt, dann wird dieses genommen
+      </li>
+    </ul>
+    <p>
+      Somit bleiben eigentlich nur die F&#228;lle einer speziellen Domain ohne Defaultwert &#8212; denn in diesem Fall gibt es keine &#252;bergeordnete Metrik, nach der <i>interpoliert</i>&#160;werden k&#246;nnte, sondern ein Code, der nicht zur Skala geh&#246;rt, ist ung&#252;ltig und mu&#223; zur&#252;ckgewiesen werden
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+<node CREATED="1788917794598" ID="ID_29123926" MODIFIED="1788917818108" TEXT="ValueChain">
+<node CREATED="1788917819659" ID="ID_1748818920" MODIFIED="1788917847680" TEXT="wird ben&#xf6;tigt um die Automations-Provision auf einen Basis-Wert anzuwenden"/>
+<node CREATED="1788917877107" ID="ID_665324760" MODIFIED="1788918801557" TEXT="h&#xe4;ngt ab...">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      hier mu&#223; ggfs. eine Logarithmus / Exponential-Konvertierung stattfinden, m&#246;glicherweise auch eine Quantisierung
+    </p>
+  </body>
+</html>
+</richcontent>
+<node CREATED="1788917882892" ID="ID_52090158" MODIFIED="1788917894364" TEXT="von der Metrik des Ergebnis-Parameters"/>
+<node CREATED="1788917904223" ID="ID_1099728874" MODIFIED="1788917932855" TEXT="ggfs von einer abweichenden Scale der Automations-Provision"/>
+</node>
+<node CREATED="1788918491304" ID="ID_991615591" MODIFIED="1788918753513" TEXT="Beschlu&#xdf;: hier Heuristik &#x2014; keine eigene Taxonomie">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Grunds&#228;tzlich soll hier im Bereich der Scale nur <i>eine Codierung</i>&#160; gehandhabt werden &#8212; es besteht die Gefahr, doch noch &#8222;durch die Hintert&#252;r&#8220; eine universelle Wert-Ontologie einzuf&#252;hren.
+    </p>
+    <ul>
+      <li>
+        es wird die Metrik des Parameters und der Automations-Provision mit herangezogen
+      </li>
+      <li>
+        ein optional vorhandener Neutralwert wird als Hinweis genommen: ein Neutralwert 1 &#10233; deutet auf einen multiplikativen Faktor hin
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">
 <node CREATED="1788134893182" ID="ID_1219540786" MODIFIED="1788134948392" TEXT="naheliegend: statischer Einsteieg vom Parameter-Frontend">
 <node CREATED="1788134968239" ID="ID_217011834" MODIFIED="1788134998930" TEXT="Parameter::from(prototype).build()"/>
@@ -85252,6 +85699,9 @@
 </html></richcontent>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1788896840672" TEXT="Scale-Konfiguration erm&#xf6;glichen">
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 <node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
 <linktarget COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" SOURCE="ID_1439464964" STARTARROW="None" STARTINCLINATION="176;0;"/>
@@ -85283,6 +85733,20 @@
 </node>
 <node CREATED="1788657034330" ID="ID_60370643" MODIFIED="1788657050967" TEXT="&#x27f9; mu&#xdf; zwingend irgendwo eine Delegate haben..."/>
 </node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788760078240" ID="ID_1283385725" MODIFIED="1788760097936" TEXT="alternativer Ansatz : Builder-Typ unterwegs schwenken">
+<icon BUILTIN="idea"/>
+<node CREATED="1788760099677" ID="ID_1558756181" MODIFIED="1788760111067" TEXT="sobald etwas eingef&#xfc;hrt wird, das numerisch ist, haben wir einen Typ"/>
+<node CREATED="1788760113459" ID="ID_207791984" MODIFIED="1788760128581" TEXT="f&#xfc;r die Anwendung wird dann aber die implizite Typkonvertierung gemacht"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788760129351" ID="ID_1496419993" MODIFIED="1788760155703" TEXT="offenes Problem: weitere Angaben die nicht typ-gebunden sind">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788760157345" ID="ID_610381104" MODIFIED="1788760167589" TEXT="ggfs eine symbolische Spec einf&#xfc;hren?">
+<icon BUILTIN="help"/>
+<node CREATED="1788760169244" ID="ID_1529282231" MODIFIED="1788760182795" TEXT="w&#xe4;re dann sinnvoll im Hinblick auf &#xbb;finite domain&#xab;"/>
+<node CREATED="1788760183730" ID="ID_535406129" MODIFIED="1788760192498" TEXT="m&#xfc;&#xdf;te eine Definitionssprache erfinden"/>
+<node CREATED="1788760193736" ID="ID_790320052" MODIFIED="1788760197204" TEXT="(und dann parsen)"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -85298,8 +85762,8 @@
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b4010b" CREATED="1788570724013" ID="ID_1620190650" MODIFIED="1788570761069" TEXT="(Grenzen werden deutlich)">
-<arrowlink COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-150;153;" ID="Arrow_ID_1196555634" STARTARROW="None" STARTINCLINATION="76;8;"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b4010b" CREATED="1788570724013" ID="ID_1620190650" MODIFIED="1788913727622" TEXT="(Grenzen werden deutlich)">
+<arrowlink COLOR="#b12b46" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="-213;222;" ID="Arrow_ID_1196555634" STARTARROW="None" STARTINCLINATION="76;8;"/>
 <font NAME="SansSerif" SIZE="11"/>
 </node>
 </node>
@@ -85451,6 +85915,34 @@
   </body>
 </html></richcontent>
 </node>
+<node CREATED="1788919077662" ID="ID_768555857" MODIFIED="1788919903351" TEXT="wie gehen wir um mit Zeit-Entit&#xe4;ten als Parameterwerten?">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Da ist erst einmal das Problem da&#223; hier eine separate Algebra definiert wurde; au&#223;erdem wird bei den Zeit-Entit&#228;ten auch eine Intention ausgedr&#252;ckt (Offset, Duration, TimeSpan); und schlie&#223;lich gilt es die Quantisierung und die Time-Codes zu beachten. Dieser Fall tritt <b>definitiv</b>&#160;auf und <b>ist sehr relevant</b>: es k&#246;nnte einen animierbaren Delay geben, oder andere temporale Qualifikationen (Time-Trail, zeitliche Integration).
+    </p>
+    <p>
+      Man k&#246;nnte hier <i>grunds&#228;tzich zwei ganz verschiedene Wege beschreiten:</i>
+    </p>
+    <ul>
+      <li>
+        man k&#246;nnte die Basis-Typen erweitern und die Diskrepanzen auf Ebene der Typ-Handler abfangen
+      </li>
+      <li>
+        denkbar w&#228;re auch eine alternative Implementierung der Disposition (ParamData) notwendig, so da&#223; man das Quantisierungs-Grid geeignet darstellen kann und u.U. sogar einen TimeSpan (zwei Datenwerte) noch in der Standard-Buffer-Storage unterbringt
+      </li>
+      <li>
+        man k&#246;nnte stattdessen solche Parameter in die Kategorie der &#187;komplexen Parameter&#171; einordnen, die ja durchaus sehr h&#228;ufig sein werden (z.B Farbwerte sind Vektoren); demnach w&#228;re eine Zeit-Entit&#228;t eben auch ein komplexer Wert, der auch ein Grid bzw. einen Timecode-Quantisierer impliziert
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#ea5e5f" DESTINATION="ID_768555857" ENDARROW="Default" ENDINCLINATION="2799;0;" ID="Arrow_ID_1670650996" SOURCE="ID_1304551002" STARTARROW="None" STARTINCLINATION="980;41;"/>
+</node>
 <node CREATED="1784672259758" ID="ID_1765265570" MODIFIED="1784673727205" TEXT="wie gehen wir mit Produkttypen um (Vektoren, Farben)?">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -85471,7 +85963,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1784673142319" ID="ID_79827229" MODIFIED="1784673414046" TEXT="es k&#xf6;nnte auf zwei Kategorien hinauslaufen: einfach vs komplex">
+<node CREATED="1784673142319" ID="ID_79827229" MODIFIED="1788902624981" TEXT="es k&#xf6;nnte auf zwei Kategorien hinauslaufen: einfach vs komplex">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85480,6 +85972,108 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#a62805" DESTINATION="ID_1434101577" ENDARROW="Default" ENDINCLINATION="-159;0;" ID="Arrow_ID_1727630196" STARTARROW="None" STARTINCLINATION="-91;4;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c6afa7" COLOR="#521477" CREATED="1788901263420" ID="ID_364482853" MODIFIED="1788901314108" TEXT="Festlegungen(2026)">
+<font BOLD="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1788901323860" ID="ID_1434101577" MODIFIED="1788902624981" TEXT="Unterscheidung zwischen Parameter und ParamSet">
+<linktarget COLOR="#a62805" DESTINATION="ID_1434101577" ENDARROW="Default" ENDINCLINATION="-159;0;" ID="Arrow_ID_1727630196" SOURCE="ID_79827229" STARTARROW="None" STARTINCLINATION="-91;4;"/>
+<node CREATED="1788901343210" ID="ID_1149370530" MODIFIED="1788901371954" TEXT="Paramter ist einfach und Zahlenwert-haft"/>
+<node CREATED="1788901377213" ID="ID_788143596" MODIFIED="1788903455511" TEXT="ParamSet ist strukturiert">
+<linktarget COLOR="#565978" DESTINATION="ID_788143596" ENDARROW="Default" ENDINCLINATION="446;-1047;" ID="Arrow_ID_1753071560" SOURCE="ID_222998203" STARTARROW="None" STARTINCLINATION="-558;35;"/>
+<node CREATED="1788902655996" ID="ID_214848012" MODIFIED="1788902873096" TEXT="es soll &#xbb;alles Andere&#xab; handhaben (Farben, Vektoren, Masken)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ganz ausdr&#252;cklich sollen hier auch komplex struktuierte Gebilde mit eingeschlossen sein, zu deren Interpretation eine Domain-Ontology mitwirken mu&#223;.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788902746760" ID="ID_653627897" MODIFIED="1788903101267" TEXT="es wird per Continuation-Funktor zugegriffen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Ich versuche dem Drang zu widerstehen, hier <i>doch noch ein allgemeines Schema</i>&#160;anzulegen; vielmehr wird konsequent die Handhabung der Daten per Callback-Funktor in den Nutz-Kontext zur&#252;ck deflektiert. Der einzige zul&#228;ssige Mechanismus ist die Bildung von &#187;Prototypen&#171; &#8212; wobei dann an die Stelle der <font face="Monospaced" color="#522e2e">Scale</font>&#160;(des einfachen Parameters) hier ein <i>Schema</i>&#160; tritt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1788902766485" ID="ID_599153391" MODIFIED="1788903238329" TEXT="Daten-Storage ist &#xbb;woanders&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ParamSet-Objekt ist grunds&#228;tzlich nur ein front-End-Handle, das auf anderweitig <i>managed data</i>&#160;verweist.
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788902778804" ID="ID_382988116" MODIFIED="1788902784397" TEXT="future-work">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1788903241758" ID="ID_28313284" MODIFIED="1788903369448" TEXT="beide sind generisch verwandt">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Es ist sinnlos, beide unter einen gemeinsamen Typ zu subsumieren, aber der Schematismus f&#252;r beide F&#228;lle soll jeweils analog sein...
+    </p>
+    <ul>
+      <li>
+        ein kopierbares front-End-Handle
+      </li>
+      <li>
+        die Idee einer &#187;Provision&#171; mit Verkn&#252;pfbarkeit
+      </li>
+      <li>
+        ein impliziter Typ welcher Query-Funktionen bereitstellt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1788902285068" ID="ID_631494622" MODIFIED="1788902387436" TEXT="Begriffliche Ordnung: Disposition, Typ, Domain, Scale, Provision">
+<arrowlink COLOR="#911122" DESTINATION="ID_1623866120" ENDARROW="Default" ENDINCLINATION="-2555;330;" ID="Arrow_ID_354302725" STARTARROW="None" STARTINCLINATION="-1060;48;"/>
+</node>
+<node CREATED="1788902213790" ID="ID_762595565" MODIFIED="1788902222279" TEXT="grund-Idee ist die &#xbb;Provision&#xab;">
+<node CREATED="1788902228267" ID="ID_1182731010" MODIFIED="1788902232461" TEXT="Zugriff auf einen Wert"/>
+<node CREATED="1788902233533" ID="ID_35725517" MODIFIED="1788902240669" TEXT="Zeit-abh&#xe4;ngiger pull()"/>
+<node CREATED="1788902241346" ID="ID_223970749" MODIFIED="1788902246885" TEXT="Verschaltung mit einer Quelle"/>
+</node>
+<node CREATED="1788902190760" ID="ID_820570977" MODIFIED="1788902203659" TEXT="der Wert ist getypt und opaque">
+<node CREATED="1788902427946" ID="ID_1446859021" MODIFIED="1788902444362" TEXT="f&#xfc;r den Zugriff liefert der Verwender die Typ-Information"/>
+<node CREATED="1788902445047" ID="ID_1698376937" MODIFIED="1788902555756" TEXT="es gibt einen optimierten Pfad (der implizit bleibt: bei Typ-Match)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Grunds&#228;tzlich gibt die jeweilige Verwendung einen Typ vor, und in diesen Typ wird transparent konvertiert; wenn aber &#187;rein zuf&#228;llig&#171; der geforderte Typ dem nativen Typ entspricht, dann wird der optimierte Code-Pfad getriggert und der Zugriff geht an jedweder Indirektion vorbei
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
 </node>
 </node>
 </node>
