@@ -30,11 +30,21 @@
 
 #include "lib/par/domain.hpp"
 
+#include <optional>
+
 
 namespace lib {
 namespace par {
   
+  using std::optional;
   
+  
+  enum Metric {LIN  ///< linear ordinary numeric scale
+              ,BIN  ///< binary logarithm
+              ,NAT  ///< natural logarithm
+              ,DEC  ///< decibels (1/10 of 10-based log)
+              ,NOM  ///< value encodes a nominal or ordinal scale
+              };
   
   /**
    * Interface: describe the properties of a value scale to use for parameters,
@@ -42,10 +52,20 @@ namespace par {
    * is to conform a value to this specific scale.
    * @todo not clear if we want a virtual interface here....?
    */
+  template<typename VAL>
   class Scale
     {
     public:
-      virtual ~Scale();  ///< this is an interface
+      Metric metric{LIN};
+      /////////////////////////////OOO Quantiser?
+      optional<VAL> minVal{};
+      optional<VAL> maxVal{};
+      optional<VAL> minUse{};
+      optional<VAL> maxUse{};
+      optional<VAL> neutral{};
+      optional<VAL> defaultVal{};
+      /////////////////////////////OOO »Sentinels« and nominal scales?
+      bool zyclic{false};
     };
   
   
