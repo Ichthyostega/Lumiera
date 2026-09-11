@@ -29,6 +29,7 @@
 
 
 #include "lib/par/domain.hpp"
+#include "lib/util.hpp"
 
 #include <optional>
 
@@ -65,14 +66,16 @@ namespace par {
       optional<VAL> neutral{};
       optional<VAL> defVal{};
       /////////////////////////////OOO »Sentinels« and nominal scales?
-      bool zyclic{false};
+      bool cyclic{false};
       
       /* ===== information functions ===== */
       
       bool isValid()  const;
+      bool isFactor() const;
       
       /* ===== conforming operations ===== */
       
+      VAL getDefault()  const;
       VAL conform (VAL const&)  const;
       
       template<typename SRC>
@@ -110,16 +113,34 @@ namespace par {
               and (not minVal or *minVal <= *defVal)
               )
            )
-       and (not zyclic
-           or (minVal and maxVal)
-           or (minVal and neutral)
-           or (neutral and maxVal)
+       and (not cyclic
+           or (minVal and maxVal and *minVal < *maxVal)
            )
            ;
   }
   
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isFactor()  const
+  {
+    return metric == LIN
+       and neutral
+       and *neutral == VAL(1);
+  }
+  
+  
   
   /* ===== conforming operations ===== */
+  
+  /** Build initial value that fits into the scale. */
+  template<typename VAL>
+  inline VAL
+  Scale<VAL>::getDefault()  const
+  {
+    return defVal? *defVal
+         : neutral? *neutral
+         : conform (VAL{});
+  }
   
   /**
    * Accommodate a raw value from the underlying domain,
@@ -129,7 +150,20 @@ namespace par {
   inline VAL
   Scale<VAL>::conform (VAL const& rawVal)  const
   {
-    UNIMPLEMENTED ("Scale conforming");
+    if (cyclic)
+      {
+        REQUIRE (minVal and maxVal);
+        REQUIRE (*minVal < *maxVal);
+        const VAL PERIOD = *maxVal - *minVal;
+        ENSURE (0 < PERIOD);
+        return (rawVal - *minVal) % PERIOD;
+      }
+    if (minVal and rawVal < *minVal)
+      return *minVal;
+    if (maxVal and rawVal > *maxVal)
+      return *maxVal;
+    // no further constraint to enforce...
+    return rawVal;
   }
   
   /**
@@ -150,9 +184,11 @@ namespace par {
    */
   template<typename VAL>
   inline VAL
-  Scale<VAL>::join (VAL const& vaule, VAL const& feed)  const
+  Scale<VAL>::join (VAL const& value, VAL const& feed)  const
   {
-    UNIMPLEMENTED ("join a feed with a base value within same Scale");
+    return conform (isFactor()? value * feed
+                              : value + feed
+                   );
   }
   
   

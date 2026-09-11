@@ -85551,6 +85551,9 @@
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
+<node CREATED="1789170262152" ID="ID_856218584" MODIFIED="1789170286367" TEXT="Scale partizipiert auch bei der default-Initialisierung....">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1788917794598" ID="ID_29123926" MODIFIED="1789161706991" TEXT="Value-Chaining">
 <node CREATED="1789161718416" ID="ID_343593959" MODIFIED="1789165376887" TEXT="join (value, feed[, feedScale const&amp;])"/>
@@ -86046,6 +86049,44 @@ class ScaleRegistry
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789170321059" ID="ID_533778146" MODIFIED="1789170328666" TEXT="einfache / vorl&#xe4;ufige Implementierung">
+<icon BUILTIN="pencil"/>
+<node CREATED="1789170329999" ID="ID_247689608" MODIFIED="1789170375860" TEXT="&#xbb;vorl&#xe4;ufig&#xab; insofern ich komplexe Themen ignorieren sollte (Nominal-Skalen, Quantisierung)">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1789170382865" ID="ID_115869673" MODIFIED="1789171900278" TEXT="default-Wert ermitteln">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789171875485" ID="ID_1356870727" MODIFIED="1789171905187" TEXT="conform">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1789171881280" ID="ID_339852589" MODIFIED="1789171906862" TEXT="zyklische Scale behandeln">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789171888403" ID="ID_1422919144" MODIFIED="1789171908101" TEXT="min/max clamp">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789171911830" ID="ID_944344547" MODIFIED="1789171915156" TEXT="join">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789171916490" ID="ID_920699877" MODIFIED="1789172001819" TEXT="einfacher Fall: gemeinsame Scale">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1789171933617" ID="ID_284757000" MODIFIED="1789171970154" TEXT="isFactor definieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1789171944336" ID="ID_166324609" MODIFIED="1789171954298" TEXT="LIN(eare) Metrik"/>
+<node CREATED="1789171955239" ID="ID_588052679" MODIFIED="1789171967564" TEXT="hat einen Neutral-Wert &#x2261; 1"/>
+</node>
+<node COLOR="#338800" CREATED="1789171972391" ID="ID_1646673905" MODIFIED="1789171988354" TEXT="demensprechend entweder multiplizieren oder addieren">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789171989215" ID="ID_1588914769" MODIFIED="1789171998253" TEXT="stets conform() anwenden">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789172009585" TEXT="gemische Scales handhaben">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">
 <node CREATED="1788134893182" ID="ID_1219540786" MODIFIED="1788134948392" TEXT="naheliegend: statischer Einsteieg vom Parameter-Frontend">
@@ -86262,6 +86303,21 @@ class ScaleRegistry
 </html></richcontent>
 <arrowlink COLOR="#852a28" DESTINATION="ID_320664672" ENDARROW="Default" ENDINCLINATION="-765;515;" ID="Arrow_ID_1819779589" STARTARROW="None" STARTINCLINATION="199;8;"/>
 <icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1789170043605" ID="ID_53749582" MODIFIED="1789172024556" TEXT="simpleUsage">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1789170050452" ID="ID_1538206925" MODIFIED="1789170070165" TEXT="Scale per Aggregate Init erzeugen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789170082264" ID="ID_821515867" MODIFIED="1789172020148" TEXT="Selbsttest / Parameter-Plausibilit&#xe4;ts-Check">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789170074033" ID="ID_1045171486" MODIFIED="1789172021400" TEXT="einfache conform()-Operation">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789170107429" ID="ID_864942829" MODIFIED="1789172022866" TEXT="einfache join()-Operation">
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
