@@ -27,9 +27,9 @@
  ** mostly at start and then hold and use the memory, the allocation is never
  ** actually _closed_ — implying that further allocations can be added during
  ** the whole life time, which may possibly even trigger a further base allocation
- ** if storage space in the last Extent is exhausted. In theory, it would be possible
+ ** if storage space if the last Extent is exhausted. In theory, it would be possible
  ** to use a custom allocation (in the AllocationCluster::StorageManager::Extents,
- ** which is a lib::LinkedElements and could be parametrised with a allocator template).
+ ** which is a lib::LinkedElements and could be parametrised with an allocator template).
  ** Allocations are never discarded, and thus any alloted memory will be kept until
  ** the whole AllocationCluster is destroyed as a compound.
  ** \par using as STL allocator

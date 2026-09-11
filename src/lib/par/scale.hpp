@@ -63,11 +63,97 @@ namespace par {
       optional<VAL> minUse{};
       optional<VAL> maxUse{};
       optional<VAL> neutral{};
-      optional<VAL> defaultVal{};
+      optional<VAL> defVal{};
       /////////////////////////////OOO »Sentinels« and nominal scales?
       bool zyclic{false};
+      
+      /* ===== information functions ===== */
+      
+      bool isValid()  const;
+      
+      /* ===== conforming operations ===== */
+      
+      VAL conform (VAL const&)  const;
+      
+      template<typename SRC>
+      VAL join (VAL const&, SRC const&, Scale<SRC> const&) const;
+      VAL join (VAL const&, VAL const&)                    const;
     };
   
+  
+  /* ===== information functions ===== */
+  
+  /** self consistency check */
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isValid()  const
+  {
+    return ((not minVal or not maxVal)
+           or *minVal <= *maxVal
+           )
+       and (not minUse
+           or (not minVal or *minVal <= *minUse)
+           )
+       and (not maxUse
+           or (not maxVal or *maxUse <= *maxVal)
+           )
+       and ((not minUse or not maxUse)
+           or *minUse <= *maxUse
+           )
+       and (not neutral
+           or (   (not maxVal or *neutral <= *maxVal)
+              and (not minVal or *minVal <= *neutral)
+              )
+           )
+       and (not defVal
+           or (   (not maxVal or *defVal <= *maxVal)
+              and (not minVal or *minVal <= *defVal)
+              )
+           )
+       and (not zyclic
+           or (minVal and maxVal)
+           or (minVal and neutral)
+           or (neutral and maxVal)
+           )
+           ;
+  }
+  
+  
+  /* ===== conforming operations ===== */
+  
+  /**
+   * Accommodate a raw value from the underlying domain,
+   * so that it conforms with this Scale definition.
+   */
+  template<typename VAL>
+  inline VAL
+  Scale<VAL>::conform (VAL const& rawVal)  const
+  {
+    UNIMPLEMENTED ("Scale conforming");
+  }
+  
+  /**
+   * Join and combine an additional feed value with an anchor value.
+   * @note actual joining operation is picked based on both scales and types involved.
+   * @remark notably multiplicative contributions and logarithmic scales to be considered.
+   */
+  template<typename VAL>
+  template<typename SRC>
+  inline VAL
+  Scale<VAL>::join (VAL const& value, SRC const& feed, Scale<SRC> const& feedScale) const
+  {
+    UNIMPLEMENTED ("join a feed with a base value, observing Scale constraints");
+  }
+  
+  /**
+   * Simplified join() variant, assuming the feed is based on the same scale.
+   */
+  template<typename VAL>
+  inline VAL
+  Scale<VAL>::join (VAL const& vaule, VAL const& feed)  const
+  {
+    UNIMPLEMENTED ("join a feed with a base value within same Scale");
+  }
   
   
 }} // namespace lib::par

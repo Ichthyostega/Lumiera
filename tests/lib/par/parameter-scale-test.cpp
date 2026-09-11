@@ -18,7 +18,7 @@
 
 #include "test/run.hpp"
 //#include "test/test-helper.hpp"
-#include "lib/par/parameter.hpp"
+#include "lib/par/scale.hpp"
 #include "test/diagnostic-output.hpp"/////////////TODO
 
 //#include <utility>
@@ -58,14 +58,21 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
-          verify_typeMarker();
+          verify_Bounds();
         }
       
       
       void
       simpleUsage()
         {
-          UNIMPLEMENTED ("nebbich");
+          Scale<int> scale = {.minVal = -5, .maxVal = 23};
+          CHECK (scale.isValid());
+          
+          CHECK (-5 == scale.conform (-55));
+          CHECK (23 == scale.conform (+55));
+          
+          CHECK ( 5 == scale.join (2,3)   );
+          CHECK (-5 == scale.join (23,-55));
         }
       
       
@@ -73,7 +80,7 @@ namespace test{
        * @todo WIP 9/26 🔁 define ⟶ implement
        */
       void
-      verify_typeMarker()
+      verify_Bounds()
         {
         }
     };
