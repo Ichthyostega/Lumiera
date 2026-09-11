@@ -85424,7 +85424,8 @@
 </node>
 <node CREATED="1788904412352" ID="ID_1436845505" MODIFIED="1788904424447" TEXT="ein &#xe4;hnliches Verdikt gilt f&#xfc;r zyklische Werte"/>
 </node>
-<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1788912980176" ID="ID_320664672" MODIFIED="1788913437098" TEXT="Beschlu&#xdf;: gel&#xe4;ufige Sonderf&#xe4;lle explizit mit aufnehmen">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1788912980176" ID="ID_320664672" MODIFIED="1789160197623" TEXT="Beschlu&#xdf;: gel&#xe4;ufige Sonderf&#xe4;lle explizit mit aufnehmen">
+<linktarget COLOR="#852a28" DESTINATION="ID_320664672" ENDARROW="Default" ENDINCLINATION="-765;515;" ID="Arrow_ID_1819779589" SOURCE="ID_1480074646" STARTARROW="None" STARTINCLINATION="199;8;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1788913085119" ID="ID_321653591" MODIFIED="1788913092162" TEXT="Zahlenwert-artige Skalen"/>
@@ -85551,9 +85552,10 @@
 </node>
 </node>
 </node>
-<node CREATED="1788917794598" ID="ID_29123926" MODIFIED="1788917818108" TEXT="ValueChain">
+<node CREATED="1788917794598" ID="ID_29123926" MODIFIED="1789161706991" TEXT="Value-Chaining">
+<node CREATED="1789161718416" ID="ID_343593959" MODIFIED="1789165376887" TEXT="join (value, feed[, feedScale const&amp;])"/>
 <node CREATED="1788917819659" ID="ID_1748818920" MODIFIED="1788917847680" TEXT="wird ben&#xf6;tigt um die Automations-Provision auf einen Basis-Wert anzuwenden"/>
-<node CREATED="1788917877107" ID="ID_665324760" MODIFIED="1788918801557" TEXT="h&#xe4;ngt ab...">
+<node CREATED="1788917877107" ID="ID_665324760" MODIFIED="1788917877107" TEXT="h&#xe4;ngt ab...">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85564,8 +85566,15 @@
 </html></richcontent>
 <node CREATED="1788917882892" ID="ID_52090158" MODIFIED="1788917894364" TEXT="von der Metrik des Ergebnis-Parameters"/>
 <node CREATED="1788917904223" ID="ID_1099728874" MODIFIED="1788917932855" TEXT="ggfs von einer abweichenden Scale der Automations-Provision"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789164533222" ID="ID_1017590695" MODIFIED="1789164556832" TEXT="Problem: kann auch vom Typ des Beitrags (und des Basis-Werts) abh&#xe4;ngen">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1789164561486" ID="ID_376197998" MODIFIED="1789164593909" TEXT="bedeutet: die darauf aufbauende Provision mu&#xdf; ggfs. einen double-Dispatch machen"/>
+<node CREATED="1789165221192" ID="ID_388299163" MODIFIED="1789165234448" TEXT="die Basis-Implementierung mu&#xdf; dann generisch sein und von Scale bereitgestellt werden"/>
+<node CREATED="1789165187065" ID="ID_1109273270" MODIFIED="1789165213989" TEXT="Konsequenz &#x27f9; die Scale mu&#xdf; hier zwei Typ-Parameter nehmen"/>
+<node CREATED="1789165444623" ID="ID_1649021234" MODIFIED="1789165459491" TEXT="vereinfachte Variante f&#xfc;r identische Scale"/>
 </node>
-<node CREATED="1788918491304" ID="ID_991615591" MODIFIED="1788918753513" TEXT="Beschlu&#xdf;: hier Heuristik &#x2014; keine eigene Taxonomie">
+</node>
+<node CREATED="1788918491304" ID="ID_991615591" MODIFIED="1788918491304" TEXT="Beschlu&#xdf;: hier Heuristik &#x2014; keine eigene Taxonomie">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85593,7 +85602,8 @@
 <node CREATED="1789072817738" ID="ID_621244531" MODIFIED="1789072844560" TEXT="man k&#xf6;nnte &#xbb;Scales&#xab; ins Zentrum stellen &#x2014; oder als Rand-Thema betrachten"/>
 <node CREATED="1789073532638" ID="ID_1112609990" MODIFIED="1789073555185" TEXT="Eine Frage des &#xbb;Navigierens&#xab; : was verbaut man sich und womit verspielt man sich"/>
 </node>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789002615502" ID="ID_1161327543" LINK="https://claude.ai/share/784807f3-8fb3-4c1f-85c0-95355e79a9db" MODIFIED="1789082794573" TEXT="eine Design-Konversation mit Claude gef&#xfc;hrt">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789002615502" ID="ID_1161327543" LINK="https://claude.ai/share/784807f3-8fb3-4c1f-85c0-95355e79a9db" MODIFIED="1789082726792" TEXT="eine Design-Konversation mit Claude gef&#xfc;hrt">
+<linktarget COLOR="#51bbdf" DESTINATION="ID_1161327543" ENDARROW="Default" ENDINCLINATION="231;13;" ID="Arrow_ID_994670578" SOURCE="ID_383248634" STARTARROW="None" STARTINCLINATION="-183;-140;"/>
 <icon BUILTIN="wizard"/>
 <node CREATED="1789002670195" ID="ID_1638903618" MODIFIED="1789074297728" TEXT="Schritt-1 : gebe ihm nur high-level Kontext">
 <richcontent TYPE="NOTE"><html>
@@ -85867,7 +85877,8 @@
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1789082704022" ID="ID_1925473607" MODIFIED="1789082723794" TEXT="mu&#xdf; eine Registry bereits jetzt bauen">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789082726792" ID="ID_383248634" MODIFIED="1789082813652" TEXT="Frage im bestehenden Chat nochmal nach &#x2014; mit konkretem Implementierungs-Szenario">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789082726792" ID="ID_383248634" MODIFIED="1789082726792" TEXT="Frage im bestehenden Chat nochmal nach &#x2014; mit konkretem Implementierungs-Szenario">
+<arrowlink COLOR="#51bbdf" DESTINATION="ID_1161327543" ENDARROW="Default" ENDINCLINATION="231;13;" ID="Arrow_ID_994670578" STARTARROW="None" STARTINCLINATION="-183;-140;"/>
 <icon BUILTIN="wizard"/>
 <node CREATED="1789082815287" ID="ID_104427970" MODIFIED="1789082927619" TEXT="beschreibe Registrierung des Scale-Desriptors">
 <richcontent TYPE="NOTE"><html>
@@ -85916,11 +85927,19 @@
 <node CREATED="1789083115404" ID="ID_564486206" MODIFIED="1789083136019" TEXT="Sichtbarkeit der neuen Scale-Definition &#x27f9; Argument stichhaltig">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#5b280f" CREATED="1789083137852" ID="ID_1965196365" MODIFIED="1789083170965" TEXT="Interne Index-Organisation in der Deque &#x27f9; nicht durch das Argument gedeckt">
+<node COLOR="#5b280f" CREATED="1789083137852" ID="ID_1965196365" MODIFIED="1789155688917" TEXT="Interne Index-Organisation in der Deque &#x27f9; nicht durch das Argument gedeckt">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      w&#228;hrend dem Neuhinzuf&#252;gen k&#246;nnten Render-Worker concurrent den Index verwenden &#8212; hierf&#252;r gibt es aber keinerlei Konsistenz-Garantie (nur die Payload Storage-Adressen in der Deque sind garantiert stabil) &#10233; &#187;undefined behaviour&#171;
+    </p>
+  </body>
+</html></richcontent>
 <icon BUILTIN="button_cancel"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789083189238" ID="ID_735608493" MODIFIED="1789083464492" TEXT="Claude schl&#xe4;gt als Alternative eine globale Index-Tabelle vor, mit atomic-Slots f&#xfc;r &#xbb;Extents&#xab;">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789083189238" ID="ID_735608493" MODIFIED="1789083189238" TEXT="Claude schl&#xe4;gt als Alternative eine globale Index-Tabelle vor, mit atomic-Slots f&#xfc;r &#xbb;Extents&#xab;">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85933,27 +85952,24 @@
       address computation touches nothing a writer mutates.
     </p>
     <div>
-      <div role="group" aria-label="cpp code" tabindex="0">
-        <div>
-          <div>
-            <pre>
-<font size="2">class ScaleRegistry
+      <pre><font size="2">
+class ScaleRegistry
   {
     static constexpr size_t CHUNK = 256;
-    static constexpr size_t MAX   = 256;          // &#8793; 65536 scales
+    static constexpr size_t MAX   = 256;          // &amp;#8793; 65536 scales
 
     struct Chunk { ScaleDescriptor slot[CHUNK]; };
 
-    std::array<std atomic="#DEFAULT" size="2"><chunk size="2">, MAX&gt; chunk_{};
-    std::mutex                           writeGuard_;   // writers only
-    size_t                               next_ {0};     // guarded
+    std::array&lt;std atomic=&quot;#DEFAULT&quot; size=&quot;2&quot;&gt;&lt;chunk size=&quot;2&quot;&gt;, MAX&amp;gt; chunk_{};
+    std::mutex writeGuard_;   // writers only
+    size_t     next_ {0};     // guarded
 
   public:
-    ScaleDescriptor const&amp;
+    ScaleDescriptor const&amp;amp;
     operator[] (ScaleID id)  const                      // lock-free, engine path
       {
         return chunk_[id / CHUNK].load (std::memory_order_acquire)
-                    -&gt;slot[id % CHUNK];
+                    -&amp;gt;slot[id % CHUNK];
       }
 
     ScaleID
@@ -85961,16 +85977,13 @@
       {
         std::lock_guard lock{writeGuard_};
         size_t id = next_++;
-        auto&amp; head = chunk_[id / CHUNK];
+        auto&amp;amp; head = chunk_[id / CHUNK];
         if (not head.load (std::memory_order_relaxed))
           head.store (new Chunk{}, std::memory_order_release);
-        head.load (std::memory_order_relaxed)-&gt;slot[id % CHUNK] = std::move(def);
+        head.load (std::memory_order_relaxed)-&amp;gt;slot[id % CHUNK] = std::move(def);
         return ScaleID{id};
       }
   };</font></pre>
-          </div>
-        </div>
-      </div>
     </div>
     <p>
       
@@ -85998,6 +86011,7 @@
     </p>
   </body>
 </html></richcontent>
+<arrowlink COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" STARTARROW="None" STARTINCLINATION="-393;12;"/>
 <icon BUILTIN="wizard"/>
 </node>
 <node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789083492013" ID="ID_816421539" MODIFIED="1789083498973" TEXT="zwei weitere Vorschl&#xe4;ge">
@@ -86023,6 +86037,10 @@
 </html></richcontent>
 </node>
 </node>
+</node>
+<node CREATED="1789159365103" ID="ID_435108847" MODIFIED="1789159397705" TEXT="sollte dann wohl gleich eine generische Registry sein...">
+<linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
+<node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
 </node>
 </node>
 </node>
@@ -86229,6 +86247,21 @@
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_1525078992" MODIFIED="1788651847850" TEXT="verify_Automation">
 <icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789159639409" ID="ID_654373559" MODIFIED="1789159678163" TEXT="Scale-Eigenschaften abstecken per ParameterScale_test">
+<icon BUILTIN="pencil"/>
+<node CREATED="1789159687318" ID="ID_1480074646" MODIFIED="1789160197623" TEXT="Hier nur rein die Scale-Descriptoren und das intendierte Verhalten">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...nicht aber die Registrierung und Einbindung in die Parameter
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#852a28" DESTINATION="ID_320664672" ENDARROW="Default" ENDINCLINATION="-765;515;" ID="Arrow_ID_1819779589" STARTARROW="None" STARTINCLINATION="199;8;"/>
+<icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
