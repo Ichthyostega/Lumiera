@@ -36,7 +36,7 @@
 #include "lib/format-string.hpp"
 #include "lib/format-cout.hpp"
 #include "lib/time/timevalue.hpp"
-#include "lib/luid.h"
+#include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>

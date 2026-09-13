@@ -27951,7 +27951,7 @@
   <head/>
   <body>
     <p>
-      <a http-equiv="content-type" content="text/html; charset=utf-8" href="javascript:void(0)" class="collapse-toggle">
+      <a>
 </a>    </p>
     <h4 id="return-value">
       Return value <a href="https://docs.gtk.org/Pango/method.FontDescription.get_size.html#return-value" class="anchor">
@@ -28104,7 +28104,7 @@
       <b><font color="#a7273b">matches that space by default</font></b><font color="#a7273b">,</font>&#160;but can be changed for the above reasons. The helper functions
     </p>
     <p>
-      <a http-equiv="content-type" content="text/html; charset=utf-8" href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device"><code>cairo_user_to_device()</code></a>&#160;and <a href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device-distance"><code>cairo_user_to_device_distance()</code></a>&#160; tell you what the device-coordinates are for a user-coordinates position or distance.
+      <a href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device"><code>cairo_user_to_device()</code></a>&#160;and <a href="http://www.cairographics.org/manual/cairo-Transformations.html#cairo-user-to-device-distance"><code>cairo_user_to_device_distance()</code></a>&#160; tell you what the device-coordinates are for a user-coordinates position or distance.
     </p>
   </body>
 </html></richcontent>
@@ -34862,7 +34862,7 @@
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p http-equiv="content-type" content="text/html; charset=utf-8">
+    <p>
       <strong>If the question is more than <code>365</code>&#160;days old, and ...</strong>
     </p>
     <ul>
@@ -85119,7 +85119,7 @@
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code data-highlighted="yes" class="hljs language-cpp"><font size="2">void hun(T* obj, class C* c)
+    <pre class="lang-cpp s-code-block"><code data-highlighted="yes" class="hljs language-cpp"><font size="2">void hun(T* obj, class C* c)
 {
     //do some checking on c
     if (some conditions from c are true)
@@ -85694,7 +85694,7 @@
   <head/>
   <body>
     <p>
-      <strong http-equiv="content-type" content="text/html; charset=utf-8">Separate hard bounds from the control range.</strong>&#160;These get conflated constantly and they are different things. A hard bound says values outside are illegal, and conform either clamps or errors. A control range says &quot;this is the travel of the fader&quot;, and values outside are perfectly legal but unusual. Gain is the obvious case: the useful range is maybe &#8722;60 to +12 dB, but +30 dB is not an error. If you have one min/max pair it will silently become whichever of the two you happened to need first. Two pairs, or one pair plus a flag, costs almost nothing today.
+      <strong>Separate hard bounds from the control range.</strong>&#160;These get conflated constantly and they are different things. A hard bound says values outside are illegal, and conform either clamps or errors. A control range says &quot;this is the travel of the fader&quot;, and values outside are perfectly legal but unusual. Gain is the obvious case: the useful range is maybe &#8722;60 to +12 dB, but +30 dB is not an error. If you have one min/max pair it will silently become whichever of the two you happened to need first. Two pairs, or one pair plus a flag, costs almost nothing today.
     </p>
   </body>
 </html></richcontent>
@@ -85704,7 +85704,7 @@
   <head/>
   <body>
     <p>
-      <strong http-equiv="content-type" content="text/html; charset=utf-8">Decide whether the stored value is in the metric's own units or in a canonical unit.</strong>&#160;This is the one place where your design page makes a claim that the implementation can quietly break. The page says combining is addition in a logarithmic scale and multiplication in a linear one, and that this is why scale belongs to the type. That's only true if the stored representation actually <em>is</em>&#160;in dB. If you store canonical linear and treat the metric as a display attribute, the joining operator becomes ambiguous again, and you're back to the thing the page argues against. My suggestion: store in the metric's units, so &quot;the metric determines the join&quot; is literally true rather than an interpretive claim.
+      <strong>Decide whether the stored value is in the metric's own units or in a canonical unit.</strong>&#160;This is the one place where your design page makes a claim that the implementation can quietly break. The page says combining is addition in a logarithmic scale and multiplication in a linear one, and that this is why scale belongs to the type. That's only true if the stored representation actually <em>is</em>&#160;in dB. If you store canonical linear and treat the metric as a display attribute, the joining operator becomes ambiguous again, and you're back to the thing the page argues against. My suggestion: store in the metric's units, so &quot;the metric determines the join&quot; is literally true rather than an interpretive claim.
     </p>
   </body>
 </html></richcontent>
@@ -85716,7 +85716,7 @@
     Cyclic interacts with min/max in a way you'll want to be explicit about: for a cyclic scale, min/max define the period rather than a bound, and conform wraps instead of clamping. That's cheap. What isn't cheap, and what you should defer, is cyclic
 
     <p>
-      <em http-equiv="content-type" content="text/html; charset=utf-8">interpolation</em>: shortest arc versus explicit winding for an automation curve crossing the seam. That belongs to the automation function, not to Scale.
+      <em>interpolation</em>: shortest arc versus explicit winding for an automation curve crossing the seam. That belongs to the automation function, not to Scale.
     </p>
   </body>
 </html></richcontent>
@@ -85725,19 +85725,19 @@
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <h3 http-equiv="content-type" content="text/html; charset=utf-8" dir="ltr">
+    <h3>
       Sentinels
     </h3>
-    <p dir="ltr">
+    <p>
       Worth separating two things that both look like sentinels.
     </p>
-    <p dir="ltr">
+    <p>
       Some are genuine domain members. Minus-infinity gain, &quot;off&quot;, the extremal end of a fader. These have a definite position in the ordering and definite algebraic behaviour: &#8722;&#8734; dB is the absorbing element for gain combination, 0 dB is the identity. They belong <em>in</em>&#160;the domain, and a log-metric numeric scale that can represent its own absorbing element is more useful than one that can't. IEEE gets this part right, and borrowing <code>-inf</code>&#160;for exactly this is reasonable.
     </p>
-    <p dir="ltr">
+    <p>
       Others are not values at all. &quot;Unset&quot;, &quot;indeterminate&quot;, &quot;multiple values selected in the GUI&quot;, &quot;bypassed&quot;. These have no position in the ordering, no join behaviour, and every arithmetic operation on them is a bug. Putting them in-band is how you get NaN's contagion problem, plus a per-type encoding story (NaN payloads for float, <code>INT_MIN</code>&#160;for int, nothing sensible for bool). You have four 64-bit slots and only need one for the value. A small out-of-band state word in the container is uniform across every implementation type, costs you nothing, and keeps comparison honest.
     </p>
-    <p dir="ltr">
+    <p>
       Then make <code>conform</code>&#160;the single choke point that recognises and resolves both kinds. Everything downstream gets to assume it's looking at a real value.
     </p>
   </body>
@@ -85749,7 +85749,7 @@
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p http-equiv="content-type" content="text/html; charset=utf-8" dir="ltr">
+    <p>
       If you want a rule for where to stop, it's this: build now only what you couldn't add later without changing code you can't reach. Behind your vtable, everything is reachable. Two things are not.
     </p>
     <ul>
@@ -86059,8 +86059,772 @@ class ScaleRegistry
 </node>
 <node COLOR="#338800" CREATED="1789171875485" ID="ID_1356870727" MODIFIED="1789171905187" TEXT="conform">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#338800" CREATED="1789171881280" ID="ID_339852589" MODIFIED="1789171906862" TEXT="zyklische Scale behandeln">
-<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789171881280" ID="ID_339852589" MODIFIED="1789250353458" TEXT="zyklische Scale behandeln">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789250357099" ID="ID_684124457" MODIFIED="1789250365217" TEXT="Vorsicht Falle">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1789250367429" ID="ID_1987781341" MODIFIED="1789250382816" TEXT="modulus und unsigned"/>
+<node CREATED="1789255452370" ID="ID_814883019" MODIFIED="1789255481553" TEXT="und Werte nahe der Dom&#xe4;nengrenze">
+<node CREATED="1789255543365" ID="ID_1812016034" MODIFIED="1789255559381" TEXT="wenn max - min &gt; Number-Domain"/>
+<node CREATED="1789255721874" ID="ID_513476241" MODIFIED="1789261526870" TEXT="problematisch wird&apos;s wenn man Periode oder Offset nicht repr&#xe4;sentieren kann"/>
+<node COLOR="#5b280f" CREATED="1789256138024" ID="ID_1547072827" MODIFIED="1789313514439" TEXT="f&#xfc;r manche Typen k&#xf6;nnte man die n&#xe4;chstgr&#xf6;&#xdf;ere Dom&#xe4;ne nehmen....?">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1789313516671" ID="ID_169607480" MODIFIED="1789313539541" TEXT="das &#xbb;riecht&#xab; nach einem ungschickten Design-Ansatz"/>
+<node CREATED="1789313546967" ID="ID_684995836" MODIFIED="1789313560085" TEXT="...f&#xfc;r den man viel Komplexit&#xe4;t ohne Gewinn verschwendet"/>
+</node>
+<node CREATED="1789313568174" ID="ID_1046980435" MODIFIED="1789313587289" TEXT="aber speziell f&#xfc;r Signed Ints k&#xf6;nnte man auf Unsigned ausweichen">
+<icon BUILTIN="idea"/>
+<node CREATED="1789313589044" ID="ID_1619027288" MODIFIED="1789313608352" TEXT="denn Unsigned wrapped zuverl&#xe4;ssig"/>
+<node CREATED="1789313609062" ID="ID_756488866" MODIFIED="1789313627095" TEXT="Vorsicht: unter Einschr&#xe4;nkungen"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1789256160668" ID="ID_1478244542" MODIFIED="1789256181567" TEXT="YAGNI">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1789256187051" ID="ID_213166809" MODIFIED="1789256203154" TEXT="wie sehr m&#xfc;ssen wir uns gegen pathologische F&#xe4;lle wappnen?"/>
+<node CREATED="1789256241090" ID="ID_249184818" MODIFIED="1789256392758" TEXT="&#x201e;normalerweise&#x201c; eigentlich gar nicht &#x2014; wer braucht sowas schon??">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i>famous last words...</i>
+    </p>
+    <p>
+      Also sollten wir zumindest den pathologischen Fall erkennen, und zwar effizient
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smiley-oh"/>
+<node CREATED="1789256397005" ID="ID_94440089" MODIFIED="1789256443685" TEXT="ein safety-Check sollte nur einmal passieren, beim Konstruieren der Scale"/>
+<node CREATED="1789256449974" ID="ID_1162189003" MODIFIED="1789256553163" TEXT="es erscheint mir sinnvoll, dann per Exception abzubrechen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil das auch in einem Release-Build passiert und dann (hoffentlich) zu einem <i>sichtbaren Crash</i>&#160;f&#252;hrt.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1789257823505" ID="ID_718639286" MODIFIED="1789257911306" TEXT="zunk&#xfc;nftige Erweiterungs-Punkte">
+<icon BUILTIN="hourglass"/>
+<node CREATED="1789257845492" ID="ID_159645394" MODIFIED="1789258180675" TEXT="man k&#xf6;nnte einen spezielleren Param-Type implementieren"/>
+<node CREATED="1789257832820" ID="ID_1668647613" MODIFIED="1789258802813" TEXT="oder Scale k&#xf6;nnte Policy-based-Design verwenden">
+<icon BUILTIN="forward"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1789257872199" ID="ID_1470234351" MODIFIED="1789257901543" TEXT="Problem ist: die Entscheidung f&#xe4;llt erst zur Laufzeit &#x2014; anhand der Scale-Parameter">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1789254612697" ID="ID_199783676" MODIFIED="1789254628075" TEXT="L&#xf6;sungsansatz gesucht...">
+<node CREATED="1789254633654" ID="ID_1348288170" MODIFIED="1789254668949" TEXT="sehe schnell: das Verhalten des C++ - Modulus-Operators (bzw. Integer-Div) ist das Problem"/>
+<node CREATED="1789254672841" ID="ID_1353212531" MODIFIED="1789254690531" TEXT="k&#xf6;nnte auf meine &#xbb;floorwrap&#xab;-Utils ausweichen">
+<node CREATED="1789254693536" ID="ID_1048387761" MODIFIED="1789254700962" TEXT="da h&#xe4;tte ich das Problem gel&#xf6;st"/>
+<node CREATED="1789254701637" ID="ID_330561168" MODIFIED="1789254717186" TEXT="aber: ich sehe nicht wie sich das an der Grenze verh&#xe4;lt"/>
+</node>
+<node CREATED="1789254718935" ID="ID_152769308" MODIFIED="1789254745179" TEXT="und oben drauf kommt der Shift zu minVal &#x27f9; das macht die Analyse komplex"/>
+<node CREATED="1789254746679" ID="ID_918824573" MODIFIED="1789254778556" TEXT="AUA: Floating-Points will ich nat&#xfc;rlich auch &#x2014; aber die ticken nochmal anders"/>
+<node CREATED="1789254779699" ID="ID_965257911" MODIFIED="1789254802266" TEXT="Beschlu&#xdf;: besser eine eigenst&#xe4;ndige L&#xf6;sung &#xbb;by first principles&#xab;">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789313686899" ID="ID_205101893" MODIFIED="1789313712777" TEXT="schwierige Analyse &#x27f9; Claude ansetzen">
+<icon BUILTIN="wizard"/>
+<node CREATED="1789313723855" ID="ID_1299061139" MODIFIED="1789313909228" TEXT="zun&#xe4;chst einmal: best&#xe4;tigt unabh&#xe4;ngig die Strukturierung des Themas">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      wie &#252;blich habe ich Claude <i>ganz bewu&#223;t</i>&#160;nicht direkt den Stand meiner &#220;berlegungen mitgeteilt; insofern ist es eine Best&#228;tigung da&#223; Claude ebenfalls (nur) zwei Hauptf&#228;lle verfolgt: Integral &#10230; Unsigned, sowie Floating-Point. Ebenfalls interessant, da&#223; Claude auf die naheliegende L&#246;sung mit Float-128 &#252;berhaupt nicht eingeht (vermutlich weil Claude von den vorhergehenden Chants den Kontext der Frage erkennen kann, und daher wei&#223;, da&#223; ich eine Library-L&#246;sung brauche)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1789313909221" ID="ID_636669321" MODIFIED="1789314360236">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Fallunterscheidung <font face="Monospaced" color="#672525">std::integral</font>&#160;vs<font face="Monospaced" color="#672525">&#160;std::floating_point</font>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &quot;Two problems hide behind one symptom here, and they have opposite YAGNI answers: for the integral case, total correctness is cheap and worth having unconditionally; for floating point it is&#160;impossible, so the only real decision is where to reject.&quot;
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314198004" ID="ID_1198665569" MODIFIED="1789314547810" TEXT="Integral: Abdeckung der gesamten Dom&#xe4;ne per Unsigned...">
+<icon BUILTIN="wizard"/>
+<node CREATED="1789314266561" ID="ID_662274868" MODIFIED="1789342378691" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      
+    </p>
+    <h3>
+      Integral: do the arithmetic in the unsigned domain
+    </h3>
+    <p>
+      The trick is not to widen the type but to change the domain. For any VAL of width N, the true span <code>maxVal - minVal</code>&#160;is at most 2^N-1, so it always fits into <code>make_unsigned_t&lt;VAL&gt;</code>&#160;&#8212; and unsigned arithmetic is modular by definition, so no UB even when the intermediate &quot;overflows&quot;.
+    </p>
+    <div>
+      <div role="group" aria-label="cpp code" tabindex="0">
+        <div>
+          <div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">template</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&lt;</font><font face="Monospaced" size="2">std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">integral</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&gt; </font>
+    </p>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">constexpr</font><font face="Monospaced" size="2">&#160;VAL </font>
+    </p>
+    <p>
+      <font color="rgb(0, 81, 194)" face="Monospaced" size="2">wrapCyclic</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">VAL rawVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">,</font><font face="Monospaced" size="2">&#160;VAL minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">,</font><font face="Monospaced" size="2">&#160;VAL maxVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;{ </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">REQUIRE</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal &lt; maxVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">); </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">using</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">U</font><font face="Monospaced" size="2">&#160;= std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">make_unsigned_t</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&lt;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&gt;; </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">const</font><font face="Monospaced" size="2">&#160;U PERIOD = </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">maxVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;- </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">));</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;// exact, always representable in U </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;U off</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">; </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">if</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">rawVal &gt;= minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;off = </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">rawVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;- </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">))</font><font face="Monospaced" size="2">&#160;% PERIOD</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">; </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">else </font>
+    </p>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">{ </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">const</font><font face="Monospaced" size="2">&#160;U dist = </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;- </font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">rawVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">));</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;// &#8805; 1, so dist-1 cannot underflow </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;off = PERIOD-</font><font color="rgb(0, 128, 128)" face="Monospaced" size="2">1</font><font face="Monospaced" size="2">&#160;- </font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">dist-</font><font color="rgb(0, 128, 128)" face="Monospaced" size="2">1</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;% PERIOD</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">;</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;// &#8801; (-dist) mod PERIOD </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">} </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">return</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">U</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;+ off</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)); </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">}</font>
+    </p>
+    <div>
+      <div role="group" aria-label="cpp code" tabindex="0">
+        <div>
+          <div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>
+      Three things worth noting. The <code>PERIOD-1 - (dist-1) % PERIOD</code>&#160;form is what avoids the usual double-modulus dance and gets the <code>dist % PERIOD == 0</code>&#160;case right. The redundant-looking outer <code>U(...)</code>&#160;casts are not redundant for types narrower than <code>int</code>: integral promotion drags <code>unsigned short</code>&#160;operands up to <code>int</code>, and the modular wrap you rely on then doesn't happen. And the final <code>VAL(U)</code>&#160; conversion is well-defined modular since C++20, though in practice it never wraps &#8212; <code>minVal + off</code>&#160;is mathematically in range by construction.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      This covers the full type range, including <code>minVal = INT_MIN, maxVal = INT_MAX</code>. Given that your Scale carries <em>optional</em>&#160;min/max qualifiers, that case is not exotic at all: toggle cyclic on a scale with no explicit bounds and the naive version is immediately UB. That alone makes the five extra lines worth it. And since <code>make_unsigned_t</code>&#160;is identity for unsigned types, one implementation serves signed and unsigned alike.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#ff0808" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="305;-925;" ID="Arrow_ID_153243460" STARTARROW="None" STARTINCLINATION="141;26;"/>
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314221349" ID="ID_63841523" MODIFIED="1789314713492" TEXT="Floatingpoint: Nicht-handhabbare Bereiche beachten...">
+<icon BUILTIN="wizard"/>
+<node CREATED="1789314574790" HGAP="49" ID="ID_1659421158" MODIFIED="1789341131113" STYLE="bubble" VSHIFT="1">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <h3>
+      Floating point: the half-open invariant is the thing that actually bites
+    </h3>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">template</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&lt;</font><font face="Monospaced" size="2">std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">floating_point</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&gt; </font>
+    </p>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">constexpr</font><font face="Monospaced" size="2">&#160;VAL </font>
+    </p>
+    <p>
+      <font color="rgb(0, 81, 194)" face="Monospaced" size="2">wrapCyclic</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">VAL rawVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">,</font><font face="Monospaced" size="2">&#160;VAL minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">,</font><font face="Monospaced" size="2">&#160;VAL maxVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">) </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">{ </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">REQUIRE</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">minVal &lt; maxVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">); </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">const</font><font face="Monospaced" size="2">&#160;VAL PERIOD = maxVal - minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">; </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;VAL off = std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">fmod</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">rawVal - minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">,</font><font face="Monospaced" size="2">&#160;PERIOD</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">); </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">if</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">off &lt; </font><font color="rgb(0, 128, 128)" face="Monospaced" size="2">0</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;off += PERIOD</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">;</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160;&#160;&#160;&#160;&#160;// this addition rounds... </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">if</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">not </font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">off &lt; PERIOD</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">))</font><font face="Monospaced" size="2">&#160;off = </font><font color="rgb(0, 128, 128)" face="Monospaced" size="2">0</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">;</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;// ...and can land exactly on PERIOD </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">const</font><font face="Monospaced" size="2">&#160;VAL res = minVal + off</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">;</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160; &#160;&#160;// so can this one </font>
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">return</font><font face="Monospaced" size="2">&#160;res &lt; maxVal? res : minVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">; </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160; </font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">}</font>
+    </p>
+    <div>
+      <div role="group" aria-label="cpp code" tabindex="0">
+        <div>
+          <div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>
+      <code>std::fmod</code>&#160;is exact &#8212; IEEE 754 specifies the result as exactly representable, no rounding introduced. Everything around it is not. The classic failure: <code>off</code>&#160;is a tiny negative like -1e-300, <code>off + PERIOD</code>&#160;rounds to exactly <code>PERIOD</code>, and you return <code>maxVal</code>&#160; from a half-open interval. That is not a boundary exotic case; it happens for any input a hair below <code>minVal</code>, which in an automation context is routine. Same for the final <code>minVal + off</code>&#160;rounding up to <code>maxVal</code>. Returning <code>minVal</code>&#160;there is not a fudge &#8212; <code>maxVal &#8801; minVal</code>&#160; in a cyclic domain, so it is the correct representative.
+    </p>
+    <p>
+      The cases I would <em>not</em>&#160;write code for:
+    </p>
+    <ul>
+      <li>
+        <code>rawVal - minVal</code>&#160;overflowing to &#177;&#8734; (needs <code>fmod(fmod(rawVal,P) - fmod(minVal,P), P)</code>, valid because both inner results are exact and their difference is bounded by 2&#183;PERIOD).
+      </li>
+      <li>
+        <code>PERIOD</code>&#160;itself overflowing to &#8734;.
+      </li>
+      <li>
+        Resolution collapse: once <code>|rawVal - minVal| / PERIOD</code>&#160;exceeds <code>1/epsilon</code>, the ulp spacing at <code>rawVal</code>&#160;exceeds the period and the answer, while exactly computed, carries no information.
+      </li>
+    </ul>
+    <p>
+      The reason to skip these is not that they're rare but that the third one is unfixable. If someone wraps 1e18 into a 0.1-wide cycle, no implementation recovers the resolution &#8212; so the honest response is to reject, not to compute. One <code>ASSERT</code>&#160;at scale definition (<code>PERIOD</code>&#160; finite and <code>PERIOD &gt; 0</code>) plus one in the wrap covering the ratio bound gives you a diagnosis instead of silent nonsense, and costs nothing in release builds.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314739520" ID="ID_900911623" MODIFIED="1789314802300" TEXT="Erl&#xe4;uterung der L&#xf6;ungsstrategie">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Auf weitere Nachfrage und Bitte um Erl&#228;uterung der gew&#228;hlten speziellen Formulierungen stellt Claude einen gemeinsamen L&#246;sungsansatz heraus...
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="wizard"/>
+<node BACKGROUND_COLOR="#d8d0b8" CREATED="1789314802289" ID="ID_861699177" MODIFIED="1789340965399" STYLE="bubble">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Both questions turn out to have a common shape: the awkwardness comes from having moved into a domain (unsigned, resp. finite-precision) where the convenient operation is no longer available, and the fix is to <b><font color="#a80a36">precompute the right quantity</font></b>&#160;instead of patching after the fact.
+    </p>
+    <h3>
+      (1) Why <code>PERIOD-1 - (dist-1) % PERIOD</code>
+    </h3>
+    <p>
+      Start with why the obvious form isn't available. In C++, <code>%</code>&#160; truncates toward zero, so <code>(-7) % 3</code>&#160;is <code>-1</code>, not <code>2</code>&#160;&#8212; the result lands in <code>(-P, 0]</code>&#160;for negative dividends, not in <code>[0, P)</code>. The usual repair is
+    </p>
+    <div>
+      <div role="group" aria-label="cpp code" tabindex="0">
+        <div>
+          <div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <p>
+      <font color="#4d2b2b" face="Monospaced">VAL r = (rawVal - minVal) % PERIOD; </font>
+    </p>
+    <p>
+      <font color="#4d2b2b" face="Monospaced">if (r &lt; 0) r += PERIOD; </font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      which is correct, cheap, and <em>unavailable to us</em>, because the whole reason for the unsigned domain is that <code>rawVal - minVal</code>&#160;can overflow. Once you're in <code>U</code>, there is no negative dividend to correct &#8212; you only have the magnitude <code>dist = minVal - rawVal &#8805; 1</code>, and you need <code>(-dist) mod PERIOD</code>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      The textbook identity for that is
+    </p>
+    <p>
+      <font color="#4d2b2b" face="Monospaced">offset = (PERIOD - dist % PERIOD) % PERIOD;</font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      The outer <code>%</code>&#160;is there solely because of one input: when <code>dist % PERIOD == 0</code>, the inner expression yields <code>PERIOD</code>&#160;itself, which is out of range. So you pay a second division to fix a single boundary value.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      The shifted form removes that boundary instead of patching it.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Write
+    </p>
+    <p>
+      &#160;<code>dist - 1 = q&#183;PERIOD + s</code>&#160;with <code>s = (dist-1) mod PERIOD &#8712; [0, PERIOD)</code>.
+    </p>
+    <p>
+      Then
+    </p>
+    <p>
+      &#160; <code>dist = q&#183;PERIOD + s + 1</code>,
+    </p>
+    <p>
+      so
+    </p>
+    <p>
+      &#160;-dist &#8801; -(s+1) &#8801; PERIOD-1-s&#160;&#160;&#160;(mod PERIOD)
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      and <code>PERIOD-1-s</code>&#160;lies in <code>[0, PERIOD-1]</code>, i.e. already in range &#8212; no second reduction possible or needed. The <code>-1</code>/<code>+1</code>&#160; shift maps the problematic residue <code>0</code>&#160;to the interior, and maps the interior residue <code>PERIOD-1</code>&#160;to <code>0</code>, which is precisely the value that was missing.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      So the preference is: one division instead of two (and integer division is the only expensive operation in this function &#8212; tens of cycles on 64-bit operands), no branch, and no intermediate that can transiently equal <code>PERIOD</code>&#160;and leak out through a later refactoring. <code>dist - 1</code>&#160;cannot underflow because the enclosing branch guarantees <code>rawVal &lt; minVal</code>, hence <code>dist &#8805; 1</code>.
+    </p>
+    <h3>
+      
+    </h3>
+    <h3>
+      (2) One rejection predicate, not two &#8212;<br />&#160;&#160;&#160;&#160;&#160;&#160;and the near-<code>minVal</code>&#160;case isn't one of them
+    </h3>
+    <p>
+      Your instinct that there are two conditions is right in the sense that overflow of <code>rawVal - minVal</code>&#160;and resolution collapse are genuinely independent: neither implies the other. With <code>PERIOD = 0.1</code>&#160;the resolution limit sits at <code>|rawVal - minVal| &#8776; 4.5e14</code>, nowhere near overflow; with <code>PERIOD &#8776; 1e300</code>&#160;the subtraction can overflow while the ratio is still fine. But both are bounds on the same quantity, and if you avoid computing the difference you can cover them with one comparison.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Let the builder precompute a magnitude limit and store it in the scale:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="rgb(110, 118, 135)" face="Monospaced" size="2">// at scale definition, cyclic + floating point </font>
+    </p>
+    <p>
+      <font face="Monospaced" size="2">VAL lim = PERIOD / std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font face="Monospaced" size="2">numeric_limits</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&lt;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&gt;::</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">epsilon</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(); </font>
+    </p>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">if</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">not std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">isfinite</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">lim</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)) </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160; </font><font face="Monospaced" size="2">lim = std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font face="Monospaced" size="2">numeric_limits</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&lt;</font><font color="rgb(179, 74, 0)" face="Monospaced" size="2">VAL</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">&gt;::</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">max</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(); </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;</font><font face="Monospaced" size="2">&#160;lim /= </font><font color="rgb(0, 128, 128)" face="Monospaced" size="2">2</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">;</font><font color="rgb(110, 118, 135)" face="Monospaced" size="2">&#160;// exact</font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      The builder then rejects the <em>definition</em>&#160;unless <code>std::abs(minVal) &lt;= lim</code>&#160;and <code>std::abs(maxVal) &lt;= lim</code>&#160;(plus <code>minVal &lt; maxVal</code>, both finite, and <code>PERIOD</code>&#160;normal rather than subnormal). A cycle of width 0.1 anchored at 1e300 is not a scale anyone can use, and that judgment belongs at definition time.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Invocation then needs exactly one check:
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <font color="rgb(129, 0, 194)" face="Monospaced" size="2">if</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">not </font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">std</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">::</font><font color="rgb(0, 81, 194)" face="Monospaced" size="2">abs</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">(</font><font face="Monospaced" size="2">rawVal</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)</font><font face="Monospaced" size="2">&#160;&lt;= lim</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">)) </font>
+    </p>
+    <p>
+      <font color="rgb(43, 48, 59)" face="Monospaced" size="2">&#160;</font><font face="Monospaced" size="2">&#160;</font><font color="rgb(129, 0, 194)" face="Monospaced" size="2">throw</font><font face="Monospaced" size="2">&#160;error::Invalid</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">{</font><font face="Monospaced" size="2">...</font><font color="rgb(43, 48, 59)" face="Monospaced" size="2">};</font>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Since <code>|rawVal| &#8804; lim</code>&#160;and <code>|minVal| &#8804; lim</code>, the difference is bounded by <code>2&#183;lim &#8804; PERIOD/&#949;</code>, which both keeps <code>ulp(rawVal - minVal) &#8804; PERIOD</code>&#160;and makes the subtraction non-overflowing. And because the predicate is written as a negated <code>&lt;=</code>, NaN and &#177;&#8734; fall into the reject branch for free &#8212; no separate <code>isfinite</code>&#160;test. That matters: without it, <code>fmod(NaN, PERIOD)</code>&#160;is NaN, every comparison in the wrap is false, and your <code>not (off &lt; PERIOD)</code>&#160;clamp quietly turns it into <code>minVal</code>. A silently invented value is the worst outcome available here.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Your second candidate &#8212; <code>rawVal</code>&#160;very close to <code>minVal</code>&#160;&#8212; is not a rejection case. Cancellation there loses absolute precision in the difference, but the result stays inside the cycle and remains the nearest representable answer; what needs protecting is only the half-open invariant, and the two clamps already do that. Rejecting would be wrong: values just below <code>minVal</code>&#160;are the single most common input to a wrap.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      On sanitising the resolution case: I'd argue against it, precisely because this is library code. Clamping or wrapping anyway produces a result indistinguishable from a legitimate one, and the caller has no way to learn that their automation curve has gone numerically meaningless. The information was destroyed in the <em>input</em>&#160;&#8212; no post-hoc treatment restores it, so there's nothing to sanitise, only something to conceal.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Throwing is the right call, and it's affordable: one comparison on the hot path, well predicted, with the throw only on the path where the value is already garbage. Two caveats specific to your setting. First, an exception thrown inside a render job must not escape a worker thread &#8212; you'll want the job invocation wrapped so it fails the job rather than reaching <code>std::terminate</code>; I assume the scheduler already has that boundary, but this makes it load-bearing. Second, if the &quot;sentinel values outside the continuous range&quot; idea from the Parametrisation design ever lands on NaN, the sentinel has to be intercepted before the cyclic conform, never inside it.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      A nice side effect: if <code>wrapCyclic</code>&#160;is <code>constexpr</code>, the throw makes a violating call ill-formed at compile time, so constant-folded scale definitions get rejected by the compiler rather than at runtime.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Given that <code>Scale</code>&#160;already exposes a &quot;conform&quot; operation, the natural home for this is there &#8212; cyclic wrapping <em>is</em>&#160;a conform, and conform is where out-of-domain inputs are supposed to be adjudicated.
+    </p>
+  </body>
+</html></richcontent>
+<node BACKGROUND_COLOR="#f8ecbf" CREATED="1789340923095" HGAP="104" ID="ID_921584380" MODIFIED="1789347764151" VSHIFT="56">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      <b><font size="5">Complete Reasoning for the Unsigned-case</font></b>
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Below, everything named with a lower-case letter is a mathematical integer (element of &#8484;, unbounded). Machine operations are written with distinct symbols so the two layers never blur. The proof is in two layers, and your question &#8212; wrapped arithmetic or equivalence transformation? &#8212; is answered by the split: wrapping is used <strong>exactly once</strong>, in Lemma 1, to establish that one machine value equals one mathematical value. Everything after that is ordinary arithmetic on non-negative integers, with no wrapping and no appeal to modular representation.
+    </p>
+    <h3>
+      Definitions
+    </h3>
+    <p>
+      Let <code>VAL</code>&#160;have width N. Write
+    </p>
+    <ul>
+      <li>
+        <code>A = [VAL_MIN, VAL_MAX] &#8834; &#8484;</code>&#160;for the set of values representable in <code>VAL</code>, with <code>|A| = 2^N</code>;
+      </li>
+      <li>
+        <code>B = [0, 2^N - 1] &#8834; &#8484;</code>&#160;for the set representable in <code>U = make_unsigned_t&lt;VAL&gt;</code>;
+      </li>
+      <li>
+        <code>&#953; : A &#8594; B</code>, <code>&#953;(v) = v mod 2^N</code>, the value-preserving-mod conversion <code>VAL &#8594; U</code>&#160;(identity if <code>v &#8805; 0</code>, else <code>v + 2^N</code>);
+      </li>
+      <li>
+        <code>&#8854;</code>, <code>&#8853;</code>&#160;for the machine's unsigned operations on <code>U</code>: <code>a &#8854; b = (a - b) mod 2^N</code>, <code>a &#8853; b = (a + b) mod 2^N</code>.
+      </li>
+    </ul>
+    <p>
+      For <code>a &#8712; &#8484;</code>&#160;and <code>p &#8805; 1</code>, let <code>a mod p</code>&#160;&#160;denote the <strong><b>mathematical</b></strong><b>&#160;modulo</b>:<br />the unique <code>r &#8712; [0, p)</code>&#160;&#160;with <code>a &#8801; r (mod p)</code>.
+    </p>
+    <p>
+      The modulus operator <font color="#6a1a1a" face="Monospaced">%</font>&#160;in C++&#160;is <i>truncating</i>&#160;and therefore agrees with this <strong>only on non-negative dividends</strong>; that restriction is the sole property of <code>%</code>&#160;used below.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Given <code>m = minVal</code>, <code>M = maxVal</code>, <code>x = rawVal</code>, all in <code>A</code>, with <code>m &lt; M</code>.
+    </p>
+    <p>
+      Thus&#160; <code>p &#8788; M - m is the period-span</code>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <strong>Goal.</strong>&#160;Compute the <i>unique offset</i>&#160;<code>off &#8712; [0, p)</code>&#160;with <code>off &#8801; x - m (mod p)</code>,
+    </p>
+    <p>
+      then return <code>m + off</code>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <strong>Observation 0.</strong>&#160;<code>1 &#8804; p &#8804; VAL_MAX - VAL_MIN = 2^N - 1</code>, so <code>p &#8712; B</code>.
+    </p>
+    <p>
+      <font color="#8e0b30">The span is always representable in <code>U</code>&#160;even when it is not representable in <code>VAL</code></font>.
+    </p>
+    <p>
+      
+    </p>
+    <h3>
+      Lemma 1 (the only wrapping step)
+    </h3>
+    <p>
+      Let <code>x &lt; m</code>&#160;and put <code>dist = m - x &#8712; &#8484;</code>. Then <code>dist &#8712; [1, 2^N - 1] &#8838; B</code>, and the machine expression <code>U(&#953;(m) &#8854; &#953;(x))</code>&#160;evaluates to exactly <code>dist</code>.
+    </p>
+    <p>
+      <em><u>Proof:</u>&#160;</em>
+    </p>
+    <p>
+      Lower bound: <code>x &lt; m</code>&#160;gives <code>dist &#8805; 1</code>.
+    </p>
+    <p>
+      Upper bound: <code>x &#8805; VAL_MIN</code>&#160;and <code>m &#8804; VAL_MAX</code>&#160;give
+    </p>
+    <p>
+      <code>dist &#8804; VAL_MAX - VAL_MIN = 2^N - 1</code>. Hence <code>dist &#8712; B</code>.
+    </p>
+    <p>
+      For the value: <code>&#953;(v) &#8801; v (mod 2^N)</code>&#160;by definition,<br />so <code>&#953;(m) - &#953;(x) &#8801; m - x = dist (mod 2^N)</code>.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Therefore
+    </p>
+    <div data-not-prose="">
+      <div role="group" aria-label="Code" tabindex="0" class="relative group/copy bg-bg-000/50 border-0.5 border-border-400 rounded-[var(--msg-block-radius,0.5rem)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100">
+        <div class="sticky opacity-0 group-hover/copy:opacity-100 group-focus-within/copy:opacity-100 pointer-coarse:opacity-100 [@media(hover:none)]:opacity-100 top-2 py-2 h-12 w-0 float-right">
+          <pre class="code-block__code !my-0 !rounded-[var(--msg-block-radius,0.5rem)] !text-sm !leading-relaxed p-3.5" style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono)"><code style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono); white-space: pre-wrap"><font color="rgb(20, 24, 31)" face="var(--font-mono)">  &#953;(m) &#8854; &#953;(x) = (&#953;(m) - &#953;(x)) mod 2^N = dist mod 2^N = dist,</font></code></pre>
+        </div>
+      </div>
+    </div>
+    <p>
+      the last equality because <code>dist &#8712; [0, 2^N)</code>. &#8718;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      This is the whole role of unsigned wrap-around: it hands us the mathematical <code>dist</code>&#160;unharmed, despite <code>x - m</code>&#160;being possibly outside <code>A</code>. (The outer cast <code>U(...)</code>&#160;in the code is needed when <code>N</code>&#160; is narrower than <code>int</code>, where integral promotion would lift the operands to <code>int</code>&#160;and suppress the <code>mod 2^N</code>&#160;reduction.)
+    </p>
+    <p>
+      From here on, all quantities lie in <code>[0, 2^N)</code>&#160;and every operation below is checked to stay there, so no further machine wrapping occurs and the reasoning is purely in &#8484;.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <strong>Restated goal.</strong>&#160;Since <code>x - m = -dist</code>, we need <code>off = (-dist) mod p </code>
+    </p>
+    <p>
+      
+    </p>
+    <h3>
+      Proposition 1 (the two-division form)
+    </h3>
+    <p>
+      Let <code>s&#8320; = dist mod p</code>. Then <code>(p - s&#8320;) mod p = (-dist) mod p</code>.
+    </p>
+    <p>
+      <em><u>Proof:</u>&#160;</em>
+    </p>
+    <p>
+      <code>dist &#8805; 0</code>, so C++ <code>dist % p</code>&#160;yields <code>s&#8320;</code>&#160; (truncating and mathematical modulo agree). From <code>dist &#8801; s&#8320;</code>, we get <code>-dist &#8801; -s&#8320; &#8801; p - s&#8320; (mod p)</code>. So <code>p - s&#8320;</code>&#160;is a correct representative, but <code>s&#8320; &#8712; [0, p)</code>&#160;&#160;gives <code>p - s&#8320; &#8712; (0, p]</code>&#160;&#8212; in range except at the single point <code>s&#8320; = 0</code>, where the value is <code>p &#8713; [0, p)</code>. The outer reduction maps <code>p &#8614; 0</code>&#160;and fixes <code>[0, p)</code>&#160;&#160;pointwise, yielding the representative in <code>[0, p)</code>. &#8718;
+    </p>
+    <p>
+      The second division exists solely to repair one input.
+    </p>
+    <p>
+      Note also that <code>p - s&#8320; &gt; 0</code>&#160;always, so no unsigned underflow &#8212;
+    </p>
+    <p>
+      the form is <em>safe</em>, just wasteful.
+    </p>
+    <p>
+      
+    </p>
+    <h3>
+      Proposition 2 (the one-division form)
+    </h3>
+    <p>
+      Let <code>s = (dist - 1) mod p</code>. Then <code>p - 1 - s = (-dist) mod p</code>.
+    </p>
+    <p>
+      <em><u>Proof:</u>&#160;</em>
+    </p>
+    <p>
+      By Lemma 1, <code>dist &#8805; 1</code>, hence <code>dist - 1 &#8805; 0</code>&#160;&#160;and C++ <code>(dist-1) % p</code>&#160;yields <code>s</code>.
+    </p>
+    <p>
+      <em>Congruence.</em>&#160;<code>dist - 1 &#8801; s (mod p)</code>&#160;implies <code>dist &#8801; s + 1 (mod p)</code>, hence
+    </p>
+    <div data-not-prose="">
+      <div role="group" aria-label="Code" tabindex="0" class="relative group/copy bg-bg-000/50 border-0.5 border-border-400 rounded-[var(--msg-block-radius,0.5rem)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100">
+        <div class="sticky opacity-0 group-hover/copy:opacity-100 group-focus-within/copy:opacity-100 pointer-coarse:opacity-100 [@media(hover:none)]:opacity-100 top-2 py-2 h-12 w-0 float-right">
+          <pre class="code-block__code !my-0 !rounded-[var(--msg-block-radius,0.5rem)] !text-sm !leading-relaxed p-3.5" style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono)"><code style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono); white-space: pre-wrap"><font color="rgb(20, 24, 31)" face="var(--font-mono)">  -dist &#8801; -(s + 1) &#8801; p - s - 1  (mod p).</font></code></pre>
+        </div>
+      </div>
+    </div>
+    <p>
+      <em>Range.</em>&#160;<code>s &#8712; [0, p - 1]</code>, therefore <code>p - 1 - s &#8712; [0, p - 1] &#8834; [0, p)</code>.
+    </p>
+    <p>
+      Since the representative of a residue class in <code>[0, p)</code>&#160;is unique,<br />and <code>p - 1 - s</code>&#160;is both congruent to <code>-dist</code>&#160;and inside <code>[0, p)</code>, it <em>is</em>&#160;<code>(-dist) mod p</code>. &#8718;
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      No repair step is possible or needed.
+    </p>
+    <p>
+      Intermediates: <code>p - 1 &#8805; 0</code>&#160;&#160;since <code>p &#8805; 1</code>, and <code>(p-1) - s &#8805; 0</code>&#160;since <code>s &#8804; p-1</code>, so neither subtraction underflows in <code>U</code>. (Precedence gives <code>PERIOD-1 - (dist-1) % PERIOD</code>&#160;= <code>(p-1) - ((dist-1) % p)</code>, as intended.)
+    </p>
+    <p>
+      
+    </p>
+    <h3>
+      Why the shift works
+    </h3>
+    <p>
+      Both propositions factor the same map <code>d &#8614; (-d) mod p</code>, but through different intermediate maps on the residue:
+    </p>
+    <ul>
+      <li>
+        Prop. 1 uses <code>s&#8320; &#8614; p - s&#8320;</code>, which sends <code>[0, p-1]</code>&#160; onto <code>[1, p]</code>&#160;&#8212; a bijection onto the <em>wrong</em>&#160; interval, off by one at both ends.
+      </li>
+      <li>
+        Prop. 2 uses <code>s &#8614; p - 1 - s</code>, the reflection of <code>[0, p-1]</code>&#160; onto itself &#8212; an involution of the correct interval.
+      </li>
+    </ul>
+    <p>
+      The <code>-1</code>/<code>+1</code>&#160;shift is precisely the reindexing that converts the first map into the second: it moves the problematic residue <code>0</code>&#160;into the interior and supplies the residue <code>p-1</code>&#160;that was otherwise unreachable.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      <u>Worked check, <code>p = 3</code></u>:
+    </p>
+    <div data-not-prose="">
+      <div role="group" aria-label="Code" tabindex="0" class="relative group/copy bg-bg-000/50 border-0.5 border-border-400 rounded-[var(--msg-block-radius,0.5rem)] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-100">
+        <div class="sticky opacity-0 group-hover/copy:opacity-100 group-focus-within/copy:opacity-100 pointer-coarse:opacity-100 [@media(hover:none)]:opacity-100 top-2 py-2 h-12 w-0 float-right">
+          <div class="absolute right-0 h-8 px-2 items-center inline-flex z-10">
+            
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <pre class="code-block__code !my-0 !rounded-[var(--msg-block-radius,0.5rem)] !text-sm !leading-relaxed p-3.5" style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono)"><code style="color: rgb(20, 24, 31); background-image: null; background-repeat: repeat; background-attachment: scroll; background-position: null; font-family: var(--font-mono); white-space: pre-wrap"><font color="rgb(20, 24, 31)" face="Monospaced">dist                 1  2  3  4  5  6
+(-dist) mod 3        2  1  0  2  1  0
+
+Prop.2: (dist-1)%3   0  1  2  0  1  2
+        2 - s        2  1  0  2  1  0   &#10003; always in range
+
+Prop.1: dist%3       1  2  0  1  2  0
+        3 - s&#8320;       2  1  3  2  1  3   &#8592; out of range at dist = 3, 6
+&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;(&#8230;)%3&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;2&#160;&#160;1&#160;&#160;0&#160;&#160;2&#160;&#160;1&#160;&#160;0&#160;&#160;&#160;&#10003; only after repair</font></code></pre>
+        </div>
+      </div>
+    </div>
+    <h3>
+      Closing the loop
+    </h3>
+    <p>
+      <code>off &#8712; [0, p)</code>&#160;gives <code>m &#8804; m + off &#8804; m + p - 1 = M - 1</code>, so <code>m + off &#8712; A</code>: the result is representable in <code>VAL</code>, always. The machine computes <code>&#953;(m) &#8853; off &#8801; m + off (mod 2^N)</code>, and the conversion back to <code>VAL</code>&#160;(modular since C++20) recovers <code>m + off</code>&#160;exactly, since that value lies in <code>A</code>.
+    </p>
+    <p>
+      The positive branch is the same argument with Lemma 1 applied in the other direction: <code>x &#8805; m</code>&#160;gives <code>x - m &#8712; [0, 2^N - 1] &#8838; B</code>, so <code>&#953;(x) &#8854; &#953;(m) = x - m</code>&#160;exactly, and <code>%</code>&#160;on a non-negative dividend is the mathematical modulo directly.
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" SOURCE="ID_380512260" STARTARROW="None" STARTINCLINATION="195;11;"/>
+<linktarget COLOR="#ff0808" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="305;-925;" ID="Arrow_ID_153243460" SOURCE="ID_662274868" STARTARROW="None" STARTINCLINATION="141;26;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#aff8e9" COLOR="#338800" CREATED="1789340798664" HGAP="15" ID="ID_1175604381" MODIFIED="1789340850559" TEXT="damit k&#xf6;nnte ich implementieren..." VSHIFT="18">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789340871908" ID="ID_380512260" MODIFIED="1789342452121" STYLE="fork" TEXT="die Erl&#xe4;uterung f&#xfc;r den Unsigned-Fall ist zu knapp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ich sehe zwar intuitiv die Logik, aber die Beschreibung von Claude ist zweideutig. Daher verlange ich von Claude einen voll ausformulierten mathematischen Beweis
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" STARTARROW="None" STARTINCLINATION="195;11;"/>
+<font NAME="SansSerif" SIZE="12"/>
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1789343115068" ID="ID_1472462163" MODIFIED="1789344195369" TEXT="also was fehlte...">
+<node CREATED="1789343159351" ID="ID_494531294" MODIFIED="1789343175553" TEXT="dist &#x2254; minVal - rawVal"/>
+<node CREATED="1789343176540" ID="ID_1097693100" MODIFIED="1789343189422" TEXT="dist &gt; 0 falls rawVal &lt; minval"/>
+<node CREATED="1789343212360" ID="ID_1976580807" MODIFIED="1789343426602" TEXT="dann ergibt sich dist identisch auch als Unsigned">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      zwar sind die nach unsigned gewrappeden werte <code>&#953;(rawVal) und &#953;(minVal) </code>rein numerisch andere Zahlen, aber sie haben den gleichen Abstand dist. Das ist tats&#228;chlich der Kern des Ansatzes und das bedarf eines Beweises, da minVal &gt;0 sein kann
+    </p>
+  </body>
+</html></richcontent>
+<node CREATED="1789344079892" ID="ID_700184626" MODIFIED="1789344102613" TEXT="die Differenz k&#xf6;nnte noch ein Vielfaches von 2^N hinzuf&#xfc;gen"/>
+<node CREATED="1789344103633" ID="ID_1014733697" MODIFIED="1789344117017" TEXT="aber unter &quot;wrapping&quot; f&#xe4;llt (mod 2^N) heraus"/>
+<node CREATED="1789344118456" ID="ID_1997489460" MODIFIED="1789344162123" TEXT="aus den Dom&#xe4;nen-Betrachtungen ist aber gesichert da&#xdf; dist &lt; 2^N"/>
+</node>
+<node CREATED="1789356710360" ID="ID_521207014" MODIFIED="1789356723054" TEXT="der -1-Verschiebe-Trick nutzt Modulus-Arithmetik"/>
+</node>
+<node CREATED="1789360000999" ID="ID_879348844" MODIFIED="1789360029799" TEXT="die Limit-Definition sollte direkt bei der cyclicWrap-Funktion selber definiert sein"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1789258808256" ID="ID_1240046297" MODIFIED="1789258815646" TEXT="Einf&#xfc;hren der Fallunterscheidung">
+<node CREATED="1789258816860" ID="ID_1706182584" MODIFIED="1789258941151" TEXT="Policy-based Design erscheint die sauberste L&#xf6;sung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Und zwar, weil sich damit der Code organisieren l&#228;&#223;t, ohne den Namepsace mit Spezial-Implementierungen zu belasten, aber auch ohne jetzt wieder eine neue generische Library-Funktion aufzumachen, die ich dann doch wieder nicht sauber ausentwickle und teste....
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1789313641938" ID="ID_1271083241" MODIFIED="1789313655675" TEXT="man k&#xf6;nnte aber auch versuchen, an eine generische Library-funktion zu delegieren"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1789171888403" ID="ID_1422919144" MODIFIED="1789171908101" TEXT="min/max clamp">
 <icon BUILTIN="button_ok"/>
@@ -104681,7 +105445,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" style="color: #000000; background-color: #fffffe; font-family: Consolas, Liberation Mono, Courier, monospace, Droid Sans Mono, monospace, monospace; font-weight: normal; font-size: 14px; line-height: 19px; white-space: pre">
+    <div style="color: #000000; background-color: #fffffe; font-family: Consolas, Liberation Mono, Courier, monospace, Droid Sans Mono, monospace, monospace; font-weight: normal; font-size: 14px; line-height: 19px; white-space: pre">
       <div>
         <font color="#0000ff" face="Monospaced" size="2">#include</font><font color="#000000" face="Monospaced" size="2">&#160;</font><font color="#0000ff" face="Monospaced" size="2">&lt;</font><font color="#a31515" face="Monospaced" size="2">functional</font><font color="#0000ff" face="Monospaced" size="2">&gt;</font>
       </div>
@@ -114156,7 +114920,7 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="2">template&lt;class RES&gt;
+    <pre><font size="2">template&lt;class RES&gt;
 pair&lt;RES, Ctx&gt;
 runBuild(Builder&lt;RES&gt; buildr, Ctx c)
 {
@@ -114197,7 +114961,7 @@ runBuild(Builder&lt;RES&gt; buildr, Ctx c)
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="2">template&lt;class R1, class R2&gt;
+    <pre><font size="2">template&lt;class R1, class R2&gt;
 auto
 StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 {
@@ -174376,7 +175140,7 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="1">mustache tmpl{&quot;Hello {{what}}!&quot;};
+    <pre><font size="1">mustache tmpl{&quot;Hello {{what}}!&quot;};
 std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; std::en</font></pre>
   </body>
 </html></richcontent>
@@ -180680,7 +181444,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
   <head/>
   <body>
     <p>
-      <b http-equiv="content-type" content="text/html; charset=utf-8">Earliest deadline first</b>&#160;(<b>EDF</b>) or <b>least time to go</b>&#160;is a dynamic priority <a href="https://en.wikipedia.org/wiki/Scheduling_algorithm" class="mw-redirect" title="Scheduling algorithm">scheduling algorithm</a>&#160;used in <a href="https://en.wikipedia.org/wiki/Real-time_operating_system" title="Real-time operating system">real-time operating systems</a>&#160;to place processes in a <a href="https://en.wikipedia.org/wiki/Priority_queue" title="Priority queue">priority queue</a>. Whenever a scheduling event occurs (task finishes, new task released, etc.) the queue will be searched for the process closest to its deadline. This process is the next to be scheduled for execution.
+      <b>Earliest deadline first</b>&#160;(<b>EDF</b>) or <b>least time to go</b>&#160;is a dynamic priority <a href="https://en.wikipedia.org/wiki/Scheduling_algorithm" class="mw-redirect" title="Scheduling algorithm">scheduling algorithm</a>&#160;used in <a href="https://en.wikipedia.org/wiki/Real-time_operating_system" title="Real-time operating system">real-time operating systems</a>&#160;to place processes in a <a href="https://en.wikipedia.org/wiki/Priority_queue" title="Priority queue">priority queue</a>. Whenever a scheduling event occurs (task finishes, new task released, etc.) the queue will be searched for the process closest to its deadline. This process is the next to be scheduled for execution.
     </p>
   </body>
 </html></richcontent>
@@ -183827,7 +184591,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="fragment">
+    <div class="fragment">
       <div class="line">
         struct bar : public&#160;<a class="code" href="https://developer.gnome.org/libsigc++/stable/structsigc_1_1trackable.html">sigc::trackable</a>&#160;{};
       </div>
@@ -183879,7 +184643,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
     The event mask determines which events a widget will receive. Keep in mind that different widgets have different default event masks, and by changing the event mask you may disrupt a widget&#8217;s functionality, so be careful. This function must be called while a widget is unrealized. Consider
 
     <p>
-      <a http-equiv="content-type" content="text/html; charset=utf-8" class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a1af589cb1d8764be5abf5579ffb69bec" title="Adds the events in the bitfield events to the event mask for widget. ">add_events()</a>&#160;for widgets that are already realized, or if you want to preserve the existing event mask. This function can&#8217;t be used with widgets that have no window. (See <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a00d5da71916c20935fa7b9d856b248c2" title="Determines whether widget has a Gdk::Window of its own. ">get_has_window()</a>). To get events on those widgets, place them inside a <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1EventBox.html" title="Event capturing box. ">Gtk::EventBox</a>&#160;and receive events on the event box.
+      <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a1af589cb1d8764be5abf5579ffb69bec" title="Adds the events in the bitfield events to the event mask for widget. ">add_events()</a>&#160;for widgets that are already realized, or if you want to preserve the existing event mask. This function can&#8217;t be used with widgets that have no window. (See <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1Widget.html#a00d5da71916c20935fa7b9d856b248c2" title="Determines whether widget has a Gdk::Window of its own. ">get_has_window()</a>). To get events on those widgets, place them inside a <a class="el" href="https://developer-old.gnome.org/gtkmm/3.20/classGtk_1_1EventBox.html" title="Event capturing box. ">Gtk::EventBox</a>&#160;and receive events on the event box.
     </p>
   </body>
 </html></richcontent>
@@ -186019,10 +186783,10 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
       Beispiel:
     </p>
     <p>
-      <code http-equiv="content-type" content="text/html; charset=utf-8"><font color="#4c3acb">&#160;&#160;&#160;cairo_scale (cr, 100, 100); </font></code>
+      <code><font color="#4c3acb">&#160;&#160;&#160;cairo_scale (cr, 100, 100); </font></code>
     </p>
     <p>
-      <code http-equiv="content-type" content="text/html; charset=utf-8"><font color="#4c3acb">&#160;&#160;&#160;cairo_translate (cr, 0.1, 0.1);</font></code>
+      <code><font color="#4c3acb">&#160;&#160;&#160;cairo_translate (cr, 0.1, 0.1);</font></code>
     </p>
   </body>
 </html></richcontent>
@@ -186512,7 +187276,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8">
+    <div>
       <font face="Monospaced" size="2">template&lt;<br face="Monospaced" size="2" /></font>
 
       <p>
@@ -186664,7 +187428,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p http-equiv="content-type" content="text/html; charset=utf-8" class="byline author vcard">
+    <p class="byline author vcard">
       Melissa .E. O'Neill
     </p>
     <p class="dateline">
@@ -187422,7 +188186,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <table http-equiv="content-type" content="text/html; charset=utf-8" class="t-sdsc-begin">
+    <table class="t-sdsc-begin">
       <tr class="t-sdsc">
         <td class="t-sdsc-nopad">
           explicit-specifier<font color="#1cab6b" size="1">&#65279;(optional)</font>&#160;template-name&#160;<code><b>(</b></code>&#160; parameter-decl-clause&#160;<code><b>) -&gt;</b></code>&#160;simple-template-id&#160; <code><b>;</b></code>
@@ -187787,7 +188551,7 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
     <p>
       
     </p>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code class="hljs language-cpp"><font color="#1f237b">template &lt;template &lt;typename...&gt; class ALO&gt;
+    <pre class="lang-cpp s-code-block"><code class="hljs language-cpp"><font color="#1f237b">template &lt;template &lt;typename...&gt; class ALO&gt;
 concept Allocator = true; // actual constraint here
 
 template&#160;&lt;template&#160;&lt;typename...&gt; class&#160;ALO&gt;
@@ -188746,7 +189510,7 @@ class Something
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code class="hljs language-cpp">std::stringstream ss;
+    <pre class="lang-cpp s-code-block"><code class="hljs language-cpp">std::stringstream ss;
 ss &lt;&lt; std::this_thread::get_id();
 int id = std::stoi(ss.str());</code></pre>
   </body>
@@ -188756,7 +189520,7 @@ int id = std::stoi(ss.str());</code></pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code class="hljs language-cpp">std::hash&lt;std::thread::id&gt;{}(std::this_thread::get_id())</code></pre>
+    <pre class="lang-cpp s-code-block"><code class="hljs language-cpp">std::hash&lt;std::thread::id&gt;{}(std::this_thread::get_id())</code></pre>
   </body>
 </html></richcontent>
 <icon BUILTIN="back"/>
@@ -188770,7 +189534,7 @@ int id = std::stoi(ss.str());</code></pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-cpp s-code-block"><code class="hljs language-cpp">std::thread::id threadId = std::this_thread::get_id();    
+    <pre class="lang-cpp s-code-block"><code class="hljs language-cpp">std::thread::id threadId = std::this_thread::get_id();    
 unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;void*&gt;(&amp;threadId));</code></pre>
   </body>
 </html></richcontent>
@@ -189899,7 +190663,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="2">      plot-element:
+    <pre><font size="2">      plot-element:
            {&lt;iteration&gt;}
            &lt;definition&gt; | {sampling-range} &lt;function&gt; | &lt;data source&gt;
                         | keyentry
@@ -190027,7 +190791,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8">      set xrange [-10:10]
+    <pre>      set xrange [-10:10]
       set yrange [] writeback
       plot sin(x)
       set yrange restore
@@ -190083,7 +190847,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8">      set multiplot
+    <pre>      set multiplot
       set size 0.4,0.4
       set origin 0.1,0.1
       plot sin(x)
@@ -190219,7 +190983,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8">plot 'data' with boxes, sin(x) with lines</pre>
+    <pre>plot 'data' with boxes, sin(x) with lines</pre>
   </body>
 </html></richcontent>
 </node>
@@ -193390,10 +194154,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>A. Shared goals and method</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(framing, before the four categories)</i></em>
     </p>
-    <ol dir="ltr" start="1" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 20px; list-style: decimal; display: flex; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <ol start="1" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 20px; list-style: decimal; display: flex; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <li style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px">
         <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Vision and common ground</b></strong>&#160;&#8212; flow and &quot;organic editing&quot; (Wouter's core framing: interruptions kill flow; the goal is focus on storytelling), software as extension of the body, protecting settled parts of an edit, the trackless aspiration, medium level of abstraction / &quot;not a Premiere clone&quot;. Largely&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>agreed</i></em>&#160;&#8212; this is where you two converged fastest.
       </li>
@@ -193401,19 +194165,19 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
         <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Working method</b></strong>&#160;&#8212; explorative reasoning (&quot;enumerate what's possible, narrow by plausibility, look for game-like mechanics&quot;), Wouter's scenario catalogue, the recognised need to build and user-test before judging. Includes the agreed intent to produce a design document.
       </li>
     </ol>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>B. Grouping</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(the richest material)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />3.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Grouping devices and encapsulation</b></strong>&#160;&#8212; Wouter's sections&gt;groups&gt;clips model with three sync modes (Apr 2025) vs. your &quot;everything is a sequence&quot; self-similarity; the convergence: groups as evolution of linked clips, co-existing with nested sequences; implicit grouping through placements; the &quot;group leader&quot; concept. Status: substantially converged, representation open.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />4.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Placement prototypes</b></strong>&#160;&#8212; the settled set of three (relative-to-parent/absolute, magnetic, content-anchored), the move/trim/slip behaviour matrix from your 29.8. mail, &quot;fewer prototypes the better&quot;. Status: largely&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>agreed</i></em>; edge cases open (swapping, offset inheritance, deletion of anchors, negative time &#8212; the last one resolved: no brick wall, relocatable zero point).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />5.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Moving, reordering and ripple behaviour</b></strong>&#160;&#8212; drag semantics (your a/b/c &#8594; Wouter's hierarchy principle &quot;parents move children&quot;; magic depends on placement, not modifier), blocking vs. never-say-no (open!), reordering of magnetic clips (open!), lift vs. extract (terminology settled), the parked ripple-trim debate incl. your power-of-defaults argument.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />6.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Adding clips and automatic placement setup</b></strong>&#160;&#8212; the three setup options, proximity rules, your hooking gesture (Dec 2025, &quot;would like to try it&quot;), Wouter's arrow/two-step alternatives, the clip-lifetime state model, the Gimp pattern (sticky sub-mode + temporary modifier &#8212; explicitly endorsed by both). Status: converging but undecided; this is where the discussion&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>paused in December</i></em>.
     </p>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>C. Control</b></strong><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />7.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Keybindings, gestures, navigation</b></strong>&#160;&#8212; your flat-keymap critique and context-based primitives, Wouter's configurability requirement and ergonomics analysis (the &quot;Fingers crossed&quot; mail is a hidden gem), the synthesis &quot;simplify down / map down&quot;, sticky selection vs. selection-in-undo-stack, keyboard navigation gestures, modifier budget (Shift=select, Alt=duplicate, Ctrl=alternative action &#8212; late convergence).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />8.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Tools, modes, views, contextual tool palette</b></strong>&#160;&#8212; anchored in Wouter's document and the FrOSCon-25 meeting; the palette as carrier for placement types; Blender-style key popups; trim mode as contextual mode.<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />9.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>The gear switch</b></strong>&#160;&#8212; your proposal, Wouter's concerns (gear-recall, Speed Editor experience), unresolved: sub-mode or always-on (his FrOSCon correction).<br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />10.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Immediate feedback and gesture architecture</b></strong>&#160;&#8212; the gesture controller / command-sentence pipeline, live-preview economics (&quot;don't compete with industry&quot;), the Priority-1/Priority-2 cue scheme, Wouter's concrete cue wishlist (locked-indicator + direction arrows). Status: goals agreed, feasibility open.
     </p>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>D. Routing</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(thin &#8212; mostly agenda fodder)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />11.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Layering, tracks as space, tag-based routing</b></strong>&#160;&#8212; layering decoupled from track order, subtracks as fluid working space, shear-aside on collision, tagging for organisation&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>and</i></em>&#160;routing (Wouter's &quot;get rid of bins entirely&quot;), vertical-space and black-box concerns with nested sequences, the popup-portal idea.
     </p>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       <strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>E. Scope and priorities</b></strong>&#160;<em style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-style: italic"><i>(cross-cutting, discussed substantively)</i></em><br style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px" />12.&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>Scope boundaries</b></strong>&#160;&#8212; node compositing inside the NLE (Wouter contra, you &quot;agree and disagree&quot;), i18n/RTL priority decision, GTK vs. Qt, target personas. Status: partly settled, partly consciously deferred.
     </p>
-    <p dir="ltr" style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
+    <p style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; color: rgb(11, 11, 11); font-family: Anthropic Sans, system-ui, Segoe UI, Roboto, Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-weight: 400; letter-spacing: normal; text-align: start; text-indent: 0px; text-transform: none; word-spacing: 0px; white-space: normal; background-color: rgb(252, 252, 251)">
       Topics 1&#8211;2 and 12 sit outside your fourfold scheme; I'd frame A as introduction-adjacent and E as a closing section. The&#160;<strong style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; font-weight: 500"><b>agenda document</b></strong>&#160;then derives from the &quot;open&quot; entries per topic plus the uncovered Routing/Editing-trimming ground.
     </p>
   </body>
@@ -194280,7 +195044,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     Richard Spindler found his way through Parma thanks to the great
 
     <p>
-      <a http-equiv="content-type" content="text/html; charset=utf-8" href="https://web.archive.org/web/20110213025138/http://www.openstreetmap.org/">OpenStreetMap</a>&#160;project.
+      <a href="https://web.archive.org/web/20110213025138/http://www.openstreetmap.org/">OpenStreetMap</a>&#160;project.
     </p>
   </body>
 </html></richcontent>
@@ -194591,7 +195355,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
     On Tue, 14 Aug 2007 23:32:01 +0200, Edouard Chalaron 
 
     <p>
-      <a http-equiv="content-type" content="text/html; charset=utf-8" class="moz-txt-link-rfc2396E" href="mailto:e.chalaron@xtra.co.nz">&lt;e.chalaron@xtra.co.nz&gt;</a>&#160;wrote:<br><br>
+      <a class="moz-txt-link-rfc2396E" href="mailto:e.chalaron@xtra.co.nz">&lt;e.chalaron@xtra.co.nz&gt;</a>&#160;wrote:<br><br>
       <blockquote type="cite" style="color: #993300">
         <br>
         Well I am sorry, but the way icons look is of the last relevance<br><br>I 
@@ -194631,7 +195395,7 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-western" style="font-family: -moz-fixed; font-size: 12px">
+    <div class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-western" style="font-family: -moz-fixed; font-size: 12px">
       <pre wrap="" class="moz-quote-pre">marquitux caballero wrote:</pre>
       <blockquote type="cite" style="color: #993300">
         <pre wrap="" class="moz-quote-pre">in the comunity very cool people tried to explain me thos things, but
@@ -194702,7 +195466,7 @@ Cinelerra mailing list
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">This my maybe arguable view how to hive Cinelerra CV out of its
+    <pre wrap="" class="moz-quote-pre">This my maybe arguable view how to hive Cinelerra CV out of its
 develoment stall:
 
 1) Change the focus of CinelerraCV
@@ -195250,7 +196014,7 @@ Cinelerra mailing list
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Wow Du hast hast m&#228;chtig vorgelegtb mit deiner uml/wiki doc.
+    <pre wrap="" class="moz-quote-pre">Wow Du hast hast m&#228;chtig vorgelegtb mit deiner uml/wiki doc.
 
 Wie Du vllt siehst hab ich ausser bisschen wiki kosmetik noch nicht viel
 gemacht, ich schreib gerade mal was zum backend was ich hoffentlich
@@ -195293,7 +196057,7 @@ Vorschlag w&#228;hre das man Bouml nach doc/uml/ generiern l&#228;sst
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
+    <pre wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
     <blockquote type="cite" style="color: #993300">
       <pre wrap="" class="moz-quote-pre">Hallo Christian,
 
@@ -195370,7 +196134,7 @@ interessierte davon was mitbekommen anstatt privater mails.
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre"></pre>
+    <pre wrap="" class="moz-quote-pre"></pre>
     <blockquote type="cite" style="color: #993300">
       <pre wrap="" class="moz-quote-pre">Vorhin hab ich gesehen, da&#223; Du auch grade die ersten Schritte
 in UML gemacht hast; bin schon gespannt...</pre>
@@ -195408,7 +196172,7 @@ oder bouml einfach ein paar sachen um bestimmte dinge zu modelliern.
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Ichthyostega wrote:</pre>
+    <pre wrap="" class="moz-quote-pre">Ichthyostega wrote:</pre>
     <blockquote type="cite" style="color: #993300">
       <pre wrap="" class="moz-quote-pre">So, could you please have a look at this prototype buildsystem? I pushed out to cinelerra3/ichthyo
  #scons     - just the buildsystem
@@ -195444,7 +196208,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="paragraph">
+    <div class="paragraph">
       <p>
         After a talk on IRC ichthyo and me agreed on making lumiera a multi language project where each part can be written in the language which will fit it best. Language purists might disagree on such a mix, but I believe the benefits outweigh the drawbacks.
       </p>
@@ -195507,7 +196271,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
     <p>
       Beachte dazu auch folgendes: der erste (wichtigere) RfC &#187;All Plugin Interfaces are C&#171; ist datiert auf 26.9. Nur dieser erste Kommentar tr&#228;gt den Timestamp 3.7. &#8212; au&#223;erdem steht dort im Pro/Contra-Teil unter &quot;Alternatives&quot;
     </p>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="ulist">
+    <div class="ulist">
       <ul>
         <li>
           <p>
@@ -195543,7 +196307,7 @@ note about gnu style: (how I/emacs interpret it)</pre>
       Phasen immer sehr aufmerksam). Er hat im Mail-Austausch an eben jenem 
       Morgen geschrieben:
     </p>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">morning, trying it out now &#55357;&#56898;, next i'll write some DesignProcess
+    <pre wrap="" class="moz-quote-pre">morning, trying it out now &#55357;&#56898;, next i'll write some DesignProcess
 proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
     <p>
       Nat&#252;rlich k&#246;nnte diese Mail f&#252;r mich der Anla&#223; gewesen sein, nochmal 
@@ -195610,7 +196374,7 @@ proposals about C nameing rules, plugins and interfaces. (i am back ;))</pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Btw: seen my Interface / CStyleGuide proposal in the pipapo wiki? please
+    <pre wrap="" class="moz-quote-pre">Btw: seen my Interface / CStyleGuide proposal in the pipapo wiki? please
 review it carefully if it looks ok, I straight go into make a referene
 implementation, since this is a very low level building block.
 
@@ -195663,7 +196427,7 @@ implementation, since this is a very low level building block.
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-unicode" style="font-family: -moz-fixed; font-size: 12px">
+    <div class="moz-text-plain" wrap="true" graphical-quote="true" lang="x-unicode" style="font-family: -moz-fixed; font-size: 12px">
       <pre wrap="" class="moz-quote-pre">Am Dienstag, den 03.07.2007, 20:51 +0200 schrieb Christian Thaeter:
 
 </pre>
@@ -195782,7 +196546,7 @@ Hermann
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
+    <pre wrap="" class="moz-quote-pre">Vo&#223;eler Hermann wrote:</pre>
     <blockquote type="cite" style="color: #993300">
       <pre wrap="" class="moz-quote-pre">Am Dienstag, den 03.07.2007, 20:51 +0200 schrieb Christian Thaeter:
 
@@ -195922,7 +196686,7 @@ we provide for us, we provide for people extenting it too)
     <p>
       Er skizziert ja, wie er sich das vorstellt:
     </p>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="" class="moz-quote-pre">we now need to define/collect what interfaces are needed to implement tracks.</pre>
+    <pre wrap="" class="moz-quote-pre">we now need to define/collect what interfaces are needed to implement tracks.</pre>
     <p>
       Das ist das gef&#252;rchtete &quot;dann kann man&quot; ... und andere Leute sollen sich gef&#228;lligst mal den Arsch aufrei&#223;en, ich hab euch jetzt das Prinzip gezeigt.
     </p>
@@ -196212,7 +196976,7 @@ we provide for us, we provide for people extenting it too)
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="paragraph">
+    <div class="paragraph">
       <p>
         after a talk on irc, we decided to do it this way, further work will be documented in the repository (tiddlywiki/source)
       </p>
@@ -196605,7 +197369,7 @@ we provide for us, we provide for people extenting it too)
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" wrap="">mark carter schrieb:</pre>
+    <pre wrap="">mark carter schrieb:</pre>
     <blockquote type="cite" style="color: #993300">
       <pre wrap="">Maybe a lot of my problem is that I'm new to the code. Coming in from
 fresh on such a big project is bound to be daunting,....</pre>
@@ -197090,7 +197854,7 @@ on some aspects of file handling media loading.</pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8">Lately i had almost no time to hack on cinelerra and it doesn't seem
+    <pre>Lately i had almost no time to hack on cinelerra and it doesn't seem
 that situation will improve in forseeable future.</pre>
   </body>
 </html></richcontent>
@@ -199240,7 +200004,7 @@ that situation will improve in forseeable future.</pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <div http-equiv="content-type" content="text/html; charset=utf-8" class="markdown-heading" dir="auto">
+    <div class="markdown-heading" dir="auto">
       <h1 tabindex="-1" class="heading-element" dir="auto">
         meta policies
       </h1>
@@ -205498,7 +206262,7 @@ that situation will improve in forseeable future.</pre>
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="hljs s-code-block" code-as-text="# run_tests.py
+    <pre class="hljs s-code-block" code-as-text="# run_tests.py
 from plugin.tests import test_suite
 import unittest
 
@@ -213091,7 +213855,7 @@ runner.run(test_suite())</font></code></pre>
     <p>
       sonst beschwert sich SQLite mit : <code data-highlighted="yes" class="hljs language-sql">attempt to write a readonly database</code>
     </p>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="lang-sql s-code-block"></pre>
+    <pre class="lang-sql s-code-block"></pre>
   </body>
 </html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
@@ -213593,7 +214357,7 @@ runner.run(test_suite())</font></code></pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="message">gdl no longer has any reverse dependencies in Debian and isn't really
+    <pre class="message">gdl no longer has any reverse dependencies in Debian and isn't really
 actively maintained upstream. Please remove gdl from Debian.</pre>
   </body>
 </html></richcontent>
@@ -213771,7 +214535,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><code>override_dh_auto_configure:
+    <pre><code>override_dh_auto_configure:
     dh_auto_configure -- --prefix=/opt/rawau</code></pre>
   </body>
 </html></richcontent>
@@ -214667,7 +215431,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8"><font size="2">The original plugin file is the file posted to http://www.scons.org/wiki/DoxygenBuilder by Matthew Nicolson
+    <pre><font size="2">The original plugin file is the file posted to http://www.scons.org/wiki/DoxygenBuilder by Matthew Nicolson
 2006-03-31.  Attached to this wiki page were two other files, both of which are in the repository history
 although removed from being in the working tree: doxygen_reiners_2007-02-26.py, and
 doxygen_boehme_2007-07-18.py.  Boehme's version seems to include many of the changes in Reiners but many of
@@ -221082,7 +221846,7 @@ Since then others have made contributions, see the log for the history.</font></
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" dir="ltr" id="CA-d995048164cd5e5b13b65f9268810ab0a49d5efa" lang="en"><a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_1">   1</a> import sys
+    <pre id="CA-d995048164cd5e5b13b65f9268810ab0a49d5efa" lang="en"><a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_1">   1</a> import sys
 <a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_2">   2</a> 
 <a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_3">   3</a> try:
 <a href="https://wiki.python.org/moin/HandlingExceptions#CA-d995048164cd5e5b13b65f9268810ab0a49d5efa_4">   4</a>     untrusted.execute()
@@ -221868,7 +222632,7 @@ Since then others have made contributions, see the log for the history.</font></
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <p http-equiv="content-type" content="text/html; charset=utf-8">
+    <p>
       Use one of these approaches: <strong>chain actions in a single <code>Command</code></strong>, or <strong>install first then attach a post-action</strong>&#160;(via <code>AddPostAction</code>&#160; or <code>Command</code>&#160;on the installed node). Both keep the install and chmod as a single build step.
     </p>
     <hr />
@@ -222450,7 +223214,7 @@ env.Chmod(installed[0], 0o644)</code></pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <h3 http-equiv="content-type" content="text/html; charset=utf-8">
+    <h3>
       Short answer
     </h3>
     <p>
@@ -224274,7 +225038,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
-    <pre http-equiv="content-type" content="text/html; charset=utf-8" class="wiki">debuild -S -sd --sign-key=11FDF5D2DBD7BBD7F4D9D9C42CF2539262382557</pre>
+    <pre class="wiki">debuild -S -sd --sign-key=11FDF5D2DBD7BBD7F4D9D9C42CF2539262382557</pre>
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
@@ -224665,7 +225429,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
   <body>
     10.2
 
-    <p http-equiv="content-type" content="text/html; charset=utf-8">
+    <p>
       Libtool <code class="docutils literal notranslate">.la</code>&#160;files should not be installed for public libraries. If they&#8217;re required (for <code class="docutils literal notranslate">libltdl</code>, for instance), the <code class="docutils literal notranslate">dependency_libs</code>&#160; setting should be emptied. Library packages historically including <code class="docutils literal notranslate">.la</code>&#160; files must continue to include them (with <code class="docutils literal notranslate">dependency_libs</code>&#160;emptied) until all libraries that depend on that library have removed or emptied their <code class="docutils literal notranslate">.la</code>&#160;files.
     </p>
   </body>
@@ -226249,7 +227013,7 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
     Some works meticulously keep track of what copyrights and licenses apply to each particular file when combining source from multiple origins. Some instead apply
 
     <p>
-      <em http-equiv="content-type" content="text/html; charset=utf-8">all</em>&#160;licenses and <em>all</em>&#160;copyrights of component parts to the entire combined work. Both are generally accepted by the open source community, as long as it's clear that an effort is being made to identify and comply with the original licenses.
+      <em>all</em>&#160;licenses and <em>all</em>&#160;copyrights of component parts to the entire combined work. Both are generally accepted by the open source community, as long as it's clear that an effort is being made to identify and comply with the original licenses.
     </p>
   </body>
 </html></richcontent>
