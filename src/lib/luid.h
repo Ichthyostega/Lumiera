@@ -46,7 +46,6 @@
 
 #include "lib/hash-value.h"  /* Types lumiera_uid and LumieraUid */
 
-#include <stdlib.h>
 
 
 

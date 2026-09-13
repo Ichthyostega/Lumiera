@@ -22,11 +22,14 @@
 
 #include "lib/integral.hpp"
 
+#include <type_traits>
 #include <concepts>
 #include <cstdlib>
 #include <climits>
-#include <cfloat>
+#include <limits>
 #include <cmath>
+
+#include <nobug.h>
 
 
 
@@ -136,7 +139,7 @@ namespace util {
   }
   
   
-  /** quantise towards ceiling. 
+  /** quantise towards ceiling.
    *  This function models to fit something into a tiled structure.
    */
   template<typename U>   requires std::unsigned_integral<U>
@@ -151,6 +154,103 @@ namespace util {
   static_assert (1 == ceilDiv (4u,5u));
   static_assert (1 == ceilDiv (5u,5u));
   static_assert (2 == ceilDiv (6u,5u));
+  
+  
+  
+  /**
+   * Transform into a cyclically wrapping domain.
+   * @tparam N any integral type, signed or unsigned
+   * @return mapping into the range [minVal...maxVal(
+   * @remark This function exploits the equivalence between signed and corresponding unsigned type
+   *   to perform the modulus computation with positive numbers, because the modulus operator of C++
+   *   works flipped for negative numbers, and oriented towards zero, while we want here always
+   *   the same cyclic wrap-around, irrespective of the position relative to zero.
+   *   - mathematically we want: `minVal + (rawVal-minVal) modulus PERIOD`
+   *   - the unsigned representation of a negative number wraps cleanly, and thus maxVal - minVal,
+   *     when converted into unsigned, is off by multiples of the whole number domain length, which
+   *     is again absorbed by wrapping. Thus surprisingly `PERIOD = U(U(maxVal) - U(minVal))` is exact
+   *     and can always be represented in the unsigned type.
+   *   - for rawVal < minVal a flipped definition is used that can also be represented as unsigned:
+   *     ** define dist ≔ minVal - rawval, then dist ≥ 1 for rawVal < minVal
+   *     ** mathematically we need offset ≡ (-dist) modulus PERIOD
+   *     ** we could compute PERIOD - (dist % PERIOD) -- but that would flip for dist ≡ PERIOD
+   *     ** thus both arguments are shifted by -1, which keeps them in-range and computable as unsigned
+   * @note the repeated casts `U(signed)` prevent C++ integer promotion to kick in (esp. by short and char)
+   * @remark Claude was used (9/26) to improve and then formally verify this solution.
+   */
+  template<std::integral N>
+  inline constexpr N
+  cyclicWrap (N rawVal, N minVal, N maxVal)
+  {
+     REQUIRE (minVal < maxVal);
+     using U = std::make_unsigned_t<N>;
+     const U PERIOD = U(U(maxVal) - U(minVal));    // always representable
+     U offset;
+     if (rawVal >= minVal)
+       offset = U(U(rawVal) - U(minVal)) % PERIOD;
+     else
+       {
+          const U dist = U(U(minVal) - U(rawVal)); // dist ≥ 1
+          offset = PERIOD-1 - (dist-1) % PERIOD;   // ≡ (-dist) modulus PERIOD
+       }
+     return N(U(U(minVal) + offset));
+   }
+  
+  
+  /**
+   * Transform into a cyclically wrapping domain: floating point implementation.
+   * @return mapping into the range [minVal...maxVal(
+   * @warning this implementation can not cover extreme numeric values beyond #limit_cyclicWrap()
+   * @remark within the usable numeric range, the flipped modulus for values below minVal can simply
+   *   be fixed by shifting once by PERIOD. But there is a caveat: extremely small negative offsets
+   *   could be absorbed, so that the result lands on +PERIOD
+   */
+  template<std::floating_point F>
+  inline constexpr F
+  cyclicWrap (F rawVal, F minVal, F maxVal)
+  {
+    REQUIRE (minVal < maxVal);
+    const F PERIOD = maxVal - minVal;
+    F offset = std::fmod (rawVal - minVal, PERIOD);
+    if (offset < 0)
+      offset += PERIOD;
+    if (not (offset < PERIOD)) // can happen due to ε or non-finite values
+      offset = 0;
+    F res = minVal + offset;   // could be rounded to maxVal
+    return res < maxVal? res : minVal;
+  }
+  
+  
+  /**
+   * Validation helper for the floating-point implementation of #cyclicWrap().
+   * Values beyond the computed limit can not be handled by the implementation,
+   * due to the limited internal resolution of floating-point computations.
+   * @param period length of the cyclic wrap period (≔ maxVal - minVal)
+   * @return a limit for each parameter values, taken absolutely
+   * @remark at the core of the #cyclicWrap() computation sits a numeric difference,
+   *   taken modulo the period length. Each floating point number has a minimum resolution ("ULP").
+   *   When the ULP of the difference computation surpasses the periodic cycle length, the cyclicWrap
+   *   becomes meaningless (albeit computed correct without glitch). And since that offset is then
+   *   added on top of meanValue, the same argument holds, so `std::abs (minVal) <= limit` is required,
+   *   and by transitive argument also for `maxVal` and `rawVal`. Furthermore, the difference and the
+   *   period length must also be finite numbers by themselves.
+   * @note for performance reasons, that limit should be computed once, checked against `minVal` and `maxVal`,
+   *   and then before each computation of #cyclicWrap(), `std::abs (rawVal) <= limit` should be checked.
+   *   It is recommended to fail with an hard error, since resolving theses settings typically requires
+   *   an intervention by the user (parameters need to be adjusted).
+   * @remark Claude was used (9/26) to analyse the computation and derive a boundary criterion.
+   */
+  template<std::floating_point F>
+  inline constexpr F
+  limit_cyclicWrap (F period)
+  {
+    REQUIRE (std::isfinite (period));
+    F limit = period / std::numeric_limits<F>::epsilon();
+    if (not std::isfinite (limit))
+      limit = std::numeric_limits<F>::max();
+    return limit / 2; // exact
+  }
+  
   
   
   
@@ -170,12 +270,13 @@ namespace util {
    * @see https://en.wikipedia.org/wiki/Unit_in_the_last_place
    * @todo 3/2024 seems we have solved this problem several times meanwhile /////////////////////////////////TICKET #1360 sort out floating-point rounding and precision
    */
+  template<std::floating_point F>
   inline constexpr bool
-  almostEqual (double d1, double d2, uint ulp =2)  noexcept
+  almostEqual (F d1, F d2, uint ulp =2)  noexcept
   {
     using std::fabs;
-    return fabs (d1-d2) < DBL_EPSILON * fabs (d1+d2) * ulp
-        or fabs (d1-d2) < DBL_MIN; // special treatment for subnormal results
+    return fabs (d1-d2) < std::numeric_limits<F>::epsilon() * fabs (d1+d2) * ulp
+        or fabs (d1-d2) < std::numeric_limits<F>::min(); // special treatment for subnormal results
   }
   
   

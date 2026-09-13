@@ -30,8 +30,11 @@
 #ifndef LIB_HASH_VALUE_H
 #define LIB_HASH_VALUE_H
 
-#include <stdlib.h>
-
+#ifdef __cplusplus
+  #include <cstdlib>
+#else
+  #include <stdlib.h>
+#endif
 
 /**
  * storage for a Lumiera unique ID,
@@ -43,8 +46,6 @@ typedef lumiera_uid* LumieraUid;
 
 
 #ifdef __cplusplus  /* =========== C++ definitions ====================== */
-
-#include <climits>
 
 namespace lib {
   

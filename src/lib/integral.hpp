@@ -21,7 +21,6 @@
 #ifndef LIB_INTEGRAL_H
 #define LIB_INTEGRAL_H
 
-#include <stdlib.h>
 #include <cstddef>
 #include <cstdint>
 
@@ -38,5 +37,5 @@ static_assert(10 <= sizeof(f128));
 
 const uint LIFE_AND_UNIVERSE_4EVER = 42;
 
-  
+
 #endif /*LIB_INTEGRAL_H*/
