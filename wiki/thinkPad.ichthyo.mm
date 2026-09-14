@@ -86141,7 +86141,7 @@ class ScaleRegistry
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1789313909221" ID="ID_636669321" MODIFIED="1789314360236">
+<node CREATED="1789313909221" ID="ID_636669321" MODIFIED="1789423588613">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -86158,7 +86158,8 @@ class ScaleRegistry
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314198004" ID="ID_1198665569" MODIFIED="1789314547810" TEXT="Integral: Abdeckung der gesamten Dom&#xe4;ne per Unsigned...">
+<linktarget COLOR="#49a8d6" DESTINATION="ID_636669321" ENDARROW="Default" ENDINCLINATION="87;46;" ID="Arrow_ID_1613615444" SOURCE="ID_945572666" STARTARROW="None" STARTINCLINATION="260;14;"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314198004" FOLDED="true" ID="ID_1198665569" MODIFIED="1789423416268" TEXT="Integral: Abdeckung der gesamten Dom&#xe4;ne per Unsigned...">
 <icon BUILTIN="wizard"/>
 <node CREATED="1789314266561" ID="ID_662274868" MODIFIED="1789342378691" STYLE="bubble">
 <richcontent TYPE="NODE"><html>
@@ -86257,7 +86258,7 @@ class ScaleRegistry
 <icon BUILTIN="wizard"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314221349" ID="ID_63841523" MODIFIED="1789314713492" TEXT="Floatingpoint: Nicht-handhabbare Bereiche beachten...">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314221349" FOLDED="true" ID="ID_63841523" MODIFIED="1789423414551" TEXT="Floatingpoint: Nicht-handhabbare Bereiche beachten...">
 <icon BUILTIN="wizard"/>
 <node CREATED="1789314574790" HGAP="49" ID="ID_1659421158" MODIFIED="1789341131113" STYLE="bubble" VSHIFT="1">
 <richcontent TYPE="NODE"><html>
@@ -86337,7 +86338,7 @@ class ScaleRegistry
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314739520" ID="ID_900911623" MODIFIED="1789314802300" TEXT="Erl&#xe4;uterung der L&#xf6;ungsstrategie">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789314739520" FOLDED="true" ID="ID_900911623" MODIFIED="1789423604616" TEXT="Erl&#xe4;uterung der L&#xf6;ungsstrategie">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -86527,7 +86528,7 @@ class ScaleRegistry
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#f8ecbf" CREATED="1789340923095" HGAP="104" ID="ID_921584380" MODIFIED="1789347764151" VSHIFT="56">
+<node BACKGROUND_COLOR="#f8ecbf" CREATED="1789340923095" HGAP="104" ID="ID_921584380" MODIFIED="1789423600852" VSHIFT="56">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -86769,13 +86770,14 @@ Prop.1: dist%3       1  2  0  1  2  0
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" SOURCE="ID_380512260" STARTARROW="None" STARTINCLINATION="195;11;"/>
 <linktarget COLOR="#ff0808" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="305;-925;" ID="Arrow_ID_153243460" SOURCE="ID_662274868" STARTARROW="None" STARTINCLINATION="141;26;"/>
+<linktarget COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" SOURCE="ID_380512260" STARTARROW="None" STARTINCLINATION="198;10;"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#aff8e9" COLOR="#338800" CREATED="1789340798664" HGAP="15" ID="ID_1175604381" MODIFIED="1789340850559" TEXT="damit k&#xf6;nnte ich implementieren..." VSHIFT="18">
 <icon BUILTIN="idea"/>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789340871908" ID="ID_380512260" MODIFIED="1789342452121" STYLE="fork" TEXT="die Erl&#xe4;uterung f&#xfc;r den Unsigned-Fall ist zu knapp">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789340871908" ID="ID_380512260" MODIFIED="1789423600852" STYLE="fork" TEXT="die Erl&#xe4;uterung f&#xfc;r den Unsigned-Fall ist zu knapp">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -86784,7 +86786,7 @@ Prop.1: dist%3       1  2  0  1  2  0
     </p>
   </body>
 </html></richcontent>
-<arrowlink COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" STARTARROW="None" STARTINCLINATION="195;11;"/>
+<arrowlink COLOR="#f8263e" DESTINATION="ID_921584380" ENDARROW="Default" ENDINCLINATION="-16;141;" ID="Arrow_ID_244758209" STARTARROW="None" STARTINCLINATION="198;10;"/>
 <font NAME="SansSerif" SIZE="12"/>
 <icon BUILTIN="broken-line"/>
 </node>
@@ -86806,13 +86808,14 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node CREATED="1789356710360" ID="ID_521207014" MODIFIED="1789356723054" TEXT="der -1-Verschiebe-Trick nutzt Modulus-Arithmetik"/>
 </node>
-<node CREATED="1789360000999" ID="ID_879348844" MODIFIED="1789360029799" TEXT="die Limit-Definition sollte direkt bei der cyclicWrap-Funktion selber definiert sein"/>
+<node COLOR="#435e98" CREATED="1789360000999" ID="ID_879348844" MODIFIED="1789423630533" TEXT="die Limit-Definition sollte direkt bei der cyclicWrap-Funktion selber definiert sein">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
 </node>
 <node CREATED="1789258808256" ID="ID_1240046297" MODIFIED="1789258815646" TEXT="Einf&#xfc;hren der Fallunterscheidung">
-<node CREATED="1789258816860" ID="ID_1706182584" MODIFIED="1789258941151" TEXT="Policy-based Design erscheint die sauberste L&#xf6;sung">
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1789258816860" ID="ID_1706182584" MODIFIED="1789423431524" TEXT="Policy-based Design erscheint die sauberste L&#xf6;sung">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -86822,8 +86825,70 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 <icon BUILTIN="yes"/>
+<icon BUILTIN="hourglass"/>
 </node>
-<node CREATED="1789313641938" ID="ID_1271083241" MODIFIED="1789313655675" TEXT="man k&#xf6;nnte aber auch versuchen, an eine generische Library-funktion zu delegieren"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789313641938" ID="ID_1271083241" MODIFIED="1789423457169" TEXT="zun&#xe4;chst gen&#xfc;gt eine generische Library-funktion als Delegate">
+<icon BUILTIN="forward"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789423486714" ID="ID_253445206" MODIFIED="1789438207120" TEXT="neue Implementierung">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1789423493685" ID="ID_1410459624" MODIFIED="1789423506223" TEXT="entwickelt ausgehend von der naiven &#xbb;modulus&#xab;-L&#xf6;sung"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789423507714" ID="ID_945572666" MODIFIED="1789423613866" TEXT="zu einer generischen L&#xf6;sung ausgebaut &#x27f5; Claude">
+<arrowlink COLOR="#49a8d6" DESTINATION="ID_636669321" ENDARROW="Default" ENDINCLINATION="87;46;" ID="Arrow_ID_1613615444" STARTARROW="None" STARTINCLINATION="260;14;"/>
+<icon BUILTIN="wizard"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789423635808" ID="ID_840921741" MODIFIED="1789438193575" TEXT="Testabdeckung &#x2014; Grenzf&#xe4;lle">
+<icon BUILTIN="pencil"/>
+<node CREATED="1789428970477" ID="ID_1439061940" MODIFIED="1789429004081" TEXT="habe gestern schon gesehen: f&#xfc;r sich sind util::flordiv | wrap wohl &#x201e;wasserdicht&#x201c;">
+<node CREATED="1789429005712" ID="ID_1890368766" MODIFIED="1789429031093" TEXT="die Division liefert stets einen kleineren Quotient als der Dividend"/>
+<node CREATED="1789429032161" ID="ID_1469836197" MODIFIED="1789429058156" TEXT="die Korrektur-Logik arbeitet &#xbb;gl&#xfc;cklicherweise&#xab; stets zur Dom&#xe4;ne nach innen"/>
+<node COLOR="#338800" CREATED="1789433766523" ID="ID_167005830" MODIFIED="1789433779815" TEXT="dies in UtilFloordiv_test dokumentieren">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1789433789808" ID="ID_538605241" MODIFIED="1789433827387" TEXT="jeweils an die Domain-Ober/Untergrenze gehen"/>
+<node COLOR="#435e98" CREATED="1789433801119" ID="ID_1533251912" MODIFIED="1789433827418" TEXT="durch 1, 2 und 5 teilen"/>
+<node COLOR="#435e98" CREATED="1789433808102" ID="ID_1210053047" MODIFIED="1789433827419" TEXT="Vorzeichen wechseln"/>
+<node COLOR="#435e98" CREATED="1789433812805" ID="ID_1425318347" MODIFIED="1789433827421" TEXT="auch f&#xfc;r uint, int64_t, int8_t"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789437807095" ID="ID_932126209" MODIFIED="1789437907066" TEXT="zun&#xe4;chst eine einfache Demonstration (als Dokumentation)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      .... ich k&#246;nnte mir denken, da&#223; mancher Leser das Konzept nicht gleich versteht, deshalb ist ein solches einfaches Beispiel nie verkehrt
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789437908944" ID="ID_880098415" MODIFIED="1789437928788" TEXT="systematisch alle real-existierenden Integral-Typen abdecken">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789437929974" ID="ID_532498668" MODIFIED="1789438198770" TEXT="die eigentliche Test-Funktion als Template">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1789437943780" ID="ID_1291965296" MODIFIED="1789438178462" TEXT="konstruiere das Test-Beispiel &#xbb;trickreich&#xab;">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1789437965201" ID="ID_1576393662" MODIFIED="1789437977028" TEXT="so da&#xdf; es sich f&#xfc;r Signed und Unsigned gut testen l&#xe4;&#xdf;t"/>
+<node CREATED="1789437977859" ID="ID_1376129649" MODIFIED="1789438001984" TEXT="soll aber auch den komplexeren Pfad ausleuchten"/>
+<node CREATED="1789438002860" ID="ID_1338563274" MODIFIED="1789438069296" TEXT="&#x27f9; sollte die zyklische Dom&#xe4;ne in den negativen Bereich legen">
+<node CREATED="1789438070916" ID="ID_379253711" MODIFIED="1789438081989" TEXT="f&#xfc;r Unsigned sollte das wrappen"/>
+<node CREATED="1789438082993" ID="ID_1576673426" MODIFIED="1789438091635" TEXT="aber trotzdem noch sicher in die Dom&#xe4;ne passen"/>
+<node CREATED="1789438092936" ID="ID_1900067766" MODIFIED="1789438108922" TEXT="und f&#xfc;r Signed ist dann der Offset garantiert repr&#xe4;sentierbar"/>
+<node CREATED="1789438111305" ID="ID_1260779668" MODIFIED="1789438125620" TEXT="und zwar grade f&#xfc;r den problematischen Fall unter der Untergrenze"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789438130012" ID="ID_1945361876" MODIFIED="1789438175874" TEXT="teste die Dom&#xe4;nen-Grenzen auf valides Ergebnis (in der zyklischen Domain)">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789438158204" ID="ID_527867911" MODIFIED="1789438175875" TEXT="rechne explizit den Wert f&#xfc;r die Domain-Untergrenze nach">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1789171888403" ID="ID_1422919144" MODIFIED="1789171908101" TEXT="min/max clamp">
