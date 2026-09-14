@@ -53,6 +53,11 @@ return: 0
 END
 
 
+TEST "Cyclic wrapping number domain" CyclicWrap_test <<END
+return: 0
+END
+
+
 TEST "Deleter function collection" DelStash_test <<END
 return: 0
 END
