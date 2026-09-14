@@ -30,7 +30,7 @@
 using ::Test;
 using util::isnil;
 using util::_Fmt;
-
+using std::integral;
 
 namespace util {
 namespace test {
@@ -41,6 +41,13 @@ namespace test {
     
     const uint NUM_ELMS_PERFORMANCE_TEST = 50000000;
     const uint NUMBER_LIMIT              =  1 << 30;
+    
+    template<typename NUM>
+    constexpr NUM _MAX = std::numeric_limits<NUM>::max();
+    
+    template<typename NUM>
+    constexpr NUM _MIN = std::numeric_limits<NUM>::lowest();
+    
     
     typedef std::vector<int> VecI;
     
@@ -108,13 +115,15 @@ namespace test {
         {
           seedRand();
           
-          verifyBehaviour ();
+          verifyBehaviour();
           
           verifyIntegerTypes<int>();
           verifyIntegerTypes<long>();
           verifyIntegerTypes<short>();
           verifyIntegerTypes<int64_t>();
           verifyIntegerTypes<llong>();
+          
+          verifyBounds();
           
           if (not isnil (arg))
             runPerformanceTest();
@@ -154,7 +163,7 @@ namespace test {
       
       template<typename I>
       void
-      verifyIntegerTypes ()
+      verifyIntegerTypes()
         {
           I n,d,expectedRes;
           
@@ -168,11 +177,51 @@ namespace test {
         }
       
       
+      void
+      verifyBounds()
+        {
+          auto verify = []<integral I>(I num, I den, I expect_quot, I expect_rem)
+                          {
+                            auto res = floorwrap (num,den);
+                            CHECK (res.quot == expect_quot, "quotient mismatch");
+                            CHECK (res.rem  == expect_rem , "remainder mismatch");
+                            CHECK (res.quot == floordiv (num,den), "floordiv diverges");
+                          };
+          
+               //----- num | den | quotient    | remainder
+          verify (_MAX<int>, 1,  _MAX<int>     , 0);
+          verify (_MAX<int>, 2,  _MAX<int>/2   , 1);
+          verify (_MAX<int>, 5,  _MAX<int>/5   , 2);
+          
+          verify (_MIN<int>, 1,  _MIN<int>     , 0);
+          verify (_MIN<int>, 2,  _MIN<int>/2   , 0);
+          verify (_MIN<int>, 5,  _MIN<int>/5 -1, 2);   // _MIN<int> ≡ -2147483648  /5 ≡ -429496729  -1 step ≡ -429496730 · 5 ≡ -2147483650 ⟹ Δ = +2
+          
+          verify (_MAX<int>,-1, -_MAX<int>     , 0);
+          verify (_MAX<int>,-2, -_MAX<int>/2 -1,-1);
+          verify (_MAX<int>,-5, -_MAX<int>/5 -1,-3);   // Δ ≡ -3 here since -_MAX<int>  ≡ _MIN<int> + 1
+          
+          
+          verify (_MAX<uint>, 1u, _MAX<uint>   ,0u);
+          verify (_MAX<uint>, 2u, _MAX<uint>/2 ,1u);
+          verify (_MAX<uint>, 5u, _MAX<uint>/5 ,0u);
+          
+          verify (_MIN<int64_t>, int64_t(1),  _MIN<int64_t>     , int64_t(0));
+          verify (_MIN<int64_t>, int64_t(2),  _MIN<int64_t>/2   , int64_t(0));
+          verify (_MIN<int64_t>, int64_t(5),  _MIN<int64_t>/5 -1, int64_t(2));   // 2^63 / 5 ≡ 1844674407370955161.6 ; 1844674407370955162 · 5 ⟹ Δ = +2
+          
+          verify (_MIN<int8_t>, int8_t(1), int8_t(-128) , int8_t(0));
+          verify (_MIN<int8_t>, int8_t(2), int8_t(-64 ) , int8_t(0));
+          verify (_MIN<int8_t>, int8_t(5), int8_t(-26 ) , int8_t(2));   // 2^7     / 5 ≡ 25.6 ;     26 · 5 ≡ 130 ⟹ Δ = +2
+          verify (_MAX<int8_t>, int8_t(5), int8_t( 25 ) , int8_t(2));   // (2^7-1) / 5 ≡ 25.4 ; 25 · 5 ≡ 125 ⟹ Δ = +2
+        }
+      
+      
       
       /** @test timing measurements to compare implementation details.
        *  This test uses a sequence of random integers, where the values
        *  used as denominator are ensured not to be zero.
-       *  
+       * 
        * \par measurement results
        * My experiments (AMD Athlon-64 4200 X2) gave me
        * the following timing measurements in nanoseconds:
