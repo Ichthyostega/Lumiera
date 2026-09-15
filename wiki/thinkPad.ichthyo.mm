@@ -86838,9 +86838,10 @@ Prop.1: dist%3       1  2  0  1  2  0
 <arrowlink COLOR="#49a8d6" DESTINATION="ID_636669321" ENDARROW="Default" ENDINCLINATION="87;46;" ID="Arrow_ID_1613615444" STARTARROW="None" STARTINCLINATION="260;14;"/>
 <icon BUILTIN="wizard"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789423635808" ID="ID_840921741" MODIFIED="1789438193575" TEXT="Testabdeckung &#x2014; Grenzf&#xe4;lle">
-<icon BUILTIN="pencil"/>
-<node CREATED="1789428970477" ID="ID_1439061940" MODIFIED="1789429004081" TEXT="habe gestern schon gesehen: f&#xfc;r sich sind util::flordiv | wrap wohl &#x201e;wasserdicht&#x201c;">
+<node COLOR="#338800" CREATED="1789423635808" ID="ID_840921741" MODIFIED="1789525417179" TEXT="Testabdeckung &#x2014; Grenzf&#xe4;lle">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1789428970477" FOLDED="true" ID="ID_1439061940" MODIFIED="1789525368840" TEXT="habe gestern schon gesehen: f&#xfc;r sich sind util::flordiv | wrap wohl &#x201e;wasserdicht&#x201c;">
+<icon BUILTIN="idea"/>
 <node CREATED="1789429005712" ID="ID_1890368766" MODIFIED="1789429031093" TEXT="die Division liefert stets einen kleineren Quotient als der Dividend"/>
 <node CREATED="1789429032161" ID="ID_1469836197" MODIFIED="1789429058156" TEXT="die Korrektur-Logik arbeitet &#xbb;gl&#xfc;cklicherweise&#xab; stets zur Dom&#xe4;ne nach innen"/>
 <node COLOR="#338800" CREATED="1789433766523" ID="ID_167005830" MODIFIED="1789433779815" TEXT="dies in UtilFloordiv_test dokumentieren">
@@ -86853,19 +86854,16 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#338800" CREATED="1789437807095" ID="ID_932126209" MODIFIED="1789437907066" TEXT="zun&#xe4;chst eine einfache Demonstration (als Dokumentation)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       .... ich k&#246;nnte mir denken, da&#223; mancher Leser das Konzept nicht gleich versteht, deshalb ist ein solches einfaches Beispiel nie verkehrt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1789437908944" ID="ID_880098415" MODIFIED="1789437928788" TEXT="systematisch alle real-existierenden Integral-Typen abdecken">
+<node COLOR="#338800" CREATED="1789437908944" FOLDED="true" ID="ID_880098415" MODIFIED="1789525347778" TEXT="systematisch alle real-existierenden Integral-Typen abdecken">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789437929974" ID="ID_532498668" MODIFIED="1789438198770" TEXT="die eigentliche Test-Funktion als Template">
 <icon BUILTIN="idea"/>
@@ -86886,6 +86884,120 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#338800" CREATED="1789438158204" ID="ID_527867911" MODIFIED="1789438175875" TEXT="rechne explizit den Wert f&#xfc;r die Domain-Untergrenze nach">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789485850174" FOLDED="true" ID="ID_1074654514" MODIFIED="1789525408140" TEXT="systematische Testabdeckung f&#xfc;r Floatingpoint-Typen entwickeln">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1789485871331" ID="ID_552981037" MODIFIED="1789525115154" TEXT="mu&#xdf; zun&#xe4;chst einmal herausfinden was man &#xfc;berhaupt testen k&#xf6;nnte">
+<icon BUILTIN="yes"/>
+<node CREATED="1789485882603" ID="ID_1932453860" MODIFIED="1789485901968" TEXT="geschenkt: einen einfachen cyclicWrap">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ganz analog zum Integral-Fall
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1789485908054" ID="ID_1390215073" MODIFIED="1789485917984" TEXT="mit dem Verhalten am Limit experimentieren"/>
+<node CREATED="1789485919101" ID="ID_126516087" MODIFIED="1789485942979" TEXT="Limit-Werte anschauen &#x27f9; sie wachsen mit der Periodenl&#xe4;nge"/>
+<node CREATED="1789485944250" ID="ID_758296300" MODIFIED="1789485958924" TEXT="man k&#xf6;nnte also mit Input knapp unter dem Limit testen"/>
+<node CREATED="1789485959655" ID="ID_1357089333" MODIFIED="1789518269807" TEXT="oder mit einem Offset knapp unter dem Limit"/>
+<node COLOR="#5b280f" CREATED="1789485980355" ID="ID_1975112618" MODIFIED="1789525168334" TEXT="man k&#xf6;nnte zeigen da&#xdf; die Berechnung ungenau wird &#xfc;ber dem Limit">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1789486105659" ID="ID_1422733682" MODIFIED="1789486116438" TEXT="f&#xfc;r maxVal &gt; Limit"/>
+<node CREATED="1789486117635" ID="ID_1961938709" MODIFIED="1789486122240" TEXT="aber auch f&#xfc;r zu gro&#xdf;e Domain"/>
+</node>
+<node COLOR="#5b280f" CREATED="1789485994791" ID="ID_1294711924" MODIFIED="1789525135527" TEXT="man k&#xf6;nnte eine Domain-Gr&#xf6;&#xdf;e am Limit testen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die sollte dann aber nur f&#252;r Input-Werte unterhalb des Limits funktionieren, allerdings auch negative Werte; oberhalb des Limits w&#252;rde ich Entgleisungen vermuten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1789525137057" ID="ID_188158552" MODIFIED="1789525146844" TEXT="nein: l&#xe4;&#xdf;t sich nicht sinnvoll im Test demonstrieren"/>
+<node CREATED="1789525147624" ID="ID_888819868" MODIFIED="1789525160044" TEXT="(ich sehe die Entgleisungen wenn ich mir die Zahlen im Debugger anschaue)"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789486294164" ID="ID_712679325" MODIFIED="1789517587212" TEXT="Beobachtungen: genau am Limit funktioniert das einfache Beispiel noch">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1789486311768" ID="ID_204301662" MODIFIED="1789486325968" TEXT="ein Epsilon drunter wird absorbiert"/>
+<node BACKGROUND_COLOR="#cab2bd" COLOR="#980009" CREATED="1789486326998" ID="ID_185831565" MODIFIED="1789517613464" TEXT="m&#xfc;&#xdf;te also tats&#xe4;chlich ein ULP daneben gehen">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1789517621465" ID="ID_1146256096" MODIFIED="1789517635375" TEXT="tats&#xe4;chlich: das Stepping wird unzuverl&#xe4;ssig"/>
+<node CREATED="1789517696551" ID="ID_825633898" MODIFIED="1789517744461" TEXT="limit &#xb7; &#x3b5; &#x2261; &#xbd; periode">
+<node CREATED="1789517760503" ID="ID_205743420" MODIFIED="1789517788314" TEXT="das haben wir aber genau so definiert...">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1789517771893" ID="ID_624480094" MODIFIED="1789517791174" TEXT="insofern ist das kein &#xbb;Test&#xab;">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1789517806226" ID="ID_1031466232" MODIFIED="1789517811675" TEXT="ein Test sollte Verhalten zeigen"/>
+<node CREATED="1789517812425" ID="ID_1660313139" MODIFIED="1789517821515" TEXT="und nicht eine Definition replizieren"/>
+</node>
+</node>
+</node>
+<node CREATED="1789518828341" ID="ID_452450374" MODIFIED="1789525394621">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      Problem ist: hier kann ich kein &#187;<b>korrekt</b>&#171; oder &#187;<b>defekt</b>&#171; zeigen
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#57fec0" DESTINATION="ID_452450374" ENDARROW="Default" ENDINCLINATION="-182;8;" ID="Arrow_ID_1586349868" SOURCE="ID_409017691" STARTARROW="None" STARTINCLINATION="87;8;"/>
+<icon BUILTIN="broken-line"/>
+<node CREATED="1789518866588" ID="ID_1949224608" MODIFIED="1789518885765" TEXT="das Verhalten wird zum Limit hin zunehmend &#xbb;unscharf&#xab;"/>
+<node CREATED="1789518886522" ID="ID_515488673" MODIFIED="1789518921574" TEXT="wie viel Unsch&#xe4;rfe tolerierbar ist l&#xe4;&#xdf;t sich nicht generisch sagen">
+<node CREATED="1789518978509" ID="ID_1991175199" MODIFIED="1789518986039" TEXT="es gibt keine &#xbb;Schrittweite&#xab;"/>
+<node CREATED="1789518987204" ID="ID_30471047" MODIFIED="1789519013068" TEXT="wann ist ein &quot;off by 0.1&#xab; noch tolerierbar??"/>
+</node>
+<node CREATED="1789518902636" ID="ID_1841879477" MODIFIED="1789518930946" TEXT="letztlich sind floating-point-numbers immer &#xbb;unscharf&#xab;"/>
+<node CREATED="1789518945761" ID="ID_1474263016" MODIFIED="1789518957882" TEXT="jedwede Demonstration w&#xfc;rde eben nur dieses darstellen"/>
+<node BACKGROUND_COLOR="#f7dba2" COLOR="#690f14" CREATED="1789522669935" ID="ID_1829288235" MODIFIED="1789522703291" TEXT="und : eine klar verst&#xe4;ndliche Demonstration ist schwer">
+<icon BUILTIN="messagebox_warning"/>
+<node COLOR="#b21478" CREATED="1789522720139" ID="ID_1872531495" MODIFIED="1789522906208" TEXT="Grenzwerte sind &#xbb;unhandlich&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      sobald man mit &#949; und ULPs hantiert, sind die numerischen Werte nur so minuti&#246;s verschieden, da&#223; man es in der &#252;blichen, gerundeten Darstellung gar nicht sieht. Damit scheiden alle Test-Methoden aus, die &quot;einfache Zahlen&quot; verwenden und ein festes Ergebnis vorgeben. Hinzu kommt, da&#223; man auch einen &#949;-Vergleich machen mu&#223;, und dann ohne gesonderte &#220;berlegung nicht offensichtlich ist, welche &quot;Unsch&#228;rfe&quot; nun &quot;unscharf&quot; ist, und welche Teil des Test-Subjekts ist. Nicht da&#223; man das alles irgendwie &quot;hinbekommt&quot; &#8212; aber der Leser versteht nicht mehr, <i>was hier gespielt wird.</i>
+    </p>
+  </body>
+</html></richcontent>
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="smily_bad"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789521749900" ID="ID_912513687" MODIFIED="1789525194850" TEXT="sollte aber trotzdem wesentliche Elemente demonstrieren">
+<icon BUILTIN="yes"/>
+<node CREATED="1789521771353" ID="ID_559262092" MODIFIED="1789522935600" TEXT="was das &#xbb;limit&#xab; bedeutet : n&#xe4;mlich im Verh&#xe4;ltnis zur Periode"/>
+<node CREATED="1789521783888" ID="ID_1660128606" MODIFIED="1789521817663" TEXT="da&#xdf; das Wrapping mit einem sehr gro&#xdf;en Intervall funktioniert"/>
+<node CREATED="1789521818763" ID="ID_22678032" MODIFIED="1789521843436" TEXT="da&#xdf; es nahe der Interval-Obergrenze zu einem Aliasing kommen kann"/>
+</node>
+<node BACKGROUND_COLOR="#a6fdce" COLOR="#338800" CREATED="1789521853775" ID="ID_1420946197" MODIFIED="1789525101636" TEXT="Test formulieren...">
+<icon BUILTIN="yes"/>
+<node CREATED="1789521897465" ID="ID_1330009757" MODIFIED="1789521904636" TEXT="zun&#xe4;chst alles f&#xfc;r double"/>
+<node CREATED="1789521905359" ID="ID_284924920" MODIFIED="1789521995911" TEXT="aber bereits mit Konversionen und almostEqual"/>
+<node CREATED="1789525027288" ID="ID_1906103710" MODIFIED="1789525036691" TEXT="dann auf generischen Float umstellen...">
+<node CREATED="1789525037796" ID="ID_767684162" MODIFIED="1789525039283" TEXT="float"/>
+<node CREATED="1789525040023" ID="ID_1224952753" MODIFIED="1789525041834" TEXT="double"/>
+<node CREATED="1789525042606" ID="ID_815586095" MODIFIED="1789525045834" TEXT="long double"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1788313090668" HGAP="15" ID="ID_904924646" MODIFIED="1789525281531" STYLE="bubble" TEXT="ufff: GR&#xdc;N" VSHIFT="2">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="ksmiletris"/>
+<node COLOR="#0f3e46" CREATED="1789525285095" HGAP="36" ID="ID_409017691" MODIFIED="1789525404221" STYLE="fork" TEXT="das ist schon &#xbb;advanced stuff&#xab;...." VSHIFT="-10">
+<arrowlink COLOR="#57fec0" DESTINATION="ID_452450374" ENDARROW="Default" ENDINCLINATION="-182;8;" ID="Arrow_ID_1586349868" STARTARROW="None" STARTINCLINATION="87;8;"/>
+<font NAME="SansSerif" SIZE="10"/>
 </node>
 </node>
 </node>

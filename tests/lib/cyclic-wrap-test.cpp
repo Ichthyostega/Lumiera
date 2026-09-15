@@ -19,20 +19,13 @@
 #include "test/run.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
-#include "test/diagnostic-output.hpp"//////////////////TODO
-//#include "lib/format-cout.hpp"
-//#include "lib/format-string.hpp"
 
 using ::Test;
-//using util::isnil;
-//using util::_Fmt;
 using util::isLimited;
 using std::floating_point;
 
 namespace util {
 namespace test {
-  
-  
   
   namespace{ // Test helpers...
     
@@ -49,6 +42,7 @@ namespace test {
   
   
   
+  
   /******************************************************************//**
    * @test Demonstrate and verify a cyclic wrapping numeric domain.
    *     - show the wrapping behaviour with simple numbers
@@ -56,7 +50,9 @@ namespace test {
    *     - verify the computation works at the very bounds of the domain
    *     - verify the most difficult path with a negative minVal,
    *       and the smallest number in the domain
-   * @todo add coverage for floating-point numbers
+   *     - show a similar simple wrapping behaviour with all float types
+   *     - demonstrate the meaning of the precision limit
+   *     - demonstrate aliasing and sanitised rounding errors
    * @see util::cyclicWrap
    * @see parameter-scale-test.cpp
    */
@@ -79,7 +75,9 @@ namespace test {
           verifyIntegerTypes<int64_t> ();
           verifyIntegerTypes<uint64_t>();
           
-          verifyFloatTypes();
+          verifyFloatTypes<float>();
+          verifyFloatTypes<double>();
+          verifyFloatTypes<f128>();
         }
       
       
@@ -132,6 +130,8 @@ namespace test {
           CHECK (isLimited (LOWER, cyc(_MAX<I>-1), UPPER));
           CHECK (isLimited (LOWER, cyc(_MIN<I>+1), UPPER));
           
+          //------ Demonstrate behaviour at lower domain bound
+          //
           I dist = LOWER - _MIN<I>;  // guaranteed to be positive and representable in-domain
           I step = (dist / 5) * 5;   // the next applicable grid point
           I excess = dist - step;
@@ -140,96 +140,52 @@ namespace test {
           CHECK (LOWER + offset == cyc(_MIN<I>) );
         }
       
+      
+      template<typename F>
       void
       verifyFloatTypes()
         {
-          double maxDom = _MAX<double>;
-          double super = _MAX<double> - _MIN<double>;
-SHOW_EXPR(maxDom)
-SHOW_EXPR(super)
-SHOW_EXPR(_EPS<double>)
-SHOW_EXPR(limit_cyclicWrap<double>(1))
-SHOW_EXPR(limit_cyclicWrap<double>(1024))
-SHOW_EXPR(limit_cyclicWrap<double>(1.0/1024))
-SHOW_EXPR(limit_cyclicWrap<double>(_EPS<double>))
-SHOW_EXPR(limit_cyclicWrap<double>(maxDom))
-          
-          double limit5 = limit_cyclicWrap<double>(5);
-          double atLimit = limit5 * (1-_EPS<double>);
-          double stepLim = std::floor (limit5 / 5) * 5;
-SHOW_EXPR(limit5*_EPS<double>)
-SHOW_EXPR(limit5)
-SHOW_EXPR(stepLim)
-SHOW_EXPR(atLimit)
-          
-SHOW_EXPR(cyclicWrap (10.0 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (limit5    ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (atLimit   ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim   ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim-5 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+1 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+2 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+3 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+4 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+5 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+6 ,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+10,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+20,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+30,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+40,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+50,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+100,0.0, 5.0))
-SHOW_EXPR(cyclicWrap (stepLim+101,0.0, 5.0))
+          auto cyc = [&](F val){ return cyclicWrap (val, F(-10),F(-5)); };
 
-SHOW_EXPL(cyclicWrap (limit5    ,10.0, 15.0))
-SHOW_EXPL(cyclicWrap (limit5+1  ,10.0, 15.0))
-          double epsStep = _MAX<double>*_EPS<double>;
-          double toxicMin = _MIN<double> + 2*epsStep;
-          double toxicMax = epsStep;
-          double toxicPeriod = toxicMax -  toxicMin;
-SHOW_EXPR(epsStep)
-SHOW_EXPR(toxicMin)
-SHOW_EXPR(toxicMax)
-SHOW_EXPR(toxicPeriod)
-SHOW_EXPR(cyclicWrap<double>(0, toxicMin,toxicMax) )
-SHOW_EXPR(cyclicWrap<double>(1, toxicMin,toxicMax) )
-SHOW_EXPR(cyclicWrap<double>(1*epsStep, toxicMin,toxicMax) )
-SHOW_EXPR(cyclicWrap<double>(2*epsStep, toxicMin,toxicMax) )
-SHOW_EXPR(cyclicWrap<double>(3*epsStep, toxicMin,toxicMax) )
-SHOW_EXPR(cyclicWrap<double>(0, 1, _MAX<double>) )
-SHOW_EXPR(cyclicWrap<double>(1, 1, _MAX<double>) )
-SHOW_EXPR(cyclicWrap<double>(2, 1, _MAX<double>) )
-SHOW_EXPR(cyclicWrap<double>(-1,1, _MAX<double>) )
-SHOW_EXPR(cyclicWrap<double>(-epsStep,1, _MAX<double>) )
-SHOW_EXPR(1 == cyclicWrap<double>(1, 1, _MAX<double>))
-SHOW_EXPR(2 == cyclicWrap<double>(2, 1, _MAX<double>))
-SHOW_EXPR(1 == cyclicWrap<double>(-1,1, _MAX<double>) )
-          double wrapped = cyclicWrap (-epsStep,double(1), _MAX<double>);
-SHOW_EXPR(1 < wrapped)
-SHOW_EXPR(wrapped < _MAX<double>)
+          CHECK (almostEqual (F(-10), cyc(0))  );
+          CHECK (almostEqual (F( -9), cyc(1))  );
+          CHECK (almostEqual (F( -8), cyc(2))  );
+          CHECK (almostEqual (F( -7), cyc(3))  );
+          CHECK (almostEqual (F( -6), cyc(4))  );
+          CHECK (almostEqual (F(-10), cyc(5))  );
+          CHECK (almostEqual (F( -9), cyc(6))  );
+          CHECK (almostEqual (F( -8), cyc(7))  );
+          CHECK (almostEqual (F( -7), cyc(8))  );
+          CHECK (almostEqual (F( -6), cyc(9))  );
+          CHECK (almostEqual (F(-10), cyc(105)));
           
-          auto cyc = [&](double val){ return cyclicWrap (val, double(-10),double(-5)); };
-
-          CHECK (almostEqual (double(-10), cyc(0)));
-          CHECK (almostEqual (double( -9), cyc(1)));
-          CHECK (almostEqual (double( -8), cyc(2)));
-          CHECK (almostEqual (double( -7), cyc(3)));
-          CHECK (almostEqual (double( -6), cyc(4)));
-          CHECK (almostEqual (double(-10), cyc(5)));
-          CHECK (almostEqual (double( -9), cyc(6)));
-          CHECK (almostEqual (double( -8), cyc(7)));
-          CHECK (almostEqual (double( -7), cyc(8)));
-          CHECK (almostEqual (double( -6), cyc(9)));
-          CHECK (almostEqual (double(-10), cyc(105)));
+          // For each period-length, a precision limit can be computed;
+          // whenever bounds or inputs approach that limit, the rounding errors
+          // approach the order of magnitude of the period-length, and thus
+          // computing of wrapped values becomes pointless...
+          F period5 = F(5);
+          F limit5  = limit_cyclicWrap<F> (period5);
           
-          CHECK (almostEqual (double(5)/2, limit5 * _EPS<double>));
+          // one ULP-Step at the limit equals already half the period-length:
+          CHECK (almostEqual (period5/2, limit5 * _EPS<F>));
+          // so small steps will alias...
           CHECK (limit5 + 1 == limit5);
           
-          CHECK (1 == cyclicWrap<double>( 1, 1,_MAX<double>) );
-          CHECK (2 == cyclicWrap<double>( 2, 1,_MAX<double>) );
-          CHECK (1 == cyclicWrap<double>(-1, 1,_MAX<double>) );
-          CHECK (      1 < wrapped     );
-          CHECK (wrapped < _MAX<double>);
+          // HOWEWER, very large periods can be handled (within numeric precision)
+          CHECK (1 == cyclicWrap<F>( 1, 1,_MAX<F>) );
+          CHECK (2 == cyclicWrap<F>( 2, 1,_MAX<F>) );   // note: these values are *exact* -- due to std::fmod()
+          CHECK (3 == cyclicWrap<F>( 3, 1,_MAX<F>) );
+          CHECK (4 == cyclicWrap<F>( 4, 1,_MAX<F>) );
+          CHECK (5 == cyclicWrap<F>( 5, 1,_MAX<F>) );
+          
+          CHECK (1 == cyclicWrap<F>(-1, 1,_MAX<F>) );   // yet this one gets aliased with the minVal
+          
+          F epsStep =  _MAX<F>*_EPS<F>;
+          // yet the following input is clearly below minVal and will wrap upwards...
+          F wrapped = cyclicWrap (-epsStep, F(1),_MAX<F>);
+          
+          CHECK (      1 < wrapped);
+          CHECK (wrapped < _MAX<F>);
         }
     };
   
