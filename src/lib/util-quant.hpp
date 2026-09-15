@@ -216,7 +216,7 @@ namespace util {
       offset += PERIOD;
     if (not (offset < PERIOD)) // can happen due to ε or non-finite values
       offset = 0;
-    F res = minVal + offset;   // could be rounded to maxVal
+    F res = minVal + offset;   // could be rounded to maxVal (or become infinite)
     return res < maxVal? res : minVal;
   }
   
@@ -245,6 +245,7 @@ namespace util {
   limit_cyclicWrap (F period)
   {
     REQUIRE (std::isfinite (period));
+    REQUIRE (F(0) < period);
     F limit = period / std::numeric_limits<F>::epsilon();
     if (not std::isfinite (limit))
       limit = std::numeric_limits<F>::max();
