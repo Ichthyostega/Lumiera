@@ -87231,7 +87231,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789159639409" ID="ID_654373559" MODIFIED="1789159678163" TEXT="Scale-Eigenschaften abstecken per ParameterScale_test">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789159639409" ID="ID_654373559" MODIFIED="1789607860036" TEXT="Scale-Eigenschaften abstecken per ParameterScale_test">
 <icon BUILTIN="pencil"/>
 <node CREATED="1789159687318" ID="ID_1480074646" MODIFIED="1789160197623" TEXT="Hier nur rein die Scale-Descriptoren und das intendierte Verhalten">
 <richcontent TYPE="NOTE"><html>
@@ -87258,6 +87258,46 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#338800" CREATED="1789170107429" ID="ID_864942829" MODIFIED="1789172022866" TEXT="einfache join()-Operation">
 <icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789607293094" ID="ID_734632281" MODIFIED="1789607296849" TEXT="verify_Conforming">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1789607298013" ID="ID_452068382" MODIFIED="1789607555871" TEXT="im Grunde offensichtlich und redundant">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...da ein Test eigentlich mehr machen sollte, als nur nochmal den Code zu wiederholen; und hier passiert nicht mehr, als ein cap an der boundrary, auf einem komplett offensichtlichen und einfachen Code-Pfad
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789607312019" ID="ID_1154758301" MODIFIED="1789607325207" TEXT="aber man k&#xf6;nnte einen anderen Datentyp testen (z.B. Float)"/>
+<node CREATED="1789607333006" ID="ID_1782430086" MODIFIED="1789607343123" TEXT="und zeigen da&#xdf; auch das cyclicWrap hier integriert ist"/>
+</node>
+<node COLOR="#338800" CREATED="1789607351998" ID="ID_144363848" MODIFIED="1789607354317" TEXT="verify_cyclicScale">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1789607356261" ID="ID_1762601340" MODIFIED="1789607743052" TEXT="auch hier nur bedingt sinnvoll testbar">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...denn die eigentlich trickreiche Funktionalit&#228;t steckt in der Library-Funktion und ist dort schon per Unit-Test abgedeckt, und das korrekte Setup wird innerhalb des Scale-Descriptors gar nicht gepr&#252;ft (weil diese Pr&#252;fung in den umschlie&#223;enden Kontext geh&#246;rt, wo die Scale in einen Parameter-Typ eingebunden wird)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1789607368451" ID="ID_383818308" MODIFIED="1789607375932" TEXT="kann zwei relevante F&#xe4;lle demonstrieren">
+<node CREATED="1789607377402" ID="ID_1342839519" MODIFIED="1789607401203" TEXT="Winkel-Skala (unsigned short)"/>
+<node CREATED="1789607407654" ID="ID_1837015555" MODIFIED="1789607428439" TEXT="floating-point-Scala mit kleinen Werten"/>
+</node>
+<node COLOR="#435e98" CREATED="1789607809345" ID="ID_1668358580" MODIFIED="1789607849725" TEXT="diese Tests dienen eigentlich nur dem Integrations-Check &#x2014; und sind Dokumentation">
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>

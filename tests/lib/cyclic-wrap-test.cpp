@@ -20,7 +20,6 @@
 #include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
-using ::Test;
 using util::isLimited;
 using std::floating_point;
 

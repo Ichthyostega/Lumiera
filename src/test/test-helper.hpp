@@ -40,6 +40,7 @@
 #include "lib/random.hpp"
 
 #include <boost/lexical_cast.hpp>
+#include <concepts>
 #include <typeinfo>
 #include <cstdlib>
 #include <utility>
@@ -62,14 +63,15 @@ namespace test{
   using util::showType;
   using util::showTypes;
   
+  using std::floating_point;
   
   constexpr auto ROUGH_PRECISION = util::ipow (10.0, -3);
   constexpr auto EPSILON_ULP     = 5;
   
   
-  template<typename F, typename N>
-  constexpr inline                                   enable_if< std::is_floating_point<F>,
-  bool                                                        >
+  template<floating_point F, typename N>
+  constexpr inline
+  bool
   roughEQ (F val, N target, F limit =ROUGH_PRECISION)
   {
     REQUIRE (0 < limit);
@@ -77,9 +79,9 @@ namespace test{
   }                                  //////////////////////////////////////////////////////////////////////////TICKET #1360 looks like this problem was solved several times
   
   
-  template<typename F>
-  constexpr inline                                   enable_if< std::is_floating_point<F>,
-  F                                                           >
+  template<floating_point F>
+  constexpr inline
+  F
   ulp (F val)
   {
     val = fabs (val);
@@ -91,9 +93,9 @@ namespace test{
     return scaledUlp;
   }
   
-  template<typename F, typename N>
-  constexpr inline                                   enable_if< std::is_floating_point<F>,
-  bool                                                        >
+  template<floating_point F, typename N>
+  constexpr inline
+  bool
   epsEQ (F val, N target, uint ulps =EPSILON_ULP)
   {
     return abs (val - target) < ulps * ulp<F> (target);

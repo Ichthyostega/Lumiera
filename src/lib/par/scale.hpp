@@ -119,7 +119,9 @@ namespace par {
               )
            )
        and (not isCyclic()
-           or (minVal and maxVal and *minVal < *maxVal)
+           or (minVal and maxVal
+               and *minVal < *maxVal
+               and VAL(0) < cyclicLim)
            )
            ;
   }
@@ -169,8 +171,8 @@ namespace par {
         if (std::is_floating_point_v<VAL>)
           if (not (std::abs (rawVal) < cyclicLim))
             throw err::Invalid {util::_Fmt{"Parameter value %4.2g beyond supported numeric precision "
-                                           "for cyclic wrapping into (%4.2g ... %4.2g("}
-                                          % rawVal % minVal % maxVal
+                                           "for cyclic wrapping into [%1.2g...%1.2g[ "}
+                                          % rawVal % *minVal % *maxVal
                                };
         return util::cyclicWrap (rawVal, *minVal, *maxVal);
       }
