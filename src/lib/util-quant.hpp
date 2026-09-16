@@ -244,7 +244,7 @@ namespace util {
   inline constexpr F
   limit_cyclicWrap (F period)
   {
-    REQUIRE (std::isfinite (period));
+    REQUIRE (std::isnormal (period));
     REQUIRE (F(0) < period);
     F limit = period / std::numeric_limits<F>::epsilon();
     if (not std::isfinite (limit))

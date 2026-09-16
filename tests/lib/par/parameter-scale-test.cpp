@@ -58,7 +58,7 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
-          verify_Bounds();
+          verify_Conforming();
         }
       
       
@@ -80,8 +80,13 @@ namespace test{
        * @todo WIP 9/26 🔁 define ⟶ implement
        */
       void
-      verify_Bounds()
+      verify_Conforming()
         {
+          Scale<float> scale;
+          CHECK (1e5f == scale.conform (1e5f));
+          
+          scale.maxVal = -5.0f;
+          CHECK (-5.0f == scale.conform (1e5f));
         }
     };
   

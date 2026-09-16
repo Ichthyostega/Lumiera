@@ -28,14 +28,18 @@
 #define LIB_PAR_SCALE_H
 
 
+#include "lib/error.hpp"
 #include "lib/par/domain.hpp"
-#include "lib/util.hpp"
+#include "lib/util-quant.hpp"
+#include "lib/format-string.hpp"
+//#include "lib/util.hpp"
 
 #include <optional>
 
 
 namespace lib {
 namespace par {
+  namespace err = lumiera::error;
   
   using std::optional;
   
@@ -66,12 +70,13 @@ namespace par {
       optional<VAL> neutral{};
       optional<VAL> defVal{};
       /////////////////////////////OOO »Sentinels« and nominal scales?
-      bool cyclic{false};
+      VAL cyclicLim =0;
       
       /* ===== information functions ===== */
       
       bool isValid()  const;
       bool isFactor() const;
+      bool isCyclic() const;
       
       /* ===== conforming operations ===== */
       
@@ -113,7 +118,7 @@ namespace par {
               and (not minVal or *minVal <= *defVal)
               )
            )
-       and (not cyclic
+       and (not isCyclic()
            or (minVal and maxVal and *minVal < *maxVal)
            )
            ;
@@ -126,6 +131,13 @@ namespace par {
     return metric == LIN
        and neutral
        and *neutral == VAL(1);
+  }
+  
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isCyclic()  const
+  {
+    return VAL(0) != cyclicLim;
   }
   
   
@@ -150,13 +162,17 @@ namespace par {
   inline VAL
   Scale<VAL>::conform (VAL const& rawVal)  const
   {
-    if (cyclic)
+    if (isCyclic())
       {
         REQUIRE (minVal and maxVal);
         REQUIRE (*minVal < *maxVal);
-        const VAL PERIOD = *maxVal - *minVal;
-        ENSURE (0 < PERIOD);
-        return (rawVal - *minVal) % PERIOD;
+        if (std::is_floating_point_v<VAL>)
+          if (not (std::abs (rawVal) < cyclicLim))
+            throw err::Invalid {util::_Fmt{"Parameter value %4.2g beyond supported numeric precision "
+                                           "for cyclic wrapping into (%4.2g ... %4.2g("}
+                                          % rawVal % minVal % maxVal
+                               };
+        return util::cyclicWrap (rawVal, *minVal, *maxVal);
       }
     if (minVal and rawVal < *minVal)
       return *minVal;
