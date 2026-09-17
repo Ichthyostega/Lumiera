@@ -30,6 +30,7 @@
 
 #include "lib/error.hpp"
 #include "lib/par/domain.hpp"
+#include "lib/par/type-handler.hpp"
 #include "lib/util-quant.hpp"
 #include "lib/format-string.hpp"
 //#include "lib/util.hpp"
@@ -192,9 +193,10 @@ namespace par {
   template<typename VAL>
   template<typename SRC>
   inline VAL
-  Scale<VAL>::join (VAL const& value, SRC const& feed, Scale<SRC> const& feedScale) const
+  Scale<VAL>::join (VAL const& value, SRC const& srcFeed, Scale<SRC> const& feedScale) const
   {
-    UNIMPLEMENTED ("join a feed with a base value, observing Scale constraints");
+    VAL feed(preClamp<VAL> (srcFeed));
+    return join (value, feed);
   }
   
   /**

@@ -1,5 +1,5 @@
 /*
-  PARAM-TYPE.hpp  -  parameter type record including domain and scale
+  TYPE-HANDLER.hpp  -  generic type conversion handling support
 
    Copyright (C)
      2026             Hermann Vosseler <Ichthyostega@web.de>
@@ -12,8 +12,8 @@
 */
 
 
-/** @file param-type.hpp
- ** Specification of the value domain and scale of a parameter.
+/** @file type-handler.hpp
+ ** Generic building blocks to support parameter value conversions and adaptation.
  ** The implementation of parameters is built up in layers, starting from the generic
  ** interfaces \ref Provision, which describes the fundamental capabilities of a
  ** parameter as conceptualised here) and \ref Domain to support type conversions.
@@ -31,15 +31,14 @@
  */
 
 
-#ifndef LIB_PAR_PARAM_TYPE_H
-#define LIB_PAR_PARAM_TYPE_H
+#ifndef LIB_PAR_TYPE_HANDLER_H
+#define LIB_PAR_TYPE_HANDLER_H
 
 
+#include "lib/par/spec.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/par/domain.hpp"
 #include "lib/meta/generator.hpp"
-
-#include <concepts>
-#include <limits>
 
 
 namespace lib {
@@ -242,4 +241,4 @@ _Pragma("GCC diagnostic pop")
   
   
 }} // namespace lib::par
-#endif /*LIB_PAR_PARAM_TYPE_H*/
+#endif /*LIB_PAR_TYPE_HANDLER_H*/

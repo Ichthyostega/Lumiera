@@ -41,17 +41,9 @@
 #include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
-#include <concepts>
-#include <limits>
-
 
 namespace lib {
 namespace par {
-  
-  using util::isNeg;
-  using std::same_as;
-  using std::floating_point;
-  using std::numeric_limits;
   
   
   /* ===== Type Handler Interface for generic parameter value access ===== */

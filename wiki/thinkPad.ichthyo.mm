@@ -85572,8 +85572,52 @@
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789164533222" ID="ID_1017590695" MODIFIED="1789164556832" TEXT="Problem: kann auch vom Typ des Beitrags (und des Basis-Werts) abh&#xe4;ngen">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1789164561486" ID="ID_376197998" MODIFIED="1789164593909" TEXT="bedeutet: die darauf aufbauende Provision mu&#xdf; ggfs. einen double-Dispatch machen"/>
-<node CREATED="1789165221192" ID="ID_388299163" MODIFIED="1789165234448" TEXT="die Basis-Implementierung mu&#xdf; dann generisch sein und von Scale bereitgestellt werden"/>
-<node CREATED="1789165187065" ID="ID_1109273270" MODIFIED="1789165213989" TEXT="Konsequenz &#x27f9; die Scale mu&#xdf; hier zwei Typ-Parameter nehmen"/>
+<node CREATED="1789165221192" ID="ID_388299163" MODIFIED="1789687877259" TEXT="die Basis-Implementierung mu&#xdf; dann generisch sein und von Scale bereitgestellt werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Zwar k&#246;nnte man auch so argumentieren, da&#223; zun&#228;chst der Quell-Feed so adaptiert werden sollte, da&#223; der Basistyp gleich ist...
+    </p>
+    <p>
+      Bei genauerer Betrachtung stellt sich jedoch heraus, da&#223; dies keine gute Idee ist, denn...
+    </p>
+    <ul>
+      <li>
+        zum Einen w&#228;re das jeweils ein weiterer dynamisch hinzugef&#252;gter Dekorator (und damit zus&#228;tzlicher Overhead), obwohl doch die eigentliche Umwandlung auf Basis bekannter Typen bereits zur Compile-Zeit gemacht werden k&#246;nnte
+      </li>
+      <li>
+        und au&#223;erdem wirft man damit die detailierte Information &#252;ber den Quell-Feed weg (oder reicht sie dann eben doch weiter, wodurch dieser Schritt dann redundant w&#252;rde) obwohl eben diese zus&#228;tzliche Information durchaus in einen besser angepa&#223;ten Rechenweg umgesetzt werden k&#246;nnte
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789165187065" ID="ID_1109273270" MODIFIED="1789165213989" TEXT="Konsequenz &#x27f9; die Scale mu&#xdf; hier zwei Typ-Parameter nehmen">
+<node CREATED="1789679141799" ID="ID_907734481" MODIFIED="1789679174971" TEXT="die eigentliche Wert-Umwandlung ist hier vergleichsweise einfach">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil wir die Basis-Typen f&#252;r Parameter entsprechend eingeschr&#228;nkt haben
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789679178010" ID="ID_641923682" MODIFIED="1789679196411" TEXT="dazu gen&#xfc;gt die preClamp-Funktion (generisch, mit Varianten)"/>
+<node CREATED="1789679234347" ID="ID_562560611" MODIFIED="1789679253968" TEXT="diese h&#xe4;ngt aber (mit diversen weiteren Funktionen) in param-type.hpp"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789679364793" ID="ID_1241002579" MODIFIED="1789681307994" TEXT="extrahieren in type-handler.hpp">
+<arrowlink COLOR="#723f52" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" STARTARROW="None" STARTINCLINATION="-203;15;"/>
+<icon BUILTIN="yes"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 <node CREATED="1789165444623" ID="ID_1649021234" MODIFIED="1789165459491" TEXT="vereinfachte Variante f&#xfc;r identische Scale"/>
 </node>
 </node>
@@ -85595,6 +85639,12 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="yes"/>
+</node>
+<node CREATED="1789681257536" ID="ID_1700836715" MODIFIED="1789681261057" TEXT="Implementierung">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789681263702" ID="ID_517472625" MODIFIED="1789681294765" TEXT="type-handler.hpp verwenden">
+<linktarget COLOR="#723f52" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" SOURCE="ID_1241002579" STARTARROW="None" STARTINCLINATION="-203;15;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789002587495" ID="ID_509669988" MODIFIED="1789002595532" TEXT="Design nochmal reflektieren">
@@ -86059,8 +86109,8 @@ class ScaleRegistry
 </node>
 <node COLOR="#338800" CREATED="1789171875485" ID="ID_1356870727" MODIFIED="1789171905187" TEXT="conform">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789171881280" ID="ID_339852589" MODIFIED="1789250353458" TEXT="zyklische Scale behandeln">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789171881280" FOLDED="true" ID="ID_339852589" MODIFIED="1789676093985" TEXT="zyklische Scale behandeln">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1789250357099" ID="ID_684124457" MODIFIED="1789250365217" TEXT="Vorsicht Falle">
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1789250367429" ID="ID_1987781341" MODIFIED="1789250382816" TEXT="modulus und unsigned"/>
@@ -87272,8 +87322,7 @@ Prop.1: dist%3       1  2  0  1  2  0
       ...da ein Test eigentlich mehr machen sollte, als nur nochmal den Code zu wiederholen; und hier passiert nicht mehr, als ein cap an der boundrary, auf einem komplett offensichtlichen und einfachen Code-Pfad
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789607312019" ID="ID_1154758301" MODIFIED="1789607325207" TEXT="aber man k&#xf6;nnte einen anderen Datentyp testen (z.B. Float)"/>
 <node CREATED="1789607333006" ID="ID_1782430086" MODIFIED="1789607343123" TEXT="und zeigen da&#xdf; auch das cyclicWrap hier integriert ist"/>
@@ -87299,6 +87348,9 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node COLOR="#435e98" CREATED="1789607809345" ID="ID_1668358580" MODIFIED="1789607849725" TEXT="diese Tests dienen eigentlich nur dem Integrations-Check &#x2014; und sind Dokumentation">
 <icon BUILTIN="yes"/>
 </node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789675604211" ID="ID_201071963" MODIFIED="1789676070358" TEXT="verify_valueJoining">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 </node>

@@ -163,7 +163,16 @@ namespace test{
       verify_valueJoining()
         {
           Scale<float> scale;
-       }
+        }
+      
+      
+      /** @test 
+       * @todo WIP 9/26 🔁 define ⟶ implement
+       */
+      void
+      verify_NominalScale()
+        {
+        }
     };
   
   
