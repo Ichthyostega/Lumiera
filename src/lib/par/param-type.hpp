@@ -36,20 +36,12 @@
 
 
 #include "lib/par/domain.hpp"
+#include "lib/par/type-handler.hpp"
 #include "lib/meta/generator.hpp"
-
-#include <concepts>
-#include <limits>
 
 
 namespace lib {
 namespace par {
-  
-  using util::isNeg;
-  using std::same_as;
-  using std::floating_point;
-  using std::numeric_limits;
-  
   
 // GCC > 13 warns at class definition when a new overload shadows an inherited virtual function.
 // While theoretically correct, in practice any call will be dispatched through the base interface,
@@ -86,103 +78,10 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
     };
   
   
-  /* ===== type conversion details ===== */
-  
-  /** Constraint: type \a SUB can not represent the full domain of type \a BAS
-   * @todo implicitly also implements a limitation to »numeric« types,
-   *       due to the use of std::numeric_limits
-   */
-  template<typename SUB, typename BAS>
-  concept sub_domain = std::signed_integral<SUB> != std::signed_integral<BAS>
-                    or std::numeric_limits<SUB>::max() < std::numeric_limits<BAS>::max()
-                    or std::numeric_limits<SUB>::lowest() > std::numeric_limits<BAS>::lowest()
-                     ;
-  
-  
-_Pragma("GCC diagnostic push") \
-_Pragma("GCC diagnostic ignored \"-Wsign-compare\"")
-// the following functions are specifically crafted to work around
-// the ambiguities caused by automatic signed-to-unsigned promotion;
-// furthermore, the automatic promotion allows to perform the comparison.
-  
-  template<typename X, typename Y>
-  inline constexpr bool
-  isLower_safe (X const& x, Y const& y)
-  {
-    return isNeg(x) == isNeg(y)? x < y
-                               : isNeg(x);
-  }
-
-  template<typename X, typename Y>
-  inline constexpr bool
-  isLarger_safe (X const& x, Y const& y)
-  {
-    return isNeg(x) == isNeg(y)? x > y
-                               : isNeg(y);
-  }
-_Pragma("GCC diagnostic pop")
-
-
-  /** generic helper to conform into a common value domain
-   * @tparam SUB the implied target value domain
-   * @tparam BAS source data type
-   * @return a value in source data type,
-   *         yet conformed into the target data range
-   */
-  template<typename SUB, typename BAS>
-  inline constexpr BAS
-  preClamp (BAS const& value)
-  {
-    return value;
-  }
-  
-  /** special case: clamp the source value into the target value domain.
-   * @remark tricky due to automatic conversions between signed/unsigned */
-  template<typename SUB, typename BAS>   requires (sub_domain<SUB,BAS>
-                                                   and not same_as<SUB,bool>)
-  inline constexpr BAS
-  preClamp (BAS const& rawVal)
-  {
-    static_assert (std::is_constructible_v<BAS,SUB const&>
-                  ,"Value domains must overlap at least partially "
-                   "and values must be cross-constructible within overlap");
-    
-    auto upperBound = numeric_limits<SUB>::max();
-    auto lowerBound = numeric_limits<SUB>::lowest();
-    
-    return isLarger_safe(rawVal, upperBound)? BAS(upperBound)
-         : isLower_safe (rawVal, lowerBound)? BAS(lowerBound)
-                                            : rawVal;
-  }
-  
-  /** special case: trigger a bool at the 0.5 level */
-  template<same_as<bool> B, floating_point F>
-  inline constexpr F
-  preClamp (F const& rawVal)
-  {
-    return 0.5 < rawVal? F{1} : F{0};
-  }
   
   
   
-  template<typename V, typename X>
-  inline void
-  assignConverted (V& targetVal, X const& srcVal)
-  {
-    if constexpr (std::is_assignable_v<V&, X const&>)
-      {
-        targetVal = preClamp<V> (srcVal);
-      }
-    else
-    if constexpr (std::is_constructible_v<V, X const&>)
-      {
-        targetVal.~U();
-        new(&targetVal) V (preClamp<V> (srcVal));
-      }
-    else
-      static_assert (!sizeof(X), "this type conversion is not supported");
-  }
-  
+  /* ===== type conversion virtual dispatch ===== */
   
   template<typename VAL, class IFA>
   template<typename X, class PAR>
