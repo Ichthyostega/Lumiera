@@ -85612,10 +85612,9 @@
 </node>
 <node CREATED="1789679178010" ID="ID_641923682" MODIFIED="1789679196411" TEXT="dazu gen&#xfc;gt die preClamp-Funktion (generisch, mit Varianten)"/>
 <node CREATED="1789679234347" ID="ID_562560611" MODIFIED="1789679253968" TEXT="diese h&#xe4;ngt aber (mit diversen weiteren Funktionen) in param-type.hpp"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789679364793" ID="ID_1241002579" MODIFIED="1789681307994" TEXT="extrahieren in type-handler.hpp">
-<arrowlink COLOR="#723f52" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" STARTARROW="None" STARTINCLINATION="-203;15;"/>
+<node COLOR="#435e98" CREATED="1789679364793" ID="ID_1241002579" MODIFIED="1789690095158" STYLE="fork" TEXT="extrahieren in type-handler.hpp">
+<arrowlink COLOR="#3f4b72" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" STARTARROW="None" STARTINCLINATION="-199;17;"/>
 <icon BUILTIN="yes"/>
-<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 <node CREATED="1789165444623" ID="ID_1649021234" MODIFIED="1789165459491" TEXT="vereinfachte Variante f&#xfc;r identische Scale"/>
@@ -85641,9 +85640,49 @@
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1789681257536" ID="ID_1700836715" MODIFIED="1789681261057" TEXT="Implementierung">
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789681263702" ID="ID_517472625" MODIFIED="1789681294765" TEXT="type-handler.hpp verwenden">
-<linktarget COLOR="#723f52" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" SOURCE="ID_1241002579" STARTARROW="None" STARTINCLINATION="-203;15;"/>
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1789681263702" ID="ID_517472625" MODIFIED="1789690087703" TEXT="type-handler.hpp verwenden">
+<linktarget COLOR="#3f4b72" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" SOURCE="ID_1241002579" STARTARROW="None" STARTINCLINATION="-199;17;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1789690189866" ID="ID_1376240578" MODIFIED="1789690197006" TEXT="Einzelf&#xe4;lle...">
+<node CREATED="1789690461895" ID="ID_1698758358" MODIFIED="1789690470825" TEXT="Ziel linear">
+<node CREATED="1789690555041" ID="ID_1115887554" MODIFIED="1789690584237" TEXT="Quelle logarithmisch &#x27f9; in Faktor verwandeln"/>
+<node CREATED="1789690484811" ID="ID_1985479365" MODIFIED="1789690540680" TEXT="Quelle multiplikativ &#x27f9;  Feed multiplizieren"/>
+<node CREATED="1789690518951" ID="ID_369458503" MODIFIED="1789690532408" TEXT="sonst: &#x27f9; Feed addieren"/>
+</node>
+<node CREATED="1789690604246" ID="ID_1698111641" MODIFIED="1789690609463" TEXT="Ziel logarithmisch">
+<node CREATED="1789690612021" ID="ID_699494084" MODIFIED="1789690620205" TEXT="Quelle logarithmisch">
+<node CREATED="1789690621353" ID="ID_369958191" MODIFIED="1789690631911" TEXT="ggfs Basis-Anpassungsfaktor"/>
+<node CREATED="1789690632759" ID="ID_169878566" MODIFIED="1789690643602" TEXT="sonst &#x27f9; Feed addieren"/>
+</node>
+<node CREATED="1789690650447" ID="ID_763848405" MODIFIED="1789690934324" TEXT="Quelle multiplikativ &#x27f9; logarithmieren und addieren"/>
+<node CREATED="1789690952586" ID="ID_806764948" MODIFIED="1789690977990" TEXT="sonst delogarithmieren, Feed addieren, re-logarithmieren"/>
+</node>
+<node CREATED="1789691026066" ID="ID_1521422421" MODIFIED="1789691072009" TEXT="Ziel ordinal und Quelle additiv(linear) &#x27f9; Ordinal-Step"/>
+<node CREATED="1789691081395" ID="ID_1029470467" MODIFIED="1789691128539" TEXT="Ziel nominal und Quelle nominal oder linear &#x27f9; Feed(codiert) ersetzt Quelle"/>
+</node>
+<node CREATED="1789691154922" ID="ID_1884775055" MODIFIED="1789691157587" TEXT="Berechnung">
+<node CREATED="1789691206195" ID="ID_521077468" MODIFIED="1789691213662" TEXT="Genauigkeit steigern">
+<node CREATED="1789691368028" ID="ID_1992504549" MODIFIED="1789691686368" TEXT="de/Logarithmieren : stets bestm&#xf6;glichen Floating-Point">
+<node CREATED="1789691697643" ID="ID_1724775924" MODIFIED="1789691708345" TEXT="von Integraltypen &#x27f9; stets double"/>
+<node CREATED="1789691709035" ID="ID_28970072" MODIFIED="1789691791715" TEXT="ansonsten maximalen floating-point-Typ">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      d.h. wenn beide Seiten float sind, dann ist das wohl auch so beabsichtigt, und wir bleiben in der float-Dom&#228;ne. Ebenso wenn eine Seite long-double ist, dann alles dort. Sonst double verwenden
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1789691232896" ID="ID_575039816" MODIFIED="1789691803456" TEXT="Konvertierung in den Ziel-Typ stets zuletzt (vor Conform)"/>
+</node>
+<node CREATED="1789691159130" ID="ID_1328281700" MODIFIED="1789691168924" TEXT="zuletzt Conform() anwenden"/>
+<node CREATED="1789691889609" ID="ID_569629897" MODIFIED="1789691899860" TEXT="Formulierung: mu&#xdf; Funktions-Kette bilden"/>
 </node>
 </node>
 </node>

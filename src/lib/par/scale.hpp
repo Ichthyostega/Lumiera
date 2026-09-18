@@ -87,6 +87,16 @@ namespace par {
       template<typename SRC>
       VAL join (VAL const&, SRC const&, Scale<SRC> const&) const;
       VAL join (VAL const&, VAL const&)                    const;
+      
+    private:
+      template<typename TAR>
+      VAL asFactor (VAL const&)  const;
+      
+      template<typename TAR>
+      VAL baseScale (Metric targetMetric)  const;
+      
+      template<typename TAR>
+      VAL asLogarithm (Metric targetMetric, VAL const&)  const;
     };
   
   
@@ -195,8 +205,34 @@ namespace par {
   inline VAL
   Scale<VAL>::join (VAL const& value, SRC const& srcFeed, Scale<SRC> const& feedScale) const
   {
-    VAL feed(preClamp<VAL> (srcFeed));
-    return join (value, feed);
+    VAL res{};
+    if (NOM == metric)
+      UNIMPLEMENTED ("nominal and ordinal scales");
+    if (LIN == metric)
+      {
+        if (feedScale.isLogarithmic())
+          assignConverted (res, value * feedScale.template asFactor<VAL> (srcFeed));
+        else
+        if (this->isFactor())
+          assignConverted (res, value * srcFeed);
+        else
+          assignConverted (res, value + srcFeed);
+      }
+    else
+    if (this->isLogarithmic())
+      {
+        if (feedScale.isLogarithmic())
+          assignConverted (res, value + feedScale.template baseScale<VAL>(metric) * srcFeed);
+        else
+        if (feedScale.isFactor())
+          assignConverted (res, value + feedScale.template asLogarithm<VAL> (metric, srcFeed));
+        else
+          throw err::Invalid {"adding a non-logarithmic data feed on top of a logarithmic base value is pointless."};
+      }
+    else
+      NOTREACHED ("Unexpected metric conversion case");
+    
+    return conform (res);
   }
   
   /**
@@ -209,6 +245,30 @@ namespace par {
     return conform (isFactor()? value * feed
                               : value + feed
                    );
+  }
+  
+  template<typename VAL>
+  template<typename TAR>
+  inline VAL
+  Scale<VAL>::asFactor (VAL const& value)  const
+  {
+    UNIMPLEMENTED ("transform a logarithmic value into an exponential factor");
+  }
+  
+  template<typename VAL>
+  template<typename TAR>
+  inline VAL
+  Scale<VAL>::baseScale (Metric targetMetric)  const
+  {
+    UNIMPLEMENTED ("provide the adaptation factor from this logarithmic scale to the given other logarithmic scale");
+  }
+  
+  template<typename VAL>
+  template<typename TAR>
+  inline VAL
+  Scale<VAL>::asLogarithm (Metric targetMetric, VAL const& value)  const
+  {
+    UNIMPLEMENTED ("transform this value into a suitable logarithm for the target scale");
   }
   
   
