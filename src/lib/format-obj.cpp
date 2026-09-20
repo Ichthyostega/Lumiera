@@ -363,11 +363,11 @@ namespace util {
   
   string showDecimal (double val)  noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<double>); }
   string showDecimal (float val)   noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<float>); }
-  string showDecimal (f128 val)    noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<f128>); }
+  string showDecimal (lflp val)    noexcept { return showFloatingPoint (val, PRECISION_DECIMAL<lflp>); }
   
   string showComplete (double val) noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<double>); }
   string showComplete (float val)  noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<float>); }
-  string showComplete (f128 val)   noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<f128>); }
+  string showComplete (lflp val)   noexcept { return showFloatingPoint (val, PRECISION_COMPLETE<lflp>); }
   
   
   string

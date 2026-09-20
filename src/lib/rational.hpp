@@ -122,12 +122,12 @@ namespace util {
     u = 0!=u? u:1;
     auto [d,r] = util::iDiv (num, den);
     // round to smallest integer fraction, to shake off "number dust"
-    f128 const ROUND_ULP = 1 + 1/(f128(std::numeric_limits<int64_t>::max()) * 2);
+    lflp const ROUND_ULP = 1 + 1/(lflp(std::numeric_limits<int64_t>::max()) * 2);
     
     // construct approximation quantised to 1/u
-    f128 frac = f128(r) / den;
+    lflp frac = lflp(r) / den;
     int64_t res = d*u + int64_t(frac*u * ROUND_ULP);
-    ENSURE (abs (f128(res)/u - rational_cast<f128>(Rat{num,den})) <= 1.0/abs(u)
+    ENSURE (abs (lflp(res)/u - rational_cast<lflp>(Rat{num,den})) <= 1.0/abs(u)
            ,"Requantisation error exceeded num=%li / den=%li -> res=%li / quant=%li"
            ,                                   num,       den,       res,        u);
     return res;

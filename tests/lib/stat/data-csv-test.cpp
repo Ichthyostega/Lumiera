@@ -224,7 +224,7 @@ namespace test{
           
           CHECK (format4Csv(double(1) / 3) == "0.333333333333333"_expect   );
           CHECK (format4Csv(float(1) / 3)  == "0.333333"_expect            );
-          CHECK (format4Csv(f128(1) / 3)   == "0.333333333333333333"_expect);
+          CHECK (format4Csv(lflp(1) / 3)   == "0.333333333333333333"_expect);
           CHECK (format4Csv(bool(1))       == "true"_expect );
           CHECK (format4Csv(bool(0))       == "false"_expect);
           CHECK (format4Csv("Starship-3")  == "\"Starship-3\""_expect ); // 3rd test today ;-)

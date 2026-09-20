@@ -93,10 +93,10 @@ namespace util {
   
   std::string showDecimal (double) noexcept;
   std::string showDecimal (float)  noexcept;
-  std::string showDecimal (f128)   noexcept;
+  std::string showDecimal (lflp)   noexcept;
   std::string showComplete (double)noexcept;
   std::string showComplete (float) noexcept;
-  std::string showComplete (f128)  noexcept;
+  std::string showComplete (lflp)  noexcept;
   
   
   

@@ -32,8 +32,8 @@ using llong = long long int;
 using ullong = unsigned long long int;
 using ushort = unsigned short int;
 
-using f128  = long double;
-static_assert(10 <= sizeof(f128));
+using lflp  = long double;
+static_assert(10 <= sizeof(lflp));
 
 const uint LIFE_AND_UNIVERSE_4EVER = 42;
 

@@ -668,8 +668,8 @@ namespace model {
               n2 = d2==u? n2 : reQuant (n2,d2, u);
               FSecs res{s1*n1 + s2*n2, u};
               
-              auto f128 = [](Rat n){ return rational_cast<long double>(n); }; // can't use the guess from above,
-              ENSURE (abs (f128(res) - (f128(t1)+f128(t2))) < 1.0/u);        //  double precision is not sufficient
+              auto lflp = [](Rat n){ return rational_cast<long double>(n); }; // can't use the guess from above,
+              ENSURE (abs (lflp(res) - (lflp(t1)+lflp(t2))) < 1.0/u);        //  double precision is not sufficient
               return detox (res);
             }
         }

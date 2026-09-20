@@ -92,9 +92,9 @@ namespace test  {
           CHECK (a2.siz > 555);
           
           // can use that memory without blowing up....
-          auto doooh = new(a1.mem) f128{std::numeric_limits<f128>::max()};
+          auto doooh = new(a1.mem) lflp{std::numeric_limits<lflp>::max()};
           *doooh /= 2;
-          CHECK (2 == std::numeric_limits<f128>::max() / *doooh);
+          CHECK (2 == std::numeric_limits<lflp>::max() / *doooh);
           
           allo.deallocate (a1);
           allo.deallocate (a2);

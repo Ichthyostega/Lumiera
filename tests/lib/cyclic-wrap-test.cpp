@@ -77,7 +77,7 @@ namespace test {
           
           verifyFloatTypes<float>();
           verifyFloatTypes<double>();
-          verifyFloatTypes<f128>();
+          verifyFloatTypes<lflp>();
         }
       
       

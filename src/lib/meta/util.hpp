@@ -456,12 +456,12 @@ namespace util {
   /** show maximum reproducible decimal representation */
   std::string showDecimal (double) noexcept;
   std::string showDecimal (float)  noexcept;
-  std::string showDecimal (f128)   noexcept;
+  std::string showDecimal (lflp)   noexcept;
   
   /** show enough decimal digits to represent every distinct value */
   std::string showComplete (double) noexcept;
   std::string showComplete (float)  noexcept;
-  std::string showComplete (f128)   noexcept;
+  std::string showComplete (lflp)   noexcept;
   
   std::string showSize (size_t)   noexcept;
   
