@@ -61,6 +61,7 @@ namespace test{
           simpleUsage();
           verify_Conforming();
           verify_cyclicScale();
+          verify_valueJoining();
         }
       
       
@@ -156,13 +157,28 @@ namespace test{
        }
       
       
-      /** @test 
+      /** @test Base value and data feeds from differing Scales can be joined together
        * @todo WIP 9/26 🔁 define ⟶ implement
        */
       void
       verify_valueJoining()
         {
-          Scale<float> scale;
+          Scale<ushort> scale = {.minVal = 2, .maxVal = 10};
+          Scale<int64_t> feedScale;
+          
+          CHECK ( 5 == scale.join (2, int64_t(3), feedScale));   // 2+3 ≡ 5     (all computations done as double)
+          CHECK (10 == scale.join (5, int64_t(8), feedScale));   // 5+8 ≡ 13 ⟼ capped to 10
+          
+          feedScale.neutral = 1;
+          CHECK (feedScale.isFactor());
+          CHECK ( 6 == scale.join (2, int64_t(3), feedScale));   // 2*3 ≡ 6
+          CHECK ( 2 == scale.join (2, int64_t(-3),feedScale));   // 2*-3 ≡ -6 ⟼ first conditioned to ushort domain, then capped to 2
+          
+          feedScale.metric = DEC; // in dB
+          CHECK ( 7 == scale.join (4, int64_t(3), feedScale));   // 4 + 3dB ⟼ 4 * 1.995 ≡ 7.98 ⟼ truncated to 7
+          
+          ////////////////////////////OOO die folgende Konvertierung entgleist....
+SHOW_EXPR(short(-3) * uint64_t(2))
         }
       
       

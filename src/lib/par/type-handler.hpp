@@ -42,8 +42,9 @@ namespace par {
   
   using util::isNeg;
   using std::same_as;
-  using std::floating_point;
+  using std::integral;
   using std::signed_integral;
+  using std::floating_point;
   using std::numeric_limits;
   
   
@@ -144,6 +145,18 @@ _Pragma("GCC diagnostic pop")
     else
       static_assert (!sizeof(X), "this type conversion is not supported");
   }
+  
+  
+  template<typename T>
+  concept number = integral<T> or floating_point<T>;
+
+  /**
+   * the best-precision floating point type to carry out
+   * a numeric operation to combine two values
+   */
+  template<number T, number U>
+  using CommonComputeType = std::conditional_t<integral<T> and integral<U>, double
+                                                                          , std::common_type_t<T, U>>;
   
   
   

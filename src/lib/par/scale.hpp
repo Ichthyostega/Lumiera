@@ -42,6 +42,7 @@ namespace lib {
 namespace par {
   namespace err = lumiera::error;
   
+  using util::_Fmt;
   using std::optional;
   
   
@@ -78,6 +79,7 @@ namespace par {
       bool isValid()  const;
       bool isFactor() const;
       bool isCyclic() const;
+      bool isLogarithmic() const;
       
       /* ===== conforming operations ===== */
       
@@ -88,15 +90,16 @@ namespace par {
       VAL join (VAL const&, SRC const&, Scale<SRC> const&) const;
       VAL join (VAL const&, VAL const&)                    const;
       
-    private:
-      template<typename TAR>
-      VAL asFactor (VAL const&)  const;
+      /* ===== conversion helpers ===== */
       
       template<typename TAR>
-      VAL baseScale (Metric targetMetric)  const;
+      auto asFactor (VAL const&)  const;
       
       template<typename TAR>
-      VAL asLogarithm (Metric targetMetric, VAL const&)  const;
+      auto baseScale (Metric targetMetric)  const;
+      
+      template<typename TAR>
+      auto asLogarithm (Metric targetMetric, VAL const&)  const;
     };
   
   
@@ -153,6 +156,15 @@ namespace par {
     return VAL(0) != cyclicLim;
   }
   
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isLogarithmic()  const
+  {
+    return metric == DEC
+        or metric == NAT
+        or metric == BIN;
+  }
+  
   
   
   /* ===== conforming operations ===== */
@@ -181,9 +193,9 @@ namespace par {
         REQUIRE (*minVal < *maxVal);
         if (std::is_floating_point_v<VAL>)
           if (not (std::abs (rawVal) < cyclicLim))
-            throw err::Invalid {util::_Fmt{"Parameter value %4.2g beyond supported numeric precision "
-                                           "for cyclic wrapping into [%1.2g...%1.2g[ "}
-                                          % rawVal % *minVal % *maxVal
+            throw err::Invalid {_Fmt{"Parameter value %4.2g beyond supported numeric precision "
+                                     "for cyclic wrapping into [%1.2g...%1.2g[ "}
+                                    % rawVal % *minVal % *maxVal
                                };
         return util::cyclicWrap (rawVal, *minVal, *maxVal);
       }
@@ -213,7 +225,7 @@ namespace par {
         if (feedScale.isLogarithmic())
           assignConverted (res, value * feedScale.template asFactor<VAL> (srcFeed));
         else
-        if (this->isFactor())
+        if (feedScale.isFactor())
           assignConverted (res, value * srcFeed);
         else
           assignConverted (res, value + srcFeed);
@@ -247,28 +259,77 @@ namespace par {
                    );
   }
   
+  /** transform a logarithmic value into an exponential factor */
   template<typename VAL>
   template<typename TAR>
-  inline VAL
+  inline auto
   Scale<VAL>::asFactor (VAL const& value)  const
   {
-    UNIMPLEMENTED ("transform a logarithmic value into an exponential factor");
+    using WorkType = CommonComputeType<VAL,TAR>;
+    switch (metric)
+      {
+        case NAT: return std::exp (WorkType(value));
+        case BIN: return std::exp2 (WorkType(value));
+        case DEC: return std::pow<WorkType> (10, value/10.0);
+        default:
+          throw err::Logic{_Fmt{"Attempt to compute exponential "
+                                "from a non-logarithmic value with metric %d"}
+                               % metric};
+        break;
+      }
   }
   
+  /** transform this value into a suitable logarithm for the target scale */
   template<typename VAL>
   template<typename TAR>
-  inline VAL
-  Scale<VAL>::baseScale (Metric targetMetric)  const
-  {
-    UNIMPLEMENTED ("provide the adaptation factor from this logarithmic scale to the given other logarithmic scale");
-  }
-  
-  template<typename VAL>
-  template<typename TAR>
-  inline VAL
+  inline auto
   Scale<VAL>::asLogarithm (Metric targetMetric, VAL const& value)  const
   {
-    UNIMPLEMENTED ("transform this value into a suitable logarithm for the target scale");
+    if (isNeg (value))
+      throw err::Invalid{_Fmt{"Attempt to take logarithm from %f < 0"}
+                             % value};
+    using WorkType = CommonComputeType<VAL,TAR>;
+    switch (targetMetric)
+      {
+        case NAT: return std::log (WorkType(value));
+        case BIN: return std::logb (WorkType(value));
+        case DEC: return std::log10 (WorkType(value)) * 10;
+        default:
+          throw err::Logic{_Fmt{"Attempt to compute logarithm "
+                                "for a non-logarithmic metric %d"}
+                               % targetMetric};
+        break;
+      }
+  }
+  
+  /** provide the adaptation factor from this logarithmic scale
+   *  to the given other logarithmic scale and target type \a VAL
+   * @remarks
+   *   - use the logarithm conversion formula logb(x) ≡ logb(k)·logk(x)
+   *   - if target is in decibel, have to apply factor 10; asLogarithm() does that already
+   *   - if we are in decibel, log10 = dB /10; fold that factor in the logarithm of the base,
+   *     by using log(b)·x ≡ log(b^x) and rewrite that as b^x = exp(ln(b)·x)
+   */
+  
+  template<typename VAL>
+  template<typename TAR>
+  inline auto
+  Scale<VAL>::baseScale (Metric targetMetric)  const
+  {
+    using WorkType = CommonComputeType<VAL,TAR>;
+    if (metric == targetMetric)
+      return WorkType(1);
+    
+    auto myBase = [&]{switch (metric)
+                        {
+                          case NAT: return std::exp(WorkType(1));
+                          case BIN: return WorkType(2);
+                          case DEC: return std::exp(std::log(WorkType(10)) / 10);
+                          default:
+                            throw err::Logic{"Attempt to treat non-logarithmic scales as logarithms"};
+                          break;
+                        }};
+    return asLogarithm<WorkType> (targetMetric, myBase());
   }
   
   

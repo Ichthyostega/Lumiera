@@ -85656,13 +85656,41 @@
 <node CREATED="1789690632759" ID="ID_169878566" MODIFIED="1789690643602" TEXT="sonst &#x27f9; Feed addieren"/>
 </node>
 <node CREATED="1789690650447" ID="ID_763848405" MODIFIED="1789690934324" TEXT="Quelle multiplikativ &#x27f9; logarithmieren und addieren"/>
-<node CREATED="1789690952586" ID="ID_806764948" MODIFIED="1789690977990" TEXT="sonst delogarithmieren, Feed addieren, re-logarithmieren"/>
+<node COLOR="#5b280f" CREATED="1789690952586" ID="ID_806764948" MODIFIED="1789864844352" TEXT="sonst delogarithmieren, Feed addieren, re-logarithmieren">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1789864846110" ID="ID_1307210282" MODIFIED="1789865000390" TEXT="dieser Fall macht inhaltlich keinen Sinn">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man k&#246;nnte hier zwar delogarithmieren / relogarithmieren, aber was ist z.B. bei negativem Ergebnis...? und, noch mehr: welchen Sinn hat es zu einem <i>multiplikativen Faktor</i>&#160;etwas hinzuzuaddieren (was aber nicht logarithmisch ist)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789864856488" ID="ID_1180276604" MODIFIED="1789865677798" TEXT="diese Kombination kann eigentlich nur auf einen konzeptionellen Fehler hinweisen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Logarithmische Metrik verwendet man nur, wenn auch die Gr&#246;&#223;e, in ihrer Bedeutung f&#252;r die Wahrnehmung, selber logarithmisch ist. Zwar k&#246;nnte man sich rein-formal vorstellen, da&#223; so ein Fall durchaus mal auftreten kann &#8212; aber dann w&#228;re es besser, die Situation zu hinterfragen: fehlt da vielleicht die Markierung des Feed als <i>logarithmisch?</i>
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
 </node>
 <node CREATED="1789691026066" ID="ID_1521422421" MODIFIED="1789691072009" TEXT="Ziel ordinal und Quelle additiv(linear) &#x27f9; Ordinal-Step"/>
 <node CREATED="1789691081395" ID="ID_1029470467" MODIFIED="1789691128539" TEXT="Ziel nominal und Quelle nominal oder linear &#x27f9; Feed(codiert) ersetzt Quelle"/>
 </node>
 <node CREATED="1789691154922" ID="ID_1884775055" MODIFIED="1789691157587" TEXT="Berechnung">
-<node CREATED="1789691206195" ID="ID_521077468" MODIFIED="1789691213662" TEXT="Genauigkeit steigern">
+<node CREATED="1789691206195" ID="ID_521077468" MODIFIED="1789877446133" TEXT="Berechnung mit passender Genauigkeit">
 <node CREATED="1789691368028" ID="ID_1992504549" MODIFIED="1789691686368" TEXT="de/Logarithmieren : stets bestm&#xf6;glichen Floating-Point">
 <node CREATED="1789691697643" ID="ID_1724775924" MODIFIED="1789691708345" TEXT="von Integraltypen &#x27f9; stets double"/>
 <node CREATED="1789691709035" ID="ID_28970072" MODIFIED="1789691791715" TEXT="ansonsten maximalen floating-point-Typ">
@@ -85677,6 +85705,80 @@
   </body>
 </html>
 </richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1789869944433" ID="ID_1523483246" MODIFIED="1789877469677" TEXT="sollte das als Typedef ausdr&#xfc;cken: CommonComputeType&lt;T,U&gt;">
+<icon BUILTIN="yes"/>
+<node CREATED="1789869964502" ID="ID_1289831616" MODIFIED="1789869996988" TEXT="geht nicht als Serie von constrained templates">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...weil sich die Constraints typischerweise &#252;berlappen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789869998707" ID="ID_221126714" MODIFIED="1789870032835" TEXT="dann doch die Bedingung als std::contditional_t ausformulieren">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>typename</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>T</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>concept</b></font><font color="#3a1f18">&#160;number </font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#59253b">integral&lt;T&gt;</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>or</b></font><font color="#3a1f18">&#160;</font><font color="#59253b">floating_point&lt;T&gt;</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <br />
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/**</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the best-precision floating point type to carry out</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* a numeric operation to combine two values</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">*/</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#3a1f18">number </font><font color="#a34649"><b><u>T</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160; number </font><font color="#a34649"><b><u>U</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>CommonComputeType</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160; </font><font color="#535773">std</font><font color="#65533c">::</font><font color="#8c505c"><b>conditional_t</b></font><font color="#65533c">&lt;</font><font color="#59253b">integral&lt;T&gt;</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>and</b></font><font color="#3a1f18">&#160;</font><font color="#59253b">integral&lt;U&gt;</font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#7f004c"><b>double</b></font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#535773">std</font><font color="#65533c">::</font><font color="#8c505c"><b>common_type_t</b></font><font color="#65533c">&lt;</font><font color="#a34649"><b><u>T</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#a34649"><b><u>U</u></b></font><font color="#65533c">&gt;&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789876376322" ID="ID_1223578931" MODIFIED="1789876404350" TEXT="eigentliche Join-Operation in auf passendem Zwischentyp ausf&#xfc;hren">
+<icon BUILTIN="pencil"/>
+<node CREATED="1789876405765" ID="ID_1109556835" MODIFIED="1789876417629" TEXT="CommonComputeType verwenden"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1789876423793" ID="ID_603151342" MODIFIED="1789877266018" TEXT="Vorsicht Falle: Kombination von signed/unsigned">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1789877276449" ID="ID_1205492042" MODIFIED="1789877286892" TEXT="kann mich nicht allein auf die number-promotion verlassen"/>
+<node CREATED="1789877306308" ID="ID_1833375564" MODIFIED="1789877330237" TEXT="Gegenbeispiel: short(-3) * uint64_t(2)"/>
 </node>
 </node>
 <node CREATED="1789691232896" ID="ID_575039816" MODIFIED="1789691803456" TEXT="Konvertierung in den Ziel-Typ stets zuletzt (vor Conform)"/>
