@@ -177,8 +177,12 @@ namespace test{
           feedScale.metric = DEC; // in dB
           CHECK ( 7 == scale.join (4, int64_t(3), feedScale));   // 4 + 3dB ⟼ 4 * 1.995 ≡ 7.98 ⟼ truncated to 7
           
-          ////////////////////////////OOO die folgende Konvertierung entgleist....
-SHOW_EXPR(short(-3) * uint64_t(2))
+          Scale<short> sscale;
+          Scale<uint64_t> uscale = {.neutral = 1};
+          
+          // Note: number promotion rules of C++ would backfire nastily here...
+          CHECK (short(-3) * uint64_t(2) > numeric_limits<int64_t>::max());
+          CHECK (short(-6) == sscale.join (-3, uint64_t(2), uscale));
         }
       
       

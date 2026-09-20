@@ -207,6 +207,7 @@ namespace par {
     return rawVal;
   }
   
+  
   /**
    * Join and combine an additional feed value with an anchor value.
    * @note actual joining operation is picked based on both scales and types involved.
@@ -218,6 +219,8 @@ namespace par {
   Scale<VAL>::join (VAL const& value, SRC const& srcFeed, Scale<SRC> const& feedScale) const
   {
     VAL res{};
+    using JoinT = NumberJoinType<VAL,SRC>;
+    
     if (NOM == metric)
       UNIMPLEMENTED ("nominal and ordinal scales");
     if (LIN == metric)
@@ -226,9 +229,9 @@ namespace par {
           assignConverted (res, value * feedScale.template asFactor<VAL> (srcFeed));
         else
         if (feedScale.isFactor())
-          assignConverted (res, value * srcFeed);
+          assignConverted (res, JoinT(value) * JoinT(srcFeed));
         else
-          assignConverted (res, value + srcFeed);
+          assignConverted (res, JoinT(value) + JoinT(srcFeed));
       }
     else
     if (this->isLogarithmic())
@@ -245,7 +248,8 @@ namespace par {
       NOTREACHED ("Unexpected metric conversion case");
     
     return conform (res);
-  }
+  }     // last step: re-establish target scale rules
+  
   
   /**
    * Simplified join() variant, assuming the feed is based on the same scale.
@@ -258,6 +262,9 @@ namespace par {
                               : value + feed
                    );
   }
+  
+  
+  
   
   /** transform a logarithmic value into an exponential factor */
   template<typename VAL>

@@ -85574,9 +85574,7 @@
 <node CREATED="1789164561486" ID="ID_376197998" MODIFIED="1789164593909" TEXT="bedeutet: die darauf aufbauende Provision mu&#xdf; ggfs. einen double-Dispatch machen"/>
 <node CREATED="1789165221192" ID="ID_388299163" MODIFIED="1789687877259" TEXT="die Basis-Implementierung mu&#xdf; dann generisch sein und von Scale bereitgestellt werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Zwar k&#246;nnte man auch so argumentieren, da&#223; zun&#228;chst der Quell-Feed so adaptiert werden sollte, da&#223; der Basistyp gleich ist...
@@ -85593,22 +85591,18 @@
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789165187065" ID="ID_1109273270" MODIFIED="1789165213989" TEXT="Konsequenz &#x27f9; die Scale mu&#xdf; hier zwei Typ-Parameter nehmen">
 <node CREATED="1789679141799" ID="ID_907734481" MODIFIED="1789679174971" TEXT="die eigentliche Wert-Umwandlung ist hier vergleichsweise einfach">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...weil wir die Basis-Typen f&#252;r Parameter entsprechend eingeschr&#228;nkt haben
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789679178010" ID="ID_641923682" MODIFIED="1789679196411" TEXT="dazu gen&#xfc;gt die preClamp-Funktion (generisch, mit Varianten)"/>
 <node CREATED="1789679234347" ID="ID_562560611" MODIFIED="1789679253968" TEXT="diese h&#xe4;ngt aber (mit diversen weiteren Funktionen) in param-type.hpp"/>
@@ -85660,29 +85654,23 @@
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1789864846110" ID="ID_1307210282" MODIFIED="1789865000390" TEXT="dieser Fall macht inhaltlich keinen Sinn">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       man k&#246;nnte hier zwar delogarithmieren / relogarithmieren, aber was ist z.B. bei negativem Ergebnis...? und, noch mehr: welchen Sinn hat es zu einem <i>multiplikativen Faktor</i>&#160;etwas hinzuzuaddieren (was aber nicht logarithmisch ist)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789864856488" ID="ID_1180276604" MODIFIED="1789865677798" TEXT="diese Kombination kann eigentlich nur auf einen konzeptionellen Fehler hinweisen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Logarithmische Metrik verwendet man nur, wenn auch die Gr&#246;&#223;e, in ihrer Bedeutung f&#252;r die Wahrnehmung, selber logarithmisch ist. Zwar k&#246;nnte man sich rein-formal vorstellen, da&#223; so ein Fall durchaus mal auftreten kann &#8212; aber dann w&#228;re es besser, die Situation zu hinterfragen: fehlt da vielleicht die Markierung des Feed als <i>logarithmisch?</i>
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 </node>
@@ -85695,37 +85683,29 @@
 <node CREATED="1789691697643" ID="ID_1724775924" MODIFIED="1789691708345" TEXT="von Integraltypen &#x27f9; stets double"/>
 <node CREATED="1789691709035" ID="ID_28970072" MODIFIED="1789691791715" TEXT="ansonsten maximalen floating-point-Typ">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       d.h. wenn beide Seiten float sind, dann ist das wohl auch so beabsichtigt, und wir bleiben in der float-Dom&#228;ne. Ebenso wenn eine Seite long-double ist, dann alles dort. Sonst double verwenden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node COLOR="#435e98" CREATED="1789869944433" ID="ID_1523483246" MODIFIED="1789877469677" TEXT="sollte das als Typedef ausdr&#xfc;cken: CommonComputeType&lt;T,U&gt;">
 <icon BUILTIN="yes"/>
 <node CREATED="1789869964502" ID="ID_1289831616" MODIFIED="1789869996988" TEXT="geht nicht als Serie von constrained templates">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...weil sich die Constraints typischerweise &#252;berlappen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789869998707" ID="ID_221126714" MODIFIED="1789870032835" TEXT="dann doch die Bedingung als std::contditional_t ausformulieren">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
       <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
@@ -85766,22 +85746,79 @@
       </div>
     </div>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789876376322" ID="ID_1223578931" MODIFIED="1789876404350" TEXT="eigentliche Join-Operation in auf passendem Zwischentyp ausf&#xfc;hren">
-<icon BUILTIN="pencil"/>
-<node CREATED="1789876405765" ID="ID_1109556835" MODIFIED="1789876417629" TEXT="CommonComputeType verwenden"/>
+<node COLOR="#338800" CREATED="1789876376322" ID="ID_1223578931" MODIFIED="1789949324151" TEXT="eigentliche Join-Operation in auf passendem Zwischentyp ausf&#xfc;hren">
+<linktarget COLOR="#28b55c" DESTINATION="ID_1223578931" ENDARROW="Default" ENDINCLINATION="-139;1297;" ID="Arrow_ID_225645373" SOURCE="ID_1294384495" STARTARROW="None" STARTINCLINATION="111;6;"/>
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1789876423793" ID="ID_603151342" MODIFIED="1789877266018" TEXT="Vorsicht Falle: Kombination von signed/unsigned">
 <icon BUILTIN="broken-line"/>
 <node CREATED="1789877276449" ID="ID_1205492042" MODIFIED="1789877286892" TEXT="kann mich nicht allein auf die number-promotion verlassen"/>
 <node CREATED="1789877306308" ID="ID_1833375564" MODIFIED="1789877330237" TEXT="Gegenbeispiel: short(-3) * uint64_t(2)"/>
 </node>
+<node CREATED="1789876405765" ID="ID_1109556835" MODIFIED="1789877918151" TEXT="CommonComputeType verwenden">
+<icon BUILTIN="idea"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1789877920344" ID="ID_640203687" MODIFIED="1789877965236" STYLE="fork" TEXT="damit gehen aber nun auch einfache Additionen &#xfc;ber floating-point &#x2014; wollen wir das?">
+<icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1789691232896" ID="ID_575039816" MODIFIED="1789691803456" TEXT="Konvertierung in den Ziel-Typ stets zuletzt (vor Conform)"/>
+<node CREATED="1789878009733" ID="ID_1316581925" MODIFIED="1789878034175" TEXT="k&#xf6;nnte in dem Fall eine Verfeinerung machen">
+<node CREATED="1789878125407" ID="ID_1221061821" MODIFIED="1789878140752" TEXT="das sollte nur in dem problematischen Fall greifen"/>
+<node CREATED="1789878141565" ID="ID_1028048071" MODIFIED="1789878149899" TEXT="also promotion to larger unsigned"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789944510715" ID="ID_746993319" MODIFIED="1789944521564" TEXT="Claude beauftragt">
+<icon BUILTIN="wizard"/>
+<node CREATED="1789944530056" ID="ID_1759698759" MODIFIED="1789949125520" TEXT="schl&#xe4;gt eine Logik-Kaskade in Metaprogramming vor">
+<icon BUILTIN="info"/>
+<node CREATED="1789944639760" ID="ID_1968290680" MODIFIED="1789944654204" TEXT="floating-point &#x27f9; common_type macht die Arbeit"/>
+<node CREATED="1789944655000" ID="ID_1256360330" MODIFIED="1789944661011" TEXT="gleiche signedness &#x27f9; dto"/>
+<node CREATED="1789944662174" ID="ID_555669740" MODIFIED="1789944682944" TEXT="Bitl&#xe4;nge pr&#xfc;fen &#x27f9; wenn ausreichend, int64_t"/>
+<node CREATED="1789944684283" ID="ID_257781335" MODIFIED="1789945256482">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sonst: Promotion in <b>long double</b>
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      bei letzterem hab ich nachgehakt, Claude hat zun&#228;chst double vorgeschlagen.
+    </p>
+    <p>
+      Einsichten:
+    </p>
+    <ul>
+      <li>
+        double kann keinen uint64_t exakt halten (das wu&#223;te ich)
+      </li>
+      <li>
+        long double ist auf x64 entweder 80bit oder 128 bit, also ausreichend
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1789944547766" ID="ID_1252274825" MODIFIED="1789945715864" TEXT="verwendet std::type_identity&lt;T&gt; um den Ergebnistyp aus einer Funktion zu liefern">
+<arrowlink COLOR="#8794ab" DESTINATION="ID_921530714" ENDARROW="Default" ENDINCLINATION="-2571;328;" ID="Arrow_ID_1292265667" STARTARROW="None" STARTINCLINATION="-3659;127;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1789944580961" ID="ID_354835013" MODIFIED="1789944589683" TEXT="Ha! den Trick kannte ich noch nicht">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1789944608086" ID="ID_688346228" MODIFIED="1789949122394" TEXT="gef&#xe4;lt mir gut: der einzige problematische Fall steht als eigener Zweig">
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node CREATED="1789691232896" ID="ID_575039816" MODIFIED="1789945553816" TEXT="Konvertierung in den Ziel-Typ stets zuletzt (vor Conform)"/>
 </node>
 <node CREATED="1789691159130" ID="ID_1328281700" MODIFIED="1789691168924" TEXT="zuletzt Conform() anwenden"/>
 <node CREATED="1789691889609" ID="ID_569629897" MODIFIED="1789691899860" TEXT="Formulierung: mu&#xdf; Funktions-Kette bilden"/>
@@ -87214,8 +87251,18 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789172009585" TEXT="gemische Scales handhaben">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789949264299" TEXT="gemische Scales handhaben">
+<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789949153983" ID="ID_781783423" MODIFIED="1789949195612" TEXT="ushort-Scale mit Limits &#x27f5; kombiniert mit int64_t">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789949198651" ID="ID_294918713" MODIFIED="1789949239261" TEXT="Varianten mit &#xbb;multiplicative&#xab; und deciBel">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789949240757" ID="ID_1294384495" MODIFIED="1789949324151" TEXT="sicheres Umgehen der unsigned/signed-Problematik">
+<arrowlink COLOR="#28b55c" DESTINATION="ID_1223578931" ENDARROW="Default" ENDINCLINATION="-139;1297;" ID="Arrow_ID_225645373" STARTARROW="None" STARTINCLINATION="111;6;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 </node>
@@ -87455,9 +87502,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 <node CREATED="1789607298013" ID="ID_452068382" MODIFIED="1789607555871" TEXT="im Grunde offensichtlich und redundant">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...da ein Test eigentlich mehr machen sollte, als nur nochmal den Code zu wiederholen; und hier passiert nicht mehr, als ein cap an der boundrary, auf einem komplett offensichtlichen und einfachen Code-Pfad
@@ -87472,9 +87517,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 <node CREATED="1789607356261" ID="ID_1762601340" MODIFIED="1789607743052" TEXT="auch hier nur bedingt sinnvoll testbar">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...denn die eigentlich trickreiche Funktionalit&#228;t steckt in der Library-Funktion und ist dort schon per Unit-Test abgedeckt, und das korrekte Setup wird innerhalb des Scale-Descriptors gar nicht gepr&#252;ft (weil diese Pr&#252;fung in den umschlie&#223;enden Kontext geh&#246;rt, wo die Scale in einen Parameter-Typ eingebunden wird)
@@ -188877,6 +188920,28 @@ std::cout &lt;&lt; tmpl.render({&quot;what&quot;, &quot;World&quot;}) &lt;&lt; s
     </p>
   </body>
 </html></richcontent>
+</node>
+<node CREATED="1789945524270" ID="ID_921530714" MODIFIED="1789945715864" TEXT="std::type_identity&lt;T&gt;">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Ist nur eine ansonsten leere Struct mit einer typedef &quot;type = T&quot;
+      </li>
+      <li>
+        also die &#187;Identity&#171;-Metafunktion
+      </li>
+      <li>
+        n&#252;tzlich um eine Typ-Entscheidungslogik in einer Funktion per constexpr-if zu formulieren
+      </li>
+      <li>
+        und nat&#252;rlich allgemein, um Typen als first-class-citizens weiterzugeben
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#8794ab" DESTINATION="ID_921530714" ENDARROW="Default" ENDINCLINATION="-2571;328;" ID="Arrow_ID_1292265667" SOURCE="ID_1252274825" STARTARROW="None" STARTINCLINATION="-3659;127;"/>
 </node>
 </node>
 </node>

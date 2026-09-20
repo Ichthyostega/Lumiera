@@ -46,6 +46,11 @@ namespace par {
   using std::signed_integral;
   using std::floating_point;
   using std::numeric_limits;
+  using std::common_type_t;
+  using std::is_signed_v;
+  using std::is_unsigned_v;
+  using std::is_integral_v;
+  using std::is_floating_point_v;
   
   
   /* ===== type conversion implementation details ===== */
@@ -154,9 +159,44 @@ _Pragma("GCC diagnostic pop")
    * the best-precision floating point type to carry out
    * a numeric operation to combine two values
    */
-  template<number T, number U>
-  using CommonComputeType = std::conditional_t<integral<T> and integral<U>, double
-                                                                          , std::common_type_t<T, U>>;
+  template<number V, number W>
+  using CommonComputeType = std::conditional_t<integral<V> and integral<W>, double
+                                                                          , common_type_t<V, W>>;
+
+  namespace {
+    /** @internal decision logic for combining numeric parameters */
+    template<typename V, typename W>
+    auto
+    selectNumberJoinType()
+    {
+      if constexpr (is_floating_point_v<V> or is_floating_point_v<W>)
+          return std::type_identity<common_type_t<V,W>>{};
+      else
+      if constexpr (is_signed_v<V> == is_signed_v<W>)
+          return std::type_identity<common_type_t<V,W>>{};
+      else
+        { // mixed signed/unsigned integral: need a type wide enough to accommodate.
+          using U = std::conditional_t<is_signed_v<V>, W,V>;
+          if constexpr (8 > sizeof(U))
+              return std::type_identity<int64_t>{};
+          else
+              return std::type_identity<lflp>{};
+              // no standard integral type can hold uint64_t's full range signed.
+              // Expand to long double, which can hold 64bit without precision loss
+        }
+    }
+  }
+  
+  /**
+   * @return A common type to perform simple numeric operations safely.
+   *  - when one of the type parameters is floating-point, computations switch over there
+   *  - on integral types with same signedness, std::common_type handles a sane common ground
+   *  - when mixed computations can be managed within signed 64bit, switch up to that
+   *  - in the remaining problematic case(s), long double is used, as it can accommodate
+   *    the full 64bit value range without loss on platforms relevant for Lumiera.
+   */
+  template<typename A, typename B>
+  using NumberJoinType = typename decltype(selectNumberJoinType<A,B>())::type;
   
   
   
