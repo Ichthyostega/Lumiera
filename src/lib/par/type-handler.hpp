@@ -158,6 +158,10 @@ _Pragma("GCC diagnostic pop")
   /**
    * the best-precision floating point type to carry out
    * a numeric operation to combine two values
+   * @note the result type is always some floating point,
+   *       since the goal is to use the exponential / logarithm family.
+   * @todo 9/26 we _could_ go from integral to long double for 64bit,
+   *       yet it is not clear if we ever need that tiny bit of extra precision...
    */
   template<number V, number W>
   using CommonComputeType = std::conditional_t<integral<V> and integral<W>, double

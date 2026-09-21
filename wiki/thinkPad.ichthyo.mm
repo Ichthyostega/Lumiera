@@ -85973,7 +85973,7 @@
 <linktarget COLOR="#c50711" DESTINATION="ID_621869035" ENDARROW="Default" ENDINCLINATION="108;0;" ID="Arrow_ID_191032855" SOURCE="ID_1491788669" STARTARROW="None" STARTINCLINATION="34;-37;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
-<node CREATED="1789003479184" ID="ID_833220665" MODIFIED="1789003552060" TEXT="The two doors that actually close">
+<node CREATED="1789003479184" ID="ID_833220665" MODIFIED="1789003479184" TEXT="The two doors that actually close">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85985,7 +85985,7 @@
         <b>The persisted form</b>. The moment a session file records a parameter with a scale, the meaning of its qualifiers is frozen or needs migration. It's worth spending more thought on what a Scale looks like when written out than on what it looks like in memory.
       </li>
       <li>
-        <b>Keeping Scale reducible to data</b>. You mention a possible connection to rules later. A rules system can only reason about a Scale if the Scale <em>is</em>&#160;&#160;a small tuple of facts (metric, bounds, cyclic flag, domain-set id, default) with a fixed interpreter, rather than a polymorphic object whose behaviour exists only as C++. That constraint costs you nothing today, since your qualifier-based design already satisfies it. It's just worth adopting as a deliberate rule so that a future <code>conform()</code>&#160;&#160;override doing something clever doesn't quietly break it.
+        <b>Keeping Scale reducible to data</b>. You mention a possible connection to rules later. A rules system can only reason about a Scale if the Scale <em>is</em>&#160;a small tuple of facts (metric, bounds, cyclic flag, domain-set id, default) with a fixed interpreter, rather than a polymorphic object whose behaviour exists only as C++. That constraint costs you nothing today, since your qualifier-based design already satisfies it. It's just worth adopting as a deliberate rule so that a future <code><font color="#673a3a">conform()</font></code>&#160;override doing something clever doesn't quietly break it.
       </li>
     </ul>
   </body>
@@ -87265,14 +87265,48 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#338800" CREATED="1789961742643" ID="ID_949990390" MODIFIED="1789961760832" TEXT="Verbindung verschiedener log-Scales">
 <icon BUILTIN="button_ok"/>
-<node COLOR="#435e98" CREATED="1789961765581" ID="ID_1536983378" MODIFIED="1789961783683" TEXT="Umwandlung linear &#x27f7; log"/>
+<node COLOR="#435e98" CREATED="1789961765581" ID="ID_1536983378" MODIFIED="1789961783683" TEXT="Umwandlung linear &#x27f7; log">
+<node CREATED="1790021597423" ID="ID_5025438" MODIFIED="1790021610941" TEXT="die Konvertierungs-Funktionen sind strukturell eigenartig">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1790021612645" ID="ID_1614531537" MODIFIED="1790021624855" TEXT="sie h&#xe4;ngen eigentlich zwischen zwei Scales"/>
+<node CREATED="1790021853785" ID="ID_1972131978" LINK="https://math.stackexchange.com/questions/14133/clarify-why-all-logarithms-differ-by-a-constant" MODIFIED="1790022525577" TEXT="sie reflektieren die (verwirrende) Struktur der Logarithmen-Konvertierung">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich mu&#223; die Formeln jedes mal wieder nachschlagen, bzw mir herleiten, weil diese Formeln so eigenartig <i>&#252;ber Kreuz</i>&#160;aufgebaut sind:
+    </p>
+    <ul>
+      <li>
+        <font color="#79320b" face="Monospaced">log</font><font color="#79320b" face="Monospaced" size="2"><i>b</i></font><font color="#79320b" face="Monospaced">(x) &#8801; log</font><font color="#79320b" face="Monospaced" size="2"><i>k</i></font><font color="#79320b" face="Monospaced">(x)/log</font><font color="#79320b" face="Monospaced" size="2"><i>k</i></font><font color="#79320b" face="Monospaced">(b)</font>
+      </li>
+      <li>
+        <font color="#79320b" face="Monospaced">log</font><font color="#79320b" face="Monospaced" size="2"><i>b</i></font><font color="#79320b" face="Monospaced">(x) &#8801; log</font><font color="#79320b" face="Monospaced" size="2"><i>b</i></font><font color="#79320b" face="Monospaced">(k)&#183;log</font><font color="#79320b" face="Monospaced" size="2"><i>k</i></font><font color="#79320b" face="Monospaced">(x)</font>
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1790021537463" ID="ID_1193038289" MODIFIED="1790022831555" TEXT="Funktion Scale&lt;VAL&gt;::asLogarithm ist zudem gar nicht von der Quell-Skala abh&#xe4;ngig"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790022911017" ID="ID_761833274" MODIFIED="1790024210457" TEXT="Code-Struktur / Design-Frage : als freie Funktionen?">
+<node CREATED="1790022936425" ID="ID_1681792313" MODIFIED="1790023005221" TEXT="als Member-Funktionen spart man sich 2 Parameter in zwei F&#xe4;llen">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1790022966402" ID="ID_1905759427" MODIFIED="1790022996702" TEXT="allerdings m&#xfc;ssen sie dann auf das Scale-API, und man ruft sie mit &quot;template&quot;-Qualifier auf">
+<icon BUILTIN="smiley-neutral"/>
+</node>
+<node COLOR="#135457" CREATED="1790023008316" ID="ID_1604048781" MODIFIED="1790024202124" TEXT="also: in den sauren Apfel bei&#xdf;en &#x2014; isbesserso">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1789961784810" ID="ID_245445484" MODIFIED="1789961910375" TEXT="Basis-Konvertierung logarithmischer werte"/>
 <node COLOR="#435e98" CREATED="1789961796062" ID="ID_1145409092" MODIFIED="1789961910354" TEXT="spezieller Twist: in Decibels steckt ein Faktor 10">
 <node CREATED="1789961817086" ID="ID_909916918" MODIFIED="1789961906542" TEXT="wenn als Input verwendet, mu&#xdf; der rausdividiert werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...und dieses Herausdividieren falte ich trickreich in den log-Basis-Konvertierungsfaktor.
@@ -87287,6 +87321,27 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1789961831540" ID="ID_104579195" MODIFIED="1789961843094" TEXT="aber auf der Ergebnis-Seite mu&#xdf; er aufgeschlagen werden"/>
 </node>
 <node COLOR="#435e98" CREATED="1789961912393" ID="ID_1778190029" MODIFIED="1789961925432" TEXT="linearer Offset auf Logarithmus wird verweigert"/>
+</node>
+<node COLOR="#5928b5" CREATED="1789961961491" ID="ID_219252546" MODIFIED="1790021532727" TEXT="und ja: wer testet, der findet">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        Type-promotion-Bug in der Anwendung der pow()-Funktion
+      </li>
+      <li>
+        logb() liefert nur den exponenten, log2() den 2-er-Logarithmus
+      </li>
+      <li>
+        das <i>Wiederverwenden</i>&#160;der asLogarithm()-Funktion macht deutlich, da&#223;&#160;diese einen unn&#246;tigen Typ-Constraint auf den VAL-Parameter der Ausgans-Scale erzwingt
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" STARTARROW="None" STARTINCLINATION="16;533;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
 </node>
 </node>
@@ -87560,6 +87615,16 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789675604211" ID="ID_201071963" MODIFIED="1789676070358" TEXT="verify_valueJoining">
 <icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1790015115678" ID="ID_1510723485" MODIFIED="1790015142255" TEXT="Schritt-1 : teste Typ-Konvertierung und Zusammenspiel mit conform()">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1790015143816" ID="ID_1173177816" MODIFIED="1790015164942" TEXT="Schritt-2 : kl&#xe4;re und repariere das noch bestehende signed/unsigned-Problem">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790015165677" ID="ID_1207373600" MODIFIED="1790021319393" TEXT="Schritt-2 : Pfadabdeckung der Logarithmus-Skalen-Behandlung">
+<linktarget COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" SOURCE="ID_219252546" STARTARROW="None" STARTINCLINATION="16;533;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 </node>

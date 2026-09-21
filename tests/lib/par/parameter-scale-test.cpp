@@ -202,23 +202,46 @@ namespace test{
           //
           Scale<float> fscale  = {.metric = NAT};
           Scale<float> feed_dB = {.metric = DEC};
-          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log(100.0f) ));        // dB ⟼ natural logarithm; note 10dB ≙ factor 10 * lg(10) value divided / 10
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log(100.0f) ));          // dB ⟼ natural logarithm; note 20dB ≙ factor 10 * lg(100); input 20 divided by 10
+          fscale.metric = BIN;
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log2(100.0f)));          // dB ⟼ binary logarithm; (factor 1/10 on input is folded into the log factor)
+          fscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , 20.0f ));                // dB ⟼ dB just passed-through and then added to value ≔ 0.0
           
           fscale.metric = DEC;
-          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , 20.0f ));              // dB ⟼ dB just passed-through and then added to value ≔ 0.0
-          
           feedScale.metric = BIN;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(1.0f/8)*10)); // binary log (given as int value)  ⟼  dB
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(1.0f/8) *10));  // binary log (given as int value)  ⟼  dB
+          feedScale.metric = NAT;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(exp(-3))*10));  // natural log (input as int)       ⟼  dB
+          feedScale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale),           -3     ));  // dB ⟼ dB just passed-through
+          
+          fscale.metric = BIN;
+          feedScale.metric = BIN;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale),           -3     ));  // lb ⟼ lb just passed-through
+          feedScale.metric = NAT;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log2 (exp(-3))   ));  // natural log  ⟼  binary log
+          feedScale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, int64_t(-30),feedScale), log2 (1.0/1000)  ));  // conversion factor: dB/10 ⟼ binary log
           
           fscale.metric = LIN;
-          CHECK (roughEQ (fscale.join (1, int64_t(-3), feedScale),       1.0f/8    )); // binary log applied as factor to a linear scale
+          feedScale.metric = BIN;
+          CHECK (roughEQ (fscale.join (1, int64_t(-3), feedScale),       1.0f/8    ));   // binary log applied as factor to a linear scale
+          feedScale.metric = NAT;
+          CHECK (roughEQ (fscale.join (1, int64_t(-1), feedScale),       1.0f/exp(1)));  // natural log applied as factor 1/e
+          feedScale.metric = DEC;
+          CHECK (roughEQ (fscale.join (1, int64_t(-30),feedScale),       1.0f/1000 ));   // decibels applied as factor : -30 dB ≙ 10^-3
           
           fscale.metric = BIN;
           feedScale.metric = LIN;
           feedScale.neutral = 1;
           CHECK (feedScale.isFactor());
           CHECK (fscale.isLogarithmic());
-          CHECK (1 + 3 == fscale.join (1, int64_t(8), feedScale));   // feed factor 8  ⟼  to binary logarithmic fscale (8 ≡ 2^3) and added there
+          CHECK (         fscale.join (1, int64_t(8),  feedScale) == 1 + 3);             // feed factor 8  ⟼  to binary logarithmic fscale (8 ≡ 2^3) and added there (exact)
+          fscale.metric = NAT;
+          CHECK (roughEQ (fscale.join (1, int64_t(8),  feedScale),   1 + logf(8)));      // feed factor 8  ⟼  now applied to a natural log scale (and added to one, in float)
+          fscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (1, int64_t(100),feedScale),   1 + 20));           // feed factor 8  ⟼  now applied as offset in decibels
           
           feedScale.neutral = 0;
           CHECK (not feedScale.isFactor());

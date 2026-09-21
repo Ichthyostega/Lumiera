@@ -90,16 +90,6 @@ namespace par {
       VAL join (VAL const&, SRC const&, Scale<SRC> const&) const;
       VAL join (VAL const&, VAL const&)                    const;
       
-      /* ===== conversion helpers ===== */
-      
-      template<typename TAR>
-      auto asFactor (VAL const&)  const;
-      
-      template<typename TAR>
-      auto baseScale (Metric targetMetric)  const;
-      
-      template<typename TAR>
-      auto asLogarithm (Metric targetMetric, VAL const&)  const;
     };
   
   
@@ -208,6 +198,80 @@ namespace par {
   }
   
   
+  namespace { // logarithmic scale conversions...
+    
+    /** transform a logarithmic value into an exponential factor */
+    template<typename TAR, typename VAL>
+    inline auto
+    expFactor (Metric metric, VAL const& value)
+    {
+      using WorkType = CommonComputeType<VAL,TAR>;
+      switch (metric)
+        {
+          case NAT: return std::exp (WorkType(value));
+          case BIN: return std::exp2 (WorkType(value));
+          case DEC: return std::pow (WorkType(10), WorkType(value/10.0));
+          default:
+            throw err::Logic{_Fmt{"Attempt to compute exponential "
+                                  "from a non-logarithmic value with metric %d"}
+                                 % metric};
+          break;
+        }
+    }
+    
+    /** transform this value into a suitable logarithm for the target scale */
+    template<typename TAR, typename VAL>
+    inline auto
+    asLogarithm (Metric targetMetric, VAL const& value)
+    {
+      if (isNeg (value))
+        throw err::Invalid{_Fmt{"Attempt to take logarithm from %f < 0"}
+                               % value};
+      using WorkType = CommonComputeType<VAL,TAR>;
+      switch (targetMetric)
+        {
+          case NAT: return std::log (WorkType(value));
+          case BIN: return std::log2 (WorkType(value));
+          case DEC: return std::log10 (WorkType(value)) * 10;
+          default:
+            throw err::Logic{_Fmt{"Attempt to compute logarithm "
+                                  "for a non-logarithmic metric %d"}
+                                 % targetMetric};
+          break;
+        }
+    }
+    
+    /** provide the adaptation factor from this logarithmic scale
+     *  to the given other logarithmic scale and target type \a VAL
+     * @remarks
+     *   - use the logarithm conversion formula logb(x) ≡ logb(k)·logk(x)
+     *   - if target is in decibel, have to apply factor 10; asLogarithm() does that already
+     *   - if we are in decibel, log10 = dB /10; fold that factor in the logarithm of the base,
+     *     by using log(b)·x ≡ log(b^x) and rewrite that as b^x = exp(ln(b)·x)
+     */
+    
+    template<typename TAR, typename VAL>
+    inline auto
+    baseScale (Metric targetMetric, Metric srcMetric)
+    {
+      using WorkType = CommonComputeType<VAL,TAR>;
+      if (srcMetric == targetMetric)
+        return WorkType(1);
+      
+      auto srcBase = [&]{switch (srcMetric)
+                          {
+                            case BIN: return WorkType(2);
+                            case NAT: return std::exp (WorkType(1));
+                            case DEC: return std::exp (std::log (WorkType(10)) / 10);
+                            default:
+                              throw err::Logic{"Attempt to treat non-logarithmic scales as logarithms"};
+                            break;
+                          }};
+      return asLogarithm<WorkType> (targetMetric, srcBase());
+    }
+  }//(End) log helpers
+  
+  
   /**
    * Join and combine an additional feed value with an anchor value.
    * @note actual joining operation is picked based on both scales and types involved.
@@ -226,7 +290,7 @@ namespace par {
     if (LIN == metric)
       {
         if (feedScale.isLogarithmic())
-          assignConverted (res, value * feedScale.template asFactor<VAL> (srcFeed));
+          assignConverted (res, value * expFactor<VAL> (feedScale.metric, srcFeed));
         else
         if (feedScale.isFactor())
           assignConverted (res, JoinT(value) * JoinT(srcFeed));
@@ -237,10 +301,10 @@ namespace par {
     if (this->isLogarithmic())
       {
         if (feedScale.isLogarithmic())
-          assignConverted (res, value + feedScale.template baseScale<VAL>(metric) * srcFeed);
+          assignConverted (res, value + baseScale<VAL,SRC> (metric,feedScale.metric) * srcFeed);
         else
         if (feedScale.isFactor())
-          assignConverted (res, value + feedScale.template asLogarithm<VAL> (metric, srcFeed));
+          assignConverted (res, value + asLogarithm<VAL> (metric, srcFeed));
         else
           throw err::Invalid {"adding a non-logarithmic data feed on top of a logarithmic base value is pointless."};
       }
@@ -261,82 +325,6 @@ namespace par {
     return conform (isFactor()? value * feed
                               : value + feed
                    );
-  }
-  
-  
-  
-  
-  /** transform a logarithmic value into an exponential factor */
-  template<typename VAL>
-  template<typename TAR>
-  inline auto
-  Scale<VAL>::asFactor (VAL const& value)  const
-  {
-    using WorkType = CommonComputeType<VAL,TAR>;
-    switch (metric)
-      {
-        case NAT: return std::exp (WorkType(value));
-        case BIN: return std::exp2 (WorkType(value));
-        case DEC: return std::pow (WorkType(10), WorkType(value/10.0));
-        default:
-          throw err::Logic{_Fmt{"Attempt to compute exponential "
-                                "from a non-logarithmic value with metric %d"}
-                               % metric};
-        break;
-      }
-  }
-  
-  /** transform this value into a suitable logarithm for the target scale */
-  template<typename VAL>
-  template<typename TAR>
-  inline auto
-  Scale<VAL>::asLogarithm (Metric targetMetric, VAL const& value)  const
-  {
-    if (isNeg (value))
-      throw err::Invalid{_Fmt{"Attempt to take logarithm from %f < 0"}
-                             % value};
-    using WorkType = CommonComputeType<VAL,TAR>;
-    switch (targetMetric)
-      {
-        case NAT: return std::log (WorkType(value));
-        case BIN: return std::logb (WorkType(value));
-        case DEC: return std::log10 (WorkType(value)) * 10;
-        default:
-          throw err::Logic{_Fmt{"Attempt to compute logarithm "
-                                "for a non-logarithmic metric %d"}
-                               % targetMetric};
-        break;
-      }
-  }
-  
-  /** provide the adaptation factor from this logarithmic scale
-   *  to the given other logarithmic scale and target type \a VAL
-   * @remarks
-   *   - use the logarithm conversion formula logb(x) ≡ logb(k)·logk(x)
-   *   - if target is in decibel, have to apply factor 10; asLogarithm() does that already
-   *   - if we are in decibel, log10 = dB /10; fold that factor in the logarithm of the base,
-   *     by using log(b)·x ≡ log(b^x) and rewrite that as b^x = exp(ln(b)·x)
-   */
-  
-  template<typename VAL>
-  template<typename TAR>
-  inline auto
-  Scale<VAL>::baseScale (Metric targetMetric)  const
-  {
-    using WorkType = CommonComputeType<VAL,TAR>;
-    if (metric == targetMetric)
-      return WorkType(1);
-    
-    auto myBase = [&]{switch (metric)
-                        {
-                          case NAT: return std::exp(WorkType(1));
-                          case BIN: return WorkType(2);
-                          case DEC: return std::exp(std::log(WorkType(10)) / 10);
-                          default:
-                            throw err::Logic{"Attempt to treat non-logarithmic scales as logarithms"};
-                          break;
-                        }};
-    return asLogarithm<WorkType> (targetMetric, myBase());
   }
   
   
