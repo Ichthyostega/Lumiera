@@ -116,7 +116,7 @@ namespace test{
       /** @test Scales can be configured to wrap cyclically, e.g. for angles.
        *      - demonstrate an unsigned angle scale with short precision
        *      - demonstrate a high-resolution scale symmetric to zero
-       * @todo WIP 9/26 ✔define ⟶ 🔁 implement
+       * @todo WIP 9/26 ✔define ⟶ ✔ implement
        */
       void
       verify_cyclicScale()
@@ -158,7 +158,21 @@ namespace test{
       
       
       /** @test Base value and data feeds from differing Scales can be joined together
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       *      - when the target scale defines limits (or is cyclic),
+       *        this conforming is applied after all conversions
+       *      - a feed can be marked as "factor", in which case
+       *        the feed is multiplied to the target rather than added
+       *      - even scales with integral type can carry log meaning
+       *      - suitable intermediary types used for good precision,
+       *        and especially to avoid wrapping signed into unsigned
+       *      - the supported logarithmic flavours are accommodated,
+       *        possibly converting the base of the logarithm accordingly
+       *      - the factor 10 inherent to decibels is applied / removed
+       *        before combining decibel values with other logarithms
+       *      - applying a linear factor to a logarithmic scale is
+       *        transformed into an addition in the logarithmic domain
+       *      - adding a linear offset to a logarithmic scale is rejected
+       * @todo WIP 9/26 🔁 define ⟶ ✔ implement
        */
       void
       verify_valueJoining()
@@ -183,6 +197,33 @@ namespace test{
           // Note: number promotion rules of C++ would backfire nastily here...
           CHECK (short(-3) * uint64_t(2) > numeric_limits<int64_t>::max());
           CHECK (short(-6) == sscale.join (-3, uint64_t(2), uscale));
+          
+           //---floating-point logarithmic scale conversions---
+          //
+          Scale<float> fscale  = {.metric = NAT};
+          Scale<float> feed_dB = {.metric = DEC};
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log(100.0f) ));        // dB ⟼ natural logarithm; note 10dB ≙ factor 10 * lg(10) value divided / 10
+          
+          fscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , 20.0f ));              // dB ⟼ dB just passed-through and then added to value ≔ 0.0
+          
+          feedScale.metric = BIN;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(1.0f/8)*10)); // binary log (given as int value)  ⟼  dB
+          
+          fscale.metric = LIN;
+          CHECK (roughEQ (fscale.join (1, int64_t(-3), feedScale),       1.0f/8    )); // binary log applied as factor to a linear scale
+          
+          fscale.metric = BIN;
+          feedScale.metric = LIN;
+          feedScale.neutral = 1;
+          CHECK (feedScale.isFactor());
+          CHECK (fscale.isLogarithmic());
+          CHECK (1 + 3 == fscale.join (1, int64_t(8), feedScale));   // feed factor 8  ⟼  to binary logarithmic fscale (8 ≡ 2^3) and added there
+          
+          feedScale.neutral = 0;
+          CHECK (not feedScale.isFactor());
+          VERIFY_FAIL ("adding a non-logarithmic data feed on top of a logarithmic base value"
+                      , fscale.join (1, int64_t(8), feedScale));
         }
       
       

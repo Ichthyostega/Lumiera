@@ -277,7 +277,7 @@ namespace par {
       {
         case NAT: return std::exp (WorkType(value));
         case BIN: return std::exp2 (WorkType(value));
-        case DEC: return std::pow<WorkType> (10, value/10.0);
+        case DEC: return std::pow (WorkType(10), WorkType(value/10.0));
         default:
           throw err::Logic{_Fmt{"Attempt to compute exponential "
                                 "from a non-logarithmic value with metric %d"}

@@ -87251,8 +87251,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789949264299" TEXT="gemische Scales handhaben">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789961933370" TEXT="gemische Scales handhaben">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1789949153983" ID="ID_781783423" MODIFIED="1789949195612" TEXT="ushort-Scale mit Limits &#x27f5; kombiniert mit int64_t">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -87262,6 +87262,31 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node COLOR="#338800" CREATED="1789949240757" ID="ID_1294384495" MODIFIED="1789949324151" TEXT="sicheres Umgehen der unsigned/signed-Problematik">
 <arrowlink COLOR="#28b55c" DESTINATION="ID_1223578931" ENDARROW="Default" ENDINCLINATION="-139;1297;" ID="Arrow_ID_225645373" STARTARROW="None" STARTINCLINATION="111;6;"/>
 <icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1789961742643" ID="ID_949990390" MODIFIED="1789961760832" TEXT="Verbindung verschiedener log-Scales">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1789961765581" ID="ID_1536983378" MODIFIED="1789961783683" TEXT="Umwandlung linear &#x27f7; log"/>
+<node COLOR="#435e98" CREATED="1789961784810" ID="ID_245445484" MODIFIED="1789961910375" TEXT="Basis-Konvertierung logarithmischer werte"/>
+<node COLOR="#435e98" CREATED="1789961796062" ID="ID_1145409092" MODIFIED="1789961910354" TEXT="spezieller Twist: in Decibels steckt ein Faktor 10">
+<node CREATED="1789961817086" ID="ID_909916918" MODIFIED="1789961906542" TEXT="wenn als Input verwendet, mu&#xdf; der rausdividiert werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...und dieses Herausdividieren falte ich trickreich in den log-Basis-Konvertierungsfaktor.
+    </p>
+    <p>
+      &#220;berraschung: die Logarithmen-Matematik funktioniert ... aber das dumme Mensch braucht endlos um zu kapieren da&#223; die Beispielwerte stimmen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1789961831540" ID="ID_104579195" MODIFIED="1789961843094" TEXT="aber auf der Ergebnis-Seite mu&#xdf; er aufgeschlagen werden"/>
+</node>
+<node COLOR="#435e98" CREATED="1789961912393" ID="ID_1778190029" MODIFIED="1789961925432" TEXT="linearer Offset auf Logarithmus wird verweigert"/>
 </node>
 </node>
 </node>
