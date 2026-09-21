@@ -37,9 +37,18 @@ namespace test{
   
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
-  namespace {//Test fixture....
+  namespace {//Test helpers....
     
-  }//(End)Test fixture
+    template<typename NUM>
+    constexpr NUM _MAX = std::numeric_limits<NUM>::max();
+    
+    template<typename NUM>
+    constexpr NUM _MIN = std::numeric_limits<NUM>::lowest();
+    
+    template<floating_point FLO>
+    constexpr FLO _EPSILON = std::numeric_limits<FLO>::epsilon();
+    
+  }//(End)Test helpers
   
   
   
@@ -178,18 +187,18 @@ namespace test{
       verify_valueJoining()
         {
           Scale<ushort> scale = {.minVal = 2, .maxVal = 10};
-          Scale<int64_t> feedScale;
+          Scale<int64_t> lscale;
           
-          CHECK ( 5 == scale.join (2, int64_t(3), feedScale));   // 2+3 ≡ 5     (all computations done as double)
-          CHECK (10 == scale.join (5, int64_t(8), feedScale));   // 5+8 ≡ 13 ⟼ capped to 10
+          CHECK ( 5 == scale.join (2, int64_t(3), lscale));   // 2+3 ≡ 5     (all computations done as double)
+          CHECK (10 == scale.join (5, int64_t(8), lscale));   // 5+8 ≡ 13 ⟼ capped to 10
           
-          feedScale.neutral = 1;
-          CHECK (feedScale.isFactor());
-          CHECK ( 6 == scale.join (2, int64_t(3), feedScale));   // 2*3 ≡ 6
-          CHECK ( 2 == scale.join (2, int64_t(-3),feedScale));   // 2*-3 ≡ -6 ⟼ first conditioned to ushort domain, then capped to 2
+          lscale.neutral = 1;
+          CHECK (lscale.isFactor());
+          CHECK ( 6 == scale.join (2, int64_t(3), lscale));   // 2*3 ≡ 6
+          CHECK ( 2 == scale.join (2, int64_t(-3),lscale));   // 2*-3 ≡ -6 ⟼ first conditioned to ushort domain, then capped to 2
           
-          feedScale.metric = DEC; // in dB
-          CHECK ( 7 == scale.join (4, int64_t(3), feedScale));   // 4 + 3dB ⟼ 4 * 1.995 ≡ 7.98 ⟼ truncated to 7
+          lscale.metric = DEC; // in dB
+          CHECK ( 7 == scale.join (4, int64_t(3), lscale));   // 4 + 3dB ⟼ 4 * 1.995 ≡ 7.98 ⟼ truncated to 7
           
           Scale<short> sscale;
           Scale<uint64_t> uscale = {.neutral = 1};
@@ -202,51 +211,94 @@ namespace test{
           //
           Scale<float> fscale  = {.metric = NAT};
           Scale<float> feed_dB = {.metric = DEC};
-          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log(100.0f) ));          // dB ⟼ natural logarithm; note 20dB ≙ factor 10 * lg(100); input 20 divided by 10
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log(100.0f) ));       // dB ⟼ natural logarithm; note 20dB ≙ factor 10 * lg(100); input 20 divided by 10
           fscale.metric = BIN;
-          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log2(100.0f)));          // dB ⟼ binary logarithm; (factor 1/10 on input is folded into the log factor)
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , log2(100.0f)));       // dB ⟼ binary logarithm; (factor 1/10 on input is folded into the log factor)
           fscale.metric = DEC;
-          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , 20.0f ));                // dB ⟼ dB just passed-through and then added to value ≔ 0.0
+          CHECK (roughEQ (fscale.join (0, float(20), feed_dB) , 20.0f ));             // dB ⟼ dB just passed-through and then added to value ≔ 0.0
           
           fscale.metric = DEC;
-          feedScale.metric = BIN;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(1.0f/8) *10));  // binary log (given as int value)  ⟼  dB
-          feedScale.metric = NAT;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log10(exp(-3))*10));  // natural log (input as int)       ⟼  dB
-          feedScale.metric = DEC;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale),           -3     ));  // dB ⟼ dB just passed-through
+          lscale.metric = BIN;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), lscale), log10(1.0f/8) *10));  // binary log (given as int value)  ⟼  dB
+          lscale.metric = NAT;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), lscale), log10(exp(-3))*10));  // natural log (input as int)       ⟼  dB
+          lscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), lscale),           -3     ));  // dB ⟼ dB just passed-through
           
           fscale.metric = BIN;
-          feedScale.metric = BIN;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale),           -3     ));  // lb ⟼ lb just passed-through
-          feedScale.metric = NAT;
-          CHECK (roughEQ (fscale.join (0, int64_t(-3), feedScale), log2 (exp(-3))   ));  // natural log  ⟼  binary log
-          feedScale.metric = DEC;
-          CHECK (roughEQ (fscale.join (0, int64_t(-30),feedScale), log2 (1.0/1000)  ));  // conversion factor: dB/10 ⟼ binary log
+          lscale.metric = BIN;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), lscale),           -3     ));  // lb ⟼ lb just passed-through
+          lscale.metric = NAT;
+          CHECK (roughEQ (fscale.join (0, int64_t(-3), lscale), log2 (exp(-3))   ));  // natural log  ⟼  binary log
+          lscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (0, int64_t(-30),lscale), log2 (1.0/1000)  ));  // conversion factor: dB/10 ⟼ binary log
           
           fscale.metric = LIN;
-          feedScale.metric = BIN;
-          CHECK (roughEQ (fscale.join (1, int64_t(-3), feedScale),       1.0f/8    ));   // binary log applied as factor to a linear scale
-          feedScale.metric = NAT;
-          CHECK (roughEQ (fscale.join (1, int64_t(-1), feedScale),       1.0f/exp(1)));  // natural log applied as factor 1/e
-          feedScale.metric = DEC;
-          CHECK (roughEQ (fscale.join (1, int64_t(-30),feedScale),       1.0f/1000 ));   // decibels applied as factor : -30 dB ≙ 10^-3
+          lscale.metric = BIN;
+          CHECK (roughEQ (fscale.join (1, int64_t(-3), lscale),       1.0f/8    ));   // binary log applied as factor to a linear scale
+          lscale.metric = NAT;
+          CHECK (roughEQ (fscale.join (1, int64_t(-1), lscale),       1.0f/exp(1)));  // natural log applied as factor 1/e
+          lscale.metric = DEC;
+          CHECK (roughEQ (fscale.join (1, int64_t(-30),lscale),       1.0f/1000 ));   // decibels applied as factor : -30 dB ≙ 10^-3
           
           fscale.metric = BIN;
-          feedScale.metric = LIN;
-          feedScale.neutral = 1;
-          CHECK (feedScale.isFactor());
+          lscale.metric = LIN;
+          lscale.neutral = 1;
+          CHECK (lscale.isFactor());
           CHECK (fscale.isLogarithmic());
-          CHECK (         fscale.join (1, int64_t(8),  feedScale) == 1 + 3);             // feed factor 8  ⟼  to binary logarithmic fscale (8 ≡ 2^3) and added there (exact)
+          CHECK (         fscale.join (1, int64_t(8),  lscale) == 1 + 3);             // feed factor 8  ⟼  to binary logarithmic fscale (8 ≡ 2^3) and added there (exact)
           fscale.metric = NAT;
-          CHECK (roughEQ (fscale.join (1, int64_t(8),  feedScale),   1 + logf(8)));      // feed factor 8  ⟼  now applied to a natural log scale (and added to one, in float)
+          CHECK (roughEQ (fscale.join (1, int64_t(8),  lscale),   1 + logf(8)));      // feed factor 8  ⟼  now applied to a natural log scale (and added to one, in float)
           fscale.metric = DEC;
-          CHECK (roughEQ (fscale.join (1, int64_t(100),feedScale),   1 + 20));           // feed factor 8  ⟼  now applied as offset in decibels
+          CHECK (roughEQ (fscale.join (1, int64_t(100),lscale),   1 + 20));           // feed factor 8  ⟼  now applied as offset in decibels
           
-          feedScale.neutral = 0;
-          CHECK (not feedScale.isFactor());
+          lscale.neutral = 0;
+          CHECK (not lscale.isFactor());
           VERIFY_FAIL ("adding a non-logarithmic data feed on top of a logarithmic base value"
-                      , fscale.join (1, int64_t(8), feedScale));
+                      , fscale.join (1, int64_t(8), lscale));
+          
+          
+          //---verify a long-double target scale
+          //
+          Scale<lflp> megaScale = {.minVal = -10, .maxVal = +10};    // setup a cyclic scale using the long double domain
+          megaScale.cyclicLim = util::limit_cyclicWrap<lflp>(20);    // (cyclic wrap is handled by conform(); just another little twist)
+          CHECK (megaScale.isCyclic());
+          megaScale.metric = DEC;
+          fscale.metric = LIN;
+          fscale.neutral = 1;
+          CHECK (fscale.isFactor());
+          CHECK ( 5 == megaScale.join ( 5, 100.0f,  fscale));        // input ⟼ decibels, then added to the base value, and finally wrapped ∈ [-10 ... 10[
+          CHECK (-5 == megaScale.join (-5, 100.0f,  fscale));
+          CHECK ( 5 == megaScale.join (-5, 1000.0f, fscale));        //          ...so here we get -5dB + 30dB
+          
+          // now push that to the limits....
+          CHECK (logb (1e18)          < logb (_MAX<int64_t>));       // use the largest power of 10 representable in int64_t
+          CHECK (logb (_MAX<int64_t>) < logb (megaScale.cyclicLim)); // ...which the (cyclic) target scale can still handle precisely!
+          
+          lflp res1 = megaScale.join (-5, 1e18f, fscale);            // log10 ⟼ 18, so we add -5dB + 180dB;
+          CHECK (roughEQ (res1, -5));                                //          the cyclicWrap then computes 175 - (-10) ≡ 185 % 20 (≙5) + (minVal ≙ -10)                    
+          
+          // but the computation is not exact...
+          CHECK (0 != std::fmod (res1, 1));
+          // yet the cause lies in the input already:
+          lflp srcErr = lflp(1e18f) - pow (lflp(10), 18);
+          CHECK (1e10 < fabs (srcErr));                              // ... so the float input incurs a gigantic error margin
+          
+          // however: use an exact input, and the result will be exact
+          lscale.neutral = 1;
+          CHECK (lscale.isFactor());
+          CHECK (-5 == megaScale.join (-5, int64_t(1e18),   lscale));
+          lflp res2 =  megaScale.join (-5, int64_t(1e18)+1, lscale);
+          CHECK (-5 != res2);                                       // even a tiny offset makes it through the computation
+          CHECK (-16 > log10 (res2 -(-5)));                         // error is below the 16. decimal place (plausible, since log10 is computed)
+          
+          // compare to target scale with lesser precision...
+          Scale<double> doubleTargetScale = {.metric = DEC};
+          Scale<uint64_t> longTargetScale = {.metric = DEC};
+          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18),   lscale));
+          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18)+1, lscale));
+          CHECK (180 ==   longTargetScale.join (0, int64_t(1e18),   lscale));
+          CHECK (180 !=   longTargetScale.join (0, int64_t(1e18)+1, lscale));  /////////////OOO this is a Bug! we should indeed use lflp for the interim computation
         }
       
       

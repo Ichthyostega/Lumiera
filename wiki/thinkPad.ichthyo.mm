@@ -87321,8 +87321,30 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1789961831540" ID="ID_104579195" MODIFIED="1789961843094" TEXT="aber auf der Ergebnis-Seite mu&#xdf; er aufgeschlagen werden"/>
 </node>
 <node COLOR="#435e98" CREATED="1789961912393" ID="ID_1778190029" MODIFIED="1789961925432" TEXT="linearer Offset auf Logarithmus wird verweigert"/>
+<node CREATED="1790029014421" ID="ID_1208653097" MODIFIED="1790036739810" TEXT="Logarithmus-Berechnung in eine long-double-Scale">
+<node CREATED="1790036139410" ID="ID_790857236" MODIFIED="1790036256247" TEXT="hier geht es darum, die m&#xf6;glichst pr&#xe4;zise Berechnung zu pr&#xfc;fen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      die Berechnungen <i>sind</i>&#160;ungenau, mit floating-point und transzendentalen Funktionen. Aber die vorhandene Daten-Genauigkeit sollte ausgesch&#246;pft werden, ohne jetzt gleich alles mit long double rechnen zu m&#252;ssen
+    </p>
+  </body>
+</html></richcontent>
 </node>
-<node COLOR="#5928b5" CREATED="1789961961491" ID="ID_219252546" MODIFIED="1790021532727" TEXT="und ja: wer testet, der findet">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1790036164854" ID="ID_229924653" MODIFIED="1790036192419" TEXT="im Besonderen die Bestimmung des Arbeits-Datentyps sollte gepr&#xfc;ft werden">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790037266068" ID="ID_1040329780" MODIFIED="1790037379434" TEXT="tats&#xe4;chlich: die Wahl des Rechen-Datentyps ist zu einfach implementiert">
+<linktarget COLOR="#e20b48" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" SOURCE="ID_31887994" STARTARROW="None" STARTINCLINATION="478;26;"/>
+<icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1790037396226" HGAP="28" ID="ID_341439483" MODIFIED="1790037416138" TEXT="wir gehen von integral &#x27f6; double" VSHIFT="-7">
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#5928b5" CREATED="1789961961491" ID="ID_219252546" MODIFIED="1790036535745" TEXT="und ja: wer testet, der findet">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -87331,15 +87353,20 @@ Prop.1: dist%3       1  2  0  1  2  0
         Type-promotion-Bug in der Anwendung der pow()-Funktion
       </li>
       <li>
+        weiterer Type-promotion-Error in der baseScale-Funktion
+      </li>
+      <li>
         logb() liefert nur den exponenten, log2() den 2-er-Logarithmus
       </li>
       <li>
-        das <i>Wiederverwenden</i>&#160;der asLogarithm()-Funktion macht deutlich, da&#223;&#160;diese einen unn&#246;tigen Typ-Constraint auf den VAL-Parameter der Ausgans-Scale erzwingt
+        in conform steckt auch noch ein statischer Fehler: std::abs funktioniert nicht auf <i>unsigned</i>
+      </li>
+      <li>
+        das <i>Wiederverwenden</i>&#160;der asLogarithm()-Funktion macht deutlich, da&#223;&#160;diese einen unn&#246;tigen Typ-Constraint auf den VAL-Parameter der Ausgangs-Scale erzwingt
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" STARTARROW="None" STARTINCLINATION="16;533;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
@@ -87624,6 +87651,118 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790015165677" ID="ID_1207373600" MODIFIED="1790021319393" TEXT="Schritt-2 : Pfadabdeckung der Logarithmus-Skalen-Behandlung">
 <linktarget COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" SOURCE="ID_219252546" STARTARROW="None" STARTINCLINATION="16;533;"/>
 <icon BUILTIN="flag-pink"/>
+<node COLOR="#8c0157" CREATED="1790024320509" HGAP="56" ID="ID_1433168831" MODIFIED="1790028991933" TEXT="l&#xe4;stig aber sinnvoll..." VSHIFT="21">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      jaja ... oft wei&#223; man nicht ob es um &quot;overengieering&quot; geht, oder man selber einfach <i>faul</i>&#160;ist
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node CREATED="1790028975682" HGAP="66" ID="ID_228688702" LINK="#ID_1208653097" MODIFIED="1790036783775" TEXT="auch noch einen log-double-Fall" VSHIFT="-1">
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1790036164854" ID="ID_585649034" MODIFIED="1790036828087" TEXT="Augenmerk auf Arbeits-Datentyp legen">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1790036260115" ID="ID_1393622284" MODIFIED="1790036281875" TEXT="f&#xfc;hre hier als &#xbb;gimmick&#xab; einen zyklische long-double-Skala ein">
+<node CREATED="1790036283183" ID="ID_181132589" MODIFIED="1790036293637" TEXT="damit k&#xf6;nnte ich exakte kleine Werte bekommen"/>
+<node CREATED="1790036295430" ID="ID_803016212" MODIFIED="1790036306537" TEXT="und somit Rechenfehler dramatisch sichtbar machen"/>
+<node CREATED="1790036308659" ID="ID_1027526075" MODIFIED="1790036324753" TEXT="(und au&#xdf;erdem best&#xe4;tigt das nochmal die Integration von conform())">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1790036331633" ID="ID_926231651" MODIFIED="1790036487239" TEXT="Ha! Compile-Fehler">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      woot?&#160;&#160;kann keinen std::abs berechnen von .... uint64_t&#160;&#160;??!
+    </p>
+    <p>
+      &quot;der mutt dat doch checken!&quot;
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5e0f69" CREATED="1790036344862" ID="ID_1357077453" MODIFIED="1790037322238" TEXT="in conform() mu&#xdf; der Genauigkeits-Test zur compile-Zeit geguarded werden">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Tats&#228;chlich ist der ganze Zweig mit dem Genauigkeits-Limit nur f&#252;r floating-point-Typen notwendig; und diesen Branch-Guard kann man tats&#228;chlich schon zur compile-time machen!
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+</node>
+<node CREATED="1790036598900" ID="ID_246190994" MODIFIED="1790036617586" TEXT="ein echter Logarithmus ist am &#xbb;intereessantesten&#xab;">
+<icon BUILTIN="idea"/>
+<node CREATED="1790036619370" ID="ID_913914685" MODIFIED="1790036638956">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      also nehme ich einen <b>linearen </b>Input
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790036640983" ID="ID_1799300764" MODIFIED="1790036674383" TEXT="und wende den als Faktor auf eine Decibel-Skala an">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      damit's raucht!
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790036690621" ID="ID_296790938" MODIFIED="1790036696747" TEXT="teste erst mal mit float-Input">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1790036837717" ID="ID_918464928" MODIFIED="1790036869516" TEXT="verbl&#xfc;ffend: mit kleinem Input, zB. 1000 ist das Ergebnis exakt">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1790036877098" ID="ID_1895824050" MODIFIED="1790036888026" TEXT="im Debugger sieht man aber ganz hinten schon die Rundungsfehler"/>
+<node CREATED="1790036889038" ID="ID_1642131477" MODIFIED="1790036914456" TEXT="nur das fmod in der Cyclic-Scale schluckt wohl die Subnormals">
+<icon BUILTIN="help"/>
+</node>
+<node CREATED="1790036918375" ID="ID_873113976" MODIFIED="1790036933655" TEXT="mit einem sehr gro&#xdf;en Input wird der Fehler sehr deutlich">
+<node CREATED="1790036950358" ID="ID_1610030443" MODIFIED="1790036982693" TEXT="verwende einen Input von 10^18">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das ist die gr&#246;&#223;tm&#246;gliche 10-er-Potenz, die noch in 63bit reinpa&#223;t
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1790037016669" ID="ID_1010388251" MODIFIED="1790037055912" TEXT="dann ist der Rechenfehler am Ende &#x2248; 10^10"/>
+</node>
+</node>
+<node CREATED="1790037065135" ID="ID_719693034" MODIFIED="1790037072092" TEXT="nehme dann int64_t-Input">
+<node COLOR="#338800" CREATED="1790037078616" ID="ID_1172597143" MODIFIED="1790037090915" TEXT="nun l&#xe4;uft selbst diese extreme Berechnung exakt">
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1790037118015" ID="ID_886617373" MODIFIED="1790037148321" TEXT="bekomme nun 10^18 + 1 noch als abweichendes Signal durch die Berechnung"/>
+<node CREATED="1790037158306" ID="ID_819609666" MODIFIED="1790037170188" TEXT="und der Fehler ist &lt; 10^16"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1790037172872" ID="ID_1473906602" MODIFIED="1790037181400" TEXT="klingt plausibel">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node CREATED="1790037201845" ID="ID_1001721326" MODIFIED="1790037216271" TEXT="Gegencheck: ungenauere Target-Scale">
+<node CREATED="1790037220688" ID="ID_1408762592" MODIFIED="1790037236453" TEXT="double &#x27f9; kann diesen Fehler wie erwartet nicht &#xbb;fangen&#xab;"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1790037238039" ID="ID_31887994" MODIFIED="1790037379434" TEXT="uint64_t &#x27f9; auch nicht &#x27f5; das ist nicht plausibel">
+<arrowlink COLOR="#e20b48" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" STARTARROW="None" STARTINCLINATION="478;26;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 </node>

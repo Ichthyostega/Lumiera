@@ -39,7 +39,7 @@ namespace test{
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   using std::floating_point;
   
-  namespace {//Test fixture....
+  namespace {//Test helpers....
     
     template<typename NUM>
     constexpr NUM _MAX = std::numeric_limits<NUM>::max();
@@ -50,7 +50,7 @@ namespace test{
     template<floating_point FLO>
     constexpr FLO _EPSILON = std::numeric_limits<FLO>::epsilon();
     
-  }//(End)Test fixture
+  }//(End)Test helpers
   
   
   

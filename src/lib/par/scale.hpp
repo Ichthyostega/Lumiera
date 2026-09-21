@@ -181,7 +181,7 @@ namespace par {
       {
         REQUIRE (minVal and maxVal);
         REQUIRE (*minVal < *maxVal);
-        if (std::is_floating_point_v<VAL>)
+        if constexpr (std::is_floating_point_v<VAL>)
           if (not (std::abs (rawVal) < cyclicLim))
             throw err::Invalid {_Fmt{"Parameter value %4.2g beyond supported numeric precision "
                                      "for cyclic wrapping into [%1.2g...%1.2g[ "}
