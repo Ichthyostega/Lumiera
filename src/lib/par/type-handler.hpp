@@ -154,20 +154,13 @@ _Pragma("GCC diagnostic pop")
   
   template<typename T>
   concept number = integral<T> or floating_point<T>;
-
-  /**
-   * the best-precision floating point type to carry out
-   * a numeric operation to combine two values
-   * @note the result type is always some floating point,
-   *       since the goal is to use the exponential / logarithm family.
-   * @todo 9/26 we _could_ go from integral to long double for 64bit,
-   *       yet it is not clear if we ever need that tiny bit of extra precision...
-   */
-  template<number V, number W>
-  using CommonComputeType = std::conditional_t<integral<V> and integral<W>, double
-                                                                          , common_type_t<V, W>>;
-
+  
+  
   namespace {
+    static_assert (64 <= std::numeric_limits<lflp>::digits
+                  ,"long double type can not represent uint64_t exactly");
+    
+    
     /** @internal decision logic for combining numeric parameters */
     template<typename V, typename W>
     auto
@@ -189,6 +182,22 @@ _Pragma("GCC diagnostic pop")
               // Expand to long double, which can hold 64bit without precision loss
         }
     }
+    
+    /** @internal logic to pick a suitable floating-point for intermediary computations */
+    template<typename V, typename W>
+    auto
+    selectCommonComputeType()
+    {
+      if constexpr (is_integral_v<V> and is_integral_v<W>)
+        { // ensure integral precision is retained to the degree possible...
+          if constexpr (8 > sizeof(V) and 8 > sizeof(W))
+              return std::type_identity<double>{};
+          else
+              return std::type_identity<lflp>{};
+        }
+      else
+          return std::type_identity<common_type_t<V,W>>{};
+    }
   }
   
   /**
@@ -199,8 +208,17 @@ _Pragma("GCC diagnostic pop")
    *  - in the remaining problematic case(s), long double is used, as it can accommodate
    *    the full 64bit value range without loss on platforms relevant for Lumiera.
    */
-  template<typename A, typename B>
-  using NumberJoinType = typename decltype(selectNumberJoinType<A,B>())::type;
+  template<number V, number W>
+  using NumberJoinType = typename decltype(selectNumberJoinType<V,W>())::type;
+
+  /**
+   * best-precision floating point type to carry out
+   * a numeric operation to transform and adapt value scales.
+   * @note the result type is always some floating point,
+   *       since the goal is to use the exponential / logarithm family.
+   */
+  template<number V, number W>
+  using CommonComputeType = typename decltype(selectCommonComputeType<V,W>())::type;
   
   
   

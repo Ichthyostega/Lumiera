@@ -86269,16 +86269,17 @@ class ScaleRegistry
 </node>
 </node>
 </node>
-<node CREATED="1789159365103" ID="ID_435108847" MODIFIED="1789159397705" TEXT="sollte dann wohl gleich eine generische Registry sein...">
+<node CREATED="1789159365103" ID="ID_435108847" MODIFIED="1790094564624" TEXT="sollte dann wohl gleich eine generische Registry sein...">
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
+<linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
 </node>
 </node>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789170321059" ID="ID_533778146" MODIFIED="1789170328666" TEXT="einfache / vorl&#xe4;ufige Implementierung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789170321059" ID="ID_533778146" MODIFIED="1790094388582" TEXT="einfache / vorl&#xe4;ufige Implementierung">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1789170329999" ID="ID_247689608" MODIFIED="1789170375860" TEXT="&#xbb;vorl&#xe4;ufig&#xab; insofern ich komplexe Themen ignorieren sollte (Nominal-Skalen, Quantisierung)">
 <icon BUILTIN="idea"/>
 </node>
@@ -87235,9 +87236,9 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789171911830" ID="ID_944344547" MODIFIED="1789171915156" TEXT="join">
-<icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1789171916490" ID="ID_920699877" MODIFIED="1789172001819" TEXT="einfacher Fall: gemeinsame Scale">
+<node COLOR="#338800" CREATED="1789171911830" ID="ID_944344547" MODIFIED="1790094358125" TEXT="join">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1789171916490" FOLDED="true" ID="ID_920699877" MODIFIED="1790094384518" TEXT="einfacher Fall: gemeinsame Scale">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1789171933617" ID="ID_284757000" MODIFIED="1789171970154" TEXT="isFactor definieren">
 <icon BUILTIN="button_ok"/>
@@ -87251,7 +87252,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="button_ok"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1789172002831" ID="ID_939833813" MODIFIED="1789961933370" TEXT="gemische Scales handhaben">
+<node COLOR="#338800" CREATED="1789172002831" FOLDED="true" ID="ID_939833813" MODIFIED="1790094383113" TEXT="gemische Scales handhaben">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1789949153983" ID="ID_781783423" MODIFIED="1789949195612" TEXT="ushort-Scale mit Limits &#x27f5; kombiniert mit int64_t">
 <icon BUILTIN="button_ok"/>
@@ -87263,7 +87264,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <arrowlink COLOR="#28b55c" DESTINATION="ID_1223578931" ENDARROW="Default" ENDINCLINATION="-139;1297;" ID="Arrow_ID_225645373" STARTARROW="None" STARTINCLINATION="111;6;"/>
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1789961742643" ID="ID_949990390" MODIFIED="1789961760832" TEXT="Verbindung verschiedener log-Scales">
+<node COLOR="#338800" CREATED="1789961742643" FOLDED="true" ID="ID_949990390" MODIFIED="1790094370986" TEXT="Verbindung verschiedener log-Scales">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1789961765581" ID="ID_1536983378" MODIFIED="1789961783683" TEXT="Umwandlung linear &#x27f7; log">
 <node CREATED="1790021597423" ID="ID_5025438" MODIFIED="1790021610941" TEXT="die Konvertierungs-Funktionen sind strukturell eigenartig">
@@ -87285,8 +87286,7 @@ Prop.1: dist%3       1  2  0  1  2  0
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1790021537463" ID="ID_1193038289" MODIFIED="1790022831555" TEXT="Funktion Scale&lt;VAL&gt;::asLogarithm ist zudem gar nicht von der Quell-Skala abh&#xe4;ngig"/>
 </node>
@@ -87315,8 +87315,7 @@ Prop.1: dist%3       1  2  0  1  2  0
       &#220;berraschung: die Logarithmen-Matematik funktioniert ... aber das dumme Mensch braucht endlos um zu kapieren da&#223; die Beispielwerte stimmen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1789961831540" ID="ID_104579195" MODIFIED="1789961843094" TEXT="aber auf der Ergebnis-Seite mu&#xdf; er aufgeschlagen werden"/>
 </node>
@@ -87332,14 +87331,25 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1790036164854" ID="ID_229924653" MODIFIED="1790036192419" TEXT="im Besonderen die Bestimmung des Arbeits-Datentyps sollte gepr&#xfc;ft werden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790036164854" ID="ID_229924653" MODIFIED="1790094127028" TEXT="im Besonderen die Bestimmung des Arbeits-Datentyps">
 <icon BUILTIN="messagebox_warning"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790037266068" ID="ID_1040329780" MODIFIED="1790037379434" TEXT="tats&#xe4;chlich: die Wahl des Rechen-Datentyps ist zu einfach implementiert">
-<linktarget COLOR="#e20b48" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" SOURCE="ID_31887994" STARTARROW="None" STARTINCLINATION="478;26;"/>
-<icon BUILTIN="flag-pink"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1790037396226" HGAP="28" ID="ID_341439483" MODIFIED="1790037416138" TEXT="wir gehen von integral &#x27f6; double" VSHIFT="-7">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#400f69" CREATED="1790037266068" ID="ID_1040329780" MODIFIED="1790094099158" TEXT="tats&#xe4;chlich: die Wahl des Rechen-Datentyps ist zu einfach implementiert">
+<linktarget COLOR="#5425ca" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" SOURCE="ID_31887994" STARTARROW="None" STARTINCLINATION="478;26;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1790037396226" HGAP="28" ID="ID_341439483" MODIFIED="1790094090617" TEXT="wir gehen von integral &#x27f6; double" VSHIFT="-7">
 <icon BUILTIN="broken-line"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1790090085802" ID="ID_222503371" MODIFIED="1790094103279" TEXT="auch hier umstellen auf eine explizit ausformulierte Fall-Logik">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      nicht mehr versuchen, alles in einen Typ-Ausdruck zu packen; stattdessen hier auch die Technik mit einer Constexpr-Funktion, die einen type_identity-Record liefert
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -87370,6 +87380,15 @@ Prop.1: dist%3       1  2  0  1  2  0
 <arrowlink COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" STARTARROW="None" STARTINCLINATION="16;533;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="12"/>
 </node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790094428926" ID="ID_1432141408" MODIFIED="1790094455904" TEXT="mu&#xdf; nun die Scale (Descriptor) sinnvoll in die Parameter-Implementierung integrieren">
+<icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790094459596" ID="ID_184861465" MODIFIED="1790094482634" TEXT="brauche dazu eine Registrierung und Scale-IDs">
+<icon BUILTIN="forward"/>
+<node CREATED="1790094501963" ID="ID_438812693" MODIFIED="1790094572153" TEXT="und diese Registry sollte generisch angelegt sein">
+<arrowlink COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 </node>
 </node>
 </node>
@@ -87442,8 +87461,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1788896840672" TEXT="Scale-Konfiguration erm&#xf6;glichen">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1790094404823" TEXT="Scale-Konfiguration erm&#xf6;glichen">
+<icon BUILTIN="pencil"/>
 </node>
 </node>
 <node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
@@ -87520,7 +87539,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203400185" ID="ID_900611719" MODIFIED="1788307794257" TEXT="Builder-Notation schaffen">
 <icon BUILTIN="full-2"/>
 </node>
-<node COLOR="#435e98" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788570267353" TEXT="Valure-Konversionen einbinden">
+<node COLOR="#435e98" CREATED="1788203422590" ID="ID_1249325546" MODIFIED="1788570267353" TEXT="Value-Konversionen einbinden">
 <icon BUILTIN="full-3"/>
 <node COLOR="#338800" CREATED="1788313016806" ID="ID_1966722816" MODIFIED="1788403892705" TEXT="generisch per Indirektion">
 <icon BUILTIN="button_ok"/>
@@ -87576,8 +87595,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789159639409" ID="ID_654373559" MODIFIED="1789607860036" TEXT="Scale-Eigenschaften abstecken per ParameterScale_test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789159639409" ID="ID_654373559" MODIFIED="1790094342453" TEXT="Scale-Eigenschaften abstecken per ParameterScale_test">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1789159687318" ID="ID_1480074646" MODIFIED="1789160197623" TEXT="Hier nur rein die Scale-Descriptoren und das intendierte Verhalten">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -87604,6 +87623,11 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node COLOR="#338800" CREATED="1789170107429" ID="ID_864942829" MODIFIED="1789172022866" TEXT="einfache join()-Operation">
 <icon BUILTIN="button_ok"/>
 </node>
+</node>
+<node COLOR="#338800" CREATED="1790094258921" ID="ID_1942061887" MODIFIED="1790094261651" TEXT="verify_Predicate">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1790094263246" ID="ID_1388987426" MODIFIED="1790094274333" TEXT="demonstriert die wichtigsten Informations-Funktionen"/>
+<node COLOR="#310088" CREATED="1790094276841" ID="ID_783774183" MODIFIED="1790094312786" TEXT="(isValid() wird i.d.R. mit dem jeweilgen Feature zusammen abgedeckt)"/>
 </node>
 <node COLOR="#338800" CREATED="1789607293094" ID="ID_734632281" MODIFIED="1789607296849" TEXT="verify_Conforming">
 <icon BUILTIN="button_ok"/>
@@ -87640,17 +87664,17 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789675604211" ID="ID_201071963" MODIFIED="1789676070358" TEXT="verify_valueJoining">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789675604211" ID="ID_201071963" MODIFIED="1790094240877" TEXT="verify_valueJoining">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1790015115678" ID="ID_1510723485" MODIFIED="1790015142255" TEXT="Schritt-1 : teste Typ-Konvertierung und Zusammenspiel mit conform()">
 <icon BUILTIN="button_ok"/>
 </node>
 <node COLOR="#338800" CREATED="1790015143816" ID="ID_1173177816" MODIFIED="1790015164942" TEXT="Schritt-2 : kl&#xe4;re und repariere das noch bestehende signed/unsigned-Problem">
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790015165677" ID="ID_1207373600" MODIFIED="1790021319393" TEXT="Schritt-2 : Pfadabdeckung der Logarithmus-Skalen-Behandlung">
+<node COLOR="#338800" CREATED="1790015165677" ID="ID_1207373600" MODIFIED="1790094237018" TEXT="Schritt-2 : Pfadabdeckung der Logarithmus-Skalen-Behandlung">
 <linktarget COLOR="#3f3ba8" DESTINATION="ID_1207373600" ENDARROW="Default" ENDINCLINATION="534;0;" ID="Arrow_ID_625720992" SOURCE="ID_219252546" STARTARROW="None" STARTINCLINATION="16;533;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 <node COLOR="#8c0157" CREATED="1790024320509" HGAP="56" ID="ID_1433168831" MODIFIED="1790028991933" TEXT="l&#xe4;stig aber sinnvoll..." VSHIFT="21">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -87659,12 +87683,12 @@ Prop.1: dist%3       1  2  0  1  2  0
       jaja ... oft wei&#223; man nicht ob es um &quot;overengieering&quot; geht, oder man selber einfach <i>faul</i>&#160;ist
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node CREATED="1790028975682" HGAP="66" ID="ID_228688702" LINK="#ID_1208653097" MODIFIED="1790036783775" TEXT="auch noch einen log-double-Fall" VSHIFT="-1">
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1790036164854" ID="ID_585649034" MODIFIED="1790036828087" TEXT="Augenmerk auf Arbeits-Datentyp legen">
+<node COLOR="#338800" CREATED="1790028975682" FOLDED="true" HGAP="66" ID="ID_228688702" LINK="#ID_1208653097" MODIFIED="1790094232863" TEXT="auch noch einen log-double-Fall" VSHIFT="-1">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#435e98" CREATED="1790036164854" ID="ID_585649034" MODIFIED="1790094228089" TEXT="Augenmerk auf Arbeits-Datentyp legen">
 <icon BUILTIN="yes"/>
 </node>
 <node CREATED="1790036260115" ID="ID_1393622284" MODIFIED="1790036281875" TEXT="f&#xfc;hre hier als &#xbb;gimmick&#xab; einen zyklische long-double-Skala ein">
@@ -87693,13 +87717,12 @@ Prop.1: dist%3       1  2  0  1  2  0
       Tats&#228;chlich ist der ganze Zweig mit dem Genauigkeits-Limit nur f&#252;r floating-point-Typen notwendig; und diesen Branch-Guard kann man tats&#228;chlich schon zur compile-time machen!
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
 </node>
-<node CREATED="1790036598900" ID="ID_246190994" MODIFIED="1790036617586" TEXT="ein echter Logarithmus ist am &#xbb;intereessantesten&#xab;">
+<node BACKGROUND_COLOR="#b7d8bb" COLOR="#338800" CREATED="1790036598900" ID="ID_246190994" MODIFIED="1790094211855" TEXT="ein echter Logarithmus ist am &#xbb;intereessantesten&#xab;">
 <icon BUILTIN="idea"/>
 <node CREATED="1790036619370" ID="ID_913914685" MODIFIED="1790036638956">
 <richcontent TYPE="NODE"><html>
@@ -87738,8 +87761,7 @@ Prop.1: dist%3       1  2  0  1  2  0
       das ist die gr&#246;&#223;tm&#246;gliche 10-er-Potenz, die noch in 63bit reinpa&#223;t
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1790037016669" ID="ID_1010388251" MODIFIED="1790037055912" TEXT="dann ist der Rechenfehler am Ende &#x2248; 10^10"/>
 </node>
@@ -87756,14 +87778,17 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node CREATED="1790037201845" ID="ID_1001721326" MODIFIED="1790037216271" TEXT="Gegencheck: ungenauere Target-Scale">
 <node CREATED="1790037220688" ID="ID_1408762592" MODIFIED="1790037236453" TEXT="double &#x27f9; kann diesen Fehler wie erwartet nicht &#xbb;fangen&#xab;"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1790037238039" ID="ID_31887994" MODIFIED="1790037379434" TEXT="uint64_t &#x27f9; auch nicht &#x27f5; das ist nicht plausibel">
-<arrowlink COLOR="#e20b48" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" STARTARROW="None" STARTINCLINATION="478;26;"/>
+<node COLOR="#435e98" CREATED="1790037238039" ID="ID_31887994" MODIFIED="1790094163676" TEXT="uint64_t &#x27f9; auch nicht &#x27f5; das ist nicht plausibel">
+<arrowlink COLOR="#5425ca" DESTINATION="ID_1040329780" ENDARROW="Default" ENDINCLINATION="805;29;" ID="Arrow_ID_1796905346" STARTARROW="None" STARTINCLINATION="478;26;"/>
 <icon BUILTIN="broken-line"/>
 </node>
 </node>
 </node>
 </node>
 </node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1790094336075" ID="ID_814063222" MODIFIED="1790094337810" TEXT="verify_NominalScale">
+<icon BUILTIN="hourglass"/>
 </node>
 </node>
 </node>

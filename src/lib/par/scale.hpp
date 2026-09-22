@@ -42,6 +42,7 @@ namespace lib {
 namespace par {
   namespace err = lumiera::error;
   
+  using std::abs;
   using util::_Fmt;
   using std::optional;
   
@@ -79,6 +80,7 @@ namespace par {
       bool isValid()  const;
       bool isFactor() const;
       bool isCyclic() const;
+      bool isLimited() const;
       bool isLogarithmic() const;
       
       /* ===== conforming operations ===== */
@@ -125,7 +127,8 @@ namespace par {
        and (not isCyclic()
            or (minVal and maxVal
                and *minVal < *maxVal
-               and VAL(0) < cyclicLim)
+               and VAL(0) < cyclicLim
+               and abs (*maxVal) <= cyclicLim)
            )
            ;
   }
@@ -144,6 +147,14 @@ namespace par {
   Scale<VAL>::isCyclic()  const
   {
     return VAL(0) != cyclicLim;
+  }
+  
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isLimited()  const
+  {
+    return (maxVal or minVal)
+       and not isCyclic();
   }
   
   template<typename VAL>

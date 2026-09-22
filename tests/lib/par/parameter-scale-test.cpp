@@ -21,21 +21,12 @@
 #include "lib/par/scale.hpp"
 #include "test/diagnostic-output.hpp"/////////////TODO
 
-//#include <utility>
-//#include <string>
-//#include <vector>
-
-//using std::string;
-//using std::vector;
-//using std::swap;
 using test::roughEQ;
 
 
 namespace lib {
 namespace par {
 namespace test{
-  
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   namespace {//Test helpers....
     
@@ -59,7 +50,13 @@ namespace test{
   
   
   /**************************************************************************//**
-   * @test cover properties of generic parameter containers.
+   * @test demonstrate features and verify behaviour of value Scale definitions.
+   *     - a par::Scale is a descriptor record with some feature configuration settings
+   *     - some combination of setting marks specific scale features to be present
+   *     - values can be _conformed_ to comply with the scale constraints
+   *     - a Scale can be configured to maintain cyclic wrapping values
+   *     - values defined on different scales can be _joined_ (numerically combined)
+   *     - scales can be defined to be logarithmic, and work together with linear scales. 
    */
   class ParameterScale_test : public Test
     {
@@ -68,6 +65,7 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
+          verify_Predicate();
           verify_Conforming();
           verify_cyclicScale();
           verify_valueJoining();
@@ -85,6 +83,51 @@ namespace test{
           
           CHECK ( 5 == scale.join (2,3)   );
           CHECK (-5 == scale.join (23,-55));
+        }
+      
+      
+      /** @test verify the feature detection and descriptor predicates */
+      void
+      verify_Predicate()
+        {
+          Scale<double> scale;
+          
+          CHECK (scale.isValid());
+          CHECK (not scale.isCyclic());
+          CHECK (not scale.isLimited());
+          CHECK (not scale.isLogarithmic());
+          
+          scale.minVal = -5;
+          CHECK (scale.isValid());
+          CHECK (not scale.isCyclic());
+          CHECK (    scale.isLimited());
+          
+          scale.cyclicLim = 10;
+          CHECK (not scale.isValid());
+          CHECK (    scale.isCyclic());
+          CHECK (not scale.isLimited());
+          
+          scale.maxVal = +5;
+          CHECK (    scale.isValid());
+          CHECK (    scale.isCyclic());
+          CHECK (not scale.isLimited());
+          
+          CHECK (not scale.isFactor());
+          scale.neutral = 2;
+          CHECK (not scale.isFactor());
+          scale.neutral = 1;
+          CHECK (    scale.isFactor());
+          
+          CHECK (scale.metric == LIN);
+          CHECK (not scale.isLogarithmic());
+          scale.metric = NOM;
+          CHECK (not scale.isLogarithmic());
+          scale.metric = DEC;
+          CHECK (    scale.isLogarithmic());
+          scale.metric = BIN;
+          CHECK (    scale.isLogarithmic());
+          scale.metric = NAT;
+          CHECK (    scale.isLogarithmic());
         }
       
       
@@ -181,7 +224,9 @@ namespace test{
        *      - applying a linear factor to a logarithmic scale is
        *        transformed into an addition in the logarithmic domain
        *      - adding a linear offset to a logarithmic scale is rejected
-       * @todo WIP 9/26 🔁 define ⟶ ✔ implement
+       *      - extended precision scales handled using `lflp` (≙`long double`)
+       *      - this allows to retain full precision of 64bit integrals
+       * @todo WIP 9/26 ✔ define ⟶ ✔ implement
        */
       void
       verify_valueJoining()
@@ -276,7 +321,7 @@ namespace test{
           CHECK (logb (_MAX<int64_t>) < logb (megaScale.cyclicLim)); // ...which the (cyclic) target scale can still handle precisely!
           
           lflp res1 = megaScale.join (-5, 1e18f, fscale);            // log10 ⟼ 18, so we add -5dB + 180dB;
-          CHECK (roughEQ (res1, -5));                                //          the cyclicWrap then computes 175 - (-10) ≡ 185 % 20 (≙5) + (minVal ≙ -10)                    
+          CHECK (roughEQ (res1, -5));                                //          the cyclicWrap then computes 175 - (-10) ≡ 185 % 20 (≙5) + (minVal ≙ -10)
           
           // but the computation is not exact...
           CHECK (0 != std::fmod (res1, 1));
@@ -295,10 +340,10 @@ namespace test{
           // compare to target scale with lesser precision...
           Scale<double> doubleTargetScale = {.metric = DEC};
           Scale<uint64_t> longTargetScale = {.metric = DEC};
-          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18),   lscale));
-          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18)+1, lscale));
-          CHECK (180 ==   longTargetScale.join (0, int64_t(1e18),   lscale));
-          CHECK (180 !=   longTargetScale.join (0, int64_t(1e18)+1, lscale));  /////////////OOO this is a Bug! we should indeed use lflp for the interim computation
+          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18),    lscale));        // uses double for internal log10 computation
+          CHECK (180 == doubleTargetScale.join (0, int64_t(1e18)-10, lscale));        // offset chosen large enough to prevail in int64_t but not in double
+          CHECK (180 ==   longTargetScale.join (0, int64_t(1e18),    lscale));        // 64bit integral scales use long-double for log10 computation internally
+          CHECK (179 ==   longTargetScale.join (0, int64_t(1e18)-10, lscale));        // ...and thus the offset survives the log10 and is truncated down on conversion
         }
       
       
