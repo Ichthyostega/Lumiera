@@ -25,3 +25,8 @@ END
 PLANNED "Enumeration domains" NomSet_test << END
 return: 0
 END
+
+
+PLANNED "Parameter type registry" TypeRegistry_test << END
+return: 0
+END

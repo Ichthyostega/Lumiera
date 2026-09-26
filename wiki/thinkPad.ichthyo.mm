@@ -84452,8 +84452,22 @@
     </p>
   </body>
 </html></richcontent>
-<node CREATED="1788123756658" HGAP="31" ID="ID_1426033062" MODIFIED="1788123771818" TEXT="die BaseDomain-ID kann statisch liegen" VSHIFT="1">
+<node CREATED="1788123756658" HGAP="31" ID="ID_1426033062" MODIFIED="1790471988055" TEXT="die BaseDomain-ID k&#xf6;nnte statisch liegen" VSHIFT="1">
 <font NAME="SansSerif" SIZE="11"/>
+</node>
+<node CREATED="1790471989989" ID="ID_368143788" MODIFIED="1790472005535" TEXT="lege sie aber nun erst mal mit in den IDRecord">
+<icon BUILTIN="yes"/>
+<node CREATED="1790472108504" ID="ID_380080816" MODIFIED="1790472341753" TEXT="wegen optimiertem Datenzugriff &#x27f6; bereits in Disposition">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Disposition ist das Implementation-Service-Interface; es ist die Grenze zwischen den Interface-Layern und dem (eigentlich opaquen) Implementierungs-Aufbau; somit ein guter Ort, einen IDRecord verbindlich bereitzustellen, denn die Festlegung, einen &#187;slot&#171; f&#252;r Klassifikation und damit und damit verschiedene Dimensionen des &#187;Typs&#171; zu verbrauchen, erscheint angemessen und akzeptabel im Overhead.
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#331dc1" DESTINATION="ID_768311001" ENDARROW="Default" ENDINCLINATION="723;0;" ID="Arrow_ID_1947843702" STARTARROW="None" STARTINCLINATION="422;20;"/>
+</node>
 </node>
 </node>
 <node CREATED="1788124658818" ID="ID_775970800" MODIFIED="1788124658818" TEXT="Rolle der (Scale)Prototypen bedenken">
@@ -84764,6 +84778,7 @@
 <node CREATED="1788380437998" ID="ID_1881580962" MODIFIED="1788380488048" TEXT="sonst ist kein &#xbb;short-circuit&#xab; m&#xf6;glich">
 <arrowlink COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" STARTARROW="None" STARTINCLINATION="220;17;"/>
 </node>
+<node CREATED="1790473843121" ID="ID_289990682" MODIFIED="1790473853207" TEXT="dieser &#xbb;codiert&#xab; die Typ-Spielarten"/>
 </node>
 <node CREATED="1788293586698" ID="ID_1746668987" MODIFIED="1788293628728" TEXT="Inhaltlich geh&#xf6;rt es aber n&#xe4;her zum ParamData-Record"/>
 </node>
@@ -85298,7 +85313,9 @@
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1788404265183" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
 <linktarget COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" SOURCE="ID_569414817" STARTARROW="None" STARTINCLINATION="-29;106;"/>
 <icon BUILTIN="pencil"/>
-<node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380631272" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition"/>
+<node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380609599" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition">
+<linktarget COLOR="#331dc1" DESTINATION="ID_768311001" ENDARROW="Default" ENDINCLINATION="723;0;" ID="Arrow_ID_1947843702" SOURCE="ID_380080816" STARTARROW="None" STARTINCLINATION="422;20;"/>
+</node>
 <node CREATED="1788380657233" ID="ID_659200917" MODIFIED="1788381357392" TEXT="Neben-Thema: brauche nun eine Basis-Typ-ID">
 <arrowlink COLOR="#80969f" DESTINATION="ID_550975867" ENDARROW="Default" ENDINCLINATION="-1482;411;" ID="Arrow_ID_1821706956" STARTARROW="None" STARTINCLINATION="434;28;"/>
 <node CREATED="1788381363706" HGAP="31" ID="ID_1985934952" MODIFIED="1788381363706" TEXT="die kann unmittelbar statisch und eindeutig zugewiesen werden" VSHIFT="6">
@@ -86104,7 +86121,8 @@
 <node CREATED="1789079643596" ID="ID_1571313547" MODIFIED="1789079662309" TEXT="die Scale sollte rein symbolisch dargestellt werden">
 <node CREATED="1789079678938" ID="ID_311127403" MODIFIED="1789079685621" TEXT="als ein Satz algebraische Daten"/>
 <node CREATED="1789079686328" ID="ID_1110601241" MODIFIED="1789079697987" TEXT="ausgestattet mit Informationsfunktionen"/>
-<node CREATED="1789079698677" ID="ID_1651075832" MODIFIED="1789079705138" TEXT="jedoch ohne Operationalisierung"/>
+<node CREATED="1790469747133" ID="ID_107922186" MODIFIED="1790469747133" TEXT="mit Wert-Ermittlungs-Funktionen (pure)"/>
+<node CREATED="1789079698677" ID="ID_1651075832" MODIFIED="1790469774810" TEXT="jedoch ohne operationallisierte Logik"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1789082704022" ID="ID_1925473607" MODIFIED="1789082723794" TEXT="mu&#xdf; eine Registry bereits jetzt bauen">
 <icon BUILTIN="yes"/>
@@ -86273,6 +86291,21 @@ class ScaleRegistry
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
 <linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1790478197709" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478209106" ID="ID_1599776496" MODIFIED="1790478269240" TEXT="Testabdeckung">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478219335" ID="ID_265184931" MODIFIED="1790478266894" TEXT="Standard-Nutzen">
+<icon BUILTIN="pencil"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478228069" ID="ID_194433887" MODIFIED="1790478263177" TEXT="Memory-Konsistenz">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478238100" ID="ID_1243204093" MODIFIED="1790478263177" TEXT="Concurrency safe">
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -87389,6 +87422,25 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="forward"/>
 <node CREATED="1790094501963" ID="ID_438812693" MODIFIED="1790094572153" TEXT="und diese Registry sollte generisch angelegt sein">
 <arrowlink COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" STARTARROW="None" STARTINCLINATION="14;-8;"/>
+<node CREATED="1790469975638" ID="ID_1306037041" MODIFIED="1790469981295" TEXT="inwiefern?"/>
+<node CREATED="1790469982412" ID="ID_1297951248" MODIFIED="1790470003336" TEXT="hier ist mehr zu &#xbb;registrieren&#xab; als nur die Scale-Deskriptoren"/>
+<node CREATED="1790470019568" ID="ID_5893879" MODIFIED="1790470044739" TEXT="also gemeinsames Baumuster &#x2014; aber nicht universelle Generizit&#xe4;t"/>
+</node>
+<node CREATED="1790473957382" ID="ID_747301753" MODIFIED="1790473972104" TEXT="was bedeutet hier Registrieren / Registry?">
+<node CREATED="1790474034779" ID="ID_670483363" MODIFIED="1790474067986" TEXT="ein spezieller Scale-Descriptor &#x27f9; identifiziert durch eine ID (numerisch)">
+<node CREATED="1790474293557" ID="ID_1634478029" MODIFIED="1790474313566" TEXT="ID-Nummern sind ephemer und g&#xfc;ltig nur in einer Runtime-Instanz"/>
+<node CREATED="1790474314638" ID="ID_1442840242" MODIFIED="1790474337583" TEXT="sie werten zuf&#xe4;llig nach Aufruf-Reihenfolge l&#xfc;ckenlos vergeben"/>
+<node CREATED="1790474342886" ID="ID_1882997371" MODIFIED="1790474363136" TEXT="ID-&#xab;slots&#xbb; werden niemals wiederverwendet"/>
+<node COLOR="#42207e" CREATED="1790474369927" ID="ID_1326954832" MODIFIED="1790474390602" TEXT="(mal sehen wie weit das reicht...">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node CREATED="1790474121848" ID="ID_1163539569" MODIFIED="1790474164518" TEXT="Zugriff per Typ(compiletime)+ID(runtime)"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790474208388" ID="ID_1335701954" MODIFIED="1790478289060" TEXT="Concurrency">
+<icon BUILTIN="yes"/>
+<node CREATED="1790474214328" ID="ID_1925127627" MODIFIED="1790474250457" TEXT="Neuerstellen unter globalem Lock (pro Typ &#x27f6; Registry)"/>
+<node CREATED="1790474251717" ID="ID_1300983163" MODIFIED="1790474272111" TEXT="Zugriff per atomic-acquire"/>
+</node>
 </node>
 </node>
 </node>
@@ -87873,7 +87925,7 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1788919077662" ID="ID_768555857" MODIFIED="1788919903351" TEXT="wie gehen wir um mit Zeit-Entit&#xe4;ten als Parameterwerten?">
+<node CREATED="1788919077662" ID="ID_768555857" MODIFIED="1790473520895" TEXT="wie gehen wir um mit Zeit-Entit&#xe4;ten als Parameterwerten?">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -87888,7 +87940,7 @@ Prop.1: dist%3       1  2  0  1  2  0
         man k&#246;nnte die Basis-Typen erweitern und die Diskrepanzen auf Ebene der Typ-Handler abfangen
       </li>
       <li>
-        denkbar w&#228;re auch eine alternative Implementierung der Disposition (ParamData) notwendig, so da&#223; man das Quantisierungs-Grid geeignet darstellen kann und u.U. sogar einen TimeSpan (zwei Datenwerte) noch in der Standard-Buffer-Storage unterbringt
+        m&#246;glicherweise w&#228;re auch eine alternative Implementierung der Disposition (ParamData) notwendig, so da&#223; man das Quantisierungs-Grid geeignet darstellen kann und u.U. sogar einen TimeSpan (zwei Datenwerte) noch in der Standard-Buffer-Storage unterbringt
       </li>
       <li>
         man k&#246;nnte stattdessen solche Parameter in die Kategorie der &#187;komplexen Parameter&#171; einordnen, die ja durchaus sehr h&#228;ufig sein werden (z.B Farbwerte sind Vektoren); demnach w&#228;re eine Zeit-Entit&#228;t eben auch ein komplexer Wert, der auch ein Grid bzw. einen Timecode-Quantisierer impliziert
@@ -199589,6 +199641,24 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1765904221705" ID="ID_168400791" MODIFIED="1765904240857" TEXT="Projektorganisation">
 <node CREATED="1765904243219" ID="ID_762435721" MODIFIED="1765904327595" TEXT="Ticket-System"/>
 </node>
+<node CREATED="1790478502069" ID="ID_772236764" MODIFIED="1790478812357" TEXT="Knowledge-Technology">
+<icon BUILTIN="stop"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790478720379" ID="ID_1701964799" MODIFIED="1790478754887" TEXT="Policy f&#xfc;r Verwendung von Knowledge-Tech(&#x201e;AI&#x201c;)">
+<icon BUILTIN="flag-pink"/>
+</node>
+<node CREATED="1790478543962" ID="ID_1537548387" MODIFIED="1790479601962" TEXT="Plan: Agent-accessible Knowlege-Base">
+<arrowlink COLOR="#9f5585" DESTINATION="ID_1054806825" ENDARROW="Default" ENDINCLINATION="-358;-39;" ID="Arrow_ID_1308347771" STARTARROW="None" STARTINCLINATION="92;968;"/>
+<node CREATED="1790478640790" ID="ID_368351739" MODIFIED="1790478675060" TEXT="strukuriert als themen-Keyword &#x27f6; summary">
+<icon BUILTIN="info"/>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478617109" ID="ID_60449110" MODIFIED="1790478638326" TEXT="Aufbau mit Claude">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478776155" ID="ID_1385239652" MODIFIED="1790478797613" TEXT="Bootstrap als &#xbb;onboarding&#xab;-Proze&#xdf;">
+<icon BUILTIN="pencil"/>
+</node>
+</node>
+</node>
+</node>
 <node CREATED="1756651585768" FOLDED="true" ID="ID_1780831155" MODIFIED="1773679549551" TEXT="Website / Infrastruktur">
 <icon BUILTIN="go"/>
 <node BACKGROUND_COLOR="#d4bcb8" COLOR="#435e98" CREATED="1768412090280" FOLDED="true" ID="ID_1149298290" MODIFIED="1769124560527" TEXT="Situation(allgemein)">
@@ -215436,7 +215506,7 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 <node CREATED="1764297022138" ID="ID_1594986433" MODIFIED="1764297041259" TEXT="jeweils abgeglichen mit Debian/Trixie und Ubuntu/Noble"/>
 </node>
 </node>
-<node CREATED="1583523694636" HGAP="56" ID="ID_446319704" MODIFIED="1583523704860" TEXT="Build-Umgebung" VSHIFT="6">
+<node CREATED="1583523694636" HGAP="56" ID="ID_446319704" MODIFIED="1790478885932" TEXT="Build/Entwicklungs-Umgebung" VSHIFT="6">
 <node COLOR="#338800" CREATED="1583523705722" ID="ID_1278670650" MODIFIED="1583523709609" TEXT="Eclipse-Projekt">
 <icon BUILTIN="button_ok"/>
 </node>
@@ -215472,7 +215542,44 @@ actively maintained upstream. Please remove gdl from Debian.</pre>
 </node>
 </node>
 </node>
-<node CREATED="1689294635406" FOLDED="true" HGAP="23" ID="ID_1624761863" MODIFIED="1764296266132" TEXT="Test/Debug" VSHIFT="35">
+<node CREATED="1790478820998" FOLDED="true" HGAP="476" ID="ID_1054806825" MODIFIED="1790479601962" TEXT="Agent-Harness" VSHIFT="10">
+<edge COLOR="#7e8e8f"/>
+<cloud COLOR="#d0bea4"/>
+<linktarget COLOR="#9f5585" DESTINATION="ID_1054806825" ENDARROW="Default" ENDINCLINATION="-358;-39;" ID="Arrow_ID_1308347771" SOURCE="ID_1537548387" STARTARROW="None" STARTINCLINATION="92;968;"/>
+<icon BUILTIN="pencil"/>
+<node CREATED="1790479201267" ID="ID_745439775" MODIFIED="1790479209417" TEXT="Vorentwurf">
+<node CREATED="1790479220679" ID="ID_1833680061" MODIFIED="1790479225242" TEXT="Zwei Phasen">
+<node CREATED="1790479226935" ID="ID_1770569711" MODIFIED="1790479231754" TEXT="Einarbeitung mit Claude"/>
+<node CREATED="1790479232579" ID="ID_995893621" MODIFIED="1790479240619" TEXT="Experimente mit erweitertem Harness"/>
+</node>
+<node CREATED="1790479243641" ID="ID_871575753" MODIFIED="1790479247205" TEXT="Zwei Richtungen">
+<node CREATED="1790479251829" ID="ID_91822617" MODIFIED="1790479442224" TEXT="Coding-Assistent mit Projektkenntnis">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Ein Assistent der den Charakter des Projekts kennt, mit dem Design-Stil und den Arbeitsmustern vertraut ist, und alle wesentlichen Elemente der Codebasis zuornen kann bez&#252;glich Architektur, Vision, Entwicklungsstand
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790479271537" ID="ID_659450664" MODIFIED="1790479581516" TEXT="Projekt-Prozeduren automatisieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Das soll ehr der &#187;K&#246;der&#171; sein, damit Leute nicht mit ihren eigenen tollen Ideen um die Ecke gebogen kommen...
+    </p>
+    <p>
+      Das Projekt stellt gewisse Arbeits-Schemata und Proze&#223;bausteine bereit, wie z.B. Git-Flow-Aktionen, Release-Verifikation, ggfs. auch ein Codereview-Vorfilter. Dies sind Bausteine, die ich &#187;in der Schublade liegen haben m&#246;chte&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1689294635406" FOLDED="true" HGAP="39" ID="ID_1624761863" MODIFIED="1790478917694" TEXT="Test/Debug" VSHIFT="24">
 <cloud COLOR="#e4d4ac"/>
 <icon BUILTIN="info"/>
 <node CREATED="1696182724524" ID="ID_1871189508" MODIFIED="1696182799932" TEXT="Test-parameter">
