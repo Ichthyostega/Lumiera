@@ -14,7 +14,7 @@
 
 /** @file format-util.hpp
  ** Collection of small helpers and convenience shortcuts for diagnostics & formatting.
- ** - util::str() performs a failsafe to-String conversion, thereby preferring a
+ ** - util::toString() performs a failsafe to-String conversion, thereby preferring a
  **         built-in conversion operator, falling back to just a mangled type string.
  ** - util::join() generates an enumerating string from elements
  **         of an arbitrary sequence or iterable. Elements will be passed

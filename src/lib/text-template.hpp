@@ -542,8 +542,8 @@ namespace lib {
               addCode(COND);
               break;
             case TagSyntax::END_IF:
-              addLead();
               __checkBalanced(IF);
+              addLead();
               if (hasElse())
                 linkJumpToNext();
               else
@@ -557,8 +557,8 @@ namespace lib {
               addCode(ITER);
               break;
             case TagSyntax::END_FOR:
-              addLead();
               __checkBalanced(FOR);
+              addLead();
               if (hasElse())
                 linkJumpToNext();
               else
@@ -570,9 +570,9 @@ namespace lib {
               closeScope();
               break;
             case TagSyntax::ELSE:
-              addLead();
               __checkInScope();
               __checkNoDup();
+              addLead();
               if (IF == scope_.top().clause)
                 {
                   markJumpInScope();
