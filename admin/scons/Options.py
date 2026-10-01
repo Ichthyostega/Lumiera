@@ -29,8 +29,6 @@ def defineCmdlineVariables(buildVars):
          ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,('CC', 'Set the C compiler to use.', 'gcc')
         ,('CXX', 'Set the C++ compiler to use.', 'g++')
-        ,PathVariable('CCACHE', 'Integrate with CCache', '', PathVariable.PathAccept)
-        ,PathVariable('DISTCC', 'Invoke C/C++ compiler commands through DistCC', '', PathVariable.PathAccept)
         ,EnumVariable('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA', allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolVariable('DEBUG', 'Build with debugging information and no optimisations', False)
         ,BoolVariable('OPTIMIZE', 'Build with strong optimisation (-O3)', False)

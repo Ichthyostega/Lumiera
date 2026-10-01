@@ -44,8 +44,6 @@ class LumieraEnvironment(Environment):
         self.path = Record (extract_localPathDefs(buildSetup))     # ◁───── e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
         self.Tool("BuilderDoxygen")
-        self.Tool("ToolDistCC")
-        self.Tool("ToolCCache")
         register_LumieraIconBuilder(self)
         register_LumieraResourceBuilders(self)
         register_LumieraCustomBuilders(self)

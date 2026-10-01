@@ -265,8 +265,33 @@ of the application to be re-built. And of course it means, that you only ever co
 necessary.
 
 With SCons, there is no need for the usual ``cleaning paranoia''. Similarly, there is no need
-for CCache (but using DistCC rocks !). Unfortunately, calculating those MD5 sums requires some
-time on each build, even if the net result is that nothing will happen at all.
+for CCache, since the content signatures already prevent any redundant compilation within a
+working tree. Unfortunately, calculating those MD5 sums requires some time on each build,
+even if the net result is that nothing will happen at all.
+
+.CCache and DistCC (removed 10/2026)
+[NOTE]
+--
+Both were supported by the build system from 12/2008 until 10/2026, as options `CCACHE`
+and `DISTCC`, each redirecting the compiler invocation through a wrapper command.
+Neither was ever used in practice, and both are considered to be of marginal relevance.
+
+- *CCache* caches compilation results across working trees and over time. SCons provides a
+  superior solution with content MD5, taking the defined dependency graph into account.
+  CCache would only provide a _secondary, opaque notion_ of ``this is the same compilation'' --
+  and when such a judgement is wrong, the resulting confusion is expensive to diagnose.
+  Furthermore, conditional compilation is also based on the MD5 change detection, and
+  turns out to be highly effective -- to the degree that full rebuilds are rare.
+- *DistCC* distributes compilation over a network of build hosts. It was added when one
+  contributor had a private build network available; the project has had no such setup for
+  many years. Note also that DistCC needs to ship _preprocessed_ translation units over
+  the wire -- for a template-heavy C++ codebase the payload grows with exactly those
+  units that are slowest, so the benefit is smallest where it would be most welcome.
+
+Beyond being unused, both carried a concrete liability: each rewrote the `$CXX` construction
+variable into `wrapper g++` -- a mutation that silently changes what any tool reading the
+build commands will conclude about the compiler in use.
+--
 
 Configuration options
 ^^^^^^^^^^^^^^^^^^^^^
