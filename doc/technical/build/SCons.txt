@@ -238,6 +238,7 @@ Targets
 - *check* builds test code and runs our test-suites
 - *research* builds just the research tree
 - *doc* builds documentation (currently just Doxygen)
+- *compiledb* (re)generates the xref:CompilationDB[compilation database] -- compiles nothing
 - *all* builds the Application, test-suites and documentation
 - *install* builds and installs the Lumiera Application
 
@@ -290,7 +291,8 @@ Neither was ever used in practice, and both are considered to be of marginal rel
 
 Beyond being unused, both carried a concrete liability: each rewrote the `$CXX` construction
 variable into `wrapper g++` -- a mutation that silently changes what any tool reading the
-build commands will conclude about the compiler in use.
+build commands will conclude about the compiler in use, the
+xref:CompilationDB[compilation database] among them.
 --
 
 Configuration options
@@ -380,3 +382,62 @@ to see examples of that technique -- which we also use to define that
 global compound target variables like `core`, `vessel_lib`, `core_lib`,
 `vault_lib`, and `support_lib`. These in turn are essential for
 building the layered dependency hierarchy in our code.
+
+
+[[CompilationDB]]
+Compilation database
+^^^^^^^^^^^^^^^^^^^^
+The tooling built on the Clang front-end -- the https://clangd.llvm.org/[clangd] language
+server, `clang-tidy`, `clang-format`'s include ordering, and various code browsers -- must
+be able to parse a translation unit *exactly the way the build parses it*: same include
+paths, same preprocessor definitions, same language standard. Since the build system is the
+only place where that knowledge exists, the tools expect it to be handed over, in the form
+of a JSON file listing one entry per compiler invocation. The format is specified by LLVM as
+the https://clang.llvm.org/docs/JSONCompilationDatabase.html[JSON Compilation Database];
+clangd's own https://clangd.llvm.org/design/compile-commands[notes on compile commands]
+explain how a language server consumes it, and which heuristic it applies for header files,
+which never appear in the database themselves.
+
+Generation is *opt-in*, through the sticky option `COMPILEDB=yes`, or for a single
+invocation by naming the `compiledb` target. Both write 'target/compile_commands.json'.
+When the option is set, the database is a dependency of the `build` alias and is thus
+refreshed by every ordinary build.
+
+.How it works
+SCons has provided a `CompilationDatabase` builder since version 4.0. Rather than
+scraping build output, it installs an additional *emitter* on the object builders: whenever
+an object node is created while the SConscript definitions are read, the emitter captures
+the unexpanded command line together with the environment in force for that node. This
+setup has several consequences:
+
+Nothing is compiled::
+  Generating the database takes about two seconds, because it only requires
+  the dependency graph to be constructed, while no build commands will be evaluated.
+All targets are captured::
+  The generated database always describes the complete build, not the requested target.
+  A plain `scons compiledb` covers 'src/', 'tests/', 'research/' and 'src/tool/' alike,
+  including the per-subtree flag differences -- the GTK include paths appear on the
+  'src/stage/' entries and nowhere else, `-Itests` is given only below 'tests/'.
+
+Note that the captured command lines are *not* affected by the `VERBOSE` option: the
+emitter reads the underlying `$CXXCOM` construction variable directly, not the abbreviated
+progress messages configured in 'Setup.py'.
+
+.How the feature is attached
+The integration lives in 'admin/scons/CompileDB.py' and is invoked from the 'SConstruct'
+through `CompileDB.setup(env)`, which returns the generated node so that the `build` alias
+stays defined in one single, prominent place. Unlike the other custom tools, this one is
+deliberately *not* loaded from the `LumieraEnvironment`: the emitter must be installed only
+*after* `Platform.configure(env)` has run, since it would otherwise also capture the `conftest_*`
+compilations of the configure checks and litter the database with entries below '.sconf_temp'.
+
+.Consuming the database
+clangd searches for 'compile_commands.json' beside the source and in a 'build/' subdirectory,
+but not in our 'target/'. The '.clangd' configuration file in the project root supplies that
+pointer, and is the place for any further language-server settings; its syntax is documented
+under https://clangd.llvm.org/config[clangd configuration]. Note that the compilation
+database describes what *GCC* is invoked with, which might not in every case be what Clang accepts;
+Yet the database is still correct and useful in those spots; the parse simply degrades locally.
+
+TIP: Lumiera embraces the policy to be compilable both with GCC and Clang
+     (but Clang support has fallen back at times, temporarily)

@@ -29,6 +29,7 @@ sys.path.append('./admin/scons')
 import Setup
 import Options
 import Platform
+import CompileDB
 
 from Buildhelper import *
 from LumieraEnvironment import *
@@ -39,6 +40,7 @@ from LumieraEnvironment import *
 
 env = Setup.defineBuildEnvironment()         # dirs & compiler flags
 env = Platform.configure(env)                # library dependencies
+compileDB = CompileDB.setup(env)             # code intelligence (opt-in: COMPILEDB=yes)
 
 
 
@@ -61,7 +63,7 @@ env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.
 #Import('lumiera plugins tools gui testsuite doxydoc')
 Import('lumiera plugins tools gui testsuite')
 
-build = env.Alias('build', lumiera + plugins + tools + gui)
+build = env.Alias('build', lumiera + plugins + tools + gui + compileDB)
 # this defines the SCons **default target**
 env.Default('build')
 

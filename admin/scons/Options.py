@@ -34,6 +34,7 @@ def defineCmdlineVariables(buildVars):
         ,BoolVariable('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
         ,BoolVariable('VALGRIND', 'Run Testsuite under valgrind control', True)
         ,BoolVariable('VERBOSE',  'Print full build commands', False)
+        ,BoolVariable('COMPILEDB','Generate target/compile_commands.json for clangd', False)
         ,('TESTSUITES', 'Run only test suites matching the given pattern', '')
         ,('TESTMODE',   'test suite error mode for test.sh', '')
 #       ,BoolVariable('OPENGL', 'Include support for OpenGL preview rendering', False)
@@ -58,6 +59,7 @@ Special Targets:
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
      doc     : generate documentation (Doxygen)
+     compiledb: just (re)generate target/compile_commands.json for clangd
      all     : build and testcode and doc
      install : install created artifacts at PREFIX
 
