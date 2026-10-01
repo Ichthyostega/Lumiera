@@ -33,6 +33,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/time/timevalue.hpp"
 #include "test/transiently.hpp"
 #include "lib/format-obj.hpp"
@@ -62,7 +63,7 @@ namespace test{
   using util::showTypes;
   
   
-  constexpr auto ROUGH_PRECISION = pow (10, -3);
+  constexpr auto ROUGH_PRECISION = util::ipow (10.0, -3);
   constexpr auto EPSILON_ULP     = 5;
   
   

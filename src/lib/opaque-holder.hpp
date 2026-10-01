@@ -810,7 +810,7 @@ namespace lib {
           using Holder = InPlaceBuffer<BA, sizeof(SUB), DEFAULT>;
           Holder& holder = *static_cast<Holder*> (buffer_);
           
-          return holder.template emplace (std::forward<SUB> (implementation));
+          return holder.emplace (std::forward<SUB> (implementation));
         }
       
       /** Abbreviation for placement new of a subclass SUB into the opaque buffer*/

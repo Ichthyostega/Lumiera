@@ -138,10 +138,10 @@ namespace lib {
       struct iterator
         : IterAdapter<Pos, DataHandle>
         {                                                ////////////////////////////////////////////////////TICKET #1125 : should be build on top of IterStateWrapper rather than IterAdapter!
-          using _I = IterAdapter<Pos, DataHandle>;
-          using _I::IterAdapter;
+          using Adapter = IterAdapter<Pos, DataHandle>;
+          using Adapter::Adapter;                        // expose inherited ctors
           
-          operator string()  const {return _I::source()? string(*_I::source()) : "⟂"; }
+          operator string()  const {return Adapter::source()? string(*Adapter::source()) : "⟂"; }
         };
       
       /** build an iterator frontend for the given source,

@@ -224,6 +224,43 @@ namespace util {
     return logB;
   }
   
-  
+
+
+  /**
+   * Exponentiation with integral exponent (counterpart to #ilog2).
+   * @param base      the value to be raised
+   * @param exponent  integral exponent; a negative exponent yields the reciprocal
+   * @remark `std::pow` can **not** be used in a constant expression: the standard does
+   *         not mark it `constexpr` and only GCC accepts it there, through a _builtin_.
+   *         Besides, for a small integral exponent, repeated multiplication is exact
+   *         whenever base and result are representable -- unlike the generic
+   *         implementation by `exp(ln(base)·exponent)`.
+   * @note the implementation uses [square-and-multiply], so it performs `ilog2(exponent)` squarings;
+   *         the reciprocal is formed only once, on the final result, and is thus correctly rounded
+   * @see ilog2()
+   * [square-and-multiply]: https://en.wikipedia.org/wiki/Exponentiation_by_squaring
+   */
+  template<std::floating_point F>
+  inline constexpr F
+  ipow (F base, int exponent)  noexcept
+  {
+    bool reciprocal = exponent < 0;
+    uint64_t exp = reciprocal? -int64_t(exponent)   // (widen first, to cover INT_MIN)
+                             :  int64_t(exponent);
+    F res{1};
+    for ( ; exp; exp >>= 1, base *= base)
+      if (exp & 1)
+        res *= base;
+    return reciprocal? F(1)/res
+                     : res;
+  }
+
+  static_assert (1.0   == ipow (10.0, 0));
+  static_assert (1e3   == ipow (10.0, 3));
+  static_assert (1e-3  == ipow (10.0,-3));   // ◁───── exactly the nearest double to 0.001
+  static_assert (0.25  == ipow ( 2.0,-2));
+  static_assert (3125  == ipow ( 5.0, 5));
+
+
 } // namespace util
 #endif /*UTIL_QUANT_H*/

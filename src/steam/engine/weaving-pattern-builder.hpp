@@ -163,6 +163,17 @@ namespace engine {
   
   
   
+  /**
+   * A builder to collect working data.
+   * Implemented through a suitable configuration of lib::SeveralBuilder,
+   * with a policy configuration parameter to define the allocator to use.
+   * @todo 10/2026 extract the builder-DSL definitions? `DataBuilder` and `SizMark`
+   *       are vocabulary of the node-builder language and are used from
+   *       'node-builder.hpp' as well -- they reside here merely because this is
+   *       the upstream header in the include order, not because the concepts
+   *       belong to the weaving pattern. The same holds for `UseHeapAlloc`,
+   *       which sits in an anonymous namespace over there.
+   */
   template<class POL, class I, class E=I>
   using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
   

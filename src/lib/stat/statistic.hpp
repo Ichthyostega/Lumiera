@@ -17,7 +17,19 @@
  ** - average over the N last elements in a data sequence
  ** - simple linear regression with weights (single predictor variable)
  ** - also over a time series with zero-based indices
- **
+ ** 
+ ** @remark this header was imported from the [yoshimi-test] acceptance suite, where it
+ **         is maintained as `src/util/statistic.hpp` within namespace `util` -- so the
+ **         two copies are kept deliberately similar, to allow carrying fixes either way.
+ **         Note in particular that a helper `round<places>(double)` for decimal rounding
+ **         was **removed here** (10/2026): it was never instantiated within Lumiera, while
+ **         its `constexpr double shift{pow(10.0,places)}` is not a constant expression by
+ **         the standard (while GCC accepts it, relying on a _builtin_). It remains in use
+ **         upstream, in `suite/step/TimingObservation.cpp`. Should decimal rounding be
+ **         wanted here, settle it together with the other half-solutions collected in #1360
+ **         -- and note util::ipow() now provides the constexpr exponentiation.
+ ** 
+ ** [yoshimi-test]: https://github.com/Ichthyostega/yoshimi-test/
  */
 
 
@@ -69,17 +81,6 @@ namespace stat{
       };
     return std::apply (makeArray, forward<TUP> (tuple));
   }
-  
-  template<size_t places>
-  inline double
-  round (double val)
-  {
-    constexpr double shift{pow(10.0, places)};
-    return std::round(val*shift) / shift;
-  }
-  
-  
-  
   
   /**
    * Read-only view into a segment within a sequence of data

@@ -167,7 +167,7 @@ namespace out   {
    * handle is retained.
    * @tparam isTest use a simple BufferMetadata table in OutputBufferProxy.
    */
-  template<class CON, bool isTest=false>
+  template<class CON, bool isTest>            // ◁───── default defined at declaration (output-slot.hpp)
   class OutputSlot::AllocState
     : public OutputSlot::Allocation
     {

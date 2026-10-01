@@ -108,7 +108,7 @@ namespace lib {
     {
       using Tuple = std::tuple<DATA...>;
       
-      using Tuple::tuple;
+      using Tuple::Tuple;
       
       template<typename SPEC>
       void linkInto (HeteroData<SPEC>&);

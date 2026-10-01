@@ -155,16 +155,6 @@ namespace engine {
   
   
   
-  /**
-   * A builder to collect working data.
-   * Implemented through a suitable configuration of lib::SeveralBuilder,
-   * with a policy configuration parameter to define the allocator to use.
-   */
-  template<class POL, class I, class E=I>
-  using DataBuilder = lib::SeveralBuilder<I,E, POL::template Policy>;
-  
-  
-  
   template<class POL, class DAT>
   class NodeBuilder;
   
@@ -506,8 +496,8 @@ namespace engine {
       closeParamFront (PAR v1, PARS ...vs)
         {
           return adaptParam(
-                    WAB::ParamClosure::template closeFront (forward<PAR> (v1)
-                                                           ,forward<PARS>(vs)...));
+                    WAB::ParamClosure::closeFront (forward<PAR> (v1)
+                                                  ,forward<PARS>(vs)...));
         }
       
       /** immediately close the rightmost parameter positions,
@@ -517,8 +507,8 @@ namespace engine {
       closeParamBack (PAR v1, PARS ...vs)
         {
           return adaptParam(
-                    WAB::ParamClosure::template closeBack  (forward<PAR> (v1)
-                                                           ,forward<PARS>(vs)...));
+                    WAB::ParamClosure::closeBack  (forward<PAR> (v1)
+                                                  ,forward<PARS>(vs)...));
         }
       
       /** immediately close a single parameter at designated position
