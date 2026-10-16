@@ -34,17 +34,24 @@
 #define LIB_PAR_TYPE_REGISTRY_H
 
 
+#include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
+#include "lib/format-string.hpp"
 //#include "lib/meta/trait.hpp"
 //#include "lib/util.hpp"
 
 //#include <concepts>
 //#include <limits>
+#include <atomic>
+#include <array>
 
 
 namespace lib {
 namespace par {
+  namespace err = lumiera::error;
+  
+  using util::_Fmt;
   
   /**
    * Management of descriptor entries keyed by numeric ID.
@@ -54,8 +61,18 @@ namespace par {
    */
   template<class ELM>
   class TypeRegistry
-    : util::NonCopyable
+    : lib::Sync<>
+    , util::NonCopyable
     {
+      static constexpr size_t EXTENT_SIZ = 256;
+      static constexpr size_t INDEX_SIZ  = 256;
+      
+      using Extent = std::array<ELM, EXTENT_SIZ>;
+      using Index  = std::array<std::atomic<Extent*>, INDEX_SIZ>;
+      
+      Index index_{};
+      size_t size_{0};
+      
     public:
       class ID;
       
@@ -80,6 +97,7 @@ namespace par {
   
   
   
+  
   template<class ELM>
   template<typename...INIT>
   inline TypeRegistry<ELM>::ID
@@ -88,11 +106,20 @@ namespace par {
     UNIMPLEMENTED ("allocate new slot, possibly grow extents, under mutex lock");
   }
   
+  /**
+   * access slot by ID, protected by atomic-acquire
+   */
   template<class ELM>
   inline ELM&
-  TypeRegistry<ELM>::operator[] (ID slot)  const
+  TypeRegistry<ELM>::operator[] (ID entryID)  const
   {
-    UNIMPLEMENTED ("access slot by ID, protected by atomic acquire");
+    auto& indexSlot = index_[entryID % EXTENT_SIZ];
+    Extent* const& extent = indexSlot.load (std::memory_order_acquire);
+    if (not extent)
+      throw err::Logic{_Fmt{"TypeRegistry: entryID = %d not yet allocated"} % entryID
+                      , LERR_(INDEX_BOUNDS)};
+    
+    return (*extent)[entryID % EXTENT_SIZ];
   }
   
   

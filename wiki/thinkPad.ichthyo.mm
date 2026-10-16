@@ -86291,8 +86291,33 @@ class ScaleRegistry
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
 <linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1790478197709" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
-<icon BUILTIN="flag-yellow"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1792195251812" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
+<icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792195119872" ID="ID_755422994" MODIFIED="1792195149285" TEXT="sehe (vorerst?) einen hart-gecodeten 16bit-Index-Space vor">
+<icon BUILTIN="yes"/>
+</node>
+<node CREATED="1792195154123" ID="ID_585016704" MODIFIED="1792195248642" TEXT="somit sitzt eine Index-Tabelle mit 256 Eintr&#xe4;gen (&#xe0; 8byte) im static-Segment">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...unter der Annahme da&#223; ich Template-Instanzen dieser TypeRegistry als statische Variable jeweils f&#252;r einen Type-Scope &#187;pflanze&#171;
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1792195264285" ID="ID_656758019" MODIFIED="1792195283801" TEXT="die Index-Slots sind selber atomic-Pointer">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1792195292550" ID="ID_1991831189" MODIFIED="1792195314280" TEXT="die Slot-Auswahl erfolgt per Modulus">
+<icon BUILTIN="info"/>
+</node>
+<node CREATED="1792195325746" ID="ID_1685989678" MODIFIED="1792195369088" TEXT="Belegung wird (implizii) durch ein size-Feld definiert">
+<icon BUILTIN="forward"/>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1792195373545" HGAP="36" ID="ID_845978423" MODIFIED="1792195403780" TEXT="gilt nur wenn wir die Size bei jeder Neubelegung erh&#xf6;hen" VSHIFT="3">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478209106" ID="ID_1599776496" MODIFIED="1790478269240" TEXT="Testabdeckung">
 <icon BUILTIN="pencil"/>
@@ -112669,6 +112694,106 @@ Date:&#160;&#160;&#160;Thu Apr 20 18:53:17 2023 +0200<br/>
 <arrowlink COLOR="#1f1a57" DESTINATION="ID_1326944262" ENDARROW="Default" ENDINCLINATION="-226;-782;" ID="Arrow_ID_973510776" STARTARROW="None" STARTINCLINATION="-147;11;"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1790815668698" HGAP="-20" ID="ID_335449239" MODIFIED="1790816166237" TEXT="Aufgabe gel&#xf6;st aber resultierende Struktur ist komplex" VSHIFT="43">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Hier habe ich mehrere Abstraktionen &#252;bereinander get&#252;rmt. Der DataBuilder zieht sich durch beide Builder (Weaving-Pattern und Node). Gemeinsames Vokabular wird verwendet, und der Ansatz mit dem &#187;geschwenkten Typ&#171; ist durchaus eine Herausforderung f&#252;r den Leser.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Anl&#228;&#223;lich einer Untersuchung mit Clang (2026-09) zeigte sich, da&#223; wir eine duplizierte Definition haben:
+    </p>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">/&#42;*</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* A builder to collect working data.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">*&#160;Implemented through a suitable configuration of lib::SeveralBuilder,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* with a policy configuration parameter to define the allocator to use.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* </font><font color="#b76746">@todo</font><font color="#b88b63">&#160;10/2026 extract the builder-DSL definitions? `DataBuilder` and `SizMark`</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* are vocabulary of the node-builder language and are used from</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* 'node-builder.hpp' as well -- they reside here merely because this is</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* the upstream header in the include order, not because the concepts</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* belong to the weaving pattern. The same holds for `UseHeapAlloc`,</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">* which sits in an anonymous namespace over there.</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#b88b63">&#42;/</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>POL</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>I</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160;</font><font color="#4a1a65"><b>class</b></font><font color="#3a1f18">&#160; </font><font color="#a34649"><b><u>E</u></b></font><font color="#65533c">=</font><font color="#a34649"><b><u>I</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>DataBuilder</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#535773">lib</font><font color="#65533c">::</font><font color="#635e96"><b>SeveralBuilder</b></font><font color="#65533c">&lt;</font><font color="#a34649"><b><u>I</u></b></font><font color="#65533c">,</font><font color="#a34649"><b><u>E</u></b></font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#a34649"><b><u>POL</u></b></font><font color="#65533c">::</font><font color="#4a1a65"><b>template</b></font><font color="#3a1f18">&#160;</font><font color="#635e96"><b>Policy</b></font><font color="#65533c">&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>template</b></font><font color="#65533c">&lt;</font><font color="#8c505c"><b>uint</b></font><font color="#3a1f18">&#160;</font><font color="#a34649"><b><u>siz</u></b></font><font color="#65533c">&gt;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>using</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>SizMark</b></font><font color="#3a1f18">&#160;</font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#535773">std</font><font color="#65533c">::</font><font color="#635e96"><b>integral_constant</b></font><font color="#65533c">&lt;</font><font color="#8c505c"><b>uint</b></font><font color="#65533c">,</font><font color="#a34649"><b><u>siz</u></b></font><font color="#65533c">&gt;;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          
+        </p>
+      </div>
+    </div>
+    <p>
+      
+    </p>
+    <p>
+      Habe mir eine Zusammenfassung der Verwendungen von Claude formulieren lassen; dann entschieden, die Definition vorerst beim WeavingPatternBuilder zu belassen. Aber mein Bauchgef&#252;hl sagt mit, das Design ist noch nicht gut.
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="clanbomber"/>
+<node BACKGROUND_COLOR="#fdd1ba" COLOR="#a50125" CREATED="1790819542829" HGAP="37" ID="ID_584941915" MODIFIED="1790819627877" TEXT="NodeBuilder&lt;UseHeapAlloc&gt; is a different type in every translation unit" VSHIFT="-5">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da &#252;ber einen anonymen Namespace injiziert.
+    </p>
+    <p>
+      Gegenw&#228;rtig kein Problem, da er ja nur hier in diesem Node-Builder-&#214;kosystem verwendet wird
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_644920322" MODIFIED="1790815376540" STYLE="bubble" TEXT="ungel&#xf6;st: DSL-Vokabular in Weaving-Pattern-Builder / Node-Builder" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1200371112" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1432749433" STARTARROW="None" STARTINCLINATION="-840;29;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_1169224110" MODIFIED="1790815349045" STYLE="fork" TEXT="Das ist ein sehr gro&#xdf;er Design-Body, und verwendet gemeinsames vokabular">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1721002518189" ID="ID_539153824" MODIFIED="1721002527069" TEXT="Lead-Ports einf&#xfc;llen">
@@ -123476,6 +123601,11 @@ StM_bind(Builder&lt;R1&gt; b1, Extension&lt;R1,R2&gt; extension)
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1735085700" MODIFIED="1780335764770" TEXT="Schwierigkeit: Builder-Produkt verifizieren">
 <linktarget COLOR="#fe512a" DESTINATION="ID_1735085700" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1365000324" SOURCE="ID_1498279820" STARTARROW="None" STARTINCLINATION="-952;45;"/>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1200371112" MODIFIED="1790815376540" TEXT="Aufgabe: unausgereiftes DSL-Design im Node-Builder">
+<linktarget COLOR="#fe512a" DESTINATION="ID_1200371112" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1432749433" SOURCE="ID_644920322" STARTARROW="None" STARTINCLINATION="-840;29;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1200371112" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_622648124" SOURCE="ID_1605968405" STARTARROW="None" STARTINCLINATION="-840;29;"/>
 <icon BUILTIN="bell"/>
 </node>
 </node>
@@ -193500,6 +193630,10 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1769123755590" ID="ID_990982180" MODIFIED="1769123770231" TEXT="&#xdc;bergeordnete strategische Themen sind dort abgebildet"/>
 <node CREATED="1769123771505" ID="ID_1108626437" MODIFIED="1769123838982" TEXT="es erscheint m&#xf6;glich, diese Struktur forzuf&#xfc;hren"/>
 </node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790799218181" ID="ID_459775090" MODIFIED="1790799307903" TEXT="wird mit einem Claude-Skill zus&#xe4;tzlich navivierbar">
+<arrowlink COLOR="#208ad7" DESTINATION="ID_1825638722" ENDARROW="Default" ENDINCLINATION="734;-27;" ID="Arrow_ID_844460555" STARTARROW="None" STARTINCLINATION="869;50;"/>
+<icon BUILTIN="wizard"/>
+</node>
 </node>
 <node CREATED="1769123866039" ID="ID_788013537" MODIFIED="1769123879329" TEXT="Anscheinend gibt es derzeit keine Alternative zu Trac">
 <node CREATED="1769123880330" ID="ID_1349368608" MODIFIED="1769123895861" TEXT="moderne Issue-Tracker behandeln Tickets als ein fl&#xfc;chtiges Artefakt"/>
@@ -193539,6 +193673,34 @@ unsigned int ThreadIdAsInt = *static_cast&lt;unsigned int*&gt;(static_cast&lt;vo
 <node CREATED="1769123977823" ID="ID_118953173" MODIFIED="1769124008080" TEXT="L&#xe4;ngerfristige M&#xf6;glichkeit: einen Requirements-DAG mit generischem Tooling aufbauen">
 <node CREATED="1769124010541" ID="ID_1347359872" MODIFIED="1769124018704" TEXT="naheliegende M&#xf6;glichkeit: Org-Mode"/>
 <node CREATED="1769124019271" ID="ID_1703535010" MODIFIED="1769124031104" TEXT="m&#xfc;&#xdf;te dann aber viel mit Skripting erg&#xe4;nzt werden"/>
+</node>
+</node>
+<node CREATED="1790798937439" ID="ID_57906549" MODIFIED="1790798945596" TEXT="Integration von Knowledge-Technology">
+<node CREATED="1790798953648" ID="ID_1212415787" MODIFIED="1790798967562" TEXT="entfaltet indirekte Wirkungen">
+<node CREATED="1792190307697" ID="ID_178144755" MODIFIED="1792190323629" TEXT="man &#xfc;bersieht was der Code sagt"/>
+<node CREATED="1792190136869" ID="ID_1971127836" MODIFIED="1792190292886" TEXT="jemand k&#xf6;nnte falsche &#xbb;Regeln&#xab; erschlie&#xdf;en">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...irgend jemand kommt daher, sagt &quot;WTF&quot;, und l&#228;&#223;t seinen Agenten auf die Codebasis los. Der Agent leitet mehr oder weniger zuf&#228;llig irgendwelche plausible Muster ab, und pr&#252;gelt dann die vom User gew&#252;nschte &#196;nderung in das System. Das f&#252;hrt zu &#196;rger, wenn es ein Pull-Request ist &#8212; und es f&#252;hrt zu Zerst&#246;rung, wenn es ein akzeptierter Mitarbeiter macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1792190152778" ID="ID_223212954" MODIFIED="1792190374545" TEXT="aber man k&#xf6;nnte auch Architektur anders vermitteln">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...weil ein Agent auf viele Belange gleichzeitig <i>achten k&#246;nnte</i>, wofern man ihm die richtigen Instruktionen gibt
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1790798980707" ID="ID_1670728278" MODIFIED="1790799108577" TEXT="Beobachtung &#x27f6; was passiert wenn man einen Agent als Assistenz einrichtet">
+<arrowlink COLOR="#803757" DESTINATION="ID_1385239652" ENDARROW="Default" ENDINCLINATION="470;-538;" ID="Arrow_ID_1028646074" STARTARROW="None" STARTINCLINATION="1035;38;"/>
 </node>
 </node>
 </node>
@@ -199317,7 +199479,7 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1762902465988" ID="ID_1902716840" MODIFIED="1762902476765" TEXT="Projektorganisation"/>
 <node CREATED="1762902477581" ID="ID_659681075" MODIFIED="1762902520594" TEXT="Authors / Attribution">
 <node CREATED="1762902539136" ID="ID_1999575438" MODIFIED="1762902542906" TEXT="Anfangszeit">
-<node CREATED="1762902544495" ID="ID_1184833585" MODIFIED="1762902648272" TEXT="es wurd mal spa&#xdf;halber ein &#xbb;Abspann&#xab; gebastelt">
+<node CREATED="1762902544495" ID="ID_1184833585" MODIFIED="1762902544495" TEXT="es wurd mal spa&#xdf;halber ein &#xbb;Abspann&#xab; gebastelt">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -199643,18 +199805,104 @@ that situation will improve in forseeable future.</pre>
 </node>
 <node CREATED="1790478502069" ID="ID_772236764" MODIFIED="1790478812357" TEXT="Knowledge-Technology">
 <icon BUILTIN="stop"/>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790478720379" ID="ID_1701964799" MODIFIED="1790478754887" TEXT="Policy f&#xfc;r Verwendung von Knowledge-Tech(&#x201e;AI&#x201c;)">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790478720379" ID="ID_1701964799" MODIFIED="1790906606789" TEXT="Policy f&#xfc;r Verwendung von Knowledge-Technology(&#x201e;AI&#x201c;)">
 <icon BUILTIN="flag-pink"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1790905347147" ID="ID_750539215" MODIFIED="1790906083217" TEXT="vorl&#xe4;ufige Praktik definiert">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1790905368204" ID="ID_1905506647" MODIFIED="1790905377986" TEXT="es geht um den Beleg der Autorenschaft"/>
+<node CREATED="1790905378643" ID="ID_342064205" MODIFIED="1790905390684" TEXT="und zwar auf Ebene eines Features / einer Contribution"/>
+<node CREATED="1790905415565" ID="ID_266124427" MODIFIED="1790905456466" TEXT="falls Knowledge-Technology substantiell eingesetzt wurde">
+<node CREATED="1790905431150" ID="ID_1194980164" MODIFIED="1790905436685" TEXT="dann ein Stamp in den Commit"/>
+<node CREATED="1790905437915" ID="ID_1618527880" MODIFIED="1790905447685" TEXT="mit einer Liste, wozu sie eingesetzt wurde"/>
+</node>
+<node CREATED="1790905520397" ID="ID_1078213983" MODIFIED="1790905527263" TEXT="Claude enstsprechend instruiert">
+<node CREATED="1790905528290" ID="ID_1150800879" MODIFIED="1790905589840" TEXT="er soll selbst einen solchen Template-Stamp hinzuf&#xfc;gen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      anstelle des &quot;co-authored by Claude Opus 5&quot;, das er normalerweise (ungefragt) an jeden Commit anh&#228;ngt, den er macht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790905540341" ID="ID_1708377991" MODIFIED="1790905624453">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      er soll mit in der Diskussion die <b>Decision-Points</b>&#160;klar markieren
+    </p>
+  </body>
+</html></richcontent>
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      dieser Vorschlag kam sogar von Claude selber, nachdem ich den Begr&#252;ndungszusammenhang gegeben habe
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
 </node>
 <node CREATED="1790478543962" ID="ID_1537548387" MODIFIED="1790479601962" TEXT="Plan: Agent-accessible Knowlege-Base">
 <arrowlink COLOR="#9f5585" DESTINATION="ID_1054806825" ENDARROW="Default" ENDINCLINATION="-358;-39;" ID="Arrow_ID_1308347771" STARTARROW="None" STARTINCLINATION="92;968;"/>
-<node CREATED="1790478640790" ID="ID_368351739" MODIFIED="1790478675060" TEXT="strukuriert als themen-Keyword &#x27f6; summary">
+<node CREATED="1790478640790" ID="ID_368351739" MODIFIED="1790799494478" TEXT="strukuriert als themen-Keyword &#x27f6; summary">
+<arrowlink COLOR="#57606b" DESTINATION="ID_479891979" ENDARROW="Default" ENDINCLINATION="-9;-79;" ID="Arrow_ID_1130879091" STARTARROW="None" STARTINCLINATION="101;6;"/>
 <icon BUILTIN="info"/>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478617109" ID="ID_60449110" MODIFIED="1790478638326" TEXT="Aufbau mit Claude">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478776155" ID="ID_1385239652" MODIFIED="1790478797613" TEXT="Bootstrap als &#xbb;onboarding&#xab;-Proze&#xdf;">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478776155" ID="ID_1385239652" MODIFIED="1790799108577" TEXT="Bootstrap als &#xbb;onboarding&#xab;-Proze&#xdf;">
+<linktarget COLOR="#803757" DESTINATION="ID_1385239652" ENDARROW="Default" ENDINCLINATION="470;-538;" ID="Arrow_ID_1028646074" SOURCE="ID_1670728278" STARTARROW="None" STARTINCLINATION="1035;38;"/>
 <icon BUILTIN="pencil"/>
+<node CREATED="1790799132670" ID="ID_1643312526" MODIFIED="1790799180688" TEXT="Einf&#xfc;hrung in die Code-Basis">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Bestandteile, historisch gewachsene &#187;bodies of code&#171;, Methodik der Tests
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790799183006" ID="ID_1825638722" MODIFIED="1790799307903" TEXT="Zugang und Analyse der Ticket-Struktur">
+<linktarget COLOR="#208ad7" DESTINATION="ID_1825638722" ENDARROW="Default" ENDINCLINATION="734;-27;" ID="Arrow_ID_844460555" SOURCE="ID_459775090" STARTARROW="None" STARTINCLINATION="869;50;"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790799310114" ID="ID_1055219341" MODIFIED="1790799432353" TEXT="Arbeits-Umgebung und Modus der Zusammenarbeit">
+<icon BUILTIN="pencil"/>
+<node CREATED="1790799344044" ID="ID_585070949" MODIFIED="1790799351496" TEXT="Claude-Code l&#xe4;uft im Terminal"/>
+<node CREATED="1790799352770" ID="ID_479891979" MODIFIED="1790799494478" TEXT="Memory-Struktur definiert">
+<linktarget COLOR="#57606b" DESTINATION="ID_479891979" ENDARROW="Default" ENDINCLINATION="-9;-79;" ID="Arrow_ID_1130879091" SOURCE="ID_368351739" STARTARROW="None" STARTINCLINATION="101;6;"/>
+<node CREATED="1790799366800" ID="ID_1799503756" MODIFIED="1790799376739" TEXT="geteilt in private und project-facing"/>
+<node CREATED="1790799377505" ID="ID_229451745" MODIFIED="1790799388881" TEXT="lokale Ablage (+Backup)"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1790799392269" ID="ID_103970132" MODIFIED="1790799399452" TEXT="Plan: admin/scons">
+<icon BUILTIN="hourglass"/>
+</node>
+</node>
+<node CREATED="1790799405020" ID="ID_1776538470" MODIFIED="1790799417318" TEXT="braucht Clangd f&#xfc;r &#xbb;code-Intelligence&#xab;">
+<node COLOR="#338800" CREATED="1790799505391" ID="ID_311376881" MODIFIED="1790904955809" TEXT="Erweiterung/Unterst&#xfc;tzung Build-System">
+<arrowlink COLOR="#0641e7" DESTINATION="ID_873006341" ENDARROW="Default" ENDINCLINATION="-1189;-57;" ID="Arrow_ID_1377084140" STARTARROW="None" STARTINCLINATION="-393;26;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+<node CREATED="1790904967950" ID="ID_451997381" MODIFIED="1790905345908" TEXT="Nebenbei: Clang-conformance analysiert und verbesert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Claude kann nun mit Clang wesentlich umfassendere Analysen &#252;ber die ganze Codebasis machen;
+    </p>
+    <p>
+      Mit dem Upgrade auf C++23 waren einige Probleme mit <font color="#4f2929" face="Monospaced">typename</font>&#160;und <font color="#4f2929" face="Monospaced">template</font>&#160;aufgetreten, welche schwierig zu diagnostizierende Folge-Probleme &#252;ber die ganze Codebasis erzeugen. Seinerzeit hatte ich aufgegeben, mit Clang zu testen, da ich (vielleicht etwas vorschnell) schlu&#223;folgerte, da&#223; Clang in der Sparchunterst&#252;tzng etwas zur&#252;ckgefallen war. Im Bedonderen mit diesem Problem der Variablen-Qualifier, die eigentlich notwendig sind, damit der Code &#252;berhaupt geparsed werden kann. Das C++ Committee m&#246;chte aber die meisten solchen expliziten Qualifizierungen durch Kontext-Heuristiken ersetzen...
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
 </node>
 </node>
 </node>
@@ -223001,7 +223249,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1446505444775" FOLDED="true" HGAP="130" ID="ID_721807850" MODIFIED="1764717907210" TEXT="Buildsystem" VSHIFT="-38">
+<node CREATED="1446505444775" FOLDED="true" HGAP="130" ID="ID_721807850" MODIFIED="1790799607227" TEXT="Buildsystem" VSHIFT="-38">
 <icon BUILTIN="go"/>
 <node CREATED="1446505367113" ID="ID_335245102" LINK="http://issues.lumiera.org/ticket/971" MODIFIED="1764295282429">
 <richcontent TYPE="NODE"><html>
@@ -223181,7 +223429,7 @@ Since then others have made contributions, see the log for the history.</font></
 </node>
 </node>
 </node>
-<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1764295783862" TEXT="Probleme..." VSHIFT="3">
+<node CREATED="1544239177727" FOLDED="true" HGAP="90" ID="ID_1414932362" MODIFIED="1790799611944" TEXT="Probleme..." VSHIFT="3">
 <icon BUILTIN="go"/>
 <node COLOR="#338800" CREATED="1544239202589" FOLDED="true" ID="ID_1398808684" MODIFIED="1544310874478" TEXT="an neue Layer-Struktur anpassen">
 <icon BUILTIN="button_ok"/>
@@ -224358,6 +224606,264 @@ env.Command('out.bin', 'in.bin', my_action)</code></pre>
 <node CREATED="1764208806162" ID="ID_1765397466" MODIFIED="1764208821103" TEXT="und baut eine irre gro&#xdf;e und tief vernetzte Datenstruktur auf"/>
 </node>
 </node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1790799524365" FOLDED="true" ID="ID_873006341" MODIFIED="1790906573883" TEXT="mu&#xdf; compile_commands.json bereitstellen f&#xfc;r Clangd">
+<linktarget COLOR="#0641e7" DESTINATION="ID_873006341" ENDARROW="Default" ENDINCLINATION="-1189;-57;" ID="Arrow_ID_1377084140" SOURCE="ID_311376881" STARTARROW="None" STARTINCLINATION="-393;26;"/>
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790802403473" ID="ID_809366993" MODIFIED="1790802417268" TEXT="beauftrage Claude mit einem &#xbb;Assessment&#xab;">
+<icon BUILTIN="wizard"/>
+<node CREATED="1790802418701" ID="ID_1009737540" MODIFIED="1790802434739" TEXT="er zieht das externe Tool &quot;bear&quot; in Betracht"/>
+<node CREATED="1790802435386" ID="ID_1391735549" MODIFIED="1790802447825" TEXT="er analyisert unseren Output mit VERBOSE=yes"/>
+<node CREATED="1790802448495" ID="ID_86972044" MODIFIED="1790802492667" TEXT="eine Websuche zeigt, da&#xdf; SCons seit 4.0 offiziellen Support for eine &quot;compile-db&quot; hat">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      das Feature wurde vom Mongo-DB-Projekt gesponsort und ist effektiv was wir hier brauchen
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790802493672" ID="ID_972033290" MODIFIED="1790802508143" TEXT="er vergleicht das mit verschiednen externen Projekten (Stale seit einigen Jahren)"/>
+<node CREATED="1790802509919" ID="ID_675452996" MODIFIED="1790802516178" TEXT="Claude macht dann mehrere Probel&#xe4;ufe">
+<node CREATED="1790802517126" ID="ID_1212337817" MODIFIED="1790802529020" TEXT="f&#xfc;gt eine Invocation des &quot;compile-db&quot;-Features ein"/>
+<node CREATED="1790802529612" ID="ID_939735970" MODIFIED="1790802541235" TEXT="untersucht, wo die Sconf-Platform-Tests landen"/>
+<node CREATED="1790802543161" ID="ID_1506269448" MODIFIED="1790802556304" TEXT="macht eine Zeitmessung  mit / ohne compile-db"/>
+<node CREATED="1790802557119" ID="ID_1886053345" MODIFIED="1790802569171" TEXT="generiert eine komplette compile-db"/>
+<node CREATED="1790802569879" ID="ID_157926679" MODIFIED="1790802585162" TEXT="unsersucht 20 zuf&#xe4;llig ausgew&#xe4;hlte Quelldateien mit clangd"/>
+<node CREATED="1790802585919" ID="ID_111455208" MODIFIED="1790802594288" TEXT="analysiert die gefundenen Fehler"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790802599075" ID="ID_1527539782" MODIFIED="1790802786554" TEXT="Ergebnisse">
+<icon BUILTIN="back"/>
+<node CREATED="1790802605098" ID="ID_842778" MODIFIED="1790802622100" TEXT="Empfehlung f&#xfc;r das offizielle &#xbb;compile-db&#xab; Feature"/>
+<node CREATED="1790802622808" ID="ID_79989028" MODIFIED="1790802635936" TEXT="Vorschlag verschiedener Einbindungs-Varianten"/>
+<node CREATED="1790802638811" ID="ID_826537642" MODIFIED="1790802647865" TEXT="Assessment der gefundenen Fehler">
+<node CREATED="1790802649690" ID="ID_1982472038" MODIFIED="1790802664078" TEXT="mehrheitlich korrekt und strikteres Verhalten von Clangd"/>
+<node CREATED="1790802664742" ID="ID_863955966" MODIFIED="1790802687930" TEXT="eine gewisse Unsch&#xe4;rfe beim Qualifier &quot;template&quot;"/>
+<node CREATED="1790802689724" ID="ID_136614691" MODIFIED="1790802753052" TEXT="eine Entgleisung in tests/steam/engine/node-builder-test.cpp">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      &#160;incomplete_member_access on FeedPrototype&lt;lambda...&gt; &#9474; one outlier, tests/steam/engine/node-builder-test.cpp with 22 errors, all from that one recursive-builder pattern
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1790802756924" ID="ID_989312816" MODIFIED="1790802777983" TEXT="Warnung vor Interaktion mit CCache und DistCC"/>
+</node>
+</node>
+<node CREATED="1790818341168" ID="ID_1504960083" MODIFIED="1790818350851" TEXT="Diskussion und Planung">
+<node CREATED="1790818357751" ID="ID_712029109" MODIFIED="1790818380240" TEXT="es handelt sich um eine Delegation an ein Standard-Feature"/>
+<node CREATED="1790818381087" ID="ID_293075367" MODIFIED="1790818417003" TEXT="die Compile-DB wird gebaut beim Aufbau des Project-Models (nicht der Build)"/>
+<node CREATED="1790818420812" ID="ID_144179756" MODIFIED="1790818425978" TEXT="Beschl&#xfc;sse">
+<node CREATED="1790818426863" ID="ID_510036631" MODIFIED="1790818445888" TEXT="soll &#xfc;ber eine eigenst&#xe4;ndige Builder-Definition eingebunden werden"/>
+<node CREATED="1790818446619" ID="ID_409475530" MODIFIED="1790818459797" TEXT="soll &#xfc;ber eine sticky-Optcache-Option ein/ausschaltbar sein"/>
+<node CREATED="1790818460778" ID="ID_269795120" MODIFIED="1790818486667" TEXT="wird eingeh&#xe4;ngt in das Basis-Target &quot;build&quot;"/>
+<node CREATED="1790818488878" ID="ID_102089618" MODIFIED="1790818514247" TEXT="compile_commands.json &#x27f6; target/"/>
+<node CREATED="1790818515812" ID="ID_939532059" MODIFIED="1790818520855" TEXT="Eingebunden &#xfc;ber .clangd"/>
+<node CREATED="1790818521882" ID="ID_393632215" MODIFIED="1790818568444" TEXT="Ergebnisse via Claude umfangreich verifiziert">
+<arrowlink COLOR="#7a23c4" DESTINATION="ID_1846996393" ENDARROW="Default" ENDINCLINATION="-36;-63;" ID="Arrow_ID_1814164832" STARTARROW="None" STARTINCLINATION="-181;12;"/>
+<node CREATED="1790818572747" ID="ID_1842337509" MODIFIED="1790818582467" TEXT="verwende nun /usr/bin/clangd-22"/>
+<node CREATED="1790818583351" ID="ID_1912930132" MODIFIED="1790818599076" TEXT="(Debian verwendet als Default die v19, aber unterst&#xfc;tzt v22)"/>
+<node CREATED="1790818649966" ID="ID_1617371050" MODIFIED="1790818661433" TEXT="auch Eclipse rekonfiguriert auf /usr/bin/clangd-22"/>
+<node CREATED="1790818663318" ID="ID_1294841020" MODIFIED="1790818694472" TEXT="Claude merkt sich die Problematik mit irref&#xfc;hrenden Fehlermeldungen"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790819654790" ID="ID_1057955886" MODIFIED="1790819679843" TEXT="Buildystem-Umbau durch Claude (Agent-mode)">
+<icon BUILTIN="wizard"/>
+<node CREATED="1790819686292" ID="ID_947359114" MODIFIED="1790819701794" TEXT="DistCC und CCache - Support zur&#xfc;ckbauen"/>
+<node CREATED="1790819702694" ID="ID_158951140" MODIFIED="1790819716188" TEXT="Compile-DB-Support einbauen und konfigurieren"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790809461483" ID="ID_1846996393" MODIFIED="1790818560946" TEXT="Neben-Thema: Compilation mit Clang -- Probleme mit &quot;typename&quot;">
+<linktarget COLOR="#7a23c4" DESTINATION="ID_1846996393" ENDARROW="Default" ENDINCLINATION="-36;-63;" ID="Arrow_ID_1814164832" SOURCE="ID_393632215" STARTARROW="None" STARTINCLINATION="-181;12;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1790809487959" ID="ID_1771074863" MODIFIED="1790809499377" TEXT="Claude hat erst Stichproben gemacht"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790809499997" ID="ID_1535524995" MODIFIED="1790809609615" TEXT="habe dann eine volle Analyse beauftragt">
+<icon BUILTIN="wizard"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790809511128" ID="ID_1239753089" MODIFIED="1790809619484" STYLE="fork" TEXT="Ergebnis">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="back"/>
+<node CREATED="1790809514419" ID="ID_1647192935" MODIFIED="1790809619483" TEXT="die Situation stellt sich jetzt nicht mehr so dramatisch dar"/>
+<node CREATED="1790809538440" ID="ID_1655162201" MODIFIED="1790809619483" TEXT="aber Claude konnte nicht aufkl&#xe4;ren, was damals das Problem war"/>
+<node CREATED="1790809553606" ID="ID_35977942" MODIFIED="1790809619483" TEXT="es zeigen sich jetzt einige Knackpunkte, die Clang entgleisen lassen">
+<node CREATED="1790809571360" ID="ID_1726771249" MODIFIED="1790809619483" TEXT="die meisten sind valide und GCC ist zu nachl&#xe4;ssig"/>
+<node CREATED="1790809587096" ID="ID_1569496944" MODIFIED="1790809619483" TEXT="viele f&#xfc;hren aber zu unklarer Diagnostik, und verwirrenden Fehlern"/>
+<node CREATED="1790809638562" ID="ID_1780378851" MODIFIED="1790809848358" TEXT="die meisten sehen als leicht beehebbar aus">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <ul>
+      <li>
+        wenn ein Alias f&#252;r einen Typ definiert ist, dann mu&#223; eine using-Direktive, die den Konstruktur dieses Alias in scope bringt, exakt genauso lauten wie der Alias. Also using Tuple::tuple ist falsch, using Tuple::Tuple korrekt
+      </li>
+      <li>
+        pow() ist nur f&#252;r GCC constexpr f&#252;r konstanten Exponent
+      </li>
+      <li>
+        Clang ist picky mit dem template qualifier. Stellenweise verlangt er ihn, stellenweise besteht er darauf, da&#223; er entfernt wird.
+      </li>
+    </ul>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1790809850062" ID="ID_204423429" MODIFIED="1790809866578" TEXT="etwas problematischer erscheint ein Problem mit Template-Instantiierung in GenNode">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1790814757464" ID="ID_161640108" MODIFIED="1790814767476" TEXT="Einfaches Clean-up sofort machen">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1790814770687" ID="ID_1723532503" MODIFIED="1790814789296" TEXT="habe den Impact noch genauer analysieren und darstellen lassen"/>
+<node CREATED="1790814790404" ID="ID_539149435" MODIFIED="1790814813373" TEXT="die meisten top-offender sind tats&#xe4;chlich einfach und risikoarm zu beheben"/>
+<node CREATED="1790814815904" ID="ID_144647873" MODIFIED="1790814830049" TEXT="die power()-Funktion">
+<node CREATED="1790814833838" ID="ID_1454603306" MODIFIED="1790814846748" TEXT="die meisten Verwendungen laufen &#xfc;ber test-helper"/>
+<node COLOR="#5b280f" CREATED="1790814847484" ID="ID_1100662848" MODIFIED="1790814876192" TEXT="aber statistic.hpp (extrahiert aus Yoshimi-testrunner) auch">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1790814878481" ID="ID_1777601579" MODIFIED="1790814884842" TEXT="wird derzeit nicht verwendet"/>
+<node CREATED="1790814886304" ID="ID_896955706" MODIFIED="1790814890819" TEXT="totmachen"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790814895582" ID="ID_1656783732" MODIFIED="1790814945863" TEXT="util::ipow() in util-quant.hpp neu aufnehmen">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f1cc99" COLOR="#bd020d" CREATED="1790814952336" ID="ID_33236263" MODIFIED="1790815160479" TEXT="die Clang-Diagnostik deutet auf Design-Problem hin im Node-Builder">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Clang st&#246;rt sich zwar nur an einem wiederholten Template-default-Argument. Aber tats&#228;chlich wurde hier ein template-Alias wortw&#246;rtlich zweimal definiert, im weaving-pattern-builder und im node-builder. Genauere Analyse zeigt, da&#223; hier ein gemeinsames Vokabular verwendet wird. Das Design ist noch nicht ausgereift!
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_1605968405" MODIFIED="1790815376540" STYLE="bubble" TEXT="ungel&#xf6;st: DSL-Vokabular in Weaving-Pattern-Builder / Node-Builder" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1200371112" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_622648124" STARTARROW="None" STARTINCLINATION="-840;29;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_131266243" MODIFIED="1790815349045" STYLE="fork" TEXT="Das ist ein sehr gro&#xdf;er Design-Body, und verwendet gemeinsames vokabular">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790817777193" ID="ID_1559003932" MODIFIED="1790817901593" TEXT="Claude f&#xfc;hrt alle Fixes sauber aus (Agent-mode)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Habe heute mehrfach Claude als Agenten die komplette Detailarbeit machen lassen, am Ende einer ausf&#252;hrlichen Analyse und Diskussion. Letztere belegt eindeutig da&#223; Claude die Anleitung auf Design-Ebene braucht, aber operationale Entscheidungen gut und defensiv handhaben kann
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c5abc9" COLOR="#690f14" CREATED="1790809890680" ID="ID_1571535531" MODIFIED="1790818325260" TEXT="Neben-Thema: SCons variant-Dir">
+<icon BUILTIN="button_cancel"/>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790809903165" ID="ID_931792721" MODIFIED="1790809913342" TEXT="habe auch hier Claude mit einem Assessment beauftragt">
+<icon BUILTIN="wizard"/>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790809915279" ID="ID_633131427" MODIFIED="1790809924667" STYLE="fork" TEXT="Ergebnis">
+<edge COLOR="#808080" STYLE="bezier" WIDTH="thin"/>
+<icon BUILTIN="back"/>
+<node CREATED="1790809926571" ID="ID_1693230625" MODIFIED="1790809941443" TEXT="w&#xe4;re heutzutage ohne &#xfc;berm&#xe4;&#xdf;igen Aufwand realisierbar"/>
+<node CREATED="1790809942310" ID="ID_914005311" MODIFIED="1790809950836" TEXT="bringt aber ein paar Fallen mit sich">
+<node CREATED="1790809951628" ID="ID_744681273" MODIFIED="1790809961891" TEXT="vor allem in unserem eigenen Buildsystem- und Tool-Code"/>
+<node CREATED="1790809962599" ID="ID_1391716446" MODIFIED="1790809995286" TEXT="&quot;der Pfad&quot; einer build-Node kann sich nun auf mehrerlei beziehen"/>
+<node CREATED="1790809996045" ID="ID_818674445" MODIFIED="1790810002965" TEXT="das macht den Sachverhalt komplex">
+<node CREATED="1790810005647" ID="ID_727044924" MODIFIED="1790810016256" TEXT="im Besonderen Globbing-Konstrukte sind kritisch"/>
+<node CREATED="1790810016865" ID="ID_1842870239" MODIFIED="1790810080421" TEXT="die k&#xf6;nnen stillschweigend falsch globben (bei leerem variant-dir)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Wenn man nicht aufpa&#223;t, geth das Globbing in das Variant-Dir. Und das ist nicht zwingend (bereits) populiert. Das f&#252;hrt zu stillschweigend falschen Build-Targets
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1790810088268" ID="ID_1307025554" MODIFIED="1790810108943" TEXT="gr&#xf6;&#xdf;tes Problem: die rolle des target-Dir ist dann nicht klar"/>
+</node>
+<node CREATED="1790810110272" ID="ID_831572322" MODIFIED="1790810120094" TEXT="meine Einsch&#xe4;tzung: das ist es nicht wert">
+<node CREATED="1790810121632" ID="ID_708175472" MODIFIED="1790810130503" TEXT="nach einiger Diskussion stimmt Claude dem auch zu"/>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1790810131161" ID="ID_403222263" MODIFIED="1790810150232" TEXT="es soll nun dokumentiert werden, aber wir bleiben bei in-tree-Builds">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1790814730580" ID="ID_1402561876" MODIFIED="1790814746313" TEXT="beauftrage Claude mit einem write-up (in Trac-Markup)">
+<icon BUILTIN="wizard"/>
+</node>
+</node>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1790824675933" ID="ID_1329354207" MODIFIED="1790904919815" TEXT="Review und Dokumentation">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1790824683067" ID="ID_1803277405" MODIFIED="1790824702143" TEXT="habe Claude instruiert, die technische Dokumentation zu erg&#xe4;nzen"/>
+<node COLOR="#338800" CREATED="1790824702989" ID="ID_578807585" MODIFIED="1790904860036" TEXT="Review der Dokumentation">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#338800" CREATED="1790824711656" ID="ID_1314157329" MODIFIED="1790904862049" TEXT="Changesets durchsehen">
+<icon BUILTIN="button_ok"/>
+</node>
+<node BACKGROUND_COLOR="#a2c7b3" COLOR="#2d660a" CREATED="1790904871241" ID="ID_1293948849" MODIFIED="1790904912457" TEXT="per Rebase vor die Parameter-Arbeit einordnen">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1790824717925" ID="ID_903924689" MODIFIED="1790904863815" TEXT="Tickets">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790824723706" ID="ID_1063043331" LINK="https://issues.lumiera.org/ticket/525" MODIFIED="1790827351240" TEXT="Meta-Hub f&#xfc;r das Buildsystem: #525">
+<node CREATED="1790824799380" ID="ID_800614113" MODIFIED="1790824958134" TEXT="ein altes Ticket umfunktioniert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Urspr&#252;nglich war das ein Report von Michael Ploujnikov -- der tats&#228;chlich ein &quot;surprise .... works as designed&quot; war: SCons propagiert keine Settings per Environment....
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Da dieses Ticket dann liegen blieb, und l&#228;ngerfristig keinen Informationswert hat (es handelt sich um eine hinreichend dokumentierte Eigenheit von SCons), habe ich mir jetzt die &#187;sch&#246;ne Schnappszahl&#171; gegriffen, und daraus ein Meta-Ticket gemacht
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1790824758697" ID="ID_622993805" LINK="https://issues.lumiera.org/ticket/932" MODIFIED="1790827347206" TEXT="GCC vs Clang : Divergenz #932">
+<node CREATED="1790824959382" ID="ID_1060395079" MODIFIED="1790824970807" TEXT="das Ticket bestand, war aber unscharf formuliert"/>
+<node COLOR="#435e98" CREATED="1790824972723" ID="ID_256335583" LINK="https://issues.lumiera.org/ticket/928" MODIFIED="1790827362909" TEXT="Tracking-Ticket f&#xfc;r die eigentliche Arbeit: #928">
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#338800" CREATED="1790827367941" ID="ID_961655227" LINK="https://issues.lumiera.org/ticket/964" MODIFIED="1790827403628" TEXT="Tags erg&#xe4;nzt und auch unter #964 geh&#xe4;ngt">
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1790825157908" ID="ID_1957567534" LINK="https://issues.lumiera.org/ticket/1436" MODIFIED="1790904866404" TEXT="Dokumentation Compilation-DB-Feature #1436">
+<icon BUILTIN="button_ok"/>
+</node>
+<node COLOR="#435e98" CREATED="1790825213947" ID="ID_1339126211" LINK="https://issues.lumiera.org/ticket/1437" MODIFIED="1790827340928" TEXT="Dokumentation Scons Variant-Dir #1437">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1790825239649" ID="ID_369371388" MODIFIED="1790825248817" TEXT="Hier Write-up von Claude einbringen"/>
+<node CREATED="1790825251620" ID="ID_1222478401" MODIFIED="1790825267963" TEXT="Beschlu&#xdf;: wir machen es vorerst nicht"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1790906535653" ID="ID_163194832" MODIFIED="1790906566436" TEXT="Claude: Resume this session">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      claude --resume 7c1964ab-eb85-470c-b8cc-4e2cd9d6aa84
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="info"/>
 </node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1763560137355" ID="ID_1362355060" MODIFIED="1763560152772" TEXT="bekannte Probleme">
