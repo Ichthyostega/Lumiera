@@ -61,7 +61,7 @@ namespace par {
    */
   template<class ELM>
   class TypeRegistry
-    : lib::Sync<>
+    : public lib::Sync<>
     , util::NonCopyable
     {
       static constexpr size_t EXTENT_SIZ = 256;
@@ -97,14 +97,33 @@ namespace par {
   
   
   
-  
+  /**
+   * Allocate new slot, possibly grow extents.
+   * @remark the *write path* is mutex-protected.
+   *   It is used for new registrations, which typically
+   *   is not required from a hot path.
+   */
   template<class ELM>
   template<typename...INIT>
   inline TypeRegistry<ELM>::ID
   TypeRegistry<ELM>::makeSlot (INIT&&... initArg)
   {
-    UNIMPLEMENTED ("allocate new slot, possibly grow extents, under mutex lock");
+    if (size_ >= INDEX_SIZ*EXTENT_SIZ)
+      throw err::State{_Fmt{"TypeRegistry space exhausted for type %s"} % meta::typeStr<ELM>()
+                      , LERR_(CAPACITY)};
+    
+    Lock sync{this};
+    ID entryID{size_++};
+    auto& indexSlot = index_[entryID % EXTENT_SIZ];
+    Extent*  extent = indexSlot.load (std::memory_order_relaxed);
+    if (not extent)
+      indexSlot.store (new Extent{}   // heap-allocate new Extent
+                      ,std::memory_order_release);
+    
+    void* storage = indexSlot + (entryID % EXTENT_SIZ);
+    new (storage) ELM(std::forward<INIT> (initArg)...);
   }
+  
   
   /**
    * access slot by ID, protected by atomic-acquire
@@ -114,7 +133,7 @@ namespace par {
   TypeRegistry<ELM>::operator[] (ID entryID)  const
   {
     auto& indexSlot = index_[entryID % EXTENT_SIZ];
-    Extent* const& extent = indexSlot.load (std::memory_order_acquire);
+    Extent*  extent = indexSlot.load (std::memory_order_acquire);
     if (not extent)
       throw err::Logic{_Fmt{"TypeRegistry: entryID = %d not yet allocated"} % entryID
                       , LERR_(INDEX_BOUNDS)};
