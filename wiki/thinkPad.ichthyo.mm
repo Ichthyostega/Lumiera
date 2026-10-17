@@ -86124,9 +86124,9 @@
 <node CREATED="1790469747133" ID="ID_107922186" MODIFIED="1790469747133" TEXT="mit Wert-Ermittlungs-Funktionen (pure)"/>
 <node CREATED="1789079698677" ID="ID_1651075832" MODIFIED="1790469774810" TEXT="jedoch ohne operationallisierte Logik"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1789082704022" ID="ID_1925473607" MODIFIED="1789082723794" TEXT="mu&#xdf; eine Registry bereits jetzt bauen">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789082704022" ID="ID_1925473607" MODIFIED="1792277287662" TEXT="mu&#xdf; eine Registry bereits jetzt bauen">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789082726792" ID="ID_383248634" MODIFIED="1789082726792" TEXT="Frage im bestehenden Chat nochmal nach &#x2014; mit konkretem Implementierungs-Szenario">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789082726792" FOLDED="true" ID="ID_383248634" MODIFIED="1792277296425" TEXT="Frage im bestehenden Chat nochmal nach &#x2014; mit konkretem Implementierungs-Szenario">
 <arrowlink COLOR="#51bbdf" DESTINATION="ID_1161327543" ENDARROW="Default" ENDINCLINATION="231;13;" ID="Arrow_ID_994670578" STARTARROW="None" STARTINCLINATION="-183;-140;"/>
 <icon BUILTIN="wizard"/>
 <node CREATED="1789082815287" ID="ID_104427970" MODIFIED="1789082927619" TEXT="beschreibe Registrierung des Scale-Desriptors">
@@ -86287,9 +86287,9 @@ class ScaleRegistry
 </node>
 </node>
 </node>
-<node CREATED="1789159365103" ID="ID_435108847" MODIFIED="1790094564624" TEXT="sollte dann wohl gleich eine generische Registry sein...">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789159365103" ID="ID_435108847" MODIFIED="1792277314150" TEXT="sollte dann wohl gleich eine generische Registry sein...">
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
-<linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
+<linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-27;101;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
 <node COLOR="#338800" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1792201647439" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
 <icon BUILTIN="button_ok"/>
@@ -86311,6 +86311,10 @@ class ScaleRegistry
 </node>
 <node CREATED="1792195292550" ID="ID_1991831189" MODIFIED="1792195314280" TEXT="die Slot-Auswahl erfolgt per Modulus">
 <icon BUILTIN="info"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792257772332" ID="ID_550004421" MODIFIED="1792257805244" TEXT="und dabei auch out-of-bounds pr&#xfc;fen">
+<linktarget COLOR="#e0021f" DESTINATION="ID_550004421" ENDARROW="Default" ENDINCLINATION="1236;0;" ID="Arrow_ID_1455631653" SOURCE="ID_977075189" STARTARROW="None" STARTINCLINATION="610;-27;"/>
+<icon BUILTIN="broken-line"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792195325746" ID="ID_1685989678" MODIFIED="1792200835146" TEXT="Belegung wird (implizit) durch ein size-Feld definiert">
 <icon BUILTIN="forward"/>
@@ -86356,12 +86360,12 @@ class ScaleRegistry
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478209106" ID="ID_1599776496" MODIFIED="1790478269240" TEXT="Testabdeckung">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1790478209106" ID="ID_1599776496" MODIFIED="1792277224879" TEXT="Testabdeckung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1790478219335" ID="ID_265184931" MODIFIED="1792201649437" TEXT="Standard-Nutzen">
 <icon BUILTIN="button_ok"/>
 </node>
-<node COLOR="#338800" CREATED="1790478228069" ID="ID_194433887" MODIFIED="1792207934918" TEXT="Memory-Konsistenz">
+<node COLOR="#338800" CREATED="1790478228069" FOLDED="true" ID="ID_194433887" MODIFIED="1792277246502" TEXT="Memory-Konsistenz">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#df0277" CREATED="1792204102943" ID="ID_1794382952" MODIFIED="1792207761829" TEXT="erst mal denke ich: Kindergarten.....">
 <font NAME="SansSerif" SIZE="11"/>
@@ -86406,15 +86410,15 @@ class ScaleRegistry
 <node CREATED="1792207903239" ID="ID_140698597" MODIFIED="1792207930110" TEXT="alle Destruktoren aufgerufen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478238100" ID="ID_1243204093" MODIFIED="1790478263177" TEXT="Concurrency safe">
-<icon BUILTIN="flag-yellow"/>
-<node CREATED="1792243503003" ID="ID_118835140" MODIFIED="1792243516591" TEXT="Ziel: concurrent Pressure">
+<node COLOR="#338800" CREATED="1790478238100" FOLDED="true" ID="ID_1243204093" MODIFIED="1792277333650" TEXT="Concurrency safe">
+<linktarget COLOR="#e9fdca" DESTINATION="ID_1243204093" ENDARROW="Default" ENDINCLINATION="46;151;" ID="Arrow_ID_470786963" SOURCE="ID_297548263" STARTARROW="None" STARTINCLINATION="76;11;"/>
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792243503003" ID="ID_118835140" MODIFIED="1792277229161" TEXT="Ziel: concurrent Pressure">
+<icon BUILTIN="yes"/>
 <node CREATED="1792243524508" ID="ID_1160740004" MODIFIED="1792243541074" TEXT="bedeutet: Wahrscheinlichkeit f&#xfc;r Kollisionen erh&#xf6;hen"/>
 <node CREATED="1792243563343" ID="ID_1528908673" MODIFIED="1792243660072" TEXT="Problem hier: die Operationen sind f&#xfc;r sich genommen schnell">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       eine Heap-Allokation kostet <i>amortisiert</i>&#160;nur 40ns, und der Rest ist <i>fast nix</i>.
@@ -86424,9 +86428,7 @@ class ScaleRegistry
 </node>
 <node CREATED="1792243672752" ID="ID_85638427" MODIFIED="1792243990414" TEXT="es besteht die Gefahr da&#xdf; Threads nicht kollidieren weil sie warten">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Das Mutex-Lock-induzierte Weit, sowie die Scheduler-Aktivit&#228;t sind um den Faktor 1000 langsamer als die eigentliche Nutzarbeit; m&#246;glicherweise warten fast alle Threads die meiste Zeit &#8212; wodurch die Wahrscheinlichkeit f&#252;r Kollisionen gegen Null geht.
@@ -86439,9 +86441,7 @@ class ScaleRegistry
 <node CREATED="1792244036770" ID="ID_1866810841" MODIFIED="1792244069698" TEXT="Verh&#xe4;ltnis Lesen zu Registrieren &#x2261; 10 : 1"/>
 <node CREATED="1792244161658" ID="ID_1060660077" MODIFIED="1792244279235" TEXT="nur wenig und kurze Randomisierung">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Kein Zugriff auf den Zufallszahlengenerator w&#228;hrend der aktiven Phase, und nur kurze Randomisierungs-Schleifen.
@@ -86451,28 +86451,24 @@ class ScaleRegistry
 </node>
 </node>
 </node>
-<node CREATED="1792244285441" ID="ID_1100815459" MODIFIED="1792244288521" TEXT="Testaufbau">
+<node COLOR="#338800" CREATED="1792244285441" ID="ID_1100815459" MODIFIED="1792277235067" TEXT="Testaufbau">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1792244289873" ID="ID_1530115505" MODIFIED="1792244301259" TEXT="Load-Thrad definieren">
 <node CREATED="1792244569484" ID="ID_53941596" MODIFIED="1792244585294" TEXT="Lesen konzentriert sich um die F&#xfc;ll-Front">
 <node CREATED="1792244686306" ID="ID_1166915882" MODIFIED="1792252324751" TEXT="&#xfc;ber die eigene letzte ID hinaus lesen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       damit man m&#246;glichst Eintr&#228;ge erfa&#223;t, die ein anderer Thread grade gemacht hat
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node COLOR="#5b280f" CREATED="1792244586773" ID="ID_802085787" MODIFIED="1792256760255" TEXT="br&#xe4;uchte dazu eine contains()-Funktion">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       eine solche Funktion ist aber nicht gut...
@@ -86489,36 +86485,29 @@ class ScaleRegistry
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="closed"/>
 </node>
 <node CREATED="1792252624719" ID="ID_1048890891" MODIFIED="1792252729856" TEXT="damit kann ich die Struktur nicht aggressiv unter Druck setzen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Weil durch einem Schreibvorgang eine acquire-Barriere erzwungen ist, und jeder Thread damit trivialerweise die vorhergehenden Eintr&#228;ge im Cache hat (es sei denn, sie liegen in einem anderen Extent)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 <node CREATED="1792252731864" ID="ID_1325538886" MODIFIED="1792252995344" TEXT="allerdings: mehr Druck gibt es in der Praxis auch nicht">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       auch im realen Einsatz liest schlimmstenfalls ein anderer Thread mit einer gewissen Verz&#246;gerung, und garantiert hinter einer schreib+lese-Barrier (weil er sonst die ID gar nicht kennen k&#246;nnte)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#605e7c" DESTINATION="ID_1325538886" ENDARROW="Default" ENDINCLINATION="347;18;" ID="Arrow_ID_1434324540" SOURCE="ID_793070482" STARTARROW="Default" STARTINCLINATION="434;0;"/>
 <icon BUILTIN="smiley-neutral"/>
 </node>
@@ -86527,9 +86516,7 @@ class ScaleRegistry
 <node CREATED="1792244788143" ID="ID_1720732613" MODIFIED="1792244815063" TEXT="Randomisierung nur zwischen den Blocks"/>
 <node CREATED="1792244825410" ID="ID_381939462" MODIFIED="1792244896220" TEXT="Randomisierung nur per Modulus-Check">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ist mein eigener aktueller Z&#228;hler durch meine feste Zufallszahl teilbar?
@@ -86546,9 +86533,7 @@ class ScaleRegistry
 <node CREATED="1792246293354" ID="ID_1313021588" MODIFIED="1792246304300" TEXT="mu&#xdf; eine Zufallszahl in jeden Thread bekommen">
 <node CREATED="1792246339080" ID="ID_1594128477" MODIFIED="1792251554934" TEXT="&#x3bb;-Thread scheidet damit aus">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das Thema hatte ich schon x-mal, zuletzt beim BufferProviderLoad_test (daf&#252;r habe ich dann sogar ScopedCollection <i>aufgebohrt</i>&#160;und &#955;-Initialisierung eingebaut)
@@ -86580,34 +86565,27 @@ class ScaleRegistry
       </li>
     </ul>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792251557240" ID="ID_1731075562" MODIFIED="1792251684525" TEXT="ein dedizierter LoadThread f&#xfc;hrt zu einer komplexen Code-Struktur">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       der m&#252;&#223;te dann n&#228;mlich als Member der Testklasse definiert sein, damit der die gemeinsame SyncBarrier sieht. Das wiederum erfordert dann, da&#223; die zu testende Registry irgendwie als Parameter durchgef&#228;delt werden mu&#223;. Die Struktur knallen wir dann dem Leser vor den Latz....
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792251686884" ID="ID_1108149420" MODIFIED="1792251781746" TEXT="dann doch lieber noch ein doppelt verschachteltes &#x3bb;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...das kann ich wenigstens als Variable definieren, und die innere Capture explizit ausformulieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1792247295125" ID="ID_403445735" MODIFIED="1792247319218" TEXT="dann kann man auch alle Threads mit einer N+1-Barriere starten"/>
@@ -86615,47 +86593,303 @@ class ScaleRegistry
 <node CREATED="1792244377340" ID="ID_265966366" MODIFIED="1792244387626" TEXT="Ergebnis pr&#xfc;fen">
 <node CREATED="1792252818802" ID="ID_268890956" MODIFIED="1792252847071" TEXT="ich mu&#xdf; vor allem auf Data-Corruption pr&#xfc;fen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       denn eine entgleiste Datenstruktur w&#252;rde sich nur so zeigen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792252852039" ID="ID_1022907040" MODIFIED="1792252867471" TEXT="also mu&#xdf; jeder geschriebene / gelesene Wert verifizierbar sein"/>
 <node CREATED="1792252869846" ID="ID_1697985306" MODIFIED="1792252953009" TEXT="Verwende die &#xfc;bliche Formel f&#xfc;r arithmetische Reihen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       1...N &#8801; N/2 &#183; (N+1)
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792252900815" ID="ID_793070482" MODIFIED="1792253003046" TEXT="allerdings hier N mal, und in unregelm&#xe4;&#xdf;iger Reihenfolge">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       Jeder Thread registriert Zahlen 1...N, und die Reihenfolge ist randomisiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <arrowlink COLOR="#605e7c" DESTINATION="ID_1325538886" ENDARROW="Default" ENDINCLINATION="347;18;" ID="Arrow_ID_1434324540" STARTARROW="Default" STARTINCLINATION="434;0;"/>
 </node>
 <node CREATED="1792254526676" ID="ID_758874087" MODIFIED="1792254547549" TEXT="am Ende noch die restlichen Eintr&#xe4;ge der anderen Threads aufsammeln"/>
 <node CREATED="1792254548569" ID="ID_975718912" MODIFIED="1792254562075" TEXT="dann mu&#xdf; jeder Thread die volle (vorhersehbare) Summe haben"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1792257550197" ID="ID_93395088" MODIFIED="1792277175635" TEXT="Verhalten">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#a20d73" CREATED="1792257558199" ID="ID_1924509365" MODIFIED="1792268758433" TEXT="mit 10&apos;000 Eintr&#xe4;gen pro Test : keine Reaktion??"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792257571633" ID="ID_886717663" MODIFIED="1792268925541" TEXT="100&apos;000 Eintr&#xe4;ge &#x27f9; Segfault">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792257600842" ID="ID_1214717319" MODIFIED="1792257687008" TEXT="zun&#xe4;chst einmal klar : das sind weit mehr als 16bit">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#b10041" CREATED="1792257693102" ID="ID_977075189" MODIFIED="1792257805244">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      oha ... da haben wir <b><font color="#ee0130">glorreich</font></b>&#160;&#252;ber das Index-Array hinausgeschrieben
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#e0021f" DESTINATION="ID_550004421" ENDARROW="Default" ENDINCLINATION="1236;0;" ID="Arrow_ID_1455631653" STARTARROW="None" STARTINCLINATION="610;-27;"/>
+<icon BUILTIN="broken-line"/>
+</node>
+</node>
+<node CREATED="1792258033468" ID="ID_1324798713" MODIFIED="1792268728295" TEXT="also &#x27f9; NUM_ENTRIES dynamisch setzen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <div style="background-color: #eee0b5; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 2px">
+      <div style="color: #202020; background-color: #eee0b5; font-family: DejaVu Sans Mono; font-size: 9pt; white-space: pre">
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>uint</b></font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>NUM_THREADS</i></font><font color="#3a1f18">&#160; </font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#535773">util</font><font color="#65533c">::</font><font color="#000000">max</font><font color="#3a1f18">&#160;</font><font color="#11123a">(</font><font color="#29466b">2</font><font color="#3a1f18">u</font><font color="#65533c">,</font><font color="#3a1f18">&#160; </font><font color="#535773">std</font><font color="#65533c">::</font><font color="#635e96"><b>thread</b></font><font color="#65533c">::</font><font color="#642880"><b>hardware_concurrency</b></font><font color="#11123a">())</font><font color="#65533c">;</font>
+        </p>
+        <p style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0">
+          <font color="#4a1a65"><b>const</b></font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>uint</b></font><font color="#3a1f18">&#160;</font><font color="#dd1616"><i>NUM_ENTRIES</i></font><font color="#3a1f18">&#160; </font><font color="#65533c">=</font><font color="#3a1f18">&#160;</font><font color="#8c505c"><b>Registry</b></font><font color="#65533c">::</font><font color="#0000c0"><i>MAX_ELEMS</i></font><font color="#3a1f18">&#160;</font><font color="#65533c">/</font><font color="#3a1f18">&#160; </font><font color="#dd1616"><i>NUM_THREADS</i></font><font color="#65533c">;</font>
+        </p>
+      </div>
+    </div>
+  </body>
+</html></richcontent>
+</node>
+<node COLOR="#435e98" CREATED="1792268787558" ID="ID_1423742164" MODIFIED="1792269702694" TEXT="Limit-Check in TypeRegistry&lt;ELM&gt;::makeSlot() nicht threadsafe">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      <i><font color="#670155">was hab ich mir da gestern wohl gedacht??</font></i>&#160;
+    </p>
+    <p>
+      <font size="2">(ich wei&#223; es sogar noch: oh wie clever, das teure Lock spare ich mir wenn der Parameter eh zu gro&#223; ist)</font>
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="broken-line"/>
+</node>
+<node COLOR="#435e98" CREATED="1792268934387" ID="ID_181443857" MODIFIED="1792269697534" TEXT="Summe geht nicht auf wie erwartet">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1792269611584" ID="ID_1996352005" MODIFIED="1792269646229">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      habe jedes <font face="Monospaced" color="#572525">lastSeen</font>&#160;beim n&#228;chsten Mal nochmal mitgenommen
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1792269611584" ID="ID_897686184" MODIFIED="1792269692002">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      sollte <font color="#572525" face="Monospaced">lastSeen</font>&#160;auf Integer umstellen und bei -1 starten
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="yes"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1792277201911" HGAP="33" ID="ID_305179383" MODIFIED="1792277217874" STYLE="bubble" TEXT="Testfall l&#xe4;uft nun" VSHIFT="8">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
+</node>
+<node COLOR="#435e98" CREATED="1792270291467" ID="ID_841893257" MODIFIED="1792277171141" TEXT="Gegencheck">
+<icon BUILTIN="yes"/>
+<node CREATED="1792270298500" ID="ID_1739539647" MODIFIED="1792270327981" TEXT="Lock und Atomic entfernen">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792270443969" ID="ID_1815214875" MODIFIED="1792270450609" TEXT="entryID = 40448 not yet allocated">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1792270489656" ID="ID_1089380302" MODIFIED="1792270499670" TEXT="gleichzeitig 8 mal und alle Threads sterben"/>
+<node CREATED="1792270455641" ID="ID_1477501436" MODIFIED="1792272762968" TEXT="beachte 40448 &lt; 65535"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792270523151" ID="ID_523440074" MODIFIED="1792270534398" TEXT="Deutung: size_ korrumpiert">
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1792271157818" ID="ID_1467307248" MODIFIED="1792271163037" TEXT="Lock aber kein Atomic">
+<node CREATED="1792271165049" ID="ID_841265790" MODIFIED="1792271178332" TEXT="l&#xe4;uft mehr als 100 mal ohne Fehler"/>
+<node CREATED="1792271179205" ID="ID_1864273081" MODIFIED="1792271189242" TEXT="aber sporadische Entgleisungen">
+<node CREATED="1792271191564" ID="ID_95641853" MODIFIED="1792271191564" TEXT="entryID = 59648 not yet allocated"/>
+<node CREATED="1792271194282" ID="ID_1765071748" MODIFIED="1792271200856" TEXT="jeweils variierende ID"/>
+<node CREATED="1792271202948" ID="ID_399190509" MODIFIED="1792271212711" TEXT="am wahrscheinlichsten direkt nach einem Build"/>
+</node>
+<node BACKGROUND_COLOR="#dfb094" COLOR="#990033" CREATED="1792271215083" ID="ID_1845816444" MODIFIED="1792276977130" TEXT="den Mechanismus verstehe ich nicht">
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1792271292600" ID="ID_838056614" MODIFIED="1792271312258" TEXT="die viel zu gro&#xdf;e entryID mu&#xdf; ja aus makeSlot() kommen"/>
+<node CREATED="1792271460418" ID="ID_1289029456" MODIFIED="1792271481451" TEXT="und au&#xdf;erdem, wie k&#xe4;me der Zugriff dann am ersten Check vorbei"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792276905309" ID="ID_470059765" MODIFIED="1792277102001" TEXT="GANZ ANDERS: der Zugreifer sieht eine veraltete Index-Tabelle">
+<arrowlink COLOR="#ff0011" DESTINATION="ID_218264644" ENDARROW="Default" ENDINCLINATION="-470;38;" ID="Arrow_ID_1636781122" STARTARROW="None" STARTINCLINATION="-515;0;"/>
+<icon BUILTIN="info"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792277120433" ID="ID_40460263" MODIFIED="1792277161612" TEXT="dieser Fall belegt: Atomics haben auf x86_64 oft keine gro&#xdf;e Wirkung">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792272292139" ID="ID_966858973" MODIFIED="1792276989939" TEXT="auch mit Lock und Atomic reproduzierbar">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1792272472699" ID="ID_1222559139" MODIFIED="1792272476255" TEXT="&quot;TypeRegistry(uint): entryID = 56832 not yet allocated&quot;"/>
+<node CREATED="1792272584023" ID="ID_217165939" MODIFIED="1792272585920" TEXT="TypeRegistry(uint): entryID = 43520 not yet allocated"/>
+<node CREATED="1792272746791" ID="ID_952333301" MODIFIED="1792272788277" TEXT="TypeRegistry(uint): entryID = 63232 not yet allocated"/>
+<node BACKGROUND_COLOR="#fde4cf" COLOR="#bd004b" CREATED="1792273012091" FOLDED="true" ID="ID_218264644" MODIFIED="1792277102001" TEXT="ein Fall mit dem Debugger gefangen">
+<linktarget COLOR="#ff0011" DESTINATION="ID_218264644" ENDARROW="Default" ENDINCLINATION="-470;38;" ID="Arrow_ID_1636781122" SOURCE="ID_470059765" STARTARROW="None" STARTINCLINATION="-515;0;"/>
+<icon BUILTIN="forward"/>
+<node CREATED="1792273042730" ID="ID_510718019" MODIFIED="1792273049746" TEXT="aus der abschlie&#xdf;ende Lese-Schleife">
+<node CREATED="1792273050982" ID="ID_438849667" MODIFIED="1792273072846" TEXT="lastSeen &#x2261; 30298"/>
+<node CREATED="1792273104951" ID="ID_916826246" MODIFIED="1792273115246" TEXT="e &#x2261; 50688"/>
+<node CREATED="1792273124480" ID="ID_1220972122" MODIFIED="1792275313440" TEXT="aber size_ &#x2261; 53763">
+<linktarget COLOR="#bf81a3" DESTINATION="ID_1220972122" ENDARROW="Default" ENDINCLINATION="735;0;" ID="Arrow_ID_830799763" SOURCE="ID_295974397" STARTARROW="Default" STARTINCLINATION="208;13;"/>
+</node>
+</node>
+<node CREATED="1792273194019" ID="ID_1566753034" MODIFIED="1792273196447" TEXT="Registry">
+<node CREATED="1792273124480" ID="ID_948370618" MODIFIED="1792274855552" TEXT="size_ &#x2261; 53763"/>
+<node CREATED="1792273199690" ID="ID_1935288287" MODIFIED="1792273206589" TEXT="index">
+<node CREATED="1792273207690" ID="ID_1430663220" MODIFIED="1792273228222" TEXT="slots 0...210 gef&#xfc;llt"/>
+<node CREATED="1792273228999" ID="ID_356183924" MODIFIED="1792273233794" TEXT="ab 211 leer"/>
+<node CREATED="1792273266746" ID="ID_1880666518" MODIFIED="1792273283843" TEXT="210*256 &#x2261; 53760"/>
+</node>
+<node CREATED="1792273750258" ID="ID_357426575" MODIFIED="1792273800860" TEXT="Zugriffspfad: 50688 / 256 &#x2261; 198">
+<font NAME="SansSerif" SIZE="12"/>
+</node>
+<node CREATED="1792273809333" ID="ID_1420646062" MODIFIED="1792274424107" TEXT="Extent* &#x2261; NULL"/>
+<node CREATED="1792273815765" ID="ID_1734998941" MODIFIED="1792274852794" TEXT="aber index_[198] ist alloziert">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      198 std::atomic&lt;lib::UninitialisedStorage&lt;unsigned int, 256&gt;*&gt; std::atomic&lt;lib::UninitialisedStorage&lt;unsigned int, 256&gt; *&gt; = { 0x7fffcc005340 }
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1792273935530" ID="ID_1281393535" MODIFIED="1792273938763" TEXT="andere Threads">
+<node CREATED="1792273939872" ID="ID_1510819169" MODIFIED="1792273957553" TEXT="Thread-1 : yield (&#x2259; Master-Thread)"/>
+<node CREATED="1792273958350" ID="ID_1935229667" MODIFIED="1792273965433" TEXT="Thread-2 : schl&#xe4;ft"/>
+<node CREATED="1792274032748" ID="ID_1540494337" MODIFIED="1792274043791" TEXT="Thread-3 : liest">
+<node CREATED="1792274044739" ID="ID_362694525" MODIFIED="1792274057673" TEXT="greift zu auf e = 53632"/>
+<node CREATED="1792274122800" ID="ID_652913716" MODIFIED="1792274126604" TEXT="slot 209">
+<node CREATED="1792274179273" ID="ID_1466245923" MODIFIED="1792274186351" TEXT="sieht man auch in atomic::load"/>
+</node>
+<node CREATED="1792274058589" ID="ID_1605079301" MODIFIED="1792274063160" TEXT="ist grade im atomic_load"/>
+</node>
+<node CREATED="1792274227622" ID="ID_1330889300" MODIFIED="1792274234959" TEXT="Thread-4 : hat belegt">
+<node CREATED="1792274326005" ID="ID_1061604010" MODIFIED="1792274339118" TEXT="neue entryID &#x2261; 53710"/>
+<node CREATED="1792274237721" ID="ID_475583328" MODIFIED="1792274244531" TEXT="ist grade im ~Lock()"/>
+<node CREATED="1792274274192" ID="ID_577092471" MODIFIED="1792274280095" TEXT="std::mutex::unlock()"/>
+<node CREATED="1792274283019" ID="ID_623392438" MODIFIED="1792274291061" TEXT="ist grade eben beim Aufwecken anderer Threads"/>
+</node>
+<node CREATED="1792274403801" ID="ID_983201517" MODIFIED="1792274514344" TEXT="Thread-5 : l&#xf6;st den Fehler aus">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1792275063786" ID="ID_1789747481" MODIFIED="1792275082573" TEXT="TypeRegistry&lt;ELM&gt;::operator[50688]"/>
+<node CREATED="1792275108087" ID="ID_1829403001" MODIFIED="1792275127058" TEXT="hat einen Extent* &#x2261; NULL bekommen"/>
+</node>
+<node CREATED="1792274515155" ID="ID_1851308568" MODIFIED="1792274523659" TEXT="Thread-6 : will grade belegen">
+<node CREATED="1792274525439" ID="ID_1868340507" MODIFIED="1792274531965" TEXT="Schleife">
+<node CREATED="1792274532809" ID="ID_1828090361" MODIFIED="1792274541611" TEXT="i=8117"/>
+<node CREATED="1792274542832" ID="ID_1007624398" MODIFIED="1792274565057" TEXT="lastSeen &#x2261; 53746"/>
+</node>
+<node CREATED="1792274566860" ID="ID_1178816857" MODIFIED="1792274585960" TEXT="geht grade in den Lock-ctor"/>
+<node CREATED="1792274594985" ID="ID_1411588216" MODIFIED="1792274608323" TEXT="std::mutex::lock()"/>
+<node CREATED="1792274618622" ID="ID_439126687" MODIFIED="1792274623801" TEXT="pthread-mutex-lock"/>
+<node CREATED="1792274624573" ID="ID_1114698355" MODIFIED="1792274640903" TEXT="III_muteck_optimized"/>
+</node>
+<node CREATED="1792274678509" ID="ID_709049273" MODIFIED="1792274687705" TEXT="Thread-7 : will grade belegen">
+<node CREATED="1792274688869" ID="ID_364484977" MODIFIED="1792274691816" TEXT="Schleife ">
+<node CREATED="1792274532809" ID="ID_780156178" MODIFIED="1792274708773" TEXT="i=5327"/>
+<node CREATED="1792274542832" ID="ID_240253925" MODIFIED="1792274720285" TEXT="lastSeen &#x2261; 53728"/>
+</node>
+<node CREATED="1792274722453" ID="ID_741829235" MODIFIED="1792274732402" TEXT="geht grade in den Lock-ctor"/>
+<node CREATED="1792274618622" ID="ID_1442624390" MODIFIED="1792274623801" TEXT="pthread-mutex-lock"/>
+<node CREATED="1792274624573" ID="ID_855080498" MODIFIED="1792274640903" TEXT="III_muteck_optimized"/>
+<node CREATED="1792274750292" ID="ID_1656834224" MODIFIED="1792274756148" TEXT="futex_wait()">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1792274780273" ID="ID_1197169929" MODIFIED="1792274787994" TEXT="Thread-8 : will grade belegen">
+<node CREATED="1792274688869" ID="ID_1631818091" MODIFIED="1792274691816" TEXT="Schleife ">
+<node CREATED="1792274532809" ID="ID_1723881655" MODIFIED="1792274808504" TEXT="i=6613"/>
+<node CREATED="1792274542832" ID="ID_1322756465" MODIFIED="1792274819879" TEXT="lastSeen &#x2261; 53762">
+<node CREATED="1792275279439" ID="ID_295974397" MODIFIED="1792275319864" TEXT="beachte: der hat zuletzt size_ inkrementiert">
+<arrowlink COLOR="#bf81a3" DESTINATION="ID_1220972122" ENDARROW="Default" ENDINCLINATION="735;0;" ID="Arrow_ID_830799763" STARTARROW="Default" STARTINCLINATION="208;13;"/>
+</node>
+</node>
+</node>
+<node CREATED="1792274722453" ID="ID_418462693" MODIFIED="1792274732402" TEXT="geht grade in den Lock-ctor"/>
+<node CREATED="1792274618622" ID="ID_193144577" MODIFIED="1792274623801" TEXT="pthread-mutex-lock"/>
+<node CREATED="1792274624573" ID="ID_1719656745" MODIFIED="1792274640903" TEXT="III_muteck_optimized"/>
+<node CREATED="1792274750292" ID="ID_1418043567" MODIFIED="1792274756148" TEXT="futex_wait()">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+<node CREATED="1792274922790" ID="ID_918287342" MODIFIED="1792274929903" TEXT="Thread-9 : will grade belegen">
+<node CREATED="1792274688869" ID="ID_1684863391" MODIFIED="1792274691816" TEXT="Schleife ">
+<node CREATED="1792274532809" ID="ID_233385159" MODIFIED="1792274978836" TEXT="i=4696"/>
+<node CREATED="1792274542832" ID="ID_913884863" MODIFIED="1792274988953" TEXT="lastSeen &#x2261; 53706"/>
+</node>
+<node CREATED="1792274722453" ID="ID_1256160753" MODIFIED="1792274732402" TEXT="geht grade in den Lock-ctor"/>
+<node CREATED="1792274618622" ID="ID_1626360583" MODIFIED="1792274623801" TEXT="pthread-mutex-lock"/>
+<node CREATED="1792274624573" ID="ID_282459059" MODIFIED="1792274640903" TEXT="III_muteck_optimized"/>
+<node CREATED="1792274750292" ID="ID_248017892" MODIFIED="1792274756148" TEXT="futex_wait()">
+<font BOLD="true" NAME="SansSerif" SIZE="12"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792275454495" ID="ID_1475466424" MODIFIED="1792275467202" TEXT="Situation verstanden">
+<icon BUILTIN="forward"/>
+<node CREATED="1792275469085" ID="ID_1754662833" MODIFIED="1792275475608" TEXT="ein Thread war wesentlich schneller"/>
+<node CREATED="1792275476611" ID="ID_513321624" MODIFIED="1792275528616" TEXT="sein letzter Slot war 30298/256 &#x2261; 118"/>
+<node CREATED="1792275537300" ID="ID_1728954149" MODIFIED="1792275557221" TEXT="er macht einen atomic_acquire auf Slot 198"/>
+<node CREATED="1792275558153" ID="ID_796911354" MODIFIED="1792275869157" TEXT="bekommt hier aber einen veralteten Stand aus seinem Cache">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792276013293" ID="ID_1384106578" MODIFIED="1792276036823" TEXT="das w&#xe4;re eine Wissensfrage">
+<icon BUILTIN="bell"/>
+<node CREATED="1792276063646" ID="ID_1500693691" MODIFIED="1792276072025" TEXT="kann dieser Stand noch geladen werden"/>
+<node CREATED="1792276072853" ID="ID_387512555" MODIFIED="1792276087238" TEXT="...w&#xe4;hrend im Hauptspeicher schon neuere Inhalte stehen?"/>
+<node CREATED="1792276088412" ID="ID_1561727907" MODIFIED="1792276111139" TEXT="oder mu&#xdf; der Stand im Thread selber (durch Verz&#xf6;gerung) verschleppt sein?"/>
+</node>
+</node>
+<node CREATED="1792275602771" ID="ID_147433345" MODIFIED="1792275631427" TEXT="w&#xe4;hrend 5 weitere Threads um das Schreiben konkurrieren"/>
+<node CREATED="1792275651133" ID="ID_1297884064" MODIFIED="1792275667345" TEXT="diese orientieren sich ander size_variablen"/>
+<node CREATED="1792275804104" ID="ID_1595878577" MODIFIED="1792275817185" TEXT="und erzeugen wohl einen konsistenten Zustand im Hauptspeicher"/>
+<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1792275894468" ID="ID_1023015420" MODIFIED="1792275918137" TEXT="das Problem ist: er greift &#xbb;blind&#xab; auf einen Slot zu ohne diesen vorher gesehen zu haben">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1792275979145" ID="ID_1936849161" MODIFIED="1792275990744" TEXT="im realen Einsatz kann das niemals auftreten"/>
+<node CREATED="1792275991441" ID="ID_823317849" MODIFIED="1792276008168">
+<richcontent TYPE="NODE"><html>
+  <head/>
+  <body>
+    <p>
+      weil der Zugriff immer auf eine <b>publizierte ID</b>&#160;aufbaut
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1792275920872" ID="ID_878841350" MODIFIED="1792277029883" TEXT="und das eigentliche Problem: der sleep war viel zu kurz">
+<linktarget COLOR="#322190" DESTINATION="ID_878841350" ENDARROW="Default" ENDINCLINATION="-302;15;" ID="Arrow_ID_824852602" SOURCE="ID_1545189256" STARTARROW="None" STARTINCLINATION="184;14;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node CREATED="1792275943910" ID="ID_415339023" MODIFIED="1792275960388" TEXT="weshalb dieser Fall vor allem kurz nach dem Build auftritt"/>
+<node CREATED="1792275960833" ID="ID_712434268" MODIFIED="1792275974497" TEXT="und schwer reproduzierbar ist"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792276993680" ID="ID_1545189256" MODIFIED="1792277038258" TEXT="Fazit: eine Schw&#xe4;che des Testaufbaus">
+<arrowlink COLOR="#322190" DESTINATION="ID_878841350" ENDARROW="Default" ENDINCLINATION="-302;15;" ID="Arrow_ID_824852602" STARTARROW="None" STARTINCLINATION="184;14;"/>
+</node>
 </node>
 </node>
 </node>
@@ -87774,8 +88008,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="yes"/>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790094459596" ID="ID_184861465" MODIFIED="1790094482634" TEXT="brauche dazu eine Registrierung und Scale-IDs">
 <icon BUILTIN="forward"/>
-<node CREATED="1790094501963" ID="ID_438812693" MODIFIED="1790094572153" TEXT="und diese Registry sollte generisch angelegt sein">
-<arrowlink COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" STARTARROW="None" STARTINCLINATION="14;-8;"/>
+<node CREATED="1790094501963" ID="ID_438812693" MODIFIED="1792277260764" TEXT="und diese Registry sollte generisch angelegt sein">
+<arrowlink COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-27;101;" ID="Arrow_ID_246372510" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1790469975638" ID="ID_1306037041" MODIFIED="1790469981295" TEXT="inwiefern?"/>
 <node CREATED="1790469982412" ID="ID_1297951248" MODIFIED="1790470003336" TEXT="hier ist mehr zu &#xbb;registrieren&#xab; als nur die Scale-Deskriptoren"/>
 <node CREATED="1790470019568" ID="ID_5893879" MODIFIED="1790470044739" TEXT="also gemeinsames Baumuster &#x2014; aber nicht universelle Generizit&#xe4;t"/>
@@ -87790,10 +88024,16 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 <node CREATED="1790474121848" ID="ID_1163539569" MODIFIED="1790474164518" TEXT="Zugriff per Typ(compiletime)+ID(runtime)"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790474208388" ID="ID_1335701954" MODIFIED="1790478289060" TEXT="Concurrency">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790474208388" ID="ID_1335701954" MODIFIED="1792277395056" TEXT="Concurrency">
 <icon BUILTIN="yes"/>
 <node CREATED="1790474214328" ID="ID_1925127627" MODIFIED="1790474250457" TEXT="Neuerstellen unter globalem Lock (pro Typ &#x27f6; Registry)"/>
 <node CREATED="1790474251717" ID="ID_1300983163" MODIFIED="1790474272111" TEXT="Zugriff per atomic-acquire"/>
+<node COLOR="#013e77" CREATED="1792277318379" ID="ID_297548263" MODIFIED="1792277422007" STYLE="fork" TEXT="(im Test best&#xe4;tigt)">
+<arrowlink COLOR="#e9fdca" DESTINATION="ID_1243204093" ENDARROW="Default" ENDINCLINATION="46;151;" ID="Arrow_ID_470786963" STARTARROW="None" STARTINCLINATION="76;11;"/>
+<node BACKGROUND_COLOR="#f6d3b5" COLOR="#990033" CREATED="1792277350202" HGAP="49" ID="ID_1845441384" MODIFIED="1792277410428" TEXT="wichtige Randbedingung : nur auf bekannte IDs zugreifen" VSHIFT="15">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
 </node>
 </node>
 </node>

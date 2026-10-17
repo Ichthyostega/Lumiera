@@ -17,7 +17,7 @@
 
 
 #include "test/run.hpp"
-//#include "test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/par/type-registry.hpp"
 #include "lib/scoped-collection.hpp"
 #include "test/tracking-dummy.hpp"
@@ -26,16 +26,9 @@
 #include "lib/thread.hpp"
 #include "lib/random.hpp"
 #include "lib/util.hpp"
-#include "test/diagnostic-output.hpp"/////////////TODO
 
-//#include <utility>
-//#include <string>
-//#include <vector>
 #include <chrono>
 
-//using std::string;
-//using std::vector;
-//using std::swap;
 using lib::explore;
 using util::isSameObject;
 using std::this_thread::yield;
@@ -47,18 +40,16 @@ namespace lib {
 namespace par {
 namespace test{
   
-//  using lumiera::error::LUMIERA_ERROR_LOGIC;
-  
-  namespace {//Test fixture....
-    
-    const uint NUM_THREADS = util::max (2u, std::thread::hardware_concurrency());
-    const uint NUM_ENTRIES = 100'000;
-    
-  }//(End)Test fixture
-  
   using ::test::Dummy;
   using Registry = TypeRegistry<Dummy>;
   using RegID = Registry::ID;
+  
+  namespace {//Test configuration....
+    
+    const uint NUM_THREADS = util::max (2u, std::thread::hardware_concurrency());
+    const uint NUM_ENTRIES = Registry::MAX_ELEMS / NUM_THREADS;
+    
+  }//(End)Test setup
   
   
   
@@ -66,10 +57,10 @@ namespace test{
   
   
   /**************************************************************************//**
-   * @test verify a index/extent based registration table for type descriptors
+   * @test verify an index/extent based registration table for type descriptors
    *     - new slots can be claimed and then re-accessed by ID
    *     - storage is stable even while new extents are added, and not leaked
-   *     - read access can happen concurrently with allocating new slots.
+   *     - read access can happen concurrently while allocating new slots.
    */
   class TypeRegistry_test : public Test
     {
@@ -112,7 +103,6 @@ namespace test{
        *      - when the registry is full, further allocations are blocked
        *      - but even a then the registry remains in sane state
        *      - all destructors of all slots are invoked
-       * @todo WIP 10/26 ✔ define ⟶ ✔ implement
        */
       void
       verify_storageSanity()
@@ -209,7 +199,6 @@ namespace test{
        *      - after adding the next number, read recent new entries and sum up
        *      - at the end, each thread must have seen all entries, and all the
        *        summed-up numbers must be consistent.
-       * @todo WIP 10/26 🔁 define ⟶ ✔ implement
        */
       void
       verify_concurrentAccess()
@@ -221,10 +210,10 @@ namespace test{
           auto genLoad = [&]{ return [&testRegistry
                                      ,&startTrigger
                                      ,expectedSum
-                                     ,random = 2 + rani(4)
+                                     ,random = 2 + rani(4)   // evaluated for each thread anew, and in the main thread
                                      ]{
                                         size_t mySum{0};
-                                        uint lastSeen{0};
+                                        int lastSeen{-1};
                                         volatile size_t blackHole{0};
                                         auto randomDelay = [&]{ if (0 == lastSeen % random) blackHole += lastSeen; };
                                         
@@ -241,19 +230,19 @@ namespace test{
                                             randomDelay();
                                             
                                             //--------------------------------------- read other entries
-                                            for (uint e=entryID; e >= lastSeen; --e)
+                                            for (int e=entryID; e > lastSeen; --e)
                                               mySum += testRegistry[e];
                                             
-                                            lastSeen = entryID;
+                                            lastSeen = int(entryID);
                                           }
                                         // to sleep for an eternity
-                                        sleep_for (10ms);
+                                        sleep_for (50ms);
                                         
                                         // complete to read all other entries
                                         for (uint e=lastSeen+1; e < NUM_THREADS*NUM_ENTRIES; ++e)
                                           mySum += testRegistry[e];
                                         
-                                        CHECK (mySum = NUM_THREADS * expectedSum (NUM_ENTRIES));
+                                        CHECK (mySum == NUM_THREADS * expectedSum (NUM_ENTRIES));
                                       };
                             };
           
@@ -263,12 +252,12 @@ namespace test{
           // unleash
           startTrigger.sync();
           
-          sleep_for(12ms);
+          sleep_for(60ms);
           
           while (explore(threads).has_any())
             yield();
           
-          CHECK (testRegistry.size() == NUM_THREADS * expectedSum (NUM_ENTRIES));
+          CHECK (testRegistry.size() == NUM_THREADS * NUM_ENTRIES);
         }
     };
   

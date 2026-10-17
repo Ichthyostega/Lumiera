@@ -24,9 +24,9 @@
  ** - the storage is organised by a fixed-sized index table and heap allocated storage extents.
  ** - entries are never discarded, and thus an atomic lock suffices _for read access_
  ** @remark while this scheme is defined in a generic way, it aims at one specific
- **   usage pattern and should not be stretched beyond that.
- ** 
- ** @todo WIP-WIP-WIP can be considered an initial draft and placeholder, as of 2026
+ **   usage pattern and should not be stretched beyond that: it is *essential* that
+ **   only IDs are accessed that where retrieved from somewhere beforehand.
+ ** @see TypeRegistry_test
  */
 
 
@@ -39,11 +39,8 @@
 #include "lib/nocopy.hpp"
 #include "lib/format-string.hpp"
 #include "lib/uninitialised-storage.hpp"
-//#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
-//#include <concepts>
-//#include <limits>
 #include <atomic>
 #include <array>
 
@@ -53,7 +50,7 @@ namespace par {
   namespace err = lumiera::error;
   
   using util::_Fmt;
-//  using util::unConst;
+  
   
   /**
    * Management of descriptor entries keyed by numeric ID.
@@ -87,13 +84,19 @@ namespace par {
       uint size()       const { return size_; }
       uint numExtents() const { return size_? 1 + (size_-1) / EXTENT_SIZ : 0; }
       
+      static constexpr uint MAX_ELEMS = EXTENT_SIZ*INDEX_SIZ;
+      
      ~TypeRegistry();
     private:
       Extent* accessExtent (ID)  const;
     };
   
   
-    /** type tagged numeric registry entry ID */
+  
+  
+  /**
+   * type-tagged numeric registry entry ID
+   */
   template<class ELM>
   class TypeRegistry<ELM>::ID
     {
@@ -112,6 +115,7 @@ namespace par {
    * @remark the *write path* is mutex-protected.
    *   It is used for new registrations, which typically
    *   is not required from a hot path.
+   * @throws err::State when capacity is exhausted
    * @note EX_STRONG
    */
   template<class ELM>
@@ -119,11 +123,11 @@ namespace par {
   inline TypeRegistry<ELM>::ID
   TypeRegistry<ELM>::makeSlot (INIT&&... initArg)
   {
-    if (size_ >= INDEX_SIZ*EXTENT_SIZ)
+    Lock sync{this};
+    if (size_ >= MAX_ELEMS)
       throw err::State{_Fmt{"TypeRegistry space exhausted for type %s"} % meta::typeStr<ELM>()
                       , LERR_(CAPACITY)};
     
-    Lock sync{this};
     ID entryID{size_};
     auto& indexSlot = index_[entryID / EXTENT_SIZ];
     Extent* extent = indexSlot.load (std::memory_order_acquire);
@@ -166,6 +170,7 @@ namespace par {
   
   
   
+  /** @internal */
   template<class ELM>
   inline TypeRegistry<ELM>::Extent*
   TypeRegistry<ELM>::accessExtent (ID entryID)  const
@@ -175,16 +180,22 @@ namespace par {
   }
   
   /**
-   * access slot by ID, protected by atomic-acquire
+   * Access slot by ID, protected by atomic-acquire
+   * @throws err::Logic when accessing a free slot
+   * @throws err::Invalid on index beyond storage capacity
    * @note EX_STRONG
    */
   template<class ELM>
   inline ELM&
   TypeRegistry<ELM>::operator[] (ID entryID)  const
   {
+    if (entryID >= MAX_ELEMS)
+      throw err::Invalid{_Fmt{"TypeRegistry(%s): index %d out of bounds"} % meta::typeStr<ELM>() % uint(entryID)
+                        , LERR_(INDEX_BOUNDS)};
+    
     Extent* extent = accessExtent (entryID);
     if (not extent)
-      throw err::Logic{_Fmt{"TypeRegistry: entryID = %d not yet allocated"} % entryID
+      throw err::Logic{_Fmt{"TypeRegistry(%s): entryID = %d not yet allocated"} % meta::typeStr<ELM>() % uint(entryID)
                       , LERR_(INDEX_BOUNDS)};
     
     return (*extent)[entryID % EXTENT_SIZ];
