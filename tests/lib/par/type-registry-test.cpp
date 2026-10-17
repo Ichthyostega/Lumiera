@@ -88,18 +88,109 @@ namespace test{
         }
       
       
-      /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
+      /** @test verify coherent storage handling and proper clean-up
+       *      - slots are filled-up in sequence
+       *      - the ID corresponds to the slot-count
+       *      - new extents are opend precisely when the
+       *        previous Extent is filled completely
+       *      - Exceptions during slot-allocation are absorbed,
+       *        without blocking the slot or corrupting data
+       *      - the designate storage space can be utilised completely
+       *      - when the registry is full, further allocations are blocked
+       *      - but even a then the registry remains in sane state
+       *      - all destructors of all slots are invoked
+       * @todo WIP 10/26 ✔ define ⟶ ✔ implement
        */
       void
       verify_storageSanity()
         {
-          UNIMPLEMENTED ("verify coherent storage handling and proper clean-up");
+          Dummy::checksum() = 0;
+          {  //  track instances by checksum...
+            Registry registry;
+            CHECK (0 == registry.size());
+            CHECK (0 == registry.numExtents());
+            
+            RegID i0 = registry.makeSlot();
+            CHECK (1 == registry.size());
+            CHECK (1 == registry.numExtents());
+            
+            CHECK (i0 == 0);
+            int rand0 = registry[i0].getID();
+            CHECK (0 < rand0);
+            CHECK (Dummy::checksum() == registry[i0].getID());
+            
+            RegID i1 = registry.makeSlot();
+            CHECK (2 == registry.size());
+            CHECK (1 == registry.numExtents());
+            int rand1 = registry[i1].getID();
+            
+            CHECK (i1 == 1);
+            CHECK (Dummy::checksum() == registry[i0].getID()
+                                      + registry[i1].getID());
+            
+            for (uint i=0; i<256; ++i)
+              registry.makeSlot();
+            // first Extent was filled up
+            CHECK (256+2 == registry.size());
+            CHECK (2     == registry.numExtents());
+            CHECK (rand1 == registry[i1] .getID());
+            CHECK (rand0 == registry[i0] .getID());
+            
+            // Verify no leak in case of Exceptions during slot allocation
+            int rand257 = registry[257].getID();
+            CHECK (0 < rand257);
+            long checkPre = Dummy::checksum();
+            Dummy::activateCtorFailure();
+            try {
+                registry.makeSlot(-55);
+                NOTREACHED ("did not throw");
+              }
+            catch (int& magic)
+              {
+                CHECK (magic == -55);
+                // since the dtor is not called on ctor failure,
+                // we have to fix the checksum explicitly here
+                Dummy::checksum() -= (-55);
+                Dummy::activateCtorFailure(false);
+              }
+            // now the important point:
+            CHECK (256+2 == registry.size());    // next slot was not marked as claimed
+            CHECK (2     == registry.numExtents());
+            CHECK (Dummy::checksum() == checkPre);
+            CHECK (rand257 == registry[257].getID());
+            CHECK (rand1   == registry[i1] .getID());
+            CHECK (rand0   == registry[i0] .getID());
+            
+            // fill-up the second Extent completely
+            for (uint i=2; i<256; ++i)
+              registry.makeSlot();
+            CHECK (2*256 == registry.size());
+            CHECK (2     == registry.numExtents());
+            
+            // and then fill up all the designated storage
+            for (uint i=registry.size(); i<256*256; ++i)
+              registry.makeSlot();
+            CHECK (256*256 == registry.size());
+            CHECK (256     == registry.numExtents());
+            
+            // can not allocate further...
+            checkPre = Dummy::checksum();
+            VERIFY_FAIL ("space exhausted for type Dummy"
+                        , registry.makeSlot() );
+            
+            // yet the registry is in sane state
+            CHECK (Dummy::checksum() == checkPre);
+            CHECK (rand0   == registry[i0] .getID());
+            CHECK (rand1   == registry[i1] .getID());
+            CHECK (rand257 == registry[257].getID());
+            
+          }//automatic clean-up of Registry triggered here
+          CHECK (0 == Dummy::checksum());
         }
       
       
       /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       * @todo WIP 10/26 🔁 define ⟶ implement
        */
       void
       verify_concurrentAccess()

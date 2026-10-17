@@ -86291,8 +86291,8 @@ class ScaleRegistry
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
 <linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-11;82;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1792195251812" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1792201647439" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792195119872" ID="ID_755422994" MODIFIED="1792195149285" TEXT="sehe (vorerst?) einen hart-gecodeten 16bit-Index-Space vor">
 <icon BUILTIN="yes"/>
 </node>
@@ -86312,20 +86312,99 @@ class ScaleRegistry
 <node CREATED="1792195292550" ID="ID_1991831189" MODIFIED="1792195314280" TEXT="die Slot-Auswahl erfolgt per Modulus">
 <icon BUILTIN="info"/>
 </node>
-<node CREATED="1792195325746" ID="ID_1685989678" MODIFIED="1792195369088" TEXT="Belegung wird (implizii) durch ein size-Feld definiert">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792195325746" ID="ID_1685989678" MODIFIED="1792200835146" TEXT="Belegung wird (implizit) durch ein size-Feld definiert">
 <icon BUILTIN="forward"/>
-<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1792195373545" HGAP="36" ID="ID_845978423" MODIFIED="1792195403780" TEXT="gilt nur wenn wir die Size bei jeder Neubelegung erh&#xf6;hen" VSHIFT="3">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792195373545" HGAP="36" ID="ID_845978423" MODIFIED="1792200799927" TEXT="gilt nur wenn wir die Size bei jeder Neubelegung erh&#xf6;hen" VSHIFT="3">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1792200802117" ID="ID_1033251739" MODIFIED="1792200828503" TEXT="EX_SANE &#x27f9; transaktionales Verhalten an der Stelle"/>
+</node>
+<node CREATED="1792204213956" ID="ID_107103429" MODIFIED="1792204342333" TEXT="der Extent selber ist UninitialisedStorage">
+<linktarget COLOR="#4b37c9" DESTINATION="ID_107103429" ENDARROW="Default" ENDINCLINATION="-23;30;" ID="Arrow_ID_1397164980" SOURCE="ID_1969148911" STARTARROW="None" STARTINCLINATION="-93;-6;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1792204285692" ID="ID_590986949" MODIFIED="1792204294798" TEXT="das stellt auch schon in-place ctor/dtor bereit"/>
+<node CREATED="1792204295710" ID="ID_1004514102" MODIFIED="1792204304518" TEXT="und hat einen Subscript-Operator"/>
+<node COLOR="#98066e" CREATED="1792204305537" ID="ID_856918383" MODIFIED="1792204317881" TEXT="was will man mehr??">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1792200841789" ID="ID_564663858" MODIFIED="1792201602058" TEXT="Clean-up: Destruktor">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792200853109" ID="ID_1804538283" MODIFIED="1792200873441" TEXT="wir allozieren hier Extents &#x27f9; also sind wir f&#xfc;r die verantwortlich">
+<icon BUILTIN="yes"/>
+</node>
+<node COLOR="#5b280f" CREATED="1792200875231" ID="ID_28384533" MODIFIED="1792200912854" TEXT="ich hab eine Policy in Lumiera da&#xdf; wir jede Allokation sauber aufr&#xe4;umen">
+<icon BUILTIN="stop-sign"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792200915095" ID="ID_510570493" LINK="https://issues.lumiera.org/ticket/195" MODIFIED="1792201592604" TEXT="die Policy ist noch nirgends aufgeschrieben">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...au&#223;er in zwei sehr alten Tracking-Tickets
+    </p>
+    <p>
+      Also ist das Problem, da&#223; jemand, der neu im Projekt ist, diese Policy nicht findet
+    </p>
+  </body>
+</html></richcontent>
+<arrowlink COLOR="#950a46" DESTINATION="ID_1553058398" ENDARROW="Default" ENDINCLINATION="-2162;163;" ID="Arrow_ID_1745743108" STARTARROW="None" STARTINCLINATION="125;1162;"/>
+<icon BUILTIN="clanbomber"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f53" CREATED="1792201622823" ID="ID_1206249316" MODIFIED="1792201638389" TEXT="Vorsicht Falle: nicht alle Slots sind belegt">
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478209106" ID="ID_1599776496" MODIFIED="1790478269240" TEXT="Testabdeckung">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1790478219335" ID="ID_265184931" MODIFIED="1790478266894" TEXT="Standard-Nutzen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1790478219335" ID="ID_265184931" MODIFIED="1792201649437" TEXT="Standard-Nutzen">
+<icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478228069" ID="ID_194433887" MODIFIED="1790478263177" TEXT="Memory-Konsistenz">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1790478228069" ID="ID_194433887" MODIFIED="1792207934918" TEXT="Memory-Konsistenz">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#df0277" CREATED="1792204102943" ID="ID_1794382952" MODIFIED="1792207761829" TEXT="erst mal denke ich: Kindergarten.....">
+<font NAME="SansSerif" SIZE="11"/>
+<icon BUILTIN="closed"/>
+</node>
+<node COLOR="#435e98" CREATED="1792204124581" ID="ID_493858308" MODIFIED="1792204250440" TEXT="Dummy-Checksumme korrupt">
+<icon BUILTIN="broken-line"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#bb0286" CREATED="1792204157016" ID="ID_1696818846" MODIFIED="1792204178459" TEXT="GUT DASS WIR DAR&#xdc;BER GEREDET HABEN....">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792204183421" ID="ID_243269335" MODIFIED="1792204262945" TEXT="das std::array macht eine Default-Initialisierung aller Elemente">
+<icon BUILTIN="broken-line"/>
+</node>
+<node CREATED="1792204265342" ID="ID_1969148911" MODIFIED="1792204351217" TEXT="was wir eigentlich wollen &#x27f5; UninitialisedStorage">
+<arrowlink COLOR="#4b37c9" DESTINATION="ID_107103429" ENDARROW="Default" ENDINCLINATION="-23;30;" ID="Arrow_ID_1397164980" STARTARROW="None" STARTINCLINATION="-93;-6;"/>
+</node>
+</node>
+<node COLOR="#435e98" CREATED="1792206829616" ID="ID_902979576" MODIFIED="1792207726955" TEXT="Memory-Corruption">
+<icon BUILTIN="broken-line"/>
+<node CREATED="1792206937555" ID="ID_342404338" MODIFIED="1792207061332" TEXT="Objekte im ersten Extent sind korrumpiert"/>
+<node CREATED="1792206920901" ID="ID_1530740626" MODIFIED="1792206936517" TEXT="nach dem &#xdc;berlauf in den n&#xe4;chsten Extent"/>
+<node CREATED="1792207657467" ID="ID_1411875772" MODIFIED="1792207667947" TEXT="mit mehreren Tests eingrenzen....">
+<icon BUILTIN="idea"/>
+</node>
+<node CREATED="1792207670063" ID="ID_1060014276" MODIFIED="1792207703521" TEXT="jaaaa .... banaler Fehler: den Extent berechnet man per div, nicht mod">
+<icon BUILTIN="smiley-oh"/>
+</node>
+<node COLOR="#eb00ff" CREATED="1792207706939" ID="ID_461398393" MODIFIED="1792207723618" TEXT="(soviel zum Kindergarten...)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1792207770559" ID="ID_65610285" MODIFIED="1792207933489" TEXT="somit gezeigt">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792207790400" ID="ID_208694130" MODIFIED="1792207798975" TEXT="Extent-&#xdc;berlauf wie erwartet"/>
+<node CREATED="1792207778639" ID="ID_1060787372" MODIFIED="1792207789404" TEXT="konsistente Belegung des Speichers"/>
+<node CREATED="1792207802306" ID="ID_1439326321" MODIFIED="1792207836217" TEXT="nach Exteption im Konstruktor ist der Slot unbelegt"/>
+<node CREATED="1792207837061" ID="ID_1232596455" MODIFIED="1792207846375" TEXT="es werden keine &#xfc;bersch&#xfc;ssigen Objekte erzeugt / kopiert"/>
+<node CREATED="1792207848433" ID="ID_1119023990" MODIFIED="1792207862270" TEXT="der Speicher l&#xe4;&#xdf;t sich komplett wie geplant belegen"/>
+<node CREATED="1792207863165" ID="ID_362511232" MODIFIED="1792207900809" TEXT="danach wirft jede weitere Allokation eine Exception"/>
+<node CREATED="1792207876696" ID="ID_506276452" MODIFIED="1792207886744" TEXT="aber die Registry bleibt trotzem valide"/>
+<node CREATED="1792207887665" ID="ID_1708245037" MODIFIED="1792207896452" TEXT="keine Memory-corruption"/>
+<node CREATED="1792207903239" ID="ID_140698597" MODIFIED="1792207930110" TEXT="alle Destruktoren aufgerufen"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478238100" ID="ID_1243204093" MODIFIED="1790478263177" TEXT="Concurrency safe">
 <icon BUILTIN="flag-yellow"/>
@@ -199471,6 +199550,34 @@ that situation will improve in forseeable future.</pre>
 <node CREATED="1757602636171" ID="ID_335590089" MODIFIED="1757602648799" TEXT="publiziert zusammen mit dem FrOSCon-Vortrag"/>
 <node CREATED="1757602999819" ID="ID_1225550232" MODIFIED="1757603048855" TEXT="Demo-Code: Anzeige aus einer GTK-3-Applikation">
 <arrowlink COLOR="#6b839a" DESTINATION="ID_425211451" ENDARROW="Default" ENDINCLINATION="-24;134;" ID="Arrow_ID_596604677" STARTARROW="None" STARTINCLINATION="-159;10;"/>
+</node>
+</node>
+</node>
+</node>
+<node CREATED="1792200963321" ID="ID_977715558" MODIFIED="1792201064964" TEXT="Policies vollst&#xe4;ndig dokumentieren">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792200973248" ID="ID_1553058398" MODIFIED="1792201526827" TEXT="keine &#xbb;ich-wei&#xdf;-schon&#xab;-Memory-Leaks">
+<linktarget COLOR="#950a46" DESTINATION="ID_1553058398" ENDARROW="Default" ENDINCLINATION="-2162;163;" ID="Arrow_ID_1745743108" SOURCE="ID_510570493" STARTARROW="None" STARTINCLINATION="125;1162;"/>
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1792201093264" ID="ID_267958438" MODIFIED="1792201103566" TEXT="jede Komponente mu&#xdf; 100% sauber herunterfahren"/>
+<node COLOR="#5b280f" CREATED="1792201105051" ID="ID_1016950981" MODIFIED="1792201178160" TEXT="keinen Speicher allozieren und dann &#xbb;fahren lassen&#xab;">
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1792201125588" ID="ID_1093524502" MODIFIED="1792201162126" TEXT="&#x201e;das wird eh nie freigegeben&#x201c; &#x27f5; Argument nicht akzeptiert">
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1792201182716" ID="ID_1787841677" MODIFIED="1792201288137" TEXT="Begr&#xfc;ndung">
+<icon BUILTIN="info"/>
+<node CREATED="1792201190718" ID="ID_114767434" MODIFIED="1792201198901" TEXT="das f&#xf6;rdert eine schlampige Haltung"/>
+<node CREATED="1792201220450" ID="ID_481912438" MODIFIED="1792201235126" TEXT="verleitet dazu, &#xbb;irgendwo unterwegs&#xab; Speicher zu belegen"/>
+<node CREATED="1792201200106" ID="ID_873731372" MODIFIED="1792201211063" TEXT="wenn man eine Allokation versteht, kann man sie auch freigeben"/>
+<node CREATED="1792201243028" ID="ID_1201322449" MODIFIED="1792201261779" TEXT="Allokation folgt einem Processing-scheme (und ist nicht &#xbb;zuf&#xe4;llig&#xab;)"/>
+<node CREATED="1792201264193" ID="ID_1183168307" MODIFIED="1792201276071" TEXT="f&#xfc;r akzidentelle Allokationen gibt es smart-ptr"/>
+</node>
+<node CREATED="1792201444896" ID="ID_1528622794" MODIFIED="1792201448579" TEXT="Publikation">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792201450444" ID="ID_1658351750" LINK="https://issues.lumiera.org/ticket/195" MODIFIED="1792201465871" TEXT=" #195 Clean shutdown"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792201478154" ID="ID_21619646" LINK="https://issues.lumiera.org/ticket/198" MODIFIED="1792201490370" TEXT="#198 Quick shutdown"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792201492208" ID="ID_469735320" MODIFIED="1792201505624" TEXT="TODO: geeignete Policy-Darstellung">
+<icon BUILTIN="flag-yellow"/>
 </node>
 </node>
 </node>

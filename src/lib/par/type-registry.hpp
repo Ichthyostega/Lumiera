@@ -38,6 +38,7 @@
 #include "lib/error.hpp"
 #include "lib/nocopy.hpp"
 #include "lib/format-string.hpp"
+#include "lib/uninitialised-storage.hpp"
 //#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
@@ -68,7 +69,7 @@ namespace par {
       static constexpr uint EXTENT_SIZ = 256;
       static constexpr uint INDEX_SIZ  = 256;
       
-      using Extent = std::array<ELM, EXTENT_SIZ>;
+      using Extent = lib::UninitialisedStorage<ELM, EXTENT_SIZ>;
       using Index  = std::array<std::atomic<Extent*>, INDEX_SIZ>;
       
       Index index_{};
@@ -81,6 +82,10 @@ namespace par {
       ID makeSlot (INIT&&...);
       
       ELM& operator[] (ID)  const;
+      
+      /* == Registry state == */
+      uint size()       const { return size_; }
+      uint numExtents() const { return size_? 1 + (size_-1) / EXTENT_SIZ : 0; }
       
      ~TypeRegistry();
     private:
@@ -120,14 +125,14 @@ namespace par {
     
     Lock sync{this};
     ID entryID{size_};
-    auto& indexSlot = index_[entryID % EXTENT_SIZ];
+    auto& indexSlot = index_[entryID / EXTENT_SIZ];
     Extent* extent = indexSlot.load (std::memory_order_acquire);
     if (not extent)
-      indexSlot.store (new Extent{}   // heap-allocate new Extent
+      indexSlot.store (extent = new Extent{}   // heap-allocate new Extent
                       ,std::memory_order_release);
     
-    void* storage = indexSlot + (entryID % EXTENT_SIZ);
-    new (storage) ELM(std::forward<INIT> (initArg)...);
+    extent->createAt (entryID % EXTENT_SIZ
+                     ,std::forward<INIT> (initArg)...);
     ++size_;
     return entryID;
   }
@@ -145,9 +150,8 @@ namespace par {
   try {
     for (uint slot=0; slot<size_; ++slot)
       {
-        Extent*& extent = UN_CONST (accessExtent (slot));
-        ELM& entry = (*extent)[slot % EXTENT_SIZ];
-        entry.~ELM();
+        Extent* extent = UN_CONST (accessExtent (slot));
+        extent->destroyAt (slot % EXTENT_SIZ);
       }
     for (uint idxSlot=0; idxSlot<INDEX_SIZ; ++idxSlot)
       {
@@ -166,7 +170,7 @@ namespace par {
   inline TypeRegistry<ELM>::Extent*
   TypeRegistry<ELM>::accessExtent (ID entryID)  const
   {
-    auto& indexSlot = index_[entryID % EXTENT_SIZ];
+    auto& indexSlot = index_[entryID / EXTENT_SIZ];
     return indexSlot.load (std::memory_order_acquire);
   }
   
