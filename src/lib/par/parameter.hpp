@@ -64,6 +64,7 @@ namespace par {
       template<typename VAL>
       void setVal (VAL&&);
       
+      
       /* === Builder API === */
       
       template<typename VAL>
@@ -113,6 +114,13 @@ namespace par {
       withValue (X&& initVal)
         {
           initVal_ = std::forward<X> (initVal);
+          return std::move(*this);
+        }
+      
+      Builder&&
+      maxVal (VAL upperBound)
+        {
+          /////////////////////////////////////////////OOO integrate a scale!
           return std::move(*this);
         }
     };

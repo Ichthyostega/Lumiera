@@ -85650,7 +85650,8 @@
 </html></richcontent>
 <icon BUILTIN="yes"/>
 </node>
-<node CREATED="1789681257536" ID="ID_1700836715" MODIFIED="1789681261057" TEXT="Implementierung">
+<node COLOR="#338800" CREATED="1789681257536" ID="ID_1700836715" MODIFIED="1792278592842" TEXT="Implementierung">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1789681263702" ID="ID_517472625" MODIFIED="1789690087703" TEXT="type-handler.hpp verwenden">
 <linktarget COLOR="#3f4b72" DESTINATION="ID_517472625" ENDARROW="Default" ENDINCLINATION="368;-30;" ID="Arrow_ID_914959509" SOURCE="ID_1241002579" STARTARROW="None" STARTINCLINATION="-199;17;"/>
 <icon BUILTIN="button_ok"/>
@@ -86116,7 +86117,9 @@
 <node CREATED="1789078384055" ID="ID_306251422" MODIFIED="1789078422220" TEXT="im Besonderen die Sentinels bedingen eine erweiterte Verkn&#xfc;pfungs-Logik"/>
 <node CREATED="1789078470649" ID="ID_1129204326" MODIFIED="1789078491346" TEXT="ein (Proto)Type kann optionale und falsche Werte einschlie&#xdf;en &#x2014; oder nicht"/>
 <node CREATED="1789078432864" ID="ID_969086554" MODIFIED="1789078448278" TEXT="die Interpretation verweist in einzelne Domain-Ontologien"/>
-<node CREATED="1789078504040" ID="ID_1032247841" MODIFIED="1789078529636" TEXT="das Thema kann nicht abschlie&#xdf;end behandelt werden"/>
+<node CREATED="1789078504040" ID="ID_1032247841" MODIFIED="1792278694864" TEXT="das Thema kann nicht abschlie&#xdf;end behandelt werden">
+<icon BUILTIN="yes"/>
+</node>
 </node>
 <node CREATED="1789079643596" ID="ID_1571313547" MODIFIED="1789079662309" TEXT="die Scale sollte rein symbolisch dargestellt werden">
 <node CREATED="1789079678938" ID="ID_311127403" MODIFIED="1789079685621" TEXT="als ein Satz algebraische Daten"/>
@@ -88037,6 +88040,91 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1792280283440" ID="ID_1153505115" MODIFIED="1792280301287" TEXT="Ort und Art der Integration festlegen">
+<icon BUILTIN="pencil"/>
+<node CREATED="1792280310467" ID="ID_819412768" MODIFIED="1792280319739" TEXT="Prototyping: an einem Beispiel orientieren">
+<node CREATED="1792280840559" ID="ID_586585186" MODIFIED="1792280917381" TEXT="float-Parameter mit einem maxVal">
+<linktarget COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" SOURCE="ID_883709615" STARTARROW="None" STARTINCLINATION="129;-103;"/>
+<node CREATED="1792280931902" ID="ID_1317967124" MODIFIED="1792280943928" TEXT="Invariante &#x27f9; Limitierung mu&#xdf; in den Setter"/>
+<node CREATED="1792281031161" ID="ID_1497588748" MODIFIED="1792281042419" TEXT="Einstieg: Disposition::setVal()">
+<node CREATED="1792281144642" ID="ID_200634955" MODIFIED="1792281451165" TEXT="(optional &#xfc;berspringbar) : TypeHandler&lt;T&gt;::conform(ValBuff&amp;, T const&amp;)"/>
+<node CREATED="1792281176345" ID="ID_1386672" MODIFIED="1792281195223" TEXT="Provision::setValFrom (ValBuff const&amp;)">
+<node CREATED="1792281545556" ID="ID_525212993" MODIFIED="1792281566702" TEXT="derzeit immer: SimpleData&lt;X&gt;::setValFrom(ValBuff const&amp;)"/>
+<node CREATED="1792281637432" ID="ID_436813447" MODIFIED="1792281649162" TEXT="ist eine direkte Werzuweisung"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792281754202" ID="ID_1006391809" MODIFIED="1792282039707" TEXT="hier m&#xfc;&#xdf;te Scale::conform (rawVal) eingeschleift werden">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1792282084209" ID="ID_683313585" MODIFIED="1792282109292" TEXT="Beschlu&#xdf;: inline-Hilfsfunktion"/>
+<node CREATED="1792282110105" ID="ID_316734846" MODIFIED="1792282146960" TEXT="TypedEntity&lt;VAL&gt;::conformScale (VAL const&amp;)"/>
+</node>
+</node>
+</node>
+<node CREATED="1792282159554" ID="ID_1072648718" MODIFIED="1792282163669" TEXT="Einbindung der Scale">
+<node CREATED="1792282166097" ID="ID_229826358" MODIFIED="1792282182035" TEXT="TypedEntity&lt;VAL&gt;::conformScale">
+<node CREATED="1792282958823" ID="ID_455919211" MODIFIED="1792282972333" TEXT="holt sich Scale aus der Registry"/>
+<node CREATED="1792282973157" ID="ID_1240733651" MODIFIED="1792283029424" TEXT="getScale(scaleID) &#x27f6; Registry in param-type.cpp"/>
+</node>
+<node CREATED="1792282510836" ID="ID_1116211538" MODIFIED="1792282548059" TEXT="erzeugt wird ParamData &#x27f8; bekommt nun Scale-Definition">
+<node CREATED="1792282588104" ID="ID_507074992" MODIFIED="1792282611516" TEXT="die Scale kann &#xbb;trivial sein&#xab; &#x27f9; dann verwerfen"/>
+<node CREATED="1792282648764" ID="ID_485780668" MODIFIED="1792282732912" TEXT="sonst: im Ctor-Rumpf die Konfiguration machen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ganz analog zu Disposition::markBaseDomain&lt;TY&gt;()
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1792283281244" ID="ID_135674308" MODIFIED="1792283290791" TEXT="Zugang zur Registry">
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1792283291879" ID="ID_1077371139" MODIFIED="1792283302995" TEXT="Beschlu&#xdf;: alles inline (und damit sichtbar)">
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1792283363262" ID="ID_1882491609" MODIFIED="1792283401201" TEXT="in der konkreten Setter-Funktion mu&#xdf; alles geinlined werden">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist der Sinn der ganzen Performance-Optimierungen und &#187;Hintert&#252;rchen&#171;
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792283402588" ID="ID_1042638184" MODIFIED="1792283429612" TEXT="die &#xbb;Include-Tax&#xab; liegt beim Param-Builder">
+<node CREATED="1792283432897" ID="ID_613489193" MODIFIED="1792283463262" TEXT="der Builder ist in class Parameter nur forwar-deklariert"/>
+<node CREATED="1792283464064" ID="ID_1420079152" MODIFIED="1792283500184" TEXT="d.h. die Builder-Impl k&#xf6;nnte in einen separaten Header">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...den man nur includieren mu&#223;, wenn man tats&#228;chlich neue Parameter(typen) definiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+</node>
+<node CREATED="1792283910057" ID="ID_145892494" MODIFIED="1792283938923" TEXT="&#xfc;berraschung: auch das statische Feld wird im Header als Template definiert">
+<icon BUILTIN="messagebox_warning"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792284936936" ID="ID_874155192" MODIFIED="1792284968466" TEXT="Konsequenz: die konkrete Scale-ID h&#xe4;ngt von der BaseType-ID ab">
+<icon BUILTIN="yes"/>
+</node>
+</node>
+</node>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1788134884746" ID="ID_195532610" MODIFIED="1788134888546" TEXT="Builder-Notation">
@@ -88109,6 +88197,41 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1790094404823" TEXT="Scale-Konfiguration erm&#xf6;glichen">
 <icon BUILTIN="pencil"/>
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1792280324798" ID="ID_1063521176" MODIFIED="1792280373904" TEXT="Code prototyping: erst einfachen Fall (statisch getypt)">
+<icon BUILTIN="pencil"/>
+<node CREATED="1792280615752" ID="ID_1382333147" MODIFIED="1792280718212" TEXT="verwende Parameter_test::verify_Builder()">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      das ist bereits ad&#228;quat: auf der Ebene will ich nicht dr&#246;lfzig Millionen Spezialf&#228;lle; eine Scale erscheint lediglich als eine weitere Variante dessen, was man vorneweg f&#252;r einen Parameter festlegen kann
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792280720336" ID="ID_1944048042" MODIFIED="1792280759543">
+<richcontent TYPE="NODE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      neuer Parameter <font face="Monospaced" color="#893d3d">ps</font>&#160;als Prototyp-Fall daneben setzen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792280768476" ID="ID_320376684" MODIFIED="1792280783349" TEXT="dieser bekommt einen maxVal(23.55)"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792280784465" ID="ID_883709615" MODIFIED="1792280922829" TEXT="&#x27f9; die Limitierung mu&#xdf; bereits in den Setter eingeschleift werden">
+<arrowlink COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" STARTARROW="None" STARTINCLINATION="129;-103;"/>
+<icon BUILTIN="flag-yellow"/>
+</node>
+</node>
+<node CREATED="1792280343796" ID="ID_1575919014" MODIFIED="1792280366123" TEXT="verallgemeinerung auf Prototyp-Builder"/>
 </node>
 </node>
 <node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">

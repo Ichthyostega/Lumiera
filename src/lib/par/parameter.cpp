@@ -16,6 +16,7 @@
  ** Implementation functions of the Parameter abstraction.
  ** 
  ** @todo this is a draft and placeholder, as of 2026
+ ** @todo 10/2026 shall we define the ctors and VTables here, or in param-type.cpp ??
  */
 
 

@@ -16,6 +16,7 @@
  ** Implementation of parameter type registration.
  ** 
  ** @todo WIP-WIP-WIP can be considered an initial draft and placeholder, as of 2026
+ ** @todo 10/2026 do we even need this translation unit?? or just parameter.cpp?  Where to define the ctors and VTables?
  */
 
 

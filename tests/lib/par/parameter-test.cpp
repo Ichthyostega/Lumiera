@@ -94,6 +94,14 @@ namespace test{
           p1.setVal (12u);
           CHECK (12.0 == p1.getVal<double>());
           
+          /////////////////////////////////////////////////////////////////////////////OOO Prototyping 10/2026 : create the simplest possible Parameter with a limiting Scale
+          Parameter ps = Parameter::forValue(123.45f)
+                                   .maxVal (23.55)
+                                   .build();
+          ps.setVal (100);
+          CHECK (23.55 == ps.getVal<double>());
+          
+          /////////////////////////////////////////////////////////////////////////////OOO (End) Prototyping 10/2026
           Parameter p2 = Parameter::from(p1)
                                    .maxVal (sqrt(2))
                                    .build();

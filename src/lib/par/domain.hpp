@@ -22,9 +22,12 @@
  ** supported parameter value types, which seems adequate, since the universe
  ** of possible values is limited anyway: elementary values in parameters
  ** must be primitive base types that can be created and destroyed
- ** without side effect. Relying on the further features of
- ** the parameter type system, compound types (vectors)
- ** and limited sub-scales can be defined.
+ ** without side effect.
+ ** 
+ ** Relying on the further features of the parameter type system, compound types
+ ** (vectors, colours, masks) and limited sub-scales can be defined.
+ ** @todo 10/2026 the latter is a plan; only a first draft is implemented now,
+ **       which supports simple "number like" parameter elements.
  ** 
  ** @todo WIP-WIP-WIP this is a draft and placeholder, as of 2026
  */

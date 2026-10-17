@@ -36,7 +36,9 @@
 
 
 #include "lib/par/domain.hpp"
+#include "lib/par/scale.hpp"
 #include "lib/par/type-handler.hpp"
+#include "lib/par/type-registry.hpp"
 #include "lib/meta/generator.hpp"
 
 
@@ -135,8 +137,32 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   class TypedEntity
     : public BaseDomain<VAL,IFA>
     {
+      using ScaleReg = TypeRegistry<Scale<VAL>>;
+      using ScaleID  = ScaleReg::ID;
+      
+      static ScaleReg scaleRegistry_;
+      
     public:
+      VAL
+      conformScale (VAL const& rawVal)
+        {
+          ScaleID scaleID = IFA::getScaleID();
+          return scaleID? getScale(scaleID).conform (rawVal)
+                        : VAL(rawVal);
+        }
+      
+    private:
+      Scale<VAL> const&
+      getScale (ScaleID scaleID)
+        {
+          return scaleRegistry_[scaleID];
+        }
     };
+  
+  
+  /** Static storage for the Scale registry index table */
+  template<typename VAL, class IFA>
+  TypedEntity<VAL,IFA>::ScaleReg TypedEntity<VAL,IFA>::scaleRegistry_;
   
   
   

@@ -42,6 +42,8 @@ namespace par {
    * Includes the ability to access / set a »value«, attach automation,
    * identify and convert underlying value data types and handle
    * trait- and identity tags and the specifics of the value scale.
+   * This is the full _Service-Interface_ assumed by the outer
+   * Parameter shell.
    */
   class Disposition
     : public Domain
@@ -68,6 +70,12 @@ namespace par {
       markBaseDomain()
         {
           idr_.baseTypeID = BaseTypeID<X>();
+        }
+      
+      uint
+      getScaleID()  const
+        {
+          return idr_.scaleID;
         }
     };
   
@@ -117,7 +125,7 @@ namespace par {
   void
   ParamData<VAL, IFA>::setValFrom (ValBuff const& newVal)
   {
-    val_ = asValue<VAL>(newVal);
+    val_ = this->conformScale (asValue<VAL> (newVal));
   }
   
   
