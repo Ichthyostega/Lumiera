@@ -142,6 +142,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   stage,                      progress);
 /** progress log for the support lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   library,                    progress);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    filesys,                   library);       //filesystem operations, opening/closing files...
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    param,                     library);       //parameters and automation support
 /** progress log for the common lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 /** progress log, config subsystem */

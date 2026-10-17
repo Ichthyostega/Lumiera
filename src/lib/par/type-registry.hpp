@@ -39,7 +39,7 @@
 #include "lib/nocopy.hpp"
 #include "lib/format-string.hpp"
 //#include "lib/meta/trait.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <concepts>
 //#include <limits>
@@ -52,6 +52,7 @@ namespace par {
   namespace err = lumiera::error;
   
   using util::_Fmt;
+//  using util::unConst;
   
   /**
    * Management of descriptor entries keyed by numeric ID.
@@ -64,14 +65,14 @@ namespace par {
     : public lib::Sync<>
     , util::NonCopyable
     {
-      static constexpr size_t EXTENT_SIZ = 256;
-      static constexpr size_t INDEX_SIZ  = 256;
+      static constexpr uint EXTENT_SIZ = 256;
+      static constexpr uint INDEX_SIZ  = 256;
       
       using Extent = std::array<ELM, EXTENT_SIZ>;
       using Index  = std::array<std::atomic<Extent*>, INDEX_SIZ>;
       
       Index index_{};
-      size_t size_{0};
+      uint  size_{0};
       
     public:
       class ID;
@@ -80,6 +81,10 @@ namespace par {
       ID makeSlot (INIT&&...);
       
       ELM& operator[] (ID)  const;
+      
+     ~TypeRegistry();
+    private:
+      Extent* accessExtent (ID)  const;
     };
   
   
@@ -102,6 +107,7 @@ namespace par {
    * @remark the *write path* is mutex-protected.
    *   It is used for new registrations, which typically
    *   is not required from a hot path.
+   * @note EX_STRONG
    */
   template<class ELM>
   template<typename...INIT>
@@ -113,27 +119,66 @@ namespace par {
                       , LERR_(CAPACITY)};
     
     Lock sync{this};
-    ID entryID{size_++};
+    ID entryID{size_};
     auto& indexSlot = index_[entryID % EXTENT_SIZ];
-    Extent*  extent = indexSlot.load (std::memory_order_relaxed);
+    Extent* extent = indexSlot.load (std::memory_order_acquire);
     if (not extent)
       indexSlot.store (new Extent{}   // heap-allocate new Extent
                       ,std::memory_order_release);
     
     void* storage = indexSlot + (entryID % EXTENT_SIZ);
     new (storage) ELM(std::forward<INIT> (initArg)...);
+    ++size_;
+    return entryID;
   }
   
   
   /**
+   * @remark according to Lumiera code policy, we _must not leak memory_.
+   *  thus proper clean-up has to be performed even if we can assume
+   *  that the registry sits in static memory and slots are permanent.
+   * @note EX_SANE
+   */
+  template<class ELM>
+  inline
+  TypeRegistry<ELM>::~TypeRegistry()
+  try {
+    for (uint slot=0; slot<size_; ++slot)
+      {
+        Extent*& extent = UN_CONST (accessExtent (slot));
+        ELM& entry = (*extent)[slot % EXTENT_SIZ];
+        entry.~ELM();
+      }
+    for (uint idxSlot=0; idxSlot<INDEX_SIZ; ++idxSlot)
+      {
+        Extent* extent = index_[idxSlot].load (std::memory_order_relaxed);
+        if (extent)
+          delete extent;
+        else
+          break;
+      }
+  }
+  ERROR_LOG_AND_IGNORE (param, "clean-up of TypeRegistry")
+  
+  
+  
+  template<class ELM>
+  inline TypeRegistry<ELM>::Extent*
+  TypeRegistry<ELM>::accessExtent (ID entryID)  const
+  {
+    auto& indexSlot = index_[entryID % EXTENT_SIZ];
+    return indexSlot.load (std::memory_order_acquire);
+  }
+  
+  /**
    * access slot by ID, protected by atomic-acquire
+   * @note EX_STRONG
    */
   template<class ELM>
   inline ELM&
   TypeRegistry<ELM>::operator[] (ID entryID)  const
   {
-    auto& indexSlot = index_[entryID % EXTENT_SIZ];
-    Extent*  extent = indexSlot.load (std::memory_order_acquire);
+    Extent* extent = accessExtent (entryID);
     if (not extent)
       throw err::Logic{_Fmt{"TypeRegistry: entryID = %d not yet allocated"} % entryID
                       , LERR_(INDEX_BOUNDS)};
