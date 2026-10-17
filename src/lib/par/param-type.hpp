@@ -142,13 +142,27 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
       
       static ScaleReg scaleRegistry_;
       
-    public:
+    protected:
       VAL
       conformScale (VAL const& rawVal)
         {
           ScaleID scaleID = IFA::getScaleID();
           return scaleID? getScale(scaleID).conform (rawVal)
                         : VAL(rawVal);
+        }
+      
+      void
+      registerScale (Scale<VAL> scale)
+        {
+          if (scale.isEmpty()) return;
+          
+          ScaleID scaleID = scaleRegistry_.makeSlot (std::move (scale));
+          if (not scaleID)
+            { // the first slot must mark an empty scale
+              scaleID = scaleRegistry_.makeSlot (std::move (scaleRegistry_[0]));
+              scaleRegistry_[0] = Scale<VAL>{};
+            }
+          IFA::activateScale (scaleID);
         }
       
     private:

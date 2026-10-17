@@ -78,6 +78,7 @@ namespace par {
       /* ===== information functions ===== */
       
       bool isValid()  const;
+      bool isEmpty()  const;
       bool isFactor() const;
       bool isCyclic() const;
       bool isLimited() const;
@@ -132,6 +133,18 @@ namespace par {
            )
            ;
   }
+  
+  /** @return is this scale without any effect? */
+  template<typename VAL>
+  inline bool
+  Scale<VAL>::isEmpty()  const
+  {
+    return not (isLimited()
+               or isCyclic()
+               or isLogarithmic()
+               );
+  }
+  
   
   template<typename VAL>
   inline bool

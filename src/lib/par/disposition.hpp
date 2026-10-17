@@ -77,6 +77,16 @@ namespace par {
         {
           return idr_.scaleID;
         }
+      
+      void
+      activateScale (uint scaleID)
+        {
+          REQUIRE (not idr_.scaleID);
+          if (MAX_SCALES < scaleID)
+            throw err::State{"Registration space for parameter scales is exhausted"};
+          
+          idr_.scaleID = scaleID;
+        }
     };
   
   
@@ -94,11 +104,12 @@ namespace par {
       Provision* src_;
       
     public:
-      ParamData (VAL initVal)
+      ParamData (VAL initVal, Scale<VAL> scale)
         : val_{std::move (initVal)}
         , src_{nullptr}
         {
           Disposition::markBaseDomain<VAL>();
+          TypedEntity<VAL,IFA>::registerScale (std::move (scale));
         }
       
       /* === Provision Interface === */

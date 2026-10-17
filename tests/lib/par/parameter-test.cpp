@@ -17,7 +17,7 @@
 
 
 #include "test/run.hpp"
-//#include "test/test-helper.hpp"
+#include "test/test-helper.hpp"
 #include "lib/par/parameter.hpp"
 #include "test/diagnostic-output.hpp"/////////////TODO
 
@@ -28,6 +28,7 @@
 //using std::string;
 //using std::vector;
 //using std::swap;
+using test::roughEQ;
 
 
 namespace lib {
@@ -99,7 +100,7 @@ namespace test{
                                    .maxVal (23.55)
                                    .build();
           ps.setVal (100);
-          CHECK (23.55 == ps.getVal<double>());
+          CHECK (roughEQ (23.55 , ps.getVal<double>()));
           
           /////////////////////////////////////////////////////////////////////////////OOO (End) Prototyping 10/2026
           Parameter p2 = Parameter::from(p1)

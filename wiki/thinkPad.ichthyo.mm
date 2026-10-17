@@ -88043,8 +88043,9 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1792280283440" ID="ID_1153505115" MODIFIED="1792280301287" TEXT="Ort und Art der Integration festlegen">
 <icon BUILTIN="pencil"/>
 <node CREATED="1792280310467" ID="ID_819412768" MODIFIED="1792280319739" TEXT="Prototyping: an einem Beispiel orientieren">
-<node CREATED="1792280840559" ID="ID_586585186" MODIFIED="1792280917381" TEXT="float-Parameter mit einem maxVal">
+<node COLOR="#435e98" CREATED="1792280840559" ID="ID_586585186" MODIFIED="1792287793810" TEXT="float-Parameter mit einem maxVal">
 <linktarget COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" SOURCE="ID_883709615" STARTARROW="None" STARTINCLINATION="129;-103;"/>
+<icon BUILTIN="idea"/>
 <node CREATED="1792280931902" ID="ID_1317967124" MODIFIED="1792280943928" TEXT="Invariante &#x27f9; Limitierung mu&#xdf; in den Setter"/>
 <node CREATED="1792281031161" ID="ID_1497588748" MODIFIED="1792281042419" TEXT="Einstieg: Disposition::setVal()">
 <node CREATED="1792281144642" ID="ID_200634955" MODIFIED="1792281451165" TEXT="(optional &#xfc;berspringbar) : TypeHandler&lt;T&gt;::conform(ValBuff&amp;, T const&amp;)"/>
@@ -88058,8 +88059,10 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node CREATED="1792282159554" ID="ID_1072648718" MODIFIED="1792282163669" TEXT="Einbindung der Scale">
-<node CREATED="1792282166097" ID="ID_229826358" MODIFIED="1792282182035" TEXT="TypedEntity&lt;VAL&gt;::conformScale">
+<node COLOR="#338800" CREATED="1792282159554" ID="ID_1072648718" MODIFIED="1792287786188" TEXT="Einbindung der Scale">
+<icon BUILTIN="button_ok"/>
+<node COLOR="#338800" CREATED="1792282166097" ID="ID_229826358" MODIFIED="1792286147613" TEXT="TypedEntity&lt;VAL&gt;::conformScale">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1792282958823" ID="ID_455919211" MODIFIED="1792282972333" TEXT="holt sich Scale aus der Registry"/>
 <node CREATED="1792282973157" ID="ID_1240733651" MODIFIED="1792283029424" TEXT="getScale(scaleID) &#x27f6; Registry in param-type.cpp"/>
 </node>
@@ -88067,49 +88070,40 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792282588104" ID="ID_507074992" MODIFIED="1792282611516" TEXT="die Scale kann &#xbb;trivial sein&#xab; &#x27f9; dann verwerfen"/>
 <node CREATED="1792282648764" ID="ID_485780668" MODIFIED="1792282732912" TEXT="sonst: im Ctor-Rumpf die Konfiguration machen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ganz analog zu Disposition::markBaseDomain&lt;TY&gt;()
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
-<node CREATED="1792283281244" ID="ID_135674308" MODIFIED="1792283290791" TEXT="Zugang zur Registry">
+<node COLOR="#435e98" CREATED="1792283281244" ID="ID_135674308" MODIFIED="1792286138768" TEXT="Zugang zur Registry">
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1792283291879" ID="ID_1077371139" MODIFIED="1792283302995" TEXT="Beschlu&#xdf;: alles inline (und damit sichtbar)">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1792283363262" ID="ID_1882491609" MODIFIED="1792283401201" TEXT="in der konkreten Setter-Funktion mu&#xdf; alles geinlined werden">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist der Sinn der ganzen Performance-Optimierungen und &#187;Hintert&#252;rchen&#171;
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792283402588" ID="ID_1042638184" MODIFIED="1792283429612" TEXT="die &#xbb;Include-Tax&#xab; liegt beim Param-Builder">
 <node CREATED="1792283432897" ID="ID_613489193" MODIFIED="1792283463262" TEXT="der Builder ist in class Parameter nur forwar-deklariert"/>
 <node CREATED="1792283464064" ID="ID_1420079152" MODIFIED="1792283500184" TEXT="d.h. die Builder-Impl k&#xf6;nnte in einen separaten Header">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...den man nur includieren mu&#223;, wenn man tats&#228;chlich neue Parameter(typen) definiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 </node>
@@ -88120,6 +88114,46 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792284936936" ID="ID_874155192" MODIFIED="1792284968466" TEXT="Konsequenz: die konkrete Scale-ID h&#xe4;ngt von der BaseType-ID ab">
 <icon BUILTIN="yes"/>
+</node>
+<node COLOR="#338800" CREATED="1792286114715" ID="ID_732603047" MODIFIED="1792287744377" TEXT="Scale vom Builder in die Registry &#xfc;bertragen">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792287748214" ID="ID_986259450" MODIFIED="1792287781665" TEXT="(bisher: einfach std:: move...)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...da kann man ja sp&#228;ter mal dar&#252;ber nachdenken, ob eine std::forward-Kette besser w&#228;re
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node COLOR="#435e98" CREATED="1792286168688" ID="ID_342793686" MODIFIED="1792287740810" TEXT="Problem die ID &#x2261; 0">
+<node CREATED="1792286294051" ID="ID_1303707073" MODIFIED="1792286305821" TEXT="diese markiert &#xbb;keine Scale&#xab;"/>
+<node COLOR="#338800" CREATED="1792286308081" ID="ID_1366478804" MODIFIED="1792287725053" TEXT="also m&#xfc;ssen wir daf&#xfc;r den ersten Slot blockieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792286348971" ID="ID_1181720659" MODIFIED="1792287737954" TEXT="passiert beim Einf&#xfc;gen der ersten Scale">
+<icon BUILTIN="info"/>
+</node>
+<node COLOR="#435e98" CREATED="1792287552059" ID="ID_1323443646" MODIFIED="1792287732961" TEXT="dort eine leer Scale hinlegen"/>
+<node COLOR="#435e98" CREATED="1792287562219" ID="ID_437670867" MODIFIED="1792287728379" TEXT="und die gegebene Scale nochmal registrieren"/>
+<node COLOR="#435e98" CREATED="1792287579036" ID="ID_1200480202" MODIFIED="1792287720454" TEXT="(ist threadsafe)">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Der Slot-0 wird beim allerersten mal belegt, von dem der als erstes kommt. Der bekommt ScaleID &#8801; 0 zur&#252;ck.
+    </p>
+    <p>
+      Eine weitere Registrierung bekommt dann <i>irgendeine ID &#8212; </i>aber das ist <i>egal,</i>&#160;denn dann f&#252;gen wir eben den Inhalt von Slot-0 in <i>irgendeinen Slot, </i>und belegen dann Slot-0 mit was anderem. K&#246;nnen wir, denn wir d&#252;rfen hier schreiben, und wir sind garantiert die einzigen, die scaleID &#8801; 0 bekommen....
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1792286322567" ID="ID_1095129972" MODIFIED="1792286344275" TEXT="kein Problem &#x2014; die Registry hat eh einen gr&#xf6;&#xdf;eren ID-Space"/>
+</node>
+<node COLOR="#435e98" CREATED="1792286814269" ID="ID_1948960327" MODIFIED="1792287543868" TEXT="Beschr&#xe4;nkung des Registration-Space &#x27f9; Exception werfen"/>
 </node>
 </node>
 </node>
@@ -88197,38 +88231,35 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1790094404823" TEXT="Scale-Konfiguration erm&#xf6;glichen">
 <icon BUILTIN="pencil"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1792280324798" ID="ID_1063521176" MODIFIED="1792280373904" TEXT="Code prototyping: erst einfachen Fall (statisch getypt)">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1792280324798" ID="ID_1063521176" MODIFIED="1792287828672" TEXT="Code prototyping: erst einfachen Fall (statisch getypt)">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1792280615752" ID="ID_1382333147" MODIFIED="1792280718212" TEXT="verwende Parameter_test::verify_Builder()">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       das ist bereits ad&#228;quat: auf der Ebene will ich nicht dr&#246;lfzig Millionen Spezialf&#228;lle; eine Scale erscheint lediglich als eine weitere Variante dessen, was man vorneweg f&#252;r einen Parameter festlegen kann
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792280720336" ID="ID_1944048042" MODIFIED="1792280759543">
 <richcontent TYPE="NODE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       neuer Parameter <font face="Monospaced" color="#893d3d">ps</font>&#160;als Prototyp-Fall daneben setzen
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792280768476" ID="ID_320376684" MODIFIED="1792280783349" TEXT="dieser bekommt einen maxVal(23.55)"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792280784465" ID="ID_883709615" MODIFIED="1792280922829" TEXT="&#x27f9; die Limitierung mu&#xdf; bereits in den Setter eingeschleift werden">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792280784465" ID="ID_883709615" MODIFIED="1792287811464" TEXT="&#x27f9; die Limitierung mu&#xdf; bereits in den Setter eingeschleift werden">
 <arrowlink COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" STARTARROW="None" STARTINCLINATION="129;-103;"/>
-<icon BUILTIN="flag-yellow"/>
+<icon BUILTIN="yes"/>
+</node>
+<node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1792287813895" HGAP="11" ID="ID_448140021" MODIFIED="1792287860567" STYLE="bubble" TEXT="Prototyping erfolgreich : der Parameter ist limitiert" VSHIFT="10">
+<edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
 </node>
 <node CREATED="1792280343796" ID="ID_1575919014" MODIFIED="1792280366123" TEXT="verallgemeinerung auf Prototyp-Builder"/>
