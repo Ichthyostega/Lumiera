@@ -19,18 +19,28 @@
 #include "test/run.hpp"
 //#include "test/test-helper.hpp"
 #include "lib/par/type-registry.hpp"
+#include "lib/scoped-collection.hpp"
 #include "test/tracking-dummy.hpp"
+#include "lib/iter-explorer.hpp"
+#include "lib/sync-barrier.hpp"
+#include "lib/thread.hpp"
+#include "lib/random.hpp"
 #include "lib/util.hpp"
 #include "test/diagnostic-output.hpp"/////////////TODO
 
 //#include <utility>
 //#include <string>
 //#include <vector>
+#include <chrono>
 
 //using std::string;
 //using std::vector;
 //using std::swap;
+using lib::explore;
 using util::isSameObject;
+using std::this_thread::yield;
+using std::this_thread::sleep_for;
+using std::chrono_literals::operator ""ms;
 
 
 namespace lib {
@@ -40,6 +50,9 @@ namespace test{
 //  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   namespace {//Test fixture....
+    
+    const uint NUM_THREADS = util::max (2u, std::thread::hardware_concurrency());
+    const uint NUM_ENTRIES = 100'000;
     
   }//(End)Test fixture
   
@@ -91,7 +104,7 @@ namespace test{
       /** @test verify coherent storage handling and proper clean-up
        *      - slots are filled-up in sequence
        *      - the ID corresponds to the slot-count
-       *      - new extents are opend precisely when the
+       *      - new extents are opened precisely when the
        *        previous Extent is filled completely
        *      - Exceptions during slot-allocation are absorbed,
        *        without blocking the slot or corrupting data
@@ -189,13 +202,73 @@ namespace test{
         }
       
       
-      /** @test
-       * @todo WIP 10/26 🔁 define ⟶ implement
+      /** @test press slot allocation and data access concurrently
+       *      - for maximum pressure avoid sleeping threads and scheduling overhead
+       *      - each worker adds the numbers 1...N to the registry
+       *      - each worker uses just a tiny delay to shift processing pattern
+       *      - after adding the next number, read recent new entries and sum up
+       *      - at the end, each thread must have seen all entries, and all the
+       *        summed-up numbers must be consistent.
+       * @todo WIP 10/26 🔁 define ⟶ ✔ implement
        */
       void
       verify_concurrentAccess()
         {
-          UNIMPLEMENTED ("press slot allocation and data access concurrently");
+          TypeRegistry<uint> testRegistry;
+          lib::SyncBarrier startTrigger{NUM_THREADS+1};
+          auto expectedSum = [](size_t n){ return n/2 * (n+1); }; // Σ 1...n
+          
+          auto genLoad = [&]{ return [&testRegistry
+                                     ,&startTrigger
+                                     ,expectedSum
+                                     ,random = 2 + rani(4)
+                                     ]{
+                                        size_t mySum{0};
+                                        uint lastSeen{0};
+                                        volatile size_t blackHole{0};
+                                        auto randomDelay = [&]{ if (0 == lastSeen % random) blackHole += lastSeen; };
+                                        
+                                        // all threads start at once
+                                        startTrigger.sync();
+                                        
+                                        for (uint i=1; i <= NUM_ENTRIES; ++i)
+                                          {
+                                            randomDelay();
+                                            
+                                            //--------------------------------------- allocate new entry
+                                            auto entryID = testRegistry.makeSlot(i);
+                                            
+                                            randomDelay();
+                                            
+                                            //--------------------------------------- read other entries
+                                            for (uint e=entryID; e >= lastSeen; --e)
+                                              mySum += testRegistry[e];
+                                            
+                                            lastSeen = entryID;
+                                          }
+                                        // to sleep for an eternity
+                                        sleep_for (10ms);
+                                        
+                                        // complete to read all other entries
+                                        for (uint e=lastSeen+1; e < NUM_THREADS*NUM_ENTRIES; ++e)
+                                          mySum += testRegistry[e];
+                                        
+                                        CHECK (mySum = NUM_THREADS * expectedSum (NUM_ENTRIES));
+                                      };
+                            };
+          
+          using Threads = lib::ScopedCollection<lib::Thread>;
+          Threads threads{NUM_THREADS, Threads::invoke(genLoad)};
+          
+          // unleash
+          startTrigger.sync();
+          
+          sleep_for(12ms);
+          
+          while (explore(threads).has_any())
+            yield();
+          
+          CHECK (testRegistry.size() == NUM_THREADS * expectedSum (NUM_ENTRIES));
         }
     };
   

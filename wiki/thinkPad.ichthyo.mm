@@ -86408,6 +86408,256 @@ class ScaleRegistry
 </node>
 <node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790478238100" ID="ID_1243204093" MODIFIED="1790478263177" TEXT="Concurrency safe">
 <icon BUILTIN="flag-yellow"/>
+<node CREATED="1792243503003" ID="ID_118835140" MODIFIED="1792243516591" TEXT="Ziel: concurrent Pressure">
+<node CREATED="1792243524508" ID="ID_1160740004" MODIFIED="1792243541074" TEXT="bedeutet: Wahrscheinlichkeit f&#xfc;r Kollisionen erh&#xf6;hen"/>
+<node CREATED="1792243563343" ID="ID_1528908673" MODIFIED="1792243660072" TEXT="Problem hier: die Operationen sind f&#xfc;r sich genommen schnell">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine Heap-Allokation kostet <i>amortisiert</i>&#160;nur 40ns, und der Rest ist <i>fast nix</i>.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1792243672752" ID="ID_85638427" MODIFIED="1792243990414" TEXT="es besteht die Gefahr da&#xdf; Threads nicht kollidieren weil sie warten">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Das Mutex-Lock-induzierte Weit, sowie die Scheduler-Aktivit&#228;t sind um den Faktor 1000 langsamer als die eigentliche Nutzarbeit; m&#246;glicherweise warten fast alle Threads die meiste Zeit &#8212; wodurch die Wahrscheinlichkeit f&#252;r Kollisionen gegen Null geht.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1792243992416" ID="ID_415683874" MODIFIED="1792244014209" TEXT="Ansatz">
+<node CREATED="1792244014753" ID="ID_840200116" MODIFIED="1792244030157" TEXT="nur so viele Threads wie CPUs"/>
+<node CREATED="1792244036770" ID="ID_1866810841" MODIFIED="1792244069698" TEXT="Verh&#xe4;ltnis Lesen zu Registrieren &#x2261; 10 : 1"/>
+<node CREATED="1792244161658" ID="ID_1060660077" MODIFIED="1792244279235" TEXT="nur wenig und kurze Randomisierung">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Kein Zugriff auf den Zufallszahlengenerator w&#228;hrend der aktiven Phase, und nur kurze Randomisierungs-Schleifen.
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+</node>
+<node CREATED="1792244285441" ID="ID_1100815459" MODIFIED="1792244288521" TEXT="Testaufbau">
+<node CREATED="1792244289873" ID="ID_1530115505" MODIFIED="1792244301259" TEXT="Load-Thrad definieren">
+<node CREATED="1792244569484" ID="ID_53941596" MODIFIED="1792244585294" TEXT="Lesen konzentriert sich um die F&#xfc;ll-Front">
+<node CREATED="1792244686306" ID="ID_1166915882" MODIFIED="1792252324751" TEXT="&#xfc;ber die eigene letzte ID hinaus lesen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      damit man m&#246;glichst Eintr&#228;ge erfa&#223;t, die ein anderer Thread grade gemacht hat
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="idea"/>
+</node>
+<node COLOR="#5b280f" CREATED="1792244586773" ID="ID_802085787" MODIFIED="1792256760255" TEXT="br&#xe4;uchte dazu eine contains()-Funktion">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      eine solche Funktion ist aber nicht gut...
+    </p>
+    <ul>
+      <li>
+        sie ist f&#252;r den intendierten Nutzen nicht notwendig (weil nur bereits registrierte IDs verwendet werden sollen)
+      </li>
+      <li>
+        sie w&#228;re als API-Funktion daher irreleitend
+      </li>
+      <li>
+        und sie ist <b>nicht concurrency-save</b>
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="closed"/>
+</node>
+<node CREATED="1792252624719" ID="ID_1048890891" MODIFIED="1792252729856" TEXT="damit kann ich die Struktur nicht aggressiv unter Druck setzen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Weil durch einem Schreibvorgang eine acquire-Barriere erzwungen ist, und jeder Thread damit trivialerweise die vorhergehenden Eintr&#228;ge im Cache hat (es sei denn, sie liegen in einem anderen Extent)
+    </p>
+  </body>
+</html>
+</richcontent>
+<icon BUILTIN="messagebox_warning"/>
+</node>
+<node CREATED="1792252731864" ID="ID_1325538886" MODIFIED="1792252995344" TEXT="allerdings: mehr Druck gibt es in der Praxis auch nicht">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      auch im realen Einsatz liest schlimmstenfalls ein anderer Thread mit einer gewissen Verz&#246;gerung, und garantiert hinter einer schreib+lese-Barrier (weil er sonst die ID gar nicht kennen k&#246;nnte)
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#605e7c" DESTINATION="ID_1325538886" ENDARROW="Default" ENDINCLINATION="347;18;" ID="Arrow_ID_1434324540" SOURCE="ID_793070482" STARTARROW="Default" STARTINCLINATION="434;0;"/>
+<icon BUILTIN="smiley-neutral"/>
+</node>
+</node>
+<node CREATED="1792244756715" ID="ID_941986258" MODIFIED="1792244782060" TEXT="ein Schreib-Block, zwei Lese-Blocks"/>
+<node CREATED="1792244788143" ID="ID_1720732613" MODIFIED="1792244815063" TEXT="Randomisierung nur zwischen den Blocks"/>
+<node CREATED="1792244825410" ID="ID_381939462" MODIFIED="1792244896220" TEXT="Randomisierung nur per Modulus-Check">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ist mein eigener aktueller Z&#228;hler durch meine feste Zufallszahl teilbar?
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node CREATED="1792244301891" ID="ID_657340352" MODIFIED="1792244308945" TEXT="Anzahl CPUs feststellen">
+<node CREATED="1792245125122" ID="ID_677915296" MODIFIED="1792245126925" TEXT="std::thread::hardware_concurrency()"/>
+<node CREATED="1792245214810" ID="ID_1296926998" MODIFIED="1792245238002" TEXT="Logik wie in WorkForce (mit minimum = 2)"/>
+</node>
+<node CREATED="1792244315350" ID="ID_218678747" MODIFIED="1792244321271" TEXT="Threads starten">
+<node CREATED="1792246293354" ID="ID_1313021588" MODIFIED="1792246304300" TEXT="mu&#xdf; eine Zufallszahl in jeden Thread bekommen">
+<node CREATED="1792246339080" ID="ID_1594128477" MODIFIED="1792251554934" TEXT="&#x3bb;-Thread scheidet damit aus">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das Thema hatte ich schon x-mal, zuletzt beim BufferProviderLoad_test (daf&#252;r habe ich dann sogar ScopedCollection <i>aufgebohrt</i>&#160;und &#955;-Initialisierung eingebaut)
+    </p>
+    <ul>
+      <li>
+        wenn ich jedem Thread ein Lambda gebe, dann sind das lauter Kopien vom gleichen Funktor-Objekt, und damit die gleiche Closure; ein Initialiser im Capture-Ausdruck hilft da &#252;berhaupt nicht
+      </li>
+      <li>
+        es mu&#223; also zwangsl&#228;ufig jeder Thread-Instanz ein separates Konstruktur-Argument &#252;bergeben werden
+
+        <ul>
+          <li>
+            das kann entweder von einem ScopedCollection::invoke(&#955;) stammen, das dann jeweils im Main-Thread ausgewertet wird. Dieser Funktor mu&#223; dann aber den Thread-Funktor generieren, ist also eine komplexe Struktur, die sich nicht sofort erschlie&#223;t
+
+            <ul>
+              <li>
+                das Thread-&#955; mu&#223; entweder direkt inline stehen (damit der Capture mit dem rand()-Aufruf jeweils erneut ausgef&#252;hrt wird)
+              </li>
+              <li>
+                oder der eigentliche Thread-Funktor nimmt die Zufallszahl als Argument, was dann dem Thread-Wrapper als zus&#228;tzlicher Binding-Parameter gegeben wird
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>
+        oder man definiert gleich eine Subklasse, hat dann aber wieder das Problem mit der Konstruktor-Synchronisierung (der Konstruktor der Subklasse l&#228;uft konkurrent mit dem bereits startenden Thread)
+      </li>
+    </ul>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792251557240" ID="ID_1731075562" MODIFIED="1792251684525" TEXT="ein dedizierter LoadThread f&#xfc;hrt zu einer komplexen Code-Struktur">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      der m&#252;&#223;te dann n&#228;mlich als Member der Testklasse definiert sein, damit der die gemeinsame SyncBarrier sieht. Das wiederum erfordert dann, da&#223; die zu testende Registry irgendwie als Parameter durchgef&#228;delt werden mu&#223;. Die Struktur knallen wir dann dem Leser vor den Latz....
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792251686884" ID="ID_1108149420" MODIFIED="1792251781746" TEXT="dann doch lieber noch ein doppelt verschachteltes &#x3bb;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...das kann ich wenigstens als Variable definieren, und die innere Capture explizit ausformulieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1792247295125" ID="ID_403445735" MODIFIED="1792247319218" TEXT="dann kann man auch alle Threads mit einer N+1-Barriere starten"/>
+</node>
+<node CREATED="1792244377340" ID="ID_265966366" MODIFIED="1792244387626" TEXT="Ergebnis pr&#xfc;fen">
+<node CREATED="1792252818802" ID="ID_268890956" MODIFIED="1792252847071" TEXT="ich mu&#xdf; vor allem auf Data-Corruption pr&#xfc;fen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      denn eine entgleiste Datenstruktur w&#252;rde sich nur so zeigen
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792252852039" ID="ID_1022907040" MODIFIED="1792252867471" TEXT="also mu&#xdf; jeder geschriebene / gelesene Wert verifizierbar sein"/>
+<node CREATED="1792252869846" ID="ID_1697985306" MODIFIED="1792252953009" TEXT="Verwende die &#xfc;bliche Formel f&#xfc;r arithmetische Reihen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      1...N &#8801; N/2 &#183; (N+1)
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792252900815" ID="ID_793070482" MODIFIED="1792253003046" TEXT="allerdings hier N mal, und in unregelm&#xe4;&#xdf;iger Reihenfolge">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      Jeder Thread registriert Zahlen 1...N, und die Reihenfolge ist randomisiert
+    </p>
+  </body>
+</html>
+</richcontent>
+<arrowlink COLOR="#605e7c" DESTINATION="ID_1325538886" ENDARROW="Default" ENDINCLINATION="347;18;" ID="Arrow_ID_1434324540" STARTARROW="Default" STARTINCLINATION="434;0;"/>
+</node>
+<node CREATED="1792254526676" ID="ID_758874087" MODIFIED="1792254547549" TEXT="am Ende noch die restlichen Eintr&#xe4;ge der anderen Threads aufsammeln"/>
+<node CREATED="1792254548569" ID="ID_975718912" MODIFIED="1792254562075" TEXT="dann mu&#xdf; jeder Thread die volle (vorhersehbare) Summe haben"/>
+</node>
+</node>
 </node>
 </node>
 </node>
