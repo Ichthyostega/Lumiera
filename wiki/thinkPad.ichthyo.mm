@@ -88515,8 +88515,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1792334532306" ID="ID_346843401" MODIFIED="1792335652266" TEXT="ich l&#xf6;se diese Schwierigkeit (vorerst) nicht">
-<linktarget COLOR="#741c3a" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="6;14;" ID="Arrow_ID_1868138011" SOURCE="ID_600328901" STARTARROW="None" STARTINCLINATION="-4;-10;"/>
 <linktarget COLOR="#fee6b5" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="-40;-142;" ID="Arrow_ID_999088829" SOURCE="ID_820490657" STARTARROW="None" STARTINCLINATION="-80;9;"/>
+<linktarget COLOR="#741c3a" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="6;14;" ID="Arrow_ID_1868138011" SOURCE="ID_600328901" STARTARROW="None" STARTINCLINATION="-4;-10;"/>
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1792334552787" ID="ID_1560244354" MODIFIED="1792334692257" TEXT="die Analyse zeigt">
@@ -88629,8 +88629,27 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="flag-pink"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_613414026" MODIFIED="1788651847846" TEXT="verify_Identity">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1788651832214" ID="ID_613414026" MODIFIED="1792350574134" TEXT="verify_Identity">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792350575809" ID="ID_1624240212" MODIFIED="1792350583762" TEXT="zeige Klon und Zuweisung"/>
+<node CREATED="1792350584342" ID="ID_1718110381" MODIFIED="1792350594685" TEXT="zeige da&#xdf; beide Instanzen unabh&#xe4;ngig sind"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792350595356" ID="ID_1868507905" MODIFIED="1792350612095" TEXT="TODO: das Konzept &#xbb;Identity&#xab; genauer fassen">
+<icon BUILTIN="flag-yellow"/>
+<node CREATED="1792350614840" ID="ID_802758372" MODIFIED="1792350755164" TEXT="ist herausfordernd bei PolymorphicValue">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      wegen dem &#187;polymorphic&#171; ist im Container eine Identit&#228;t verborgen; man kann nicht einfach auf observable Werte abstellen, aber uberfl&#228;chlich verh&#228;lt es sich wie ein kopierbarer Value. Das wirft subtile Fragen auf
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792350756971" ID="ID_200174072" MODIFIED="1792350779084" TEXT="ich hate geplant, einen ID-Marker und Metadaten zuzulassen"/>
+</node>
 </node>
 <node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_11918736" MODIFIED="1788651847848" TEXT="verify_ParamType">
 <icon BUILTIN="hourglass"/>
@@ -88995,9 +89014,9 @@ Prop.1: dist%3       1  2  0  1  2  0
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1169133505" SOURCE="ID_1539001135" STARTARROW="None" STARTINCLINATION="-849;57;"/>
-<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1848570299" SOURCE="ID_1255943604" STARTARROW="None" STARTINCLINATION="-799;81;"/>
 <linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" SOURCE="ID_774038603" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1848570299" SOURCE="ID_1255943604" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1169133505" SOURCE="ID_1539001135" STARTARROW="None" STARTINCLINATION="-849;57;"/>
 <icon BUILTIN="bell"/>
 </node>
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1719134265" MODIFIED="1792344499462" TEXT="Schwierigkeit: Registry-IDs h&#xe4;ngen sind abh&#xe4;ngig">

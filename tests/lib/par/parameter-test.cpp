@@ -84,7 +84,7 @@ namespace test{
       
       
       /** @test explore ways to define a parameter...
-       * @todo WIP 10/26 🔁 define ⟶ 🔁 implement
+       * @todo WIP 10/26 🔁 define ⟶ ✔ implement
        */
       void
       verify_Builder()
@@ -129,19 +129,53 @@ namespace test{
           CHECK ( 5 == p4.getVal<int64_t>());
           p4.setVal (7.1);
           CHECK ( 7 == p4.getVal<uint64_t>());
+          
+          // build a cyclic wrapping scale
+          Parameter p5 = Parameter::forType<int>()
+                                   .cyclicWrap(-180, 180)
+                                   .withValue(361)
+                                   .build();
+          
+          CHECK ( 1 == p5.getVal<int>());
+          p5.setVal (270u);
+          CHECK (-90 == p5.getVal<int>());
+          p5.setVal (23.5);
+          CHECK (23 == p5.getVal<uint64_t>());
         }
       
       
-      /** @test
-       * @todo WIP 10/26 🔁 define ⟶ implement
+      /** @test equality and instance identity
+       *      - demonstrate copy and assignment
+       *      - validate that copies have independent state
+       * @todo planned as of 10/26 : can attach an ID and metadata
+       * @todo WIP 10/26 🔁 define ⟶ 🔁 implement
        */
       void
       verify_Identity()
         {
+          Parameter p1 = Parameter::forType<uint>()
+                                   .minVal(10)
+                                   .build();
+          CHECK (10 == p1.getVal<uint>());
+          
+          // can be copied
+          Parameter p2{p1};
+          CHECK (10 == p2.getVal<uint>());
+          p2.setVal(23.55);
+          CHECK (23 == p2.getVal<uint>());
+          CHECK (10 == p1.getVal<uint>());
+          
+          // can be assigned
+          p1 = p2;
+          CHECK (23 == p2.getVal<uint>());
+          // both share the same scale, but operate independently
+          p2.setVal(-55);
+          CHECK (10 == p2.getVal<uint>());
+          CHECK (23 == p1.getVal<uint>());
         }
       
       
-      /** @test
+      /** @test each parameter has an opaque yet distinct type 
        * @todo WIP 10/26 🔁 define ⟶ implement
        */
       void

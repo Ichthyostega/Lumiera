@@ -178,10 +178,17 @@ namespace par {
           maybeCloneScale();
           scale_.maxVal = upperBound;
           scale_.minVal = lowerBound;
-          scale_.cyclicLim = util::limit_cyclicWrap<VAL> (upperBound - lowerBound);
-          if (abs(*scale_.maxVal > *scale_.cyclicLim)  )
-            throw err::Invalid{_Fmt{"invalid parameter build: maxVal(%s) for cyclicWrap is too large to handle precisely (limit: %s)"}
-                                   % upperBound % *scale_.cyclicLim};
+          if constexpr (std::is_floating_point_v<VAL>)
+            { // ensure that the float-precision can actually handle the given interval
+              scale_.cyclicLim = util::limit_cyclicWrap<VAL> (upperBound - lowerBound);
+              if (abs(*scale_.maxVal > *scale_.cyclicLim)  )
+                throw err::Invalid{_Fmt{"invalid parameter build: maxVal(%s) for cyclicWrap is too large to handle precisely (limit: %s)"}
+                                       % upperBound % *scale_.cyclicLim};
+            }
+          else
+            { // limit must be set but actual value does not matter (ints are precise)
+              scale_.cyclicLim = std::numeric_limits<VAL>::max();
+            }
           initVal_ = util::limited(lowerBound, initVal_, upperBound);
           return std::move(*this);
         }
