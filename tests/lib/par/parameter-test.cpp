@@ -106,10 +106,13 @@ namespace test{
           CHECK (roughEQ (23.0  , ps.getVal<double>()));
           
           /////////////////////////////////////////////////////////////////////////////OOO (End) Prototyping 10/2026
-          Parameter p2 = Parameter::from(p1)
+          Parameter p2 = Parameter::from<double>(p1)
                                    .maxVal (sqrt(2))
                                    .build();
 SHOW_EXPR(p2.getVal<float>());
+SHOW_EXPR(p2.getVal<double>());
+          CHECK (sqrt(2) == p2.getVal<double>());
+          CHECK (roughEQ (1.41421, p2.getVal<float>()));
         }
       
       

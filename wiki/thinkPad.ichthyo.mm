@@ -88095,16 +88095,32 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node CREATED="1792283402588" ID="ID_1042638184" MODIFIED="1792283429612" TEXT="die &#xbb;Include-Tax&#xab; liegt beim Param-Builder">
 <node CREATED="1792283432897" ID="ID_613489193" MODIFIED="1792283463262" TEXT="der Builder ist in class Parameter nur forwar-deklariert"/>
-<node CREATED="1792283464064" ID="ID_1420079152" MODIFIED="1792283500184" TEXT="d.h. die Builder-Impl k&#xf6;nnte in einen separaten Header">
+<node CREATED="1792283464064" ID="ID_1420079152" MODIFIED="1792328768166" TEXT="d.h. die Builder-Impl k&#xf6;nnte in einen separaten Header">
 <richcontent TYPE="NOTE"><html>
-  <head/>
+  <head>
+    
+  </head>
   <body>
     <p>
       ...den man nur includieren mu&#223;, wenn man tats&#228;chlich neue Parameter(typen) definiert
     </p>
   </body>
-</html></richcontent>
+</html>
+</richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node CREATED="1792328807818" ID="ID_761145664" MODIFIED="1792328840514" TEXT="dann m&#xfc;&#xdf;te man aber Disposition von ParamData trennen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_920406895" MODIFIED="1792329161369" STYLE="bubble" TEXT="Header-Include-Struktur aufr&#xe4;umen" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1667486175" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_172597435" STARTARROW="None" STARTINCLINATION="-829;57;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_1297097510" MODIFIED="1792329199722" STYLE="fork" TEXT="der reine Nutzer eines Parameters braucht nicht alle Header">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+<node CREATED="1721239003353" ID="ID_1529633605" MODIFIED="1792329248428" STYLE="fork" TEXT="die volle Implementierung wird nur in Builder::build() gebraucht">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1792283910057" ID="ID_145892494" MODIFIED="1792283938923" TEXT="&#xfc;berraschung: auch das statische Feld wird im Header als Template definiert">
@@ -88155,8 +88171,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#435e98" CREATED="1792286814269" ID="ID_1948960327" MODIFIED="1792287543868" TEXT="Beschr&#xe4;nkung des Registration-Space &#x27f9; Exception werfen"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1792327408895" ID="ID_179945417" MODIFIED="1792327424236" TEXT="Scale sofort zu Beginn auch einmal auf den Value anwenden">
-<icon BUILTIN="flag-pink"/>
+<node COLOR="#338800" CREATED="1792327408895" ID="ID_179945417" MODIFIED="1792328186418" TEXT="Scale sofort zu Beginn auch einmal auf den Value anwenden">
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 </node>
@@ -88232,11 +88248,11 @@ Prop.1: dist%3       1  2  0  1  2  0
 </html></richcontent>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1790094404823" TEXT="Scale-Konfiguration erm&#xf6;glichen">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788896830329" ID="ID_355463973" MODIFIED="1792335326334" STYLE="fork" TEXT="Scale-Konfiguration erm&#xf6;glichen">
 <icon BUILTIN="pencil"/>
-<node COLOR="#338800" CREATED="1792280324798" ID="ID_1063521176" MODIFIED="1792287828672" TEXT="Code prototyping: erst einfachen Fall (statisch getypt)">
+<node COLOR="#338800" CREATED="1792280324798" ID="ID_1063521176" MODIFIED="1792335326334" TEXT="Code prototyping: erst einfachen Fall (statisch getypt)">
 <icon BUILTIN="button_ok"/>
-<node CREATED="1792280615752" ID="ID_1382333147" MODIFIED="1792280718212" TEXT="verwende Parameter_test::verify_Builder()">
+<node CREATED="1792280615752" ID="ID_1382333147" MODIFIED="1792335326334" TEXT="verwende Parameter_test::verify_Builder()">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -88246,7 +88262,7 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1792280720336" ID="ID_1944048042" MODIFIED="1792280759543">
+<node CREATED="1792280720336" ID="ID_1944048042" MODIFIED="1792335326334">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -88256,8 +88272,8 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1792280768476" ID="ID_320376684" MODIFIED="1792280783349" TEXT="dieser bekommt einen maxVal(23.55)"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792280784465" ID="ID_883709615" MODIFIED="1792287811464" TEXT="&#x27f9; die Limitierung mu&#xdf; bereits in den Setter eingeschleift werden">
+<node CREATED="1792280768476" ID="ID_320376684" MODIFIED="1792335326334" TEXT="dieser bekommt einen maxVal(23.55)"/>
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1792280784465" ID="ID_883709615" MODIFIED="1792335326334" TEXT="&#x27f9; die Limitierung mu&#xdf; bereits in den Setter eingeschleift werden">
 <arrowlink COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" STARTARROW="None" STARTINCLINATION="129;-103;"/>
 <icon BUILTIN="yes"/>
 </node>
@@ -88265,12 +88281,18 @@ Prop.1: dist%3       1  2  0  1  2  0
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
 </node>
-<node CREATED="1792280343796" ID="ID_1575919014" MODIFIED="1792280366123" TEXT="verallgemeinerung auf Prototyp-Builder"/>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1792280343796" ID="ID_1575919014" MODIFIED="1792335326334" TEXT="Verallgemeinerung auf Prototyp-Builder">
+<icon BUILTIN="hourglass"/>
+</node>
+<node COLOR="#338800" CREATED="1792335309386" ID="ID_1561668830" MODIFIED="1792335578596" TEXT="stattdessen: Builder kann scale-ID durchreichen">
+<arrowlink COLOR="#dffdc3" DESTINATION="ID_1601535791" ENDARROW="Default" ENDINCLINATION="-583;26;" ID="Arrow_ID_1612217784" STARTARROW="None" STARTINCLINATION="-519;29;"/>
+<icon BUILTIN="button_ok"/>
+</node>
 </node>
 </node>
 <node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
 <linktarget COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" SOURCE="ID_1439464964" STARTARROW="None" STARTINCLINATION="176;0;"/>
-<node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1788654157480" ID="ID_180727420" MODIFIED="1788654167767" TEXT="Problem: statische vs. dynamische Typisierung">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788654157480" ID="ID_180727420" MODIFIED="1792335514862" TEXT="Problem: statische vs. dynamische Typisierung">
 <icon BUILTIN="broken-line"/>
 <node COLOR="#5b280f" CREATED="1788654460183" ID="ID_1493548979" MODIFIED="1788654476434" TEXT="mit dem bestehenden Builder-System nicht m&#xf6;glich">
 <icon BUILTIN="stop-sign"/>
@@ -88282,7 +88304,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1788655291159" ID="ID_843134849" MODIFIED="1788655306463" TEXT="wir haben dann eben mehrere Builder-Klassen"/>
 <node CREATED="1788655317266" ID="ID_54539066" MODIFIED="1788655344253" TEXT="Builder&lt;TY&gt; sowie ProtoBuilder"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788654668731" ID="ID_429473344" MODIFIED="1788657066747" TEXT="die Schwierigkeit besteht ehr darin, wie man das &#xbb;Rekonfigurieren&#xab; mit dem API verbindet">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788654668731" ID="ID_429473344" MODIFIED="1792334673420" TEXT="die Schwierigkeit besteht ehr darin, wie man das &#xbb;Rekonfigurieren&#xab; mit dem API verbindet">
 <icon BUILTIN="yes"/>
 <node CREATED="1788655193044" ID="ID_137199832" MODIFIED="1788655224153" TEXT="Component / Composit-Design">
 <node CREATED="1788655225447" ID="ID_955239990" MODIFIED="1788655240601" TEXT="die Immutability steckt dann erst im ParamType"/>
@@ -88293,11 +88315,16 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1788656839242" ID="ID_392888721" MODIFIED="1788656854065" TEXT="bleibt aber das Problem: der Typ ist opaque">
 <icon BUILTIN="messagebox_warning"/>
-<node COLOR="#5b280f" CREATED="1788656871646" ID="ID_1325131915" MODIFIED="1788656955176" TEXT="generisch-getypter Code kann nicht von runtime-dynamischen Typ aufgerufen werden">
+<node COLOR="#5b280f" CREATED="1788656871646" ID="ID_1325131915" MODIFIED="1792328355848" TEXT="generisch-getypter Code kann nicht von runtime-dynamischem Typ aufgerufen werden">
 <icon BUILTIN="closed"/>
 </node>
 <node CREATED="1788657034330" ID="ID_60370643" MODIFIED="1788657050967" TEXT="&#x27f9; mu&#xdf; zwingend irgendwo eine Delegate haben...">
-<node CREATED="1792326693987" ID="ID_1304117406" MODIFIED="1792326705987" TEXT="Idee: den getypten Builder in einen PolymorphicValue legen"/>
+<node CREATED="1792326693987" ID="ID_1304117406" MODIFIED="1792329481536" TEXT="Idee: den getypten Builder in einen PolymorphicValue legen">
+<icon BUILTIN="idea"/>
+<node CREATED="1792329485409" HGAP="38" ID="ID_1179371873" MODIFIED="1792329511613" TEXT="(kann aber auch ein klassischer PImpl sein)" VSHIFT="3">
+<font NAME="SansSerif" SIZE="11"/>
+</node>
+</node>
 <node CREATED="1792326980597" ID="ID_1209132614" MODIFIED="1792327007767" TEXT="das Delegate m&#xfc;&#xdf;te dann die Typkonvertierung der Werte machen"/>
 <node CREATED="1792327018765" ID="ID_574806581" MODIFIED="1792327035157" TEXT="am Ende kommt wieder ein opaquer Parameter(container) raus"/>
 </node>
@@ -88328,6 +88355,140 @@ Prop.1: dist%3       1  2  0  1  2  0
 <icon BUILTIN="yes"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#ead2b1" COLOR="#c20007" CREATED="1792328197091" ID="ID_1195588170" MODIFIED="1792334692257" TEXT="das Schema mit dem Delegate (probeweise) durchspielen">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...besonders gefallen tut mir das nicht, aber es ist die einzige M&#246;glichkeit, die ich im Moment sehe
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#7930c5" DESTINATION="ID_1195588170" ENDARROW="Default" ENDINCLINATION="-344;16;" ID="Arrow_ID_1371310739" SOURCE="ID_1560244354" STARTARROW="None" STARTINCLINATION="-24;-147;"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1792328367653" ID="ID_274950780" MODIFIED="1792328382543" TEXT="ben&#xf6;tigte Bestandteile">
+<node CREATED="1792328454249" ID="ID_25452319" MODIFIED="1792328460404" TEXT="ein Builder-Interface"/>
+<node CREATED="1792328505227" ID="ID_1820186345" MODIFIED="1792328526276" TEXT="getyptes Delegate (impl Builder)"/>
+<node CREATED="1792328577233" ID="ID_1120583372" MODIFIED="1792328599281" TEXT="front-End-Proxy mit PImpl"/>
+</node>
+<node CREATED="1792329937402" ID="ID_951591878" MODIFIED="1792329940311" TEXT="Weiterungen">
+<node CREATED="1792329946163" ID="ID_1358350420" MODIFIED="1792329966218" TEXT="das Schema k&#xf6;nnte stets angewendet werden">
+<node CREATED="1792329971599" ID="ID_1236273834" MODIFIED="1792329981106" TEXT="auch im getypten Fall"/>
+</node>
+<node CREATED="1792329986806" ID="ID_1448662603" MODIFIED="1792330035102" TEXT="der PImpl k&#xf6;nnte dann &quot;nach hinten&quot; wandern">
+<node CREATED="1792331995668" ID="ID_272588865" MODIFIED="1792332010220" TEXT="man k&#xf6;nnte ihn sogar &quot;hinten&quot; erzeugen, per BaseType-ID"/>
+<node CREATED="1792332045203" ID="ID_1160947745" MODIFIED="1792332059613" TEXT="damit w&#xe4;re der Typ im Parameter-front-End wirklich gel&#xf6;scht"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792330777446" ID="ID_130039943" MODIFIED="1792330931415" TEXT="PolymorphicValue verwenden?">
+<icon BUILTIN="help"/>
+<node CREATED="1792330952367" ID="ID_58375414" MODIFIED="1792330959200" TEXT="w&#xe4;re symmetrisch und einheitlich"/>
+<node CREATED="1792330960132" ID="ID_941564977" MODIFIED="1792331279533" TEXT="der front-Builder sollte dann aber per Referenz funktionieren (nicht move-Build)">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      ...also das klassische Builder-Pattern: man erzeugt ein &quot;schwebendes&quot; Builder-Objekt, und die Builder-Methoden geben eine Referenz darauf zur&#252;ck, bis schlie&#223;lich die terminale build()-Operation das Resultat by-value liefert.
+    </p>
+    <p>
+      
+    </p>
+    <p>
+      Der andere Ansatz, move-Build, w&#252;rde n&#228;mlich in jedem Schrit einen Dispatch durch den VirtualCopySupport machen, und damit den entscheidenden Vorteil eines move-Build negieren
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+<node CREATED="1792331208954" ID="ID_1929608722" MODIFIED="1792331222956" TEXT="dann kann man aber auch nicht mehr &#xbb;den Builder-Typ schwenken&#xab;"/>
+<node CREATED="1792331230190" ID="ID_201117950" MODIFIED="1792331247521" TEXT="was allerdings dann im front-End auch nicht mehr notwendig ist"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792331715343" ID="ID_975026938" MODIFIED="1792331724252" TEXT="alternativ: unique_ptr?">
+<icon BUILTIN="help"/>
+<node CREATED="1792331735733" ID="ID_1257210203" MODIFIED="1792331750958" TEXT="klassisch-vertraut und weniger komplex"/>
+<node CREATED="1792331760228" ID="ID_224062259" MODIFIED="1792331775643" TEXT="der front-Builder k&#xf6;nnte auch ein move-Builder sein / oder noncopyable"/>
+</node>
+</node>
+<node CREATED="1792330109500" ID="ID_342777127" MODIFIED="1792330117580" TEXT="Problem: Typ der Eingabe-Werte">
+<node CREATED="1792330152616" ID="ID_1972985118" MODIFIED="1792330165751" TEXT="die Eingabe entspricht nicht notwendig dem Zieltyp"/>
+<node CREATED="1792330167357" ID="ID_794881584" MODIFIED="1792330179632" TEXT="bisher wird das durch Value-Argumente abgefangen"/>
+<node CREATED="1792330384329" ID="ID_1677705281" MODIFIED="1792330428567" TEXT="nun brauchen wir ValBuff + Konversions-Maschinerie">
+<node CREATED="1792330658204" ID="ID_1846776521" MODIFIED="1792330677303" TEXT="und zwar als generischer Adapter auf dem Builder-Interface"/>
+<node CREATED="1792330688680" ID="ID_292464871" MODIFIED="1792330711749" TEXT="ganz analog zur Anordnung Parameter &#x27f6; Dispostition::setVal(X)"/>
+</node>
+</node>
+<node COLOR="#5b280f" CREATED="1792332701869" ID="ID_309717423" MODIFIED="1792332766186" TEXT="ich wehre mich gegen diese ganze ausufernde Komplexit&#xe4;t">
+<arrowlink COLOR="#4968c7" DESTINATION="ID_609725960" ENDARROW="Default" ENDINCLINATION="30;-94;" ID="Arrow_ID_42101904" STARTARROW="None" STARTINCLINATION="-182;9;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792331422063" ID="ID_1237874986" MODIFIED="1792331454173" TEXT="alternativer Ansatz: den Parameter &#xbb;Huckepack&#xab; nehmen?">
+<icon BUILTIN="help"/>
+<node CREATED="1792331485230" ID="ID_1753890859" MODIFIED="1792331491068" TEXT="scheitert an der Scale">
+<node CREATED="1792331529832" ID="ID_338739895" MODIFIED="1792331540947" TEXT="die Scale lebt immutable in der Registry"/>
+<node CREATED="1792331548158" ID="ID_344798866" MODIFIED="1792331566660" TEXT="der Parameter hat gar keine extra-Storage f&#xfc;r eine mutable-Scale"/>
+</node>
+<node CREATED="1792331491517" ID="ID_1866256283" MODIFIED="1792331497613" TEXT="...und der Provision-Impl">
+<node CREATED="1792331597783" ID="ID_213495046" MODIFIED="1792331616466" TEXT="auch diese mu&#xdf; den konkreten Typ kennen"/>
+<node CREATED="1792331616894" ID="ID_1139693653" MODIFIED="1792331624583" TEXT="Storage ist noch &#xfc;berhaupt nicht klar"/>
+<node CREATED="1792331625666" ID="ID_220502295" MODIFIED="1792331642365" TEXT="man bezieht sich darauf als Quelle (per Pointer)"/>
+</node>
+<node CREATED="1792331501034" ID="ID_1245068668" MODIFIED="1792331504751" TEXT="beide sind getypt"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792332449862" ID="ID_609725960" MODIFIED="1792332758738" TEXT="die Spar-L&#xf6;sung">
+<linktarget COLOR="#4968c7" DESTINATION="ID_609725960" ENDARROW="Default" ENDINCLINATION="30;-94;" ID="Arrow_ID_42101904" SOURCE="ID_309717423" STARTARROW="None" STARTINCLINATION="-182;9;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1792332469967" ID="ID_1593825673" MODIFIED="1792332558011" TEXT="man mu&#xdf; bei Prototyp-Anwendung den Typ angeben"/>
+<node CREATED="1792332582485" ID="ID_1932048694" MODIFIED="1792332611400" TEXT="(sehr wahrscheinlich) mu&#xdf; der Client diesen Typ ohnehin kennen">
+<icon BUILTIN="help"/>
+<node CREATED="1792332614923" ID="ID_1015440292" MODIFIED="1792332627210" TEXT="das mu&#xdf; sich im praktischen Nutzen zeigen"/>
+<node CREATED="1792332641264" ID="ID_425147259" MODIFIED="1792332652823" TEXT="hierf&#xfc;r ist die Einbindung ins GUI entscheidend"/>
+<node CREATED="1792332657050" ID="ID_129494961" MODIFIED="1792332662429" TEXT="und was dann &#xfc;ber den UI-Bus geht"/>
+</node>
+<node CREATED="1792332990127" ID="ID_1194456460" MODIFIED="1792333001065" TEXT="damit k&#xf6;nnte der normale Builder diesen Fall mit &#xfc;bernehmen"/>
+<node CREATED="1792333031769" ID="ID_1459782133" MODIFIED="1792333090610" TEXT="er m&#xfc;&#xdf;te dann lediglich eine unver&#xe4;nderte Scale per ID durchreichen k&#xf6;nnen"/>
+<node BACKGROUND_COLOR="#f1ce92" COLOR="#330f69" CREATED="1792334448029" ID="ID_820490657" MODIFIED="1792335661106" TEXT="puh .... das ist einfach">
+<arrowlink COLOR="#fee6b5" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="-40;-142;" ID="Arrow_ID_999088829" STARTARROW="None" STARTINCLINATION="-80;9;"/>
+<icon BUILTIN="ksmiletris"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1792334532306" ID="ID_346843401" MODIFIED="1792335652266" TEXT="ich l&#xf6;se diese Schwierigkeit (vorerst) nicht">
+<linktarget COLOR="#741c3a" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="6;14;" ID="Arrow_ID_1868138011" SOURCE="ID_600328901" STARTARROW="None" STARTINCLINATION="-4;-10;"/>
+<linktarget COLOR="#fee6b5" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="-40;-142;" ID="Arrow_ID_999088829" SOURCE="ID_820490657" STARTARROW="None" STARTINCLINATION="-80;9;"/>
+<font ITALIC="true" NAME="SansSerif" SIZE="14"/>
+<icon BUILTIN="yes"/>
+<node CREATED="1792334552787" ID="ID_1560244354" MODIFIED="1792334692257" TEXT="die Analyse zeigt">
+<arrowlink COLOR="#7930c5" DESTINATION="ID_1195588170" ENDARROW="Default" ENDINCLINATION="-344;16;" ID="Arrow_ID_1371310739" STARTARROW="None" STARTINCLINATION="-24;-147;"/>
+<node CREATED="1792334558630" ID="ID_1603044845" MODIFIED="1792334563663" TEXT="wird irre komplex"/>
+<node CREATED="1792334564413" ID="ID_1065827087" MODIFIED="1792334773903" TEXT="h&#xe4;tte Potential bzgl. &#xbb;encapsulation&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      man k&#246;nnte damit den konkreten Typ tats&#228;chlich vom Parameter-front-End l&#246;schen, und danach eine Reorganisation der Implementierungs-Hierarchie machen, so da&#223; Teile der Implementierung tats&#228;chlich verborgen bleiben, da ja setets eine Indirektion dazwischen liegt
+    </p>
+  </body>
+</html>
+</richcontent>
+</node>
+</node>
+<node CREATED="1792335482203" ID="ID_1853479427" MODIFIED="1792335504139" TEXT="k&#xf6;nnte sp&#xe4;ter darauf zur&#xfc;ckkommen (wenn tats&#xe4;chlicher Nutzen klar)"/>
+</node>
+</node>
+<node CREATED="1792335333454" ID="ID_230670224" MODIFIED="1792335356256" TEXT="verlange vorerst explizite Typ-Angabe vom Benutzer">
+<icon BUILTIN="yes"/>
+<node CREATED="1792335364426" ID="ID_600328901" MODIFIED="1792335467506" TEXT="Komplexit&#xe4;t mit dem opaquen Typ umgangen">
+<arrowlink COLOR="#741c3a" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="6;14;" ID="Arrow_ID_1868138011" STARTARROW="None" STARTINCLINATION="-4;-10;"/>
+</node>
+<node CREATED="1792335524564" ID="ID_1601535791" MODIFIED="1792335562702" TEXT="stattdessen kann (optional) die Scale durchgereicht werden">
+<linktarget COLOR="#dffdc3" DESTINATION="ID_1601535791" ENDARROW="Default" ENDINCLINATION="-583;26;" ID="Arrow_ID_1612217784" SOURCE="ID_1561668830" STARTARROW="None" STARTINCLINATION="-519;29;"/>
 </node>
 </node>
 </node>
@@ -88747,6 +88908,23 @@ Prop.1: dist%3       1  2  0  1  2  0
   </body>
 </html></richcontent>
 <arrowlink COLOR="#a62805" DESTINATION="ID_1434101577" ENDARROW="Default" ENDINCLINATION="-159;0;" ID="Arrow_ID_1727630196" STARTARROW="None" STARTINCLINATION="-91;4;"/>
+</node>
+<node CREATED="1792328915458" ID="ID_1651963593" MODIFIED="1792328927006" TEXT="ungel&#xf6;ste Themen">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1667486175" MODIFIED="1792329161369" TEXT="Aufgabe: &#xbb;Include-Tax&#xab;">
+<richcontent TYPE="NOTE"><html>
+  <head>
+    
+  </head>
+  <body>
+    <p>
+      aus Performance-Gr&#252;nden wurde alles auf Inlining hin ausgelegt &#8212; und die (noch im Entstehen befindlichen) Header sind bereits ziemlich komplex geworden
+    </p>
+  </body>
+</html>
+</richcontent>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1667486175" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_172597435" SOURCE="ID_920406895" STARTARROW="None" STARTINCLINATION="-829;57;"/>
+<icon BUILTIN="bell"/>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#c6afa7" COLOR="#521477" CREATED="1788901263420" ID="ID_364482853" MODIFIED="1788901314108" TEXT="Festlegungen(2026)">

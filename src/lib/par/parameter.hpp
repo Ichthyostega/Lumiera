@@ -83,8 +83,13 @@ namespace par {
                   .withValue (std::forward<VAL> (initVal));
         }
       
-      class ProtoBuilder;
-      static ProtoBuilder from (Parameter const& prototype);
+      template<typename VAL>
+      static Builder<VAL>
+      from (Parameter const& prototype)
+        {
+          return {prototype.getVal<VAL>() // note: may convert value type
+                 ,unConst(prototype).getPayload().getScaleID()};
+        }
       
     protected:
       template<class IMP, typename...ARGS>
@@ -98,16 +103,24 @@ namespace par {
   class Parameter::Builder
     {
       VAL initVal_{};
+      uint scaleID_{0};
       Scale<VAL> scale_{};
       
     public:
+      Builder() = default;
+      Builder (VAL initVal, uint scaleID)
+        : initVal_{initVal}
+        , scaleID_{scaleID}
+        { }
+      // default copy operations
+      
       Parameter
       build()
         {
           using ImplPackage = ParamData<VAL, CopySupportMarker>;   //////////////////////////////////////////TICKET #1197 : remove the necessity to inject the CopySupportMarker
           ImplPackage* typeTag{nullptr};
-          Parameter resParam{typeTag, initVal_, std::move (scale_)};
-          return resParam;
+          return scaleID_? Parameter{typeTag, initVal_, scaleID_} // pass-through scale unmodified
+                         : Parameter{typeTag, initVal_, std::move (scale_)};
         }
       
       template<typename X>
@@ -127,36 +140,7 @@ namespace par {
     };
   
   
-  class Parameter::ProtoBuilder
-    {
-      Parameter ref_;
-      
-    public:
-      ProtoBuilder (Parameter const& prototype)
-        : ref_{prototype}
-        { }
-        
-      Parameter
-      build()
-        {
-          return ref_;
-        }
-      
-      template<typename X>
-      ProtoBuilder&&
-      maxVal (X&& upperBound)
-        {
-          /////////////////////////////////////////////OOO how to remould a scale?
-          return std::move(*this);
-        }
-    };
   
-  inline Parameter::ProtoBuilder
-  Parameter::from (Parameter const& prototype)
-  {
-    return ProtoBuilder{prototype};
-  }
-
   
   
   template<typename VAL>

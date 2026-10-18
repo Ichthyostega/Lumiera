@@ -57,6 +57,12 @@ namespace par {
       template<typename X>
       void setVal (X);
       
+      uint
+      getScaleID()  const
+        {
+          return idr_.scaleID;
+        }
+      
     protected:
       template<typename X>
       bool
@@ -70,12 +76,6 @@ namespace par {
       markBaseDomain()
         {
           idr_.baseTypeID = BaseTypeID<X>();
-        }
-      
-      uint
-      getScaleID()  const
-        {
-          return idr_.scaleID;
         }
       
       void
@@ -110,6 +110,15 @@ namespace par {
         {
           Disposition::markBaseDomain<VAL>();
           TypedEntity<VAL,IFA>::registerScale (std::move (scale));
+        }
+      
+      ParamData (VAL const& initVal, uint scaleID)
+        : val_{}
+        , src_{nullptr}
+        {
+          Disposition::markBaseDomain<VAL>();
+          Disposition::activateScale (scaleID);
+          val_ = this->conformScale (initVal);
         }
       
       /* === Provision Interface === */
