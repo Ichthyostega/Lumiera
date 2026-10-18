@@ -84,40 +84,43 @@ namespace test{
       
       
       /** @test explore ways to define a parameter...
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       * @todo WIP 10/26 🔁 define ⟶ 🔁 implement
        */
       void
       verify_Builder()
         {
+          // build a simple float-parameter
           Parameter p1 = Parameter::forValue(123.45f).build();
           CHECK (123.45f == p1.getVal<float>());
           
           p1.setVal (12u);
           CHECK (12.0 == p1.getVal<double>());
           
-          /////////////////////////////////////////////////////////////////////////////OOO Prototyping 10/2026 : create the simplest possible Parameter with a limiting Scale
-          Parameter ps = Parameter::forValue(123.45f)
-                                   .maxVal (23.55)
-                                   .build();
-          CHECK (roughEQ (23.55 , ps.getVal<double>()));
-          ps.setVal (100);
-          CHECK (roughEQ (23.55 , ps.getVal<double>()));
-          ps.setVal ( 23);
-          CHECK (roughEQ (23.0  , ps.getVal<double>()));
-          
-          /////////////////////////////////////////////////////////////////////////////OOO (End) Prototyping 10/2026
+          // remould into a double parameter with value limit
           Parameter p2 = Parameter::from<double>(p1)
                                    .maxVal (sqrt(2))
                                    .build();
-SHOW_EXPR(p2.getVal<float>());
-SHOW_EXPR(p2.getVal<double>());
+          
           CHECK (sqrt(2) == p2.getVal<double>());
           CHECK (roughEQ (1.41421, p2.getVal<float>()));
+          
+          p2.setVal (100);
+          CHECK (sqrt(2) == p2.getVal<double>());
+          p2.setVal (-10);
+          CHECK (    -10 == p2.getVal<double>());
+          
+          // clone again, but re-use the scale / value-limit
+          Parameter p3 = Parameter::from<double>(p2)
+                                   .withValue (1000)
+                                   .build();
+          
+          CHECK (sqrt(2) == p3.getVal<double>());
+          CHECK (    -10 == p2.getVal<double>());
         }
       
       
       /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       * @todo WIP 10/26 🔁 define ⟶ implement
        */
       void
       verify_Identity()
@@ -126,7 +129,7 @@ SHOW_EXPR(p2.getVal<double>());
       
       
       /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       * @todo WIP 10/26 🔁 define ⟶ implement
        */
       void
       verify_ParamType()
@@ -135,7 +138,7 @@ SHOW_EXPR(p2.getVal<double>());
       
       
       /** @test
-       * @todo WIP 9/26 🔁 define ⟶ implement
+       * @todo WIP 10/26 🔁 define ⟶ implement
        */
       void
       verify_Automation()

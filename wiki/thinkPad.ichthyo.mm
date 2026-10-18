@@ -88288,6 +88288,13 @@ Prop.1: dist%3       1  2  0  1  2  0
 <arrowlink COLOR="#dffdc3" DESTINATION="ID_1601535791" ENDARROW="Default" ENDINCLINATION="-583;26;" ID="Arrow_ID_1612217784" STARTARROW="None" STARTINCLINATION="-519;29;"/>
 <icon BUILTIN="button_ok"/>
 </node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792337337548" ID="ID_986841873" MODIFIED="1792337361143" TEXT="Vorsicht: ist jetzt (erst mal) eine Einbahnstra&#xdf;e">
+<icon BUILTIN="stop-sign"/>
+<node CREATED="1792337367608" ID="ID_461750033" MODIFIED="1792337382692" TEXT="m&#xfc;&#xdf;te auch eine bestehende Scale ab&#xe4;ndern k&#xf6;nnen"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#c9000c" CREATED="1792337383694" ID="ID_1518841636" MODIFIED="1792337463321" TEXT="dazu mu&#xdf; sie erst mal extrahiert und typ-konvertiert werden">
+<arrowlink COLOR="#ff0003" DESTINATION="ID_1758926949" ENDARROW="Default" ENDINCLINATION="184;-563;" ID="Arrow_ID_22131225" STARTARROW="None" STARTINCLINATION="464;23;"/>
+</node>
+</node>
 </node>
 </node>
 <node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
@@ -88489,6 +88496,16 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node CREATED="1792335524564" ID="ID_1601535791" MODIFIED="1792335562702" TEXT="stattdessen kann (optional) die Scale durchgereicht werden">
 <linktarget COLOR="#dffdc3" DESTINATION="ID_1601535791" ENDARROW="Default" ENDINCLINATION="-583;26;" ID="Arrow_ID_1612217784" SOURCE="ID_1561668830" STARTARROW="None" STARTINCLINATION="-519;29;"/>
+</node>
+<node BACKGROUND_COLOR="#f4c4ac" COLOR="#a50125" CREATED="1792337215636" ID="ID_1692127620" MODIFIED="1792337254565" TEXT="Aber damit gibt&apos;s ein anderes Problem">
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792337259878" ID="ID_1454710220" MODIFIED="1792337320849" TEXT="u.U. mu&#xdf; eine bestehende Scale vom Prototypen extrahiert werden">
+<icon BUILTIN="flag-yellow"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1792337285663" ID="ID_1758926949" MODIFIED="1792337440803" TEXT="noch schlimmer: da kann eine Typ-Konvertierung notwendig werden">
+<linktarget COLOR="#ff0003" DESTINATION="ID_1758926949" ENDARROW="Default" ENDINCLINATION="184;-563;" ID="Arrow_ID_22131225" SOURCE="ID_1518841636" STARTARROW="None" STARTINCLINATION="464;23;"/>
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 </node>

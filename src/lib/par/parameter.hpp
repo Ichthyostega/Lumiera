@@ -134,8 +134,19 @@ namespace par {
       Builder&&
       maxVal (VAL upperBound)
         {
+          maybeCloneScale();
           scale_.maxVal = upperBound;
           return std::move(*this);
+        }
+      
+    private:
+      void
+      maybeCloneScale()
+        {
+          if (not scaleID_) return;
+          
+          UNIMPLEMENTED ("extract and possibly type-convert the scale definition");
+          scaleID_ = 0; // use explicitly defined scale instead
         }
     };
   
