@@ -29,6 +29,7 @@
 #include "lib/par/spec.hpp"
 #include "lib/par/provision.hpp"
 #include "lib/par/param-type.hpp"
+#include "lib/polymorphic-value.hpp"   //////////////////////////////////////////////////////////////////////TICKET #1197 : remove the necessity to inject the CopySupportMarker
 
 
 namespace lib {
@@ -127,10 +128,10 @@ namespace par {
     };
   
   template<typename X>
-  using FullDomain = BaseDomain<X, Disposition>;
+  using FullDomain = BaseDomain<X, polyvalue::CopySupport<Disposition>>;   //////////////////////////////////TICKET #1197 : get rid of the need to inject the CopySupprt API
   
   template<typename X>
-  using SimpleData = ParamData<X, Disposition>;
+  using SimpleData = ParamData<X, polyvalue::CopySupport<Disposition>>;    //////////////////////////////////TICKET #1197 : get rid of the need to inject the CopySupprt API
   
   
   

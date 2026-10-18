@@ -84284,6 +84284,14 @@
     </p>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="93" ID="ID_774038603" MODIFIED="1792344070927" STYLE="bubble" TEXT="Komplikationen durch CopySupportAPI" VSHIFT="28">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_664673835" MODIFIED="1792343801433" STYLE="fork" TEXT="die alte PolymorphicValue - Implementierung verlangt das so">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
 </node>
 <node CREATED="1788017830099" ID="ID_1598313786" MODIFIED="1788017847940" TEXT="letztlich wird an copy-Ctor bzw. Assignment des Implementierungs-Typs delegiert"/>
 <node CREATED="1788017850607" ID="ID_1152900201" MODIFIED="1788017910538" TEXT="siehe PolymorphicValue_test::verifyBasics()">
@@ -84807,8 +84815,8 @@
 <node COLOR="#338800" CREATED="1788296967307" ID="ID_1067952271" MODIFIED="1788296982864" TEXT="damit ist f&#xfc;r jeden Belang eine Ebene festgelegt">
 <icon BUILTIN="idea"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788296987347" ID="ID_1409086602" MODIFIED="1788297005246" TEXT="kann nun die Implementierung konstruieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1788296987347" ID="ID_1409086602" MODIFIED="1792343530342" TEXT="kann nun die Implementierung konstruieren">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#435e98" CREATED="1788307857528" ID="ID_412964688" MODIFIED="1788313299843" TEXT="Value-Init &#x27f6; direkt vom Builder in den Konstruktor"/>
 <node CREATED="1788307874399" ID="ID_195138202" MODIFIED="1788307912949" TEXT="Get mit Typ-Konversion &#x27f6; generisches front-End auf dem Disposition-Interface">
 <node CREATED="1788307916543" ID="ID_877977052" MODIFIED="1788307932499" TEXT="so mu&#xdf; es sein &#x2014; daf&#xfc;r haben wir ein Interface"/>
@@ -84831,7 +84839,7 @@
 </html></richcontent>
 <arrowlink COLOR="#ffd5f2" DESTINATION="ID_632634612" ENDARROW="Default" ENDINCLINATION="140;-422;" ID="Arrow_ID_423990415" STARTARROW="None" STARTINCLINATION="-499;24;"/>
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788308332698" FOLDED="true" ID="ID_1468282295" MODIFIED="1788896870129" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788308332698" FOLDED="true" ID="ID_1468282295" MODIFIED="1792344081125" TEXT="Problem: brauche hier die BaseDomain-ID ohne Indirektion">
 <linktarget COLOR="#7a6a8b" DESTINATION="ID_1468282295" ENDARROW="Default" ENDINCLINATION="116;-139;" ID="Arrow_ID_582693889" SOURCE="ID_1881580962" STARTARROW="None" STARTINCLINATION="220;17;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1788362693945" ID="ID_1951653761" MODIFIED="1788362711453" TEXT="sonst &#xbb;relativiert&#xab; sich der Direkt-Zugriff">
@@ -84887,7 +84895,7 @@
 </node>
 <node COLOR="#338800" CREATED="1788380554839" ID="ID_1101549379" MODIFIED="1788570018729" TEXT="Kompromi&#xdf;: ziehe einen ID-Record bereits in die Disposition">
 <icon BUILTIN="button_ok"/>
-<node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" FOLDED="true" ID="ID_552546860" MODIFIED="1788397901695" TEXT="PolymorphicValue nicht optimal definiert">
+<node BACKGROUND_COLOR="#c2b6c8" COLOR="#5b280f" CREATED="1788382780349" FOLDED="true" ID="ID_552546860" MODIFIED="1792342783614" TEXT="PolymorphicValue nicht optimal definiert">
 <icon BUILTIN="broken-line"/>
 <icon BUILTIN="button_cancel"/>
 <node CREATED="1788301325125" ID="ID_1978220833" MODIFIED="1788386325808" TEXT="das mit dem CopySupport ist ein echtes Problem ">
@@ -84935,9 +84943,34 @@
 <icon BUILTIN="idea"/>
 <node CREATED="1788386039641" ID="ID_477009340" MODIFIED="1788386053499" TEXT="zweites Template-Argument in ParamData">
 <node CREATED="1788386057747" ID="ID_904631655" MODIFIED="1788386082344" TEXT="damit kann dann der Parameter (Container) hier das CopySupport-API injizieren"/>
-<node CREATED="1788386085851" ID="ID_1295285894" MODIFIED="1788386098957" TEXT="und wir halten die Komplexit&#xe4;t nur an einer stelle"/>
+<node CREATED="1788386085851" ID="ID_1295285894" MODIFIED="1792343962515" TEXT="und wir halten die Komplexit&#xe4;t nur an einer Stelle"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792343240984" ID="ID_1822822313" MODIFIED="1792343259555" TEXT="leder verbreitet sich das nun &#xfc;ber Typdefs weiter">
+<icon BUILTIN="clanbomber"/>
+<node CREATED="1792343261171" ID="ID_337184826" MODIFIED="1792343378274" TEXT="und wenn man nicht aufpa&#xdf;t...">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...ich hatte mir einen Typdef geschrieben, als Abk&#252;rzung; und da stand die einfache Hierarchie drinnen, ohne dieses d&#228;mliche CopySuportAPI (was sowiso nur ein reiner Marker ist, denn es wird ja von PolymorphicValue automatisch implementiert)
+    </p>
+  </body>
+</html></richcontent>
+<icon BUILTIN="smily_bad"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788386101665" ID="ID_93545182" MODIFIED="1788386217575" TEXT="mu&#xdf; die PAYLOAD_SIZE so definieren, da&#xdf; die VTable-size abgezogen wird">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#271c9c" CREATED="1792343269645" ID="ID_1757333666" MODIFIED="1792343298993" TEXT="dann gibt es auf einmal zwei Instanzen von der ScaleRegstry">
+<icon BUILTIN="broken-line"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="148" ID="ID_1255943604" MODIFIED="1792343871117" STYLE="bubble" TEXT="Komplikationen durch CopySupportAPI" VSHIFT="44">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1848570299" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_1894396085" MODIFIED="1792343801433" STYLE="fork" TEXT="die alte PolymorphicValue - Implementierung verlangt das so">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788386101665" ID="ID_93545182" MODIFIED="1792342783631" TEXT="mu&#xdf; die PAYLOAD_SIZE so definieren, da&#xdf; die VTable-size abgezogen wird">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -85181,9 +85214,9 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="forward"/>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788404196803" ID="ID_569414817" MODIFIED="1788404269415" TEXT="baue statische Type-Spec auf">
+<node COLOR="#338800" CREATED="1788404196803" ID="ID_569414817" MODIFIED="1792343545645" TEXT="baue statische Type-Spec auf">
 <arrowlink COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" STARTARROW="None" STARTINCLINATION="-29;106;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1788404287935" ID="ID_959512138" MODIFIED="1788404297298" TEXT="Basis-Typ-ID wird generisch erzeugt"/>
 <node CREATED="1788404298134" ID="ID_770813391" MODIFIED="1788404312059" TEXT="Storage-Buffer-Size wird automatisch begrenzt"/>
 </node>
@@ -85310,9 +85343,9 @@
 <arrowlink COLOR="#b781a4" DESTINATION="ID_661068668" ENDARROW="Default" ENDINCLINATION="128;148;" ID="Arrow_ID_1562138790" STARTARROW="None" STARTINCLINATION="-493;26;"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1788404265183" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
+<node COLOR="#338800" CREATED="1788380520115" ID="ID_1609007571" MODIFIED="1792343547784" TEXT="f&#xfc;hre also eine generische Spec mit einem ID-Record ein">
 <linktarget COLOR="#578fd2" DESTINATION="ID_1609007571" ENDARROW="Default" ENDINCLINATION="53;-180;" ID="Arrow_ID_486335926" SOURCE="ID_569414817" STARTARROW="None" STARTINCLINATION="-29;106;"/>
-<icon BUILTIN="pencil"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1788380609599" ID="ID_768311001" MODIFIED="1788380609599" TEXT="und die zugeh&#xf6;rige Storage kommt in die Disposition">
 <linktarget COLOR="#331dc1" DESTINATION="ID_768311001" ENDARROW="Default" ENDINCLINATION="723;0;" ID="Arrow_ID_1947843702" SOURCE="ID_380080816" STARTARROW="None" STARTINCLINATION="422;20;"/>
 </node>
@@ -85769,7 +85802,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1789876376322" ID="ID_1223578931" MODIFIED="1789949324151" TEXT="eigentliche Join-Operation in auf passendem Zwischentyp ausf&#xfc;hren">
+<node COLOR="#338800" CREATED="1789876376322" FOLDED="true" ID="ID_1223578931" MODIFIED="1792344154357" TEXT="eigentliche Join-Operation in auf passendem Zwischentyp ausf&#xfc;hren">
 <linktarget COLOR="#28b55c" DESTINATION="ID_1223578931" ENDARROW="Default" ENDINCLINATION="-139;1297;" ID="Arrow_ID_225645373" SOURCE="ID_1294384495" STARTARROW="None" STARTINCLINATION="111;6;"/>
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#fafe99" COLOR="#fa002a" CREATED="1789876423793" ID="ID_603151342" MODIFIED="1789877266018" TEXT="Vorsicht Falle: Kombination von signed/unsigned">
@@ -86294,7 +86327,7 @@ class ScaleRegistry
 <linktarget COLOR="#426aa5" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="28;-70;" ID="Arrow_ID_1818399541" SOURCE="ID_735608493" STARTARROW="None" STARTINCLINATION="-393;12;"/>
 <linktarget COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-27;101;" ID="Arrow_ID_246372510" SOURCE="ID_438812693" STARTARROW="None" STARTINCLINATION="14;-8;"/>
 <node CREATED="1789159448086" ID="ID_1755995276" MODIFIED="1789159547368" TEXT="Feste Index-Tabelle + heap-allozierte Extents"/>
-<node COLOR="#338800" CREATED="1790478166301" ID="ID_1258631659" MODIFIED="1792201647439" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
+<node COLOR="#338800" CREATED="1790478166301" FOLDED="true" ID="ID_1258631659" MODIFIED="1792344173993" TEXT="Implementierung nach Standard-Schema (wie von Claude vorgeschlagen)">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792195119872" ID="ID_755422994" MODIFIED="1792195149285" TEXT="sehe (vorerst?) einen hart-gecodeten 16bit-Index-Space vor">
 <icon BUILTIN="yes"/>
@@ -88007,9 +88040,9 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1790094428926" ID="ID_1432141408" MODIFIED="1790094455904" TEXT="mu&#xdf; nun die Scale (Descriptor) sinnvoll in die Parameter-Implementierung integrieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790094428926" ID="ID_1432141408" MODIFIED="1792345085792" TEXT="mu&#xdf; nun die Scale (Descriptor) sinnvoll in die Parameter-Implementierung integrieren">
 <icon BUILTIN="yes"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1790094459596" ID="ID_184861465" MODIFIED="1790094482634" TEXT="brauche dazu eine Registrierung und Scale-IDs">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1790094459596" FOLDED="true" ID="ID_184861465" MODIFIED="1792344213112" TEXT="brauche dazu eine Registrierung und Scale-IDs">
 <icon BUILTIN="forward"/>
 <node CREATED="1790094501963" ID="ID_438812693" MODIFIED="1792277260764" TEXT="und diese Registry sollte generisch angelegt sein">
 <arrowlink COLOR="#365ac0" DESTINATION="ID_435108847" ENDARROW="Default" ENDINCLINATION="-27;101;" ID="Arrow_ID_246372510" STARTARROW="None" STARTINCLINATION="14;-8;"/>
@@ -88040,10 +88073,10 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1792280283440" ID="ID_1153505115" MODIFIED="1792280301287" TEXT="Ort und Art der Integration festlegen">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1792280283440" ID="ID_1153505115" MODIFIED="1792344556980" TEXT="Ort und Art der Integration festlegen">
+<icon BUILTIN="button_ok"/>
 <node CREATED="1792280310467" ID="ID_819412768" MODIFIED="1792280319739" TEXT="Prototyping: an einem Beispiel orientieren">
-<node COLOR="#435e98" CREATED="1792280840559" ID="ID_586585186" MODIFIED="1792287793810" TEXT="float-Parameter mit einem maxVal">
+<node COLOR="#435e98" CREATED="1792280840559" FOLDED="true" ID="ID_586585186" MODIFIED="1792344546338" TEXT="float-Parameter mit einem maxVal">
 <linktarget COLOR="#d10155" DESTINATION="ID_586585186" ENDARROW="Default" ENDINCLINATION="-223;19;" ID="Arrow_ID_30320262" SOURCE="ID_883709615" STARTARROW="None" STARTINCLINATION="129;-103;"/>
 <icon BUILTIN="idea"/>
 <node CREATED="1792280931902" ID="ID_1317967124" MODIFIED="1792280943928" TEXT="Invariante &#x27f9; Limitierung mu&#xdf; in den Setter"/>
@@ -88052,14 +88085,15 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792281176345" ID="ID_1386672" MODIFIED="1792281195223" TEXT="Provision::setValFrom (ValBuff const&amp;)">
 <node CREATED="1792281545556" ID="ID_525212993" MODIFIED="1792281566702" TEXT="derzeit immer: SimpleData&lt;X&gt;::setValFrom(ValBuff const&amp;)"/>
 <node CREATED="1792281637432" ID="ID_436813447" MODIFIED="1792281649162" TEXT="ist eine direkte Werzuweisung"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792281754202" ID="ID_1006391809" MODIFIED="1792282039707" TEXT="hier m&#xfc;&#xdf;te Scale::conform (rawVal) eingeschleift werden">
-<icon BUILTIN="flag-yellow"/>
+<node COLOR="#338800" CREATED="1792281754202" ID="ID_1006391809" MODIFIED="1792344278622" TEXT="hier wird Scale::conform (rawVal) eingeschleift">
+<arrowlink COLOR="#3d97c2" DESTINATION="ID_1878162771" ENDARROW="Default" ENDINCLINATION="82;-128;" ID="Arrow_ID_725446006" STARTARROW="None" STARTINCLINATION="-472;28;"/>
+<icon BUILTIN="button_ok"/>
 <node CREATED="1792282084209" ID="ID_683313585" MODIFIED="1792282109292" TEXT="Beschlu&#xdf;: inline-Hilfsfunktion"/>
 <node CREATED="1792282110105" ID="ID_316734846" MODIFIED="1792282146960" TEXT="TypedEntity&lt;VAL&gt;::conformScale (VAL const&amp;)"/>
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1792282159554" ID="ID_1072648718" MODIFIED="1792287786188" TEXT="Einbindung der Scale">
+<node COLOR="#338800" CREATED="1792282159554" ID="ID_1072648718" MODIFIED="1792344538852" TEXT="Einbindung der Scale">
 <icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1792282166097" ID="ID_229826358" MODIFIED="1792286147613" TEXT="TypedEntity&lt;VAL&gt;::conformScale">
 <icon BUILTIN="button_ok"/>
@@ -88097,16 +88131,13 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792283432897" ID="ID_613489193" MODIFIED="1792283463262" TEXT="der Builder ist in class Parameter nur forwar-deklariert"/>
 <node CREATED="1792283464064" ID="ID_1420079152" MODIFIED="1792328768166" TEXT="d.h. die Builder-Impl k&#xf6;nnte in einen separaten Header">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...den man nur includieren mu&#223;, wenn man tats&#228;chlich neue Parameter(typen) definiert
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <icon BUILTIN="idea"/>
 </node>
 <node CREATED="1792328807818" ID="ID_761145664" MODIFIED="1792328840514" TEXT="dann m&#xfc;&#xdf;te man aber Disposition von ParamData trennen">
@@ -88123,13 +88154,23 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node CREATED="1792283910057" ID="ID_145892494" MODIFIED="1792283938923" TEXT="&#xfc;berraschung: auch das statische Feld wird im Header als Template definiert">
+<node CREATED="1792283910057" ID="ID_145892494" MODIFIED="1792344530204" TEXT="&#xfc;berraschung: auch das statische Feld wird im Header als Template definiert">
+<arrowlink COLOR="#ee4701" DESTINATION="ID_874155192" ENDARROW="Default" ENDINCLINATION="29;-68;" ID="Arrow_ID_340824222" STARTARROW="None" STARTINCLINATION="-77;-3;"/>
 <icon BUILTIN="messagebox_warning"/>
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792284936936" ID="ID_874155192" MODIFIED="1792284968466" TEXT="Konsequenz: die konkrete Scale-ID h&#xe4;ngt von der BaseType-ID ab">
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792284936936" ID="ID_874155192" MODIFIED="1792344522507" TEXT="Konsequenz: die konkrete Scale-ID h&#xe4;ngt von der BaseType-ID ab">
+<linktarget COLOR="#ee4701" DESTINATION="ID_874155192" ENDARROW="Default" ENDINCLINATION="29;-68;" ID="Arrow_ID_340824222" SOURCE="ID_145892494" STARTARROW="None" STARTINCLINATION="-77;-3;"/>
 <icon BUILTIN="yes"/>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="106" ID="ID_1513102925" MODIFIED="1792344503485" STYLE="bubble" TEXT="Schwierigkeit: Scale-ID ist typabh&#xe4;ngig" VSHIFT="26">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1719134265" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_618389304" STARTARROW="None" STARTINCLINATION="-897;50;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_878587253" MODIFIED="1792344471404" STYLE="fork" TEXT="die Registry sitzt in einer tempalte-Static-variable">
+<font NAME="SansSerif" SIZE="8"/>
+</node>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1792286114715" ID="ID_732603047" MODIFIED="1792287744377" TEXT="Scale vom Builder in die Registry &#xfc;bertragen">
 <icon BUILTIN="button_ok"/>
@@ -88177,6 +88218,13 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5b0f69" CREATED="1792344228020" ID="ID_1338844520" MODIFIED="1792344567429" TEXT="einzuschleifen">
+<icon BUILTIN="yes"/>
+<node COLOR="#435e98" CREATED="1792344235156" ID="ID_1878162771" MODIFIED="1792344571103" TEXT="immer wenn ein neuer Wert gesetzt wird">
+<linktarget COLOR="#3d97c2" DESTINATION="ID_1878162771" ENDARROW="Default" ENDINCLINATION="82;-128;" ID="Arrow_ID_725446006" SOURCE="ID_1006391809" STARTARROW="None" STARTINCLINATION="-472;28;"/>
+</node>
+<node COLOR="#435e98" CREATED="1792344242795" ID="ID_1970864789" MODIFIED="1792344571103" TEXT="initial im Konstruktor mit dem Anfangswert"/>
+</node>
 </node>
 </node>
 </node>
@@ -88212,8 +88260,16 @@ Prop.1: dist%3       1  2  0  1  2  0
     </p>
   </body>
 </html></richcontent>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="166" ID="ID_1539001135" MODIFIED="1792344305264" STYLE="bubble" TEXT="Komplikationen durch CopySupportAPI" VSHIFT="9">
+<edge COLOR="#ff5d00" STYLE="sharp_linear"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1169133505" STARTARROW="None" STARTINCLINATION="-849;57;"/>
+<icon BUILTIN="bell"/>
+<node CREATED="1721239003353" ID="ID_1831888778" MODIFIED="1792343801433" STYLE="fork" TEXT="die alte PolymorphicValue - Implementierung verlangt das so">
+<font NAME="SansSerif" SIZE="8"/>
 </node>
-<node CREATED="1788301325125" ID="ID_1100385220" MODIFIED="1788301843036" TEXT="PolymorphicValue mu&#xdf; definitiv demn&#xe4;chst umfasend modernisiert werden">
+</node>
+</node>
+<node CREATED="1788301325125" ID="ID_1100385220" MODIFIED="1792343875199" TEXT="PolymorphicValue mu&#xdf; definitiv demn&#xe4;chst umfasend modernisiert werden">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -88364,16 +88420,13 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node BACKGROUND_COLOR="#ead2b1" COLOR="#c20007" CREATED="1792328197091" ID="ID_1195588170" MODIFIED="1792334692257" TEXT="das Schema mit dem Delegate (probeweise) durchspielen">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...besonders gefallen tut mir das nicht, aber es ist die einzige M&#246;glichkeit, die ich im Moment sehe
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#7930c5" DESTINATION="ID_1195588170" ENDARROW="Default" ENDINCLINATION="-344;16;" ID="Arrow_ID_1371310739" SOURCE="ID_1560244354" STARTARROW="None" STARTINCLINATION="-24;-147;"/>
 <icon BUILTIN="yes"/>
 <node CREATED="1792328367653" ID="ID_274950780" MODIFIED="1792328382543" TEXT="ben&#xf6;tigte Bestandteile">
@@ -88394,9 +88447,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792330952367" ID="ID_58375414" MODIFIED="1792330959200" TEXT="w&#xe4;re symmetrisch und einheitlich"/>
 <node CREATED="1792330960132" ID="ID_941564977" MODIFIED="1792331279533" TEXT="der front-Builder sollte dann aber per Referenz funktionieren (nicht move-Build)">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       ...also das klassische Builder-Pattern: man erzeugt ein &quot;schwebendes&quot; Builder-Objekt, und die Builder-Methoden geben eine Referenz darauf zur&#252;ck, bis schlie&#223;lich die terminale build()-Operation das Resultat by-value liefert.
@@ -88408,8 +88459,7 @@ Prop.1: dist%3       1  2  0  1  2  0
       Der andere Ansatz, move-Build, w&#252;rde n&#228;mlich in jedem Schrit einen Dispatch durch den VirtualCopySupport machen, und damit den entscheidenden Vorteil eines move-Build negieren
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 <node CREATED="1792331208954" ID="ID_1929608722" MODIFIED="1792331222956" TEXT="dann kann man aber auch nicht mehr &#xbb;den Builder-Typ schwenken&#xab;"/>
 <node CREATED="1792331230190" ID="ID_201117950" MODIFIED="1792331247521" TEXT="was allerdings dann im front-End auch nicht mehr notwendig ist"/>
@@ -88474,16 +88524,13 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792334558630" ID="ID_1603044845" MODIFIED="1792334563663" TEXT="wird irre komplex"/>
 <node CREATED="1792334564413" ID="ID_1065827087" MODIFIED="1792334773903" TEXT="h&#xe4;tte Potential bzgl. &#xbb;encapsulation&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       man k&#246;nnte damit den konkreten Typ tats&#228;chlich vom Parameter-front-End l&#246;schen, und danach eine Reorganisation der Implementierungs-Hierarchie machen, so da&#223; Teile der Implementierung tats&#228;chlich verborgen bleiben, da ja setets eine Indirektion dazwischen liegt
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1792335482203" ID="ID_1853479427" MODIFIED="1792335504139" TEXT="k&#xf6;nnte sp&#xe4;ter darauf zur&#xfc;ckkommen (wenn tats&#xe4;chlicher Nutzen klar)"/>
@@ -88929,17 +88976,40 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792328915458" ID="ID_1651963593" MODIFIED="1792328927006" TEXT="ungel&#xf6;ste Themen">
 <node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1667486175" MODIFIED="1792329161369" TEXT="Aufgabe: &#xbb;Include-Tax&#xab;">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       aus Performance-Gr&#252;nden wurde alles auf Inlining hin ausgelegt &#8212; und die (noch im Entstehen befindlichen) Header sind bereits ziemlich komplex geworden
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 <linktarget COLOR="#fe512a" DESTINATION="ID_1667486175" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_172597435" SOURCE="ID_920406895" STARTARROW="None" STARTINCLINATION="-829;57;"/>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1848612887" MODIFIED="1792344305264" TEXT="Aufgabe: PolymorphicValue besser implementieren">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      ...er ist einigerma&#223;en schwer zu verwenden, vor allem weil das &#187;CopySupportAPI&#171; eingeschleift werden mu&#223; (was nach heutigem Stand eigentlich gar nicht mehr n&#246;tig w&#228;re, man kann einen &#187;virtual copy support&#171; komplett generisch implementieren)
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1169133505" SOURCE="ID_1539001135" STARTARROW="None" STARTINCLINATION="-849;57;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1848570299" SOURCE="ID_1255943604" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" SOURCE="ID_774038603" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<icon BUILTIN="bell"/>
+</node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238814245" ID="ID_1719134265" MODIFIED="1792344499462" TEXT="Schwierigkeit: Registry-IDs h&#xe4;ngen sind abh&#xe4;ngig">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      Die IDs ergeben sich zuf&#228;llig, zur Laufzeit; aber die Scale ist auf einen bestimmten Typ parametrisiert. Also hat jeder Typ seine eigene Registry, und die Scale-IDs sind somit immer nur f&#252;r einen ganz bestimmten BaseType (Domain) g&#252;ltig
+    </p>
+  </body>
+</html></richcontent>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1719134265" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_618389304" SOURCE="ID_1513102925" STARTARROW="None" STARTINCLINATION="-897;50;"/>
 <icon BUILTIN="bell"/>
 </node>
 </node>
