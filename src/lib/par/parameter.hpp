@@ -29,8 +29,10 @@
 #define LIB_PAR_PARAMETER_H
 
 
+#include "lib/error.hpp"
 #include "lib/par/disposition.hpp"
 #include "lib/polymorphic-value.hpp"
+#include "lib/format-string.hpp"
 #include "lib/util.hpp"
 
 #include <utility>
@@ -38,6 +40,7 @@
 
 namespace lib {
 namespace par {
+  namespace err = lumiera::error;
   
   namespace {
     static constexpr size_t PAYLOAD_SIZ = sizeof(ParamData<double>) - sizeof(void*); ////////////////////////TICKET #1197 : this is a mess! PolymorphicValue adds the ADMIN_OVERHEAD (but our payload has already a VTable)
@@ -46,6 +49,7 @@ namespace par {
     using ParamContainer = PolymorphicValue<ParameterImplAPI, PAYLOAD_SIZ, CopySupportMarker>;
   }
   
+  using util::_Fmt;
   using util::unConst;
   
   
@@ -134,8 +138,83 @@ namespace par {
       Builder&&
       maxVal (VAL upperBound)
         {
+          if (scale_.minVal and *scale_.minVal > upperBound)
+            throw err::Invalid{_Fmt{"invalid parameter build: maxVal(%s) must be above defined minVal(%s)"}
+                                   % upperBound % *scale_.minVal};
           maybeCloneScale();
           scale_.maxVal = upperBound;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      minVal (VAL lowerBound)
+        {
+          if (scale_.maxVal and *scale_.maxVal < lowerBound)
+            throw err::Invalid{_Fmt{"invalid parameter build: minVal(%s) must be below defined maxVal(%s)"}
+                                   % lowerBound % *scale_.maxVal};
+          maybeCloneScale();
+          scale_.minVal = lowerBound;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      limited (VAL lowerBound, VAL upperBound)
+        {
+          if (lowerBound > upperBound)
+            throw err::Invalid{_Fmt{"invalid parameter build: minVal(%s) <= maxVal(%s)"}
+                                   % lowerBound % upperBound};
+          maybeCloneScale();
+          scale_.maxVal = upperBound;
+          scale_.minVal = lowerBound;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      cyclicWrap (VAL lowerBound, VAL upperBound)
+        {
+          if (lowerBound >= upperBound)
+            throw err::Invalid{_Fmt{"invalid parameter build: cyclicWrap requires open interval minVal(%s) < maxVal(%s)"}
+                                   % lowerBound % upperBound};
+          maybeCloneScale();
+          scale_.maxVal = upperBound;
+          scale_.minVal = lowerBound;
+          scale_.cyclicLim = util::limit_cyclicWrap<VAL> (upperBound - lowerBound);
+          if (abs(*scale_.maxVal > *scale_.cyclicLim)  )
+            throw err::Invalid{_Fmt{"invalid parameter build: maxVal(%s) for cyclicWrap is too large to handle precisely (limit: %s)"}
+                                   % upperBound % *scale_.cyclicLim};
+          initVal_ = util::limited(lowerBound, initVal_, upperBound);
+          return std::move(*this);
+        }
+      
+      Builder&&
+      useLogScale()
+        {
+          maybeCloneScale();
+          scale_.metric = NAT;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      useBinLogScale()
+        {
+          maybeCloneScale();
+          scale_.metric = BIN;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      useDecibelScale()
+        {
+          maybeCloneScale();
+          scale_.metric = DEC;
+          return std::move(*this);
+        }
+      
+      Builder&&
+      markAsFactor()
+        {
+          maybeCloneScale();
+          scale_.neutral = VAL(1);
           return std::move(*this);
         }
       

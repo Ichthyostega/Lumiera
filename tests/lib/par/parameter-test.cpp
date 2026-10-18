@@ -116,6 +116,19 @@ namespace test{
           
           CHECK (sqrt(2) == p3.getVal<double>());
           CHECK (    -10 == p2.getVal<double>());
+          
+          // build a limited scale
+          Parameter p4 = Parameter::forType<uint>()
+                                   .limited(5, 10)
+                                   .build();
+          
+          CHECK ( 5 == p4.getVal<int>());
+          p4.setVal (12u);
+          CHECK (10 == p4.getVal<uint>());
+          p4.setVal (-22);
+          CHECK ( 5 == p4.getVal<int64_t>());
+          p4.setVal (7.1);
+          CHECK ( 7 == p4.getVal<uint64_t>());
         }
       
       
