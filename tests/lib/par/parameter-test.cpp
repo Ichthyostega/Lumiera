@@ -99,8 +99,11 @@ namespace test{
           Parameter ps = Parameter::forValue(123.45f)
                                    .maxVal (23.55)
                                    .build();
+          CHECK (roughEQ (23.55 , ps.getVal<double>()));
           ps.setVal (100);
           CHECK (roughEQ (23.55 , ps.getVal<double>()));
+          ps.setVal ( 23);
+          CHECK (roughEQ (23.0  , ps.getVal<double>()));
           
           /////////////////////////////////////////////////////////////////////////////OOO (End) Prototyping 10/2026
           Parameter p2 = Parameter::from(p1)

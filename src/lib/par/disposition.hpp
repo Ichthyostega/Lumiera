@@ -104,8 +104,8 @@ namespace par {
       Provision* src_;
       
     public:
-      ParamData (VAL initVal, Scale<VAL> scale)
-        : val_{std::move (initVal)}
+      ParamData (VAL const& initVal, Scale<VAL> scale)
+        : val_{scale.conform(initVal)}
         , src_{nullptr}
         {
           Disposition::markBaseDomain<VAL>();

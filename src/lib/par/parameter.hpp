@@ -106,7 +106,7 @@ namespace par {
         {
           using ImplPackage = ParamData<VAL, CopySupportMarker>;   //////////////////////////////////////////TICKET #1197 : remove the necessity to inject the CopySupportMarker
           ImplPackage* typeTag{nullptr};
-          Parameter resParam{typeTag, std::move (initVal_), std::move (scale_)};
+          Parameter resParam{typeTag, initVal_, std::move (scale_)};
           return resParam;
         }
       

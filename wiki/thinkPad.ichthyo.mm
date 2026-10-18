@@ -88155,6 +88155,9 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 <node COLOR="#435e98" CREATED="1792286814269" ID="ID_1948960327" MODIFIED="1792287543868" TEXT="Beschr&#xe4;nkung des Registration-Space &#x27f9; Exception werfen"/>
 </node>
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1792327408895" ID="ID_179945417" MODIFIED="1792327424236" TEXT="Scale sofort zu Beginn auch einmal auf den Value anwenden">
+<icon BUILTIN="flag-pink"/>
+</node>
 </node>
 </node>
 </node>
@@ -88293,12 +88296,24 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node COLOR="#5b280f" CREATED="1788656871646" ID="ID_1325131915" MODIFIED="1788656955176" TEXT="generisch-getypter Code kann nicht von runtime-dynamischen Typ aufgerufen werden">
 <icon BUILTIN="closed"/>
 </node>
-<node CREATED="1788657034330" ID="ID_60370643" MODIFIED="1788657050967" TEXT="&#x27f9; mu&#xdf; zwingend irgendwo eine Delegate haben..."/>
+<node CREATED="1788657034330" ID="ID_60370643" MODIFIED="1788657050967" TEXT="&#x27f9; mu&#xdf; zwingend irgendwo eine Delegate haben...">
+<node CREATED="1792326693987" ID="ID_1304117406" MODIFIED="1792326705987" TEXT="Idee: den getypten Builder in einen PolymorphicValue legen"/>
+<node CREATED="1792326980597" ID="ID_1209132614" MODIFIED="1792327007767" TEXT="das Delegate m&#xfc;&#xdf;te dann die Typkonvertierung der Werte machen"/>
+<node CREATED="1792327018765" ID="ID_574806581" MODIFIED="1792327035157" TEXT="am Ende kommt wieder ein opaquer Parameter(container) raus"/>
 </node>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1788760078240" ID="ID_1283385725" MODIFIED="1788760097936" TEXT="alternativer Ansatz : Builder-Typ unterwegs schwenken">
+</node>
+<node COLOR="#5b280f" CREATED="1788760078240" ID="ID_1283385725" MODIFIED="1792327058347" TEXT="alternativer Ansatz : Builder-Typ unterwegs schwenken">
 <icon BUILTIN="idea"/>
+<icon BUILTIN="button_cancel"/>
 <node CREATED="1788760099677" ID="ID_1558756181" MODIFIED="1788760111067" TEXT="sobald etwas eingef&#xfc;hrt wird, das numerisch ist, haben wir einen Typ"/>
-<node CREATED="1788760113459" ID="ID_207791984" MODIFIED="1788760128581" TEXT="f&#xfc;r die Anwendung wird dann aber die implizite Typkonvertierung gemacht"/>
+<node CREATED="1788760113459" ID="ID_207791984" MODIFIED="1788760128581" TEXT="f&#xfc;r die Anwendung wird dann aber die implizite Typkonvertierung gemacht">
+<node COLOR="#5b280f" CREATED="1792326616149" ID="ID_1408192727" MODIFIED="1792327128951" TEXT="will man das wirklich??">
+<arrowlink COLOR="#c0024c" DESTINATION="ID_583867473" ENDARROW="Default" ENDINCLINATION="25;-81;" ID="Arrow_ID_1998125976" STARTARROW="None" STARTINCLINATION="-106;0;"/>
+<icon BUILTIN="stop-sign"/>
+</node>
+<node CREATED="1792326647489" ID="ID_527264440" MODIFIED="1792326661563" TEXT="ehr will man den impliziten Typ weiterverwenden"/>
+<node CREATED="1792326662671" ID="ID_1596481621" MODIFIED="1792326676025" TEXT="oder aber explizit auf einen anderen Typ schwenken"/>
+</node>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788760129351" ID="ID_1496419993" MODIFIED="1788760155703" TEXT="offenes Problem: weitere Angaben die nicht typ-gebunden sind">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1788760157345" ID="ID_610381104" MODIFIED="1788760167589" TEXT="ggfs eine symbolische Spec einf&#xfc;hren?">
@@ -88307,6 +88322,10 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1788760183730" ID="ID_535406129" MODIFIED="1788760192498" TEXT="m&#xfc;&#xdf;te eine Definitionssprache erfinden"/>
 <node CREATED="1788760193736" ID="ID_790320052" MODIFIED="1788760197204" TEXT="(und dann parsen)"/>
 </node>
+</node>
+<node COLOR="#7f021a" CREATED="1792327078736" ID="ID_583867473" MODIFIED="1792327155931" TEXT="also ehr nicht (aber das mit dem &#xbb;Typ schwenken&#xab; bleibt im Einzelfall m&#xf6;glich)">
+<linktarget COLOR="#c0024c" DESTINATION="ID_583867473" ENDARROW="Default" ENDINCLINATION="25;-81;" ID="Arrow_ID_1998125976" SOURCE="ID_1408192727" STARTARROW="None" STARTINCLINATION="-106;0;"/>
+<icon BUILTIN="yes"/>
 </node>
 </node>
 </node>
