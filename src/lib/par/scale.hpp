@@ -211,7 +211,10 @@ namespace par {
                                      "for cyclic wrapping into [%1.2g...%1.2g[ "}
                                     % rawVal % *minVal % *maxVal
                                };
-        return util::cyclicWrap (rawVal, *minVal, *maxVal);
+        if constexpr (std::is_same_v<VAL,bool>)
+            throw err::Logic {"cyclicWrap on a bool-parameter is pointless"};
+        else
+          return util::cyclicWrap (rawVal, *minVal, *maxVal);
       }
     if (minVal and rawVal < *minVal)
       return *minVal;

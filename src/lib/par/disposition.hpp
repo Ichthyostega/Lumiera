@@ -64,6 +64,8 @@ namespace par {
           return idr_.scaleID;
         }
       
+      virtual void assignValueTo (Disposition&)  const =0;
+      
     protected:
       template<typename X>
       bool
@@ -125,6 +127,8 @@ namespace par {
       /* === Provision Interface === */
       void retrieveInto (ValBuff&)  const override final;    ///< @note is sometimes invoked non-virtually for sake of optimisation 
       void setValFrom (ValBuff const&)    override final;
+      
+      void assignValueTo (Disposition&)   const override;
     };
   
   template<typename X>
@@ -136,18 +140,29 @@ namespace par {
   
   
   template<typename VAL, class IFA>
-  void
+  inline void
   ParamData<VAL, IFA>::retrieveInto (ValBuff& target)  const
   {
     asValue<VAL>(target) = val_;
   }
   
   template<typename VAL, class IFA>
-  void
+  inline void
   ParamData<VAL, IFA>::setValFrom (ValBuff const& newVal)
   {
     val_ = this->conformScale (asValue<VAL> (newVal));
   }
+  
+  /** @internal part of a double dispatch to transfer a value
+   *            between two opaque parameter containers.   */
+  template<typename VAL, class IFA>
+  inline void
+  ParamData<VAL, IFA>::assignValueTo (Disposition& target)  const
+  {
+    target.setVal (val_);
+  }
+  
+  
   
   
   
@@ -161,7 +176,7 @@ namespace par {
    *   inline the call, resulting in a direct value access.
    */
   template<typename X>
-  X
+  inline X
   Disposition::extract()  const
   {
     X result; // RVO
@@ -182,7 +197,7 @@ namespace par {
   
   
   template<typename X>
-  void
+  inline void
   Disposition::setVal (X changedVal)
   {
     if (isBaseDomainMatch<X>())

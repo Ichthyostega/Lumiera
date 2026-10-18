@@ -255,6 +255,7 @@ namespace test{
        *        and target as reference to _some value buffer_, since this API describes
        *        only a data type disposition, while the actual data storage is defined
        *        as derived parameter data type.
+       * @todo 10/2026 it seems this was built only to explore the underlying mechanism.
        */
       void
       verify_opaqueAssign()

@@ -175,12 +175,42 @@ namespace test{
         }
       
       
-      /** @test each parameter has an opaque yet distinct type 
-       * @todo WIP 10/26 🔁 define ⟶ implement
+      /** @test each parameter has an opaque yet distinct dynamic type.
+       *      - types are converted, limited and conformed
+       *        automatically, both on setting and getting values
+       *      - based on the embedded type information, it is possible
+       *        to transfer the value to a differently typed parameter.
+       * @todo WIP 10/26 🔁 define ⟶ ✔ implement
        */
       void
       verify_ParamType()
         {
+          Parameter p1 = Parameter::forType<uint>()
+                                   .maxVal(10)
+                                   .build();
+          Parameter p2 = Parameter::forType<float>()
+                                   .maxVal(20)
+                                   .build();
+          p1.setVal(5.5);
+          p2.setVal(5.5);
+          CHECK (5   == p1.getVal<float>());
+          CHECK (5.5 == p2.getVal<float>());
+          
+          // based on type and scale information,
+          // a value can be transfered between opaque parameters
+          p2.setVal(15.5);
+          p1.assignValueFrom(p2);
+          CHECK (10   == p1.getVal<uint>());
+          CHECK (15.5 == p2.getVal<float>());
+          
+          Parameter pb = Parameter::forValue(true).build();
+          CHECK ( 1.0 == pb.getVal<double>());
+          
+          p2.setVal(0.2);
+          pb.assignValueFrom(p2);
+          CHECK ( 0.0 == pb.getVal<double>());
+          pb.assignValueFrom(p1);
+          CHECK (true == pb.getVal<bool>());
         }
       
       

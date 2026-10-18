@@ -82659,7 +82659,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#5b280f" CREATED="1783036834486" ID="ID_101058576" MODIFIED="1783036949647" TEXT="Ooops &#x2014; das pa&#xdf;t jetzt nicht mit dem Type-ID-Pointer zusammen">
+<node COLOR="#5b280f" CREATED="1783036834486" FOLDED="true" ID="ID_101058576" MODIFIED="1792359617136" TEXT="Ooops &#x2014; das pa&#xdf;t jetzt nicht mit dem Type-ID-Pointer zusammen">
 <linktarget COLOR="#c51d73" DESTINATION="ID_101058576" ENDARROW="Default" ENDINCLINATION="-41;-57;" ID="Arrow_ID_1162387219" SOURCE="ID_1669853507" STARTARROW="None" STARTINCLINATION="-148;6;"/>
 <icon BUILTIN="messagebox_warning"/>
 <node CREATED="1783037016985" ID="ID_273854941" MODIFIED="1783037025187" TEXT="wo w&#xe4;re denn nun die Indirektion...?">
@@ -82887,7 +82887,7 @@
   </body>
 </html></richcontent>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5f0f69" CREATED="1783087011755" ID="ID_522578531" MODIFIED="1783090291858" TEXT="stelle die Frage: ist das angemessen?">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#5f0f69" CREATED="1783087011755" FOLDED="true" ID="ID_522578531" MODIFIED="1792359595486" TEXT="stelle die Frage: ist das angemessen?">
 <icon BUILTIN="help"/>
 <node CREATED="1783087038084" ID="ID_192113507" MODIFIED="1783087050833" TEXT="ein Parameter ist nicht unbedingt ein &#xbb;Value&#xab;"/>
 <node CREATED="1783087061644" ID="ID_529127857" MODIFIED="1788013904753" TEXT="Einsicht: Symbolische Repr&#xe4;sentationen liegen oft in einem Zwischenfeld">
@@ -82975,7 +82975,7 @@
 </node>
 </node>
 </node>
-<node CREATED="1783182571290" ID="ID_41969896" MODIFIED="1783182584988" TEXT="m&#xf6;glichst viel direkt &#xfc;ber diese VTable leiten...?">
+<node CREATED="1783182571290" FOLDED="true" ID="ID_41969896" MODIFIED="1792359600956" TEXT="m&#xf6;glichst viel direkt &#xfc;ber diese VTable leiten...?">
 <node CREATED="1783183185380" ID="ID_1945100188" MODIFIED="1783183203452" TEXT="Alle Methoden hierher"/>
 <node CREATED="1783097205817" ID="ID_1999962808" MODIFIED="1783183255718" TEXT="l&#xe4;uft auf einen reflexiven Visitor hinaus...">
 <icon BUILTIN="idea"/>
@@ -83248,7 +83248,7 @@
 <node CREATED="1783098358531" ID="ID_1280505955" MODIFIED="1783098443001" TEXT="Type-Sequenz der erlaubten Basis-Typen">
 <linktarget COLOR="#662940" DESTINATION="ID_1280505955" ENDARROW="Default" ENDINCLINATION="1362;-81;" ID="Arrow_ID_157492531" SOURCE="ID_836781666" STARTARROW="None" STARTINCLINATION="133;501;"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783209319403" ID="ID_571533481" MODIFIED="1784492334714" TEXT="Code-technische Schwierigkeiten">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1783209319403" FOLDED="true" ID="ID_571533481" MODIFIED="1784492334714" TEXT="Code-technische Schwierigkeiten">
 <icon BUILTIN="messagebox_warning"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#6b0990" CREATED="1783209333347" ID="ID_1718416802" MODIFIED="1784492354321" TEXT="GCC warnt wegen Ambiguit&#xe4;t">
 <icon BUILTIN="broken-line"/>
@@ -83455,12 +83455,12 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1783101484020" ID="ID_1158137372" MODIFIED="1784502236650" TEXT="entwicklen per ParameterDomain_test">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1783101484020" ID="ID_1158137372" MODIFIED="1792358264633" TEXT="entwicklen per ParameterDomain_test">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#984388" CREATED="1784502242602" ID="ID_635909141" MODIFIED="1784502276027" TEXT="okok .... das artet in Arbeit aus ....">
 <icon BUILTIN="smiley-oh"/>
 </node>
-<node COLOR="#338800" CREATED="1784501919054" ID="ID_1834839968" MODIFIED="1785008647038" TEXT="beginne mit Templates f&#xfc;r frei-stehende cross-Type-Zugriffe">
+<node COLOR="#338800" CREATED="1784501919054" FOLDED="true" ID="ID_1834839968" MODIFIED="1785008647038" TEXT="beginne mit Templates f&#xfc;r frei-stehende cross-Type-Zugriffe">
 <icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1784501937939" ID="ID_1946888391" MODIFIED="1784501952147">
 <richcontent TYPE="NODE"><html>
@@ -83520,7 +83520,7 @@
 <icon BUILTIN="yes"/>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1784583466853" ID="ID_1381198266" MODIFIED="1785008649447" TEXT="erweitere auf &#xbb;conforiming&#xab;-Funktionalit&#xe4;t">
+<node COLOR="#338800" CREATED="1784583466853" FOLDED="true" ID="ID_1381198266" MODIFIED="1785008649447" TEXT="erweitere auf &#xbb;conforiming&#xab;-Funktionalit&#xe4;t">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1784583493969" ID="ID_1551792524" MODIFIED="1784583530626">
 <richcontent TYPE="NODE"><html>
@@ -83903,7 +83903,7 @@
 </node>
 </node>
 </node>
-<node COLOR="#338800" CREATED="1784588917160" ID="ID_174389664" MODIFIED="1785008698199" TEXT="Zuweisungs-Operationen auf die Basis-Operationen aufsetzen">
+<node COLOR="#338800" CREATED="1784588917160" FOLDED="true" ID="ID_174389664" MODIFIED="1785008698199" TEXT="Zuweisungs-Operationen auf die Basis-Operationen aufsetzen">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1784589831498" HGAP="30" ID="ID_1748150865" MODIFIED="1784589831498" TEXT="denn auch beim Extrahieren kann eine Limitierung notwendig sein" VSHIFT="-6">
 <richcontent TYPE="NOTE"><html>
@@ -84129,6 +84129,10 @@
 </node>
 </node>
 </node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792358302734" ID="ID_142755827" MODIFIED="1792358553674" TEXT="die double-Dispatch-Operation Domain::transferTo() ist aber eine Demo geblieben">
+<arrowlink COLOR="#813784" DESTINATION="ID_1574446364" ENDARROW="Default" ENDINCLINATION="133;-336;" ID="Arrow_ID_1656229072" STARTARROW="None" STARTINCLINATION="477;17;"/>
+<icon BUILTIN="messagebox_warning"/>
+</node>
 </node>
 <node COLOR="#338800" CREATED="1785006078479" ID="ID_770448079" MODIFIED="1785008635920" TEXT="Testabdeckung: beide Basis-Zugriffe sowie die opaque-Zuweisung">
 <icon BUILTIN="button_ok"/>
@@ -84158,7 +84162,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1787706805296" ID="ID_1205481403" MODIFIED="1787784159945" TEXT="Im Besonderen zu den Scales werde ich erst wesentlich sp&#xe4;ter Genaueres wissen">
+<node CREATED="1787706805296" ID="ID_1205481403" MODIFIED="1787706805296" TEXT="Im Besonderen zu den Scales werde ich erst wesentlich sp&#xe4;ter Genaueres wissen">
 <richcontent TYPE="NOTE"><html>
   <head/>
   <body>
@@ -84168,7 +84172,7 @@
   </body>
 </html></richcontent>
 </node>
-<node CREATED="1787759996035" ID="ID_1779718376" LINK="#ID_1804668463" MODIFIED="1787784256666">
+<node COLOR="#338800" CREATED="1787759996035" ID="ID_1779718376" LINK="#ID_1804668463" MODIFIED="1792359638897">
 <richcontent TYPE="NODE"><html>
   <head/>
   <body>
@@ -84284,9 +84288,9 @@
     </p>
   </body>
 </html></richcontent>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="93" ID="ID_774038603" MODIFIED="1792344070927" STYLE="bubble" TEXT="Komplikationen durch CopySupportAPI" VSHIFT="28">
+<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1721238837562" HGAP="93" ID="ID_774038603" MODIFIED="1792351946017" STYLE="bubble" TEXT="Komplikationen durch CopySupportAPI" VSHIFT="28">
 <edge COLOR="#ff5d00" STYLE="sharp_linear"/>
-<arrowlink COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<arrowlink COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" STARTARROW="None" STARTINCLINATION="-809;54;"/>
 <icon BUILTIN="bell"/>
 <node CREATED="1721239003353" ID="ID_664673835" MODIFIED="1792343801433" STYLE="fork" TEXT="die alte PolymorphicValue - Implementierung verlangt das so">
 <font NAME="SansSerif" SIZE="8"/>
@@ -84304,6 +84308,13 @@
   </body>
 </html></richcontent>
 <icon BUILTIN="idea"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1792351757549" ID="ID_628911314" MODIFIED="1792351865487" TEXT="theoretisch w&#xe4;re auch Klon-Kopie mit Typ-Wechsel denkbar">
+<linktarget COLOR="#fee5de" DESTINATION="ID_628911314" ENDARROW="Default" ENDINCLINATION="-584;28;" ID="Arrow_ID_1845637963" SOURCE="ID_1129780588" STARTARROW="None" STARTINCLINATION="278;16;"/>
+<icon BUILTIN="hourglass"/>
+<node CREATED="1792351870470" ID="ID_496943607" MODIFIED="1792351888767" TEXT="bisher gibts nur eine Assertion um Zuweisung an einen anderen Impl-Typ zu unterbinden"/>
+<node CREATED="1792351889699" ID="ID_919262815" MODIFIED="1792351909884" TEXT="aber es w&#xe4;re auch m&#xf6;glich daf&#xfc;r ein spezielles API auf der Implementierung aufzugreifen"/>
+<node CREATED="1792351911984" ID="ID_1062297158" MODIFIED="1792351933277" TEXT="und ersatzweise w&#xe4;re es m&#xf6;glich, das Target zu zerst&#xf6;ren und in-place neu zu konstruieren"/>
 </node>
 </node>
 <node CREATED="1788020075343" ID="ID_1141636956" MODIFIED="1788046263248" TEXT="alles das zusammen w&#xe4;re die &#xbb;Disposition&#xab;">
@@ -84875,7 +84886,7 @@
 <icon BUILTIN="smiley-oh"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#fed199" COLOR="#b90040" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1788380092658" TEXT="Alarm: das Design geht hier nicht auf">
+<node BACKGROUND_COLOR="#fed199" COLOR="#b90040" CREATED="1788309764989" ID="ID_137382885" MODIFIED="1792359267137" TEXT="Alarm: das Design geht hier nicht auf">
 <arrowlink COLOR="#fe2680" DESTINATION="ID_1551239755" ENDARROW="Default" ENDINCLINATION="191;-241;" ID="Arrow_ID_1230826257" STARTARROW="None" STARTINCLINATION="-740;0;"/>
 <linktarget COLOR="#3b3577" DESTINATION="ID_137382885" ENDARROW="Default" ENDINCLINATION="-395;29;" ID="Arrow_ID_1892316604" SOURCE="ID_1271224230" STARTARROW="None" STARTINCLINATION="2071;0;"/>
 <icon BUILTIN="broken-line"/>
@@ -85203,6 +85214,49 @@
 </node>
 </node>
 <node CREATED="1788313220539" ID="ID_1678152846" MODIFIED="1788313251138" TEXT="Set mit Typ-Konversion &#x27f6;  spiegelblidlich auf dem Disposition-Inteface"/>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f5c" CREATED="1792358370285" ID="ID_1574446364" MODIFIED="1792359173534" TEXT="opaque-value-assignment">
+<linktarget COLOR="#813784" DESTINATION="ID_1574446364" ENDARROW="Default" ENDINCLINATION="133;-336;" ID="Arrow_ID_1656229072" SOURCE="ID_142755827" STARTARROW="None" STARTINCLINATION="477;17;"/>
+<linktarget COLOR="#4849bd" DESTINATION="ID_1574446364" ENDARROW="Default" ENDINCLINATION="-625;1892;" ID="Arrow_ID_1281949122" SOURCE="ID_1279370125" STARTARROW="None" STARTINCLINATION="1442;48;"/>
+<icon BUILTIN="idea"/>
+<node CREATED="1792358557788" ID="ID_1591435616" MODIFIED="1792358595555" TEXT="das Schema wurde schon auf class Domain / BaseDoman&lt;T&gt; implementiert"/>
+<node COLOR="#5b280f" CREATED="1792358596815" ID="ID_306298895" MODIFIED="1792358779422" TEXT="leider ist diese Implementierung nicht brauchbar...">
+<icon BUILTIN="button_cancel"/>
+<node CREATED="1792358657695" ID="ID_1254396924" MODIFIED="1792358659128" TEXT="da ich den internen Value-Buffer nicht &#xfc;ber das Service-API exponieren m&#xf6;chte"/>
+<node CREATED="1792358660981" ID="ID_142456245" MODIFIED="1792358677991" TEXT="denn damit w&#xfc;rde man sich daruf festlegen, da&#xdf; es einen &#xbb;Buffer&#xab; tats&#xe4;chlich gibt"/>
+<node CREATED="1792358678780" ID="ID_680314568" MODIFIED="1792358773451" TEXT="inzwischen habe ich alle high-level-APIs &quot;andersherum&quot; aufgezogen">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      eine ValBuff&amp; ist immer das Argument, d.h. das ist in der Regel nur eine opaque Verpackung eines Datenwerts, der anderweitig direkt zug&#228;nglich ist
+    </p>
+  </body>
+</html></richcontent>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1792358780766" ID="ID_908774000" MODIFIED="1792359031180" TEXT="also das gleiche Schema nochmal implementieren">
+<icon BUILTIN="button_ok"/>
+<node CREATED="1792358790191" ID="ID_1511076216" MODIFIED="1792359025282" TEXT="Dispatch-Schritt-1">
+<icon BUILTIN="full-1"/>
+<node CREATED="1792358813742" ID="ID_972243531" MODIFIED="1792358822028" TEXT="Parameter::assignValueFrom()"/>
+<node CREATED="1792358835678" ID="ID_1773894122" MODIFIED="1792358859162" TEXT="ruft auf der Quelle auf Disposition:.assignValueTo (Disposition&amp;)"/>
+</node>
+<node CREATED="1792358860997" ID="ID_896366456" MODIFIED="1792359028217" TEXT="Dispatch-Schritt-2">
+<icon BUILTIN="full-2"/>
+<node CREATED="1792358889238" ID="ID_787825924" MODIFIED="1792358891706" TEXT="ParamData&lt;VAL, IFA&gt;::assignValueTo (Disposition&amp; target)"/>
+<node CREATED="1792358898406" ID="ID_1344829292" MODIFIED="1792358913735" TEXT="das via VTable im Quell-Parameter"/>
+<node CREATED="1792358914635" ID="ID_1683847606" MODIFIED="1792358924886" TEXT="also ist der Quell-Typ VAL nun explizit bekannt"/>
+<node CREATED="1792358925674" ID="ID_905693734" MODIFIED="1792358941187" TEXT="damit ganz einfach: target.setVal (val_)">
+<node CREATED="1792358944967" ID="ID_101377796" MODIFIED="1792358967302" TEXT="d.h. nutze hier den generischen front-End-Setter"/>
+<node CREATED="1792358968420" ID="ID_1274258347" MODIFIED="1792358974832" TEXT="der macht intern den zweiten Dispatch"/>
+<node CREATED="1792358995012" ID="ID_1776466613" MODIFIED="1792359004475" TEXT="this-&gt;conform (valueBuffer, newVal);"/>
+</node>
+</node>
+</node>
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#81023f" CREATED="1792359053065" ID="ID_1025171264" MODIFIED="1792359071355" TEXT="(ob man das jemals braucht?)">
+<font NAME="SansSerif" SIZE="10"/>
+</node>
+</node>
 <node COLOR="#435e98" CREATED="1788313267301" ID="ID_697595338" MODIFIED="1788313294222" TEXT="Provision: Zugriff auf den Value-Buffer  &#x27f6; cast und Assignment"/>
 <node CREATED="1788404121292" ID="ID_630136540" MODIFIED="1788404194186">
 <richcontent TYPE="NODE"><html>
@@ -85371,6 +85425,20 @@
 <icon BUILTIN="forward"/>
 </node>
 </node>
+<node BACKGROUND_COLOR="#f8f1cb" COLOR="#a50125" CREATED="1792351451582" ID="ID_764735460" MODIFIED="1792351572350" TEXT="&#xbb;Identity&#xab; eines Parameters ist schwer zu bestimmen">
+<linktarget COLOR="#ff2300" DESTINATION="ID_764735460" ENDARROW="Default" ENDINCLINATION="-343;18;" ID="Arrow_ID_1774401364" SOURCE="ID_1944912553" STARTARROW="None" STARTINCLINATION="367;15;"/>
+<linktarget COLOR="#a80441" DESTINATION="ID_764735460" ENDARROW="Default" ENDINCLINATION="-334;14;" ID="Arrow_ID_465475214" SOURCE="ID_1868507905" STARTARROW="None" STARTINCLINATION="221;-16;"/>
+<icon BUILTIN="messagebox_warning"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792351593107" ID="ID_381001258" MODIFIED="1792351643668" TEXT="ist es rein die einzelnen Instanz?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792351606169" ID="ID_1981975226" MODIFIED="1792351643667" TEXT="ist es eine bestimmte Konfiguration (also ein Prototyp)?">
+<icon BUILTIN="help"/>
+</node>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792351624798" ID="ID_279259368" MODIFIED="1792351643667" TEXT="was passiert mit einem ID-Record + Metadata bei Kopie?">
+<icon BUILTIN="help"/>
+</node>
+</node>
 </node>
 </node>
 <node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788897224786" HGAP="33" ID="ID_394337664" MODIFIED="1788897243128" TEXT="Erweiterung anlegen: Scale-Konfiguration" VSHIFT="4">
@@ -85517,7 +85585,7 @@
 <node CREATED="1788913324214" ID="ID_1114697487" MODIFIED="1788913329534" TEXT="optionale Zyklizit&#xe4;t"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788914733259" ID="ID_1024480560" MODIFIED="1788914744874" TEXT="Funktionalit&#xe4;t definieren">
+<node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1788914733259" ID="ID_1024480560" MODIFIED="1792359326107" TEXT="Funktionalit&#xe4;t definieren">
 <icon BUILTIN="yes"/>
 <node CREATED="1788914766575" ID="ID_1913361537" MODIFIED="1788915158752" TEXT="Unterst&#xfc;tzung der Domain-Operationen">
 <linktarget COLOR="#66299e" DESTINATION="ID_1913361537" ENDARROW="Default" ENDINCLINATION="-1137;-2314;" ID="Arrow_ID_1874303468" SOURCE="ID_1943514908" STARTARROW="None" STARTINCLINATION="-699;38;"/>
@@ -85876,15 +85944,15 @@
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1789002587495" ID="ID_509669988" MODIFIED="1789002595532" TEXT="Design nochmal reflektieren">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1789002587495" ID="ID_509669988" MODIFIED="1792359299282" TEXT="Design nochmal reflektieren">
+<icon BUILTIN="button_ok"/>
 <node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1789002597684" ID="ID_65698909" MODIFIED="1789072159474" TEXT="die Frage ist: wie sehr mu&#xdf; ich mich aktuell um die Nominal/Ordinal-Skalen k&#xfc;mmern?">
 <icon BUILTIN="help"/>
 <node CREATED="1789072181799" ID="ID_961319455" MODIFIED="1789072203699" TEXT="konzeptionell sollten sie explizit in der Scale-Definition markiert sein"/>
 <node CREATED="1789072817738" ID="ID_621244531" MODIFIED="1789072844560" TEXT="man k&#xf6;nnte &#xbb;Scales&#xab; ins Zentrum stellen &#x2014; oder als Rand-Thema betrachten"/>
 <node CREATED="1789073532638" ID="ID_1112609990" MODIFIED="1789073555185" TEXT="Eine Frage des &#xbb;Navigierens&#xab; : was verbaut man sich und womit verspielt man sich"/>
 </node>
-<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789002615502" ID="ID_1161327543" LINK="https://claude.ai/share/784807f3-8fb3-4c1f-85c0-95355e79a9db" MODIFIED="1789082726792" TEXT="eine Design-Konversation mit Claude gef&#xfc;hrt">
+<node BACKGROUND_COLOR="#accdc3" COLOR="#3f4015" CREATED="1789002615502" FOLDED="true" ID="ID_1161327543" LINK="https://claude.ai/share/784807f3-8fb3-4c1f-85c0-95355e79a9db" MODIFIED="1789082726792" TEXT="eine Design-Konversation mit Claude gef&#xfc;hrt">
 <linktarget COLOR="#51bbdf" DESTINATION="ID_1161327543" ENDARROW="Default" ENDINCLINATION="231;13;" ID="Arrow_ID_994670578" SOURCE="ID_383248634" STARTARROW="None" STARTINCLINATION="-183;-140;"/>
 <icon BUILTIN="wizard"/>
 <node CREATED="1789002670195" ID="ID_1638903618" MODIFIED="1789074297728" TEXT="Schritt-1 : gebe ihm nur high-level Kontext">
@@ -86111,7 +86179,8 @@
 </node>
 </node>
 </node>
-<node CREATED="1789074370284" ID="ID_1609743766" MODIFIED="1789074377700" TEXT="Schlu&#xdf;folgerungen (am Tag danach)">
+<node COLOR="#435e98" CREATED="1789074370284" ID="ID_1609743766" MODIFIED="1792359313350" TEXT="Schlu&#xdf;folgerungen (am Tag danach)">
+<icon BUILTIN="forward"/>
 <node BACKGROUND_COLOR="#ccb59b" COLOR="#6e2a38" CREATED="1789077067749" ID="ID_1147548998" MODIFIED="1789077105470" TEXT="sollte mein Design wie geplant &#xbb;durchziehen&#xab; und komplexere Themen offen lassen">
 <font ITALIC="true" NAME="SansSerif" SIZE="14"/>
 <icon BUILTIN="yes"/>
@@ -86159,6 +86228,9 @@
 <node CREATED="1789079686328" ID="ID_1110601241" MODIFIED="1789079697987" TEXT="ausgestattet mit Informationsfunktionen"/>
 <node CREATED="1790469747133" ID="ID_107922186" MODIFIED="1790469747133" TEXT="mit Wert-Ermittlungs-Funktionen (pure)"/>
 <node CREATED="1789079698677" ID="ID_1651075832" MODIFIED="1790469774810" TEXT="jedoch ohne operationallisierte Logik"/>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1792359351472" ID="ID_814476255" MODIFIED="1792359367562" TEXT="Nominal-Scalen bleiben &#xbb;vorgesehen&#xab; (aber sind erst mal vertagt)">
+<icon BUILTIN="hourglass"/>
 </node>
 <node BACKGROUND_COLOR="#c8c0b6" COLOR="#435e98" CREATED="1789082704022" ID="ID_1925473607" MODIFIED="1792277287662" TEXT="mu&#xdf; eine Registry bereits jetzt bauen">
 <icon BUILTIN="yes"/>
@@ -88353,7 +88425,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1788654185033" TEXT="Prototyp-Builder">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#231672" CREATED="1788654131472" ID="ID_1807734347" MODIFIED="1792359213856" TEXT="Prototyp-Builder">
 <linktarget COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" SOURCE="ID_1439464964" STARTARROW="None" STARTINCLINATION="176;0;"/>
 <node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788654157480" ID="ID_180727420" MODIFIED="1792335514862" TEXT="Problem: statische vs. dynamische Typisierung">
 <icon BUILTIN="broken-line"/>
@@ -88367,7 +88439,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1788655291159" ID="ID_843134849" MODIFIED="1788655306463" TEXT="wir haben dann eben mehrere Builder-Klassen"/>
 <node CREATED="1788655317266" ID="ID_54539066" MODIFIED="1788655344253" TEXT="Builder&lt;TY&gt; sowie ProtoBuilder"/>
 </node>
-<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788654668731" ID="ID_429473344" MODIFIED="1792334673420" TEXT="die Schwierigkeit besteht ehr darin, wie man das &#xbb;Rekonfigurieren&#xab; mit dem API verbindet">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1788654668731" FOLDED="true" ID="ID_429473344" MODIFIED="1792334673420" TEXT="die Schwierigkeit besteht ehr darin, wie man das &#xbb;Rekonfigurieren&#xab; mit dem API verbindet">
 <icon BUILTIN="yes"/>
 <node CREATED="1788655193044" ID="ID_137199832" MODIFIED="1788655224153" TEXT="Component / Composit-Design">
 <node CREATED="1788655225447" ID="ID_955239990" MODIFIED="1788655240601" TEXT="die Immutability steckt dann erst im ParamType"/>
@@ -88536,7 +88608,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node CREATED="1792335482203" ID="ID_1853479427" MODIFIED="1792335504139" TEXT="k&#xf6;nnte sp&#xe4;ter darauf zur&#xfc;ckkommen (wenn tats&#xe4;chlicher Nutzen klar)"/>
 </node>
 </node>
-<node CREATED="1792335333454" ID="ID_230670224" MODIFIED="1792335356256" TEXT="verlange vorerst explizite Typ-Angabe vom Benutzer">
+<node BACKGROUND_COLOR="#e0ceaa" COLOR="#690f14" CREATED="1792335333454" ID="ID_230670224" MODIFIED="1792359188426" TEXT="verlange vorerst explizite Typ-Angabe vom Benutzer">
 <icon BUILTIN="yes"/>
 <node CREATED="1792335364426" ID="ID_600328901" MODIFIED="1792335467506" TEXT="Komplexit&#xe4;t mit dem opaquen Typ umgangen">
 <arrowlink COLOR="#741c3a" DESTINATION="ID_346843401" ENDARROW="Default" ENDINCLINATION="6;14;" ID="Arrow_ID_1868138011" STARTARROW="None" STARTINCLINATION="-4;-10;"/>
@@ -88594,7 +88666,7 @@ Prop.1: dist%3       1  2  0  1  2  0
 </node>
 </node>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203353588" ID="ID_810940322" MODIFIED="1788203359142" TEXT="entwicklen per Parameter_test">
+<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788203353588" ID="ID_810940322" MODIFIED="1792359245395" TEXT="entwicklen per Parameter_test">
 <icon BUILTIN="pencil"/>
 <node COLOR="#338800" CREATED="1788203485528" ID="ID_1524876130" MODIFIED="1788313089197" TEXT="simpleUsage">
 <icon BUILTIN="button_ok"/>
@@ -88611,8 +88683,8 @@ Prop.1: dist%3       1  2  0  1  2  0
 <node BACKGROUND_COLOR="#174956" COLOR="#8dfd49" CREATED="1788313090668" ID="ID_684424843" MODIFIED="1788313179645" STYLE="bubble" TEXT="erster einfachster Testfall GR&#xdc;N">
 <edge COLOR="#61fe5b" STYLE="bezier" WIDTH="thin"/>
 </node>
-<node BACKGROUND_COLOR="#eef0c5" COLOR="#990000" CREATED="1788651832213" ID="ID_820925379" MODIFIED="1788653981264" TEXT="verify_Builder">
-<icon BUILTIN="pencil"/>
+<node COLOR="#338800" CREATED="1788651832213" ID="ID_820925379" MODIFIED="1792359245394" TEXT="verify_Builder">
+<icon BUILTIN="button_ok"/>
 <node COLOR="#338800" CREATED="1788653988590" ID="ID_1096230694" MODIFIED="1788654069986" TEXT="Parameter von Wert ausgehend definieren">
 <richcontent TYPE="NOTE"><html>
   <head/>
@@ -88624,37 +88696,59 @@ Prop.1: dist%3       1  2  0  1  2  0
 </html></richcontent>
 <icon BUILTIN="button_ok"/>
 </node>
-<node BACKGROUND_COLOR="#fdfdcf" COLOR="#ff0000" CREATED="1788654074330" ID="ID_1439464964" MODIFIED="1788654198587" TEXT="von Prototyp bauen">
+<node COLOR="#435e98" CREATED="1788654074330" ID="ID_1439464964" MODIFIED="1792359245394" TEXT="von Prototyp bauen">
 <arrowlink COLOR="#c6386b" DESTINATION="ID_1807734347" ENDARROW="Default" ENDINCLINATION="29;104;" ID="Arrow_ID_1712704888" STARTARROW="None" STARTINCLINATION="176;0;"/>
-<icon BUILTIN="flag-pink"/>
+<icon BUILTIN="button_ok"/>
 </node>
 </node>
 <node COLOR="#338800" CREATED="1788651832214" ID="ID_613414026" MODIFIED="1792350574134" TEXT="verify_Identity">
 <icon BUILTIN="button_ok"/>
 <node CREATED="1792350575809" ID="ID_1624240212" MODIFIED="1792350583762" TEXT="zeige Klon und Zuweisung"/>
 <node CREATED="1792350584342" ID="ID_1718110381" MODIFIED="1792350594685" TEXT="zeige da&#xdf; beide Instanzen unabh&#xe4;ngig sind"/>
-<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792350595356" ID="ID_1868507905" MODIFIED="1792350612095" TEXT="TODO: das Konzept &#xbb;Identity&#xab; genauer fassen">
+<node BACKGROUND_COLOR="#eee5c3" COLOR="#990000" CREATED="1792350595356" ID="ID_1868507905" MODIFIED="1792359245394" TEXT="TODO: das Konzept &#xbb;Identity&#xab; genauer fassen">
+<arrowlink COLOR="#a80441" DESTINATION="ID_764735460" ENDARROW="Default" ENDINCLINATION="-334;14;" ID="Arrow_ID_465475214" STARTARROW="None" STARTINCLINATION="221;-16;"/>
 <icon BUILTIN="flag-yellow"/>
-<node CREATED="1792350614840" ID="ID_802758372" MODIFIED="1792350755164" TEXT="ist herausfordernd bei PolymorphicValue">
+<node CREATED="1792350614840" ID="ID_802758372" MODIFIED="1792359245394" TEXT="ist herausfordernd bei PolymorphicValue">
 <richcontent TYPE="NOTE"><html>
-  <head>
-    
-  </head>
+  <head/>
   <body>
     <p>
       wegen dem &#187;polymorphic&#171; ist im Container eine Identit&#228;t verborgen; man kann nicht einfach auf observable Werte abstellen, aber uberfl&#228;chlich verh&#228;lt es sich wie ein kopierbarer Value. Das wirft subtile Fragen auf
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1792350756971" ID="ID_200174072" MODIFIED="1792350779084" TEXT="ich hate geplant, einen ID-Marker und Metadaten zuzulassen"/>
+<node CREATED="1792350756971" ID="ID_200174072" MODIFIED="1792350756971" TEXT="ich hate geplant, einen ID-Marker und Metadaten zuzulassen"/>
 </node>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_11918736" MODIFIED="1788651847848" TEXT="verify_ParamType">
-<icon BUILTIN="hourglass"/>
+<node COLOR="#338800" CREATED="1788651832214" ID="ID_11918736" MODIFIED="1792359245394" TEXT="verify_ParamType">
+<icon BUILTIN="button_ok"/>
+<node BACKGROUND_COLOR="#f0d5c5" COLOR="#990033" CREATED="1792350821971" ID="ID_1592515629" MODIFIED="1792359245394" TEXT="wie kann ich &#xfc;berhaupt zeigen, da&#xdf; es einen opaquen Typ gibt?">
+<icon BUILTIN="help"/>
 </node>
-<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_1525078992" MODIFIED="1788651847850" TEXT="verify_Automation">
+<node COLOR="#5b280f" CREATED="1792351426977" ID="ID_1944912553" MODIFIED="1792359245394" TEXT="weiteres Problem: Zuweisung von Parametern mit intern verschiedenem Typ">
+<arrowlink COLOR="#ff2300" DESTINATION="ID_764735460" ENDARROW="Default" ENDINCLINATION="-343;18;" ID="Arrow_ID_1774401364" STARTARROW="None" STARTINCLINATION="367;15;"/>
+<icon BUILTIN="closed"/>
+<node CREATED="1792351714147" HGAP="43" ID="ID_1332779060" MODIFIED="1792359245394" TEXT="w&#xe4;re theoretisch machbar" VSHIFT="8">
+<richcontent TYPE="NOTE"><html>
+  <head/>
+  <body>
+    <p>
+      man m&#252;&#223;te nur alle internen Descriptoren mit bewegen; also im Grunde eine neu-Konstruktion in-place &#8212; das wirft lediglich die gleichen konzeptionellen Probleme auf, die auch eine Copy-Konstruktion aufwirft (was ist dann die Identit&#228;t?)
+    </p>
+  </body>
+</html></richcontent>
+</node>
+<node CREATED="1792351730457" HGAP="44" ID="ID_1129780588" MODIFIED="1792359245394" TEXT="wird aber von PolymorphicValue nicht unterst&#xfc;tzt">
+<arrowlink COLOR="#fee5de" DESTINATION="ID_628911314" ENDARROW="Default" ENDINCLINATION="-584;28;" ID="Arrow_ID_1845637963" STARTARROW="None" STARTINCLINATION="278;16;"/>
+</node>
+</node>
+<node COLOR="#338800" CREATED="1792358186470" ID="ID_1279370125" MODIFIED="1792359245394" TEXT="k&#xf6;nnte hier aber die Wert-Zuweisung zwischen opaque Parametern demonstrieren">
+<arrowlink COLOR="#4849bd" DESTINATION="ID_1574446364" ENDARROW="Default" ENDINCLINATION="-625;1892;" ID="Arrow_ID_1281949122" STARTARROW="None" STARTINCLINATION="1442;48;"/>
+<icon BUILTIN="button_ok"/>
+</node>
+</node>
+<node BACKGROUND_COLOR="#d2beaf" COLOR="#5c4d6e" CREATED="1788651832214" ID="ID_1525078992" MODIFIED="1788651832214" TEXT="verify_Automation">
 <icon BUILTIN="hourglass"/>
 </node>
 </node>
@@ -89014,7 +89108,7 @@ Prop.1: dist%3       1  2  0  1  2  0
     </p>
   </body>
 </html></richcontent>
-<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" SOURCE="ID_774038603" STARTARROW="None" STARTINCLINATION="-799;81;"/>
+<linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_79333885" SOURCE="ID_774038603" STARTARROW="None" STARTINCLINATION="-809;54;"/>
 <linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1848570299" SOURCE="ID_1255943604" STARTARROW="None" STARTINCLINATION="-799;81;"/>
 <linktarget COLOR="#fe512a" DESTINATION="ID_1848612887" ENDARROW="Default" ENDINCLINATION="1101;-48;" ID="Arrow_ID_1169133505" SOURCE="ID_1539001135" STARTARROW="None" STARTINCLINATION="-849;57;"/>
 <icon BUILTIN="bell"/>

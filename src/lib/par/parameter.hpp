@@ -68,6 +68,8 @@ namespace par {
       template<typename VAL>
       void setVal (VAL&&);
       
+      Parameter& assignValueFrom (Parameter const&);
+      
       
       /* === Builder API === */
       
@@ -172,6 +174,8 @@ namespace par {
       Builder&&
       cyclicWrap (VAL lowerBound, VAL upperBound)
         {
+          if constexpr (std::is_same_v<VAL,bool>)
+            throw err::Logic {"attempt to configure a bool-parameter for cyclicWrap"};
           if (lowerBound >= upperBound)
             throw err::Invalid{_Fmt{"invalid parameter build: cyclicWrap requires open interval minVal(%s) < maxVal(%s)"}
                                    % lowerBound % upperBound};
@@ -258,6 +262,18 @@ namespace par {
       
       getPayload().setVal (changedVal);
     }
+  
+  
+  /** transfer value with type conversion between two opaque parameters.
+   * @remark this requires a double dispatch, defected back from the target
+   */
+  inline Parameter&
+  Parameter::assignValueFrom (Parameter const& srcParam)
+  {
+      unConst(srcParam).getPayload().assignValueTo (getPayload());
+      return *this;
+  }
+
   
   
 }} // namespace lib::par

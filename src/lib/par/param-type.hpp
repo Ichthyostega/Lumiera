@@ -114,6 +114,11 @@ _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
   }
   
   
+  /** @todo 10/2026 this API-function turned out to be merely a demonstration,
+   *        since the same double-dispatch scheme was then implemented directly
+   *        as Disposition::assignValueTo (Disposition&)
+   *  @see ParameterDomain_test::verify_opaqueAssign()
+   */
   template<typename VAL, class IFA>
   inline void
   BaseDomain<VAL,IFA>::transferTo (ValBuff const& source, Domain& targetDomain, ValBuff& target)  const
